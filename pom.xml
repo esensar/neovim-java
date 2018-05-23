@@ -10,6 +10,7 @@
     <version>0.0-SNAPSHOT</version>
     <modules>
         <module>core-rpc</module>
+        <module>api-explorer</module>
     </modules>
 
     <name>neovim-java (Parent)</name>
@@ -50,6 +51,9 @@
         <mockito.version>2.10.0</mockito.version>
         <assertj.version>3.9.0</assertj.version>
         <msgpack.version>0.8.16</msgpack.version>
+        <jackson.yaml.version>2.3.0</jackson.yaml.version>
+        <jackson.databind.version>2.2.3</jackson.databind.version>
+        <apache.commons.version>3.4</apache.commons.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
