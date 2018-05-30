@@ -40,6 +40,12 @@ public class MessageTypeTest {
         assertEquals(MessageType.NOTIFICATION, MessageType.fromInt(2));
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void fromInvalidIntTest() {
+        // when an invalid int is used it should throw an exception
+        MessageType.fromInt(27);
+    }
+
     @Test
     public void asIntTest() {
         // 0 should be request

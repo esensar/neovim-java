@@ -38,19 +38,22 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.stubbing.Answer;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class BackgroundRPCListenerTest {
@@ -163,6 +166,48 @@ public class BackgroundRPCListenerTest {
         backgroundRPCListener.listenForNotifications(notificationCallback);
 
         verify(notificationCallback, never()).notificationReceived(any());
+    }
+
+    @Test
+    public void testStopping() throws IOException, InterruptedException {
+        // Given a proper executor service and object mapper
+        executorService = Executors.newSingleThreadExecutor();
+        backgroundRPCListener = new BackgroundRPCListener(executorService, objectMapper);
+        given(objectMapper.reader()).willReturn(objectReader);
+        ArrayNode notificationNode = prepareNotificationNode();
+        NotificationMessage notificationMessage = new NotificationMessage.Builder("test").build();
+        given(objectMapper.treeToValue(any(), eq(NotificationMessage.class))).willReturn(notificationMessage);
+        given(objectReader.readTree(inputStream)).will(invocationOnMock -> {
+            Thread.sleep(20);
+            return notificationNode;
+        });
+
+        RPCListener.NotificationCallback notificationCallback = Mockito.mock(RPCListener.NotificationCallback.class);
+        doAnswer(invocationOnMock -> {
+            System.out.println(invocationOnMock.getArguments()[0]);
+            return null;
+        }).when(notificationCallback).notificationReceived(any());
+
+        backgroundRPCListener.listenForNotifications(notificationCallback);
+        backgroundRPCListener.start(inputStream);
+
+        verify(notificationCallback, timeout(100)).notificationReceived(notificationMessage);
+        verify(notificationCallback, timeout(100)).notificationReceived(notificationMessage);
+
+        // After listener is stopped, no more notifications should arrive
+        backgroundRPCListener.stop();
+        Thread.sleep(80);
+        verifyNoMoreInteractions(notificationCallback);
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void exceptionOnStartIsThrown() {
+        // Given an error in reading from stream
+        prepareSequentialExecutorService();
+        given(objectMapper.reader()).willThrow(new IOException());
+
+        // When listener is started, app should crash
+        backgroundRPCListener.start(inputStream);
     }
 
     @Test(expected = NullPointerException.class)
