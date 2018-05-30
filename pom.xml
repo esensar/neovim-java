@@ -53,6 +53,8 @@
         <msgpack.version>0.8.16</msgpack.version>
         <jackson.databind.version>2.9.5</jackson.databind.version>
         <apache.commons.version>3.4</apache.commons.version>
+        <slf4j.version>1.7.25</slf4j.version>
+        <rxjava2.version>2.1.14</rxjava2.version>
         <maven.compiler.source>10</maven.compiler.source>
         <maven.compiler.target>10</maven.compiler.target>
     </properties>
