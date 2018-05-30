@@ -42,7 +42,7 @@ import java.util.concurrent.TimeUnit;
  * Wrapper around {@link RPCStreamer}
  * This class should be used for communication. It provides convenience factory methods
  */
-public class RPCClient implements RPCStreamer {
+public final class RPCClient implements RPCStreamer {
 
     private static ObjectMapper defaultObjectMapper;
     private static ExecutorService defaultExecutorService;
