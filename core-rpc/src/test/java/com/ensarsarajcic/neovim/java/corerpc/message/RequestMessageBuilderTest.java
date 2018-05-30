@@ -51,6 +51,9 @@ public class RequestMessageBuilderTest {
         assertEquals("test", builder.build().getMethod());
         assertEquals(arguments, builder.build().getArguments());
         assertEquals(MessageType.REQUEST, builder.build().getType());
+
+        // To string doesn't crash
+        String result = builder.build().toString();
     }
 
     @Test
@@ -65,6 +68,9 @@ public class RequestMessageBuilderTest {
 
         // They should not be same
         assertNotEquals(requestMessage, builder.build());
+
+        // To string doesn't crash
+        String result = builder.build().toString();
     }
 
     @Test
@@ -79,6 +85,9 @@ public class RequestMessageBuilderTest {
         assertEquals(0, builder.build().getArguments().size());
         // Type should still be REQUEST
         assertEquals(MessageType.REQUEST, builder.build().getType());
+
+        // To string doesn't crash
+        String result = builder.build().toString();
     }
 
     @Test
@@ -98,6 +107,9 @@ public class RequestMessageBuilderTest {
         assertEquals("test", builder.build().getMethod());
         assertEquals(arguments, builder.build().getArguments());
         assertEquals(MessageType.REQUEST, builder.build().getType());
+
+        // To string doesn't crash
+        String result = builder.build().toString();
     }
 
     @Test
@@ -120,6 +132,9 @@ public class RequestMessageBuilderTest {
         // Everyhing else is the same
         assertEquals("test", builder.build().getMethod());
         assertEquals(MessageType.REQUEST, builder.build().getType());
+
+        // To string doesn't crash
+        String result = builder.build().toString();
     }
 
     @Test
@@ -150,5 +165,8 @@ public class RequestMessageBuilderTest {
         // Everyhing else is the same
         assertEquals("test", builder.build().getMethod());
         assertEquals(MessageType.REQUEST, builder.build().getType());
+
+        // To string doesn't crash
+        String result = builder.build().toString();
     }
 }

@@ -53,6 +53,9 @@ public class ResponseMessageBuilderTest {
         assertEquals(rpcError, builder.build().getError());
         assertEquals(result, builder.build().getResult());
         assertEquals(MessageType.RESPONSE, builder.build().getType());
+
+        // To string doesn't crash
+        String stringResult = builder.build().toString();
     }
 
     @Test
@@ -67,6 +70,9 @@ public class ResponseMessageBuilderTest {
 
         // They should not be same
         assertNotEquals(responseMessage, builder.build());
+
+        // To string doesn't crash
+        String stringResult = builder.build().toString();
     }
 
     @Test
@@ -82,6 +88,9 @@ public class ResponseMessageBuilderTest {
         assertNull(builder.build().getError());
         // Type should still be RESPONSE
         assertEquals(MessageType.RESPONSE, builder.build().getType());
+
+        // To string doesn't crash
+        String stringResult = builder.build().toString();
     }
 
     @Test
@@ -97,6 +106,9 @@ public class ResponseMessageBuilderTest {
         assertNull(builder.build().getResult());
         // Type should still be RESPONSE
         assertEquals(MessageType.RESPONSE, builder.build().getType());
+
+        // To string doesn't crash
+        String stringResult = builder.build().toString();
     }
 
     @Test
@@ -114,6 +126,9 @@ public class ResponseMessageBuilderTest {
         assertNull(builder.build().getResult());
         assertNull(builder.build().getError());
         assertEquals(MessageType.RESPONSE, builder.build().getType());
+
+        // To string doesn't crash
+        String stringResult = builder.build().toString();
     }
 
     @Test
@@ -135,6 +150,9 @@ public class ResponseMessageBuilderTest {
         assertNull(builder.build().getResult());
         assertEquals(0, builder.build().getId());
         assertEquals(MessageType.RESPONSE, builder.build().getType());
+
+        // To string doesn't crash
+        String stringResult = builder.build().toString();
     }
 
     @Test
@@ -154,5 +172,8 @@ public class ResponseMessageBuilderTest {
         assertNull(builder.build().getError());
         assertEquals(0, builder.build().getId());
         assertEquals(MessageType.RESPONSE, builder.build().getType());
+
+        // To string doesn't crash
+        String stringResult = builder.build().toString();
     }
 }

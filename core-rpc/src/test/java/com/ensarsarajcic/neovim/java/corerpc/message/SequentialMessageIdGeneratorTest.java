@@ -34,7 +34,7 @@ import static org.junit.Assert.*;
 
 public class SequentialMessageIdGeneratorTest {
 
-    private SequentialMessageIdGenerator sequentialMessageIdGenerator;
+    private MessageIdGenerator sequentialMessageIdGenerator;
 
     @Before
     public void setUp() throws Exception {
