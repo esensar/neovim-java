@@ -122,7 +122,7 @@ public class ResponseMessageBuilderTest {
         builder.withId(5);
         assertEquals(5, builder.build().getId());
 
-        // Everyhing else is the same
+        // Everything else is the same
         assertNull(builder.build().getResult());
         assertNull(builder.build().getError());
         assertEquals(MessageType.RESPONSE, builder.build().getType());
@@ -146,7 +146,7 @@ public class ResponseMessageBuilderTest {
         assertEquals(0, builder.build().getError().getId());
         assertEquals("", builder.build().getError().getMessage());
 
-        // Everyhing else is the same
+        // Everything else is the same
         assertNull(builder.build().getResult());
         assertEquals(0, builder.build().getId());
         assertEquals(MessageType.RESPONSE, builder.build().getType());
@@ -168,7 +168,7 @@ public class ResponseMessageBuilderTest {
         builder.withResult(result);
         assertEquals(result, builder.build().getResult());
 
-        // Everyhing else is the same
+        // Everything else is the same
         assertNull(builder.build().getError());
         assertEquals(0, builder.build().getId());
         assertEquals(MessageType.RESPONSE, builder.build().getType());

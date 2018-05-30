@@ -30,27 +30,27 @@ import java.util.ArrayList;
 
 import static org.junit.Assert.*;
 
-public class RequestMessageBuilderTest {
+public class NotificationMessageBuilderTest {
 
     @Test
     public void testFullConstructor() {
-        // Given a method and arguments
+        // Given a name and arguments
         ArrayList<String> arguments = new ArrayList<>();
         arguments.add("argOne");
-        RequestMessage.Builder builder = new RequestMessage.Builder("test", arguments);
+        NotificationMessage.Builder builder = new NotificationMessage.Builder("test", arguments);
 
         // When builder builds response
-        RequestMessage requestMessage = builder.build();
+        NotificationMessage notificationMessage = builder.build();
 
-        // It should contain these objects and should have REQUEST type
-        assertEquals("test", requestMessage.getMethod());
-        assertEquals(arguments, requestMessage.getArguments());
-        assertEquals(MessageType.REQUEST, requestMessage.getType());
+        // It should contain these objects and should have NOTIFICATION type
+        assertEquals("test", notificationMessage.getName());
+        assertEquals(arguments, notificationMessage.getArguments());
+        assertEquals(MessageType.NOTIFICATION, notificationMessage.getType());
 
         // New calls should also work right
-        assertEquals("test", builder.build().getMethod());
+        assertEquals("test", builder.build().getName());
         assertEquals(arguments, builder.build().getArguments());
-        assertEquals(MessageType.REQUEST, builder.build().getType());
+        assertEquals(MessageType.NOTIFICATION, builder.build().getType());
 
         // To string doesn't crash
         String result = builder.build().toString();
@@ -58,55 +58,33 @@ public class RequestMessageBuilderTest {
 
     @Test
     public void testNewInstanceEveryTime() {
-        // Given a method and arguments
+        // Given a name and arguments
         ArrayList<String> arguments = new ArrayList<>();
         arguments.add("argOne");
-        RequestMessage.Builder builder = new RequestMessage.Builder("test", arguments);
+        NotificationMessage.Builder builder = new NotificationMessage.Builder("test", arguments);
 
         // When builder builds multiple requests
-        RequestMessage requestMessage = builder.build();
+        NotificationMessage notificationMessage = builder.build();
 
         // They should not be same
-        assertNotEquals(requestMessage, builder.build());
+        assertNotEquals(notificationMessage, builder.build());
 
         // To string doesn't crash
         String result = builder.build().toString();
     }
 
     @Test
-    public void testMethodConstructor() {
-        // Given a builder with just a method
-        RequestMessage.Builder builder = new RequestMessage.Builder("test");
+    public void testNameConstructor() {
+        // Given a builder with just a name
+        NotificationMessage.Builder builder = new NotificationMessage.Builder("test");
 
         // When build is called
         // Result should contain given method
-        assertEquals("test", builder.build().getMethod());
+        assertEquals("test", builder.build().getName());
         // And arguments should be empty
         assertEquals(0, builder.build().getArguments().size());
-        // Type should still be REQUEST
-        assertEquals(MessageType.REQUEST, builder.build().getType());
-
-        // To string doesn't crash
-        String result = builder.build().toString();
-    }
-
-    @Test
-    public void testWithId() {
-        // Given a builder with some defaults
-        ArrayList<String> arguments = new ArrayList<>();
-        arguments.add("argOne");
-        RequestMessage.Builder builder = new RequestMessage.Builder("test", arguments);
-
-        assertEquals(0, builder.build().getId());
-
-        // When withId is called, new id is used
-        builder.withId(5);
-        assertEquals(5, builder.build().getId());
-
-        // Everything else is the same
-        assertEquals("test", builder.build().getMethod());
-        assertEquals(arguments, builder.build().getArguments());
-        assertEquals(MessageType.REQUEST, builder.build().getType());
+        // Type should still be NOTIFICATION
+        assertEquals(MessageType.NOTIFICATION, builder.build().getType());
 
         // To string doesn't crash
         String result = builder.build().toString();
@@ -117,21 +95,21 @@ public class RequestMessageBuilderTest {
         // Given a builder with some defaults
         ArrayList<String> arguments = new ArrayList<>();
         arguments.add("argOne");
-        RequestMessage.Builder builder = new RequestMessage.Builder("test", arguments);
+        NotificationMessage.Builder builder = new NotificationMessage.Builder("test", arguments);
 
-        RequestMessage requestMessage = builder.build();
-        assertEquals(arguments, requestMessage.getArguments());
+        NotificationMessage notificationMessage = builder.build();
+        assertEquals(arguments, notificationMessage.getArguments());
 
         // When add argument is called, it is added to the new list
         builder.addArgument("argTwo");
         assertEquals(2, builder.build().getArguments().size());
 
         // But not to the already built object
-        assertEquals(1, requestMessage.getArguments().size());
+        assertEquals(1, notificationMessage.getArguments().size());
 
         // Everything else is the same
-        assertEquals("test", builder.build().getMethod());
-        assertEquals(MessageType.REQUEST, builder.build().getType());
+        assertEquals("test", builder.build().getName());
+        assertEquals(MessageType.NOTIFICATION, builder.build().getType());
 
         // To string doesn't crash
         String result = builder.build().toString();
@@ -142,17 +120,17 @@ public class RequestMessageBuilderTest {
         // Given a builder with some defaults
         ArrayList<String> arguments = new ArrayList<>();
         arguments.add("argOne");
-        RequestMessage.Builder builder = new RequestMessage.Builder("test", arguments);
+        NotificationMessage.Builder builder = new NotificationMessage.Builder("test", arguments);
 
-        RequestMessage requestMessage = builder.build();
-        assertEquals(arguments, requestMessage.getArguments());
+        NotificationMessage notificationMessage = builder.build();
+        assertEquals(arguments, notificationMessage.getArguments());
 
         // When add argument is called, it is added to the new list
         ArrayList<String> extraArgs = new ArrayList<>();
         extraArgs.add("argTwo");
 
         builder.addArguments(extraArgs);
-        RequestMessage twoArgsMessage = builder.build();
+        NotificationMessage twoArgsMessage = builder.build();
         assertEquals(2, twoArgsMessage.getArguments().size());
 
         // And not affecting any old objects
@@ -160,11 +138,11 @@ public class RequestMessageBuilderTest {
         builder.addArguments(extraArgs); // in this case two extra args are added (argTwo and argThree)
         assertEquals(4, builder.build().getArguments().size());
         assertEquals(2, twoArgsMessage.getArguments().size());
-        assertEquals(1, requestMessage.getArguments().size());
+        assertEquals(1, notificationMessage.getArguments().size());
 
         // Everything else is the same
-        assertEquals("test", builder.build().getMethod());
-        assertEquals(MessageType.REQUEST, builder.build().getType());
+        assertEquals("test", builder.build().getName());
+        assertEquals(MessageType.NOTIFICATION, builder.build().getType());
 
         // To string doesn't crash
         String result = builder.build().toString();

@@ -64,7 +64,7 @@ public final class NotificationMessage implements Message {
      */
     public NotificationMessage(String name, ArrayList<String> arguments) {
         this.name = name;
-        this.arguments = arguments;
+        this.arguments = new ArrayList<>(arguments);
     }
 
     @JsonProperty("name")
