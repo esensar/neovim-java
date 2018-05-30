@@ -43,6 +43,8 @@ public class ResponseMessageBuilderTest {
         // It should contain these objects and should have RESPONSE type
         assertEquals(1, responseMessage.getId());
         assertEquals(rpcError, responseMessage.getError());
+        assertEquals(0, responseMessage.getError().getId());
+        assertEquals("message", responseMessage.getError().getMessage());
         assertEquals(result, responseMessage.getResult());
         assertEquals(MessageType.RESPONSE, responseMessage.getType());
 
@@ -126,6 +128,8 @@ public class ResponseMessageBuilderTest {
         // When withError is called, new error is used
         builder.withError(newError);
         assertEquals(newError, builder.build().getError());
+        assertEquals(0, builder.build().getError().getId());
+        assertEquals("", builder.build().getError().getMessage());
 
         // Everyhing else is the same
         assertNull(builder.build().getResult());
