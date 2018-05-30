@@ -27,6 +27,7 @@ package com.ensarsarajcic.neovim.java.corerpc.message;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Set;
 import java.util.concurrent.*;
 
 import static org.junit.Assert.*;
@@ -42,19 +43,24 @@ public class SequentialMessageIdGeneratorTest {
 
     @Test
     public void startsFromOne() {
+        // Given a fresh generator
+        // Next id should generate 1
         int firstId = sequentialMessageIdGenerator.nextId();
         assertEquals(1, firstId);
     }
 
     @Test
     public void increasesByOne() {
+        // Given a fresh generator
         for (int i = 1; i < 100; i++) {
+            // Each id should be 1 higher than last one
             assertEquals(i, sequentialMessageIdGenerator.nextId());
         }
     }
 
     @Test
     public void worksInMultithreadedEnvironment() throws InterruptedException {
+        // Given multithreaded environment
         ExecutorService executorService = new ThreadPoolExecutor(
                 3,
                 5,
@@ -63,13 +69,15 @@ public class SequentialMessageIdGeneratorTest {
                 new LinkedBlockingQueue<>()
         );
 
-        int repeatCount = 25000;
+        Set<Integer> integers = ConcurrentHashMap.newKeySet();
 
+        int repeatCount = 25000;
         final CountDownLatch countDownLatch = new CountDownLatch(repeatCount);
 
+        // When generator is used multiple times
         for (int i = 0; i < repeatCount; i++) {
             executorService.submit(() -> {
-                sequentialMessageIdGenerator.nextId();
+                integers.add(sequentialMessageIdGenerator.nextId());
                 countDownLatch.countDown();
             });
         }
@@ -78,7 +86,9 @@ public class SequentialMessageIdGeneratorTest {
             fail("Timeout");
         }
 
+        // No duplicates are generated and number is properly increased
         assertEquals(repeatCount + 1, sequentialMessageIdGenerator.nextId());
+        assertEquals(repeatCount, integers.size());
         executorService.shutdown();
     }
 }
