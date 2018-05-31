@@ -51,6 +51,7 @@ public final class RPCClient implements RPCStreamer {
     private RPCStreamer rpcStreamer;
 
     private RPCClient(RPCStreamer rpcStreamer) {
+        Objects.requireNonNull(rpcStreamer, "rpcStreamer is required for all operations");
         this.rpcStreamer = rpcStreamer;
     }
 
@@ -260,8 +261,8 @@ public final class RPCClient implements RPCStreamer {
          * @param rpcListener {@link RPCListener} instance to use
          * @return instance of a different, more limited builder
          */
-        public DefaultRPCStreamerFullBuilder withRPCListener(RPCListener rpcListener) {
-            return new DefaultRPCStreamerFullBuilder(rpcListener);
+        public CustomRPCListenerBuilder withRPCListener(RPCListener rpcListener) {
+            return new CustomRPCListenerBuilder(rpcListener, executorService, objectMapper);
         }
 
         /**
@@ -272,7 +273,7 @@ public final class RPCClient implements RPCStreamer {
          * @param rpcListener {@link RPCListener} instance to use
          * @return instance of a different, more limited builder
          */
-        public DefaultRPCStreamerFullBuilder withRPCListener(RPCSender rpcSender, RPCListener rpcListener) {
+        public DefaultRPCStreamerFullBuilder withRPCSenderAndListener(RPCSender rpcSender, RPCListener rpcListener) {
             return new DefaultRPCStreamerFullBuilder(rpcSender, rpcListener);
         }
 
@@ -288,14 +289,6 @@ public final class RPCClient implements RPCStreamer {
                 Objects.requireNonNull(rpcListener, "rpcListener may not be null");
                 this.rpcSender = rpcSender;
                 this.rpcListener = rpcListener;
-            }
-
-            private DefaultRPCStreamerFullBuilder(RPCSender rpcSender) {
-                this(rpcSender, createDefaultAsyncRPCListener());
-            }
-
-            private DefaultRPCStreamerFullBuilder(RPCListener rpcListener) {
-                this(createDefaultAsyncRPCSender(), rpcListener);
             }
 
             /**
