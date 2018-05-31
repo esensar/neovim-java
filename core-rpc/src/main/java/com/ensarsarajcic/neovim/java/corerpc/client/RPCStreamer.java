@@ -26,8 +26,10 @@ package com.ensarsarajcic.neovim.java.corerpc.client;
 
 import com.ensarsarajcic.neovim.java.corerpc.message.Message;
 import com.ensarsarajcic.neovim.java.corerpc.message.RequestMessage;
+import com.ensarsarajcic.neovim.java.corerpc.message.ResponseMessage;
 
 import java.io.IOException;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * Interface defining a two way RPC communication stream
@@ -69,6 +71,18 @@ public interface RPCStreamer {
      * @throws IOException if issues arise in communication or serialization
      */
     void send(RequestMessage.Builder requestMessage, RPCListener.ResponseCallback responseCallback) throws IOException;
+
+    /**
+     * Specific variant of {@link #send(RequestMessage.Builder)} which uses {@link CompletableFuture}
+     * instead of {@link com.ensarsarajcic.neovim.java.corerpc.client.RPCListener.ResponseCallback}
+     *
+     * Prefer this over {@link #send(RequestMessage.Builder, RPCListener.ResponseCallback)}
+     *
+     * @param requestMessage {@link RequestMessage.Builder} of message to send
+     * @return {@link CompletableFuture} which can throw {@link IOException} or {@link IllegalStateException}
+     * @see #send(RequestMessage.Builder, RPCListener.ResponseCallback)
+     */
+    CompletableFuture<ResponseMessage> response(RequestMessage.Builder requestMessage);
 
     /**
      * Adds a new {@link RPCListener.RequestCallback}, if it is not already added

@@ -32,18 +32,23 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.stubbing.Answer;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class PackStreamTest {
@@ -148,6 +153,45 @@ public class PackStreamTest {
 
         // RPC Listener should be used too
         verify(rpcListener).listenForResponse(25, responseCallback);
+    }
+
+    @Test
+    public void testSendRequestCompletable() throws IOException {
+        // Given a proper message id generator and response
+        given(messageIdGenerator.nextId()).willReturn(25);
+        RequestMessage.Builder message = new RequestMessage.Builder("test");
+        ResponseMessage preparedResponse = new ResponseMessage.Builder("test").withId(25).build();
+        doAnswer(invocationOnMock -> {
+            RPCListener.ResponseCallback responseCallback = (RPCListener.ResponseCallback) invocationOnMock.getArguments()[1];
+            responseCallback.responseReceived(25, preparedResponse);
+            return null;
+        }).when(rpcListener).listenForResponse(anyInt(), any());
+
+        CountDownLatch countDownLatch = new CountDownLatch(1);
+
+        // When response is requested
+        packStream.response(message).thenAccept(responseMessage -> {
+            try {
+                assertTrue(countDownLatch.await(100, TimeUnit.MILLISECONDS));
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
+
+        // Ensure it does not block
+        countDownLatch.countDown();
+
+        // Rpc sender should be used
+        ArgumentCaptor<RequestMessage> argumentCaptor = ArgumentCaptor.forClass(RequestMessage.class);
+        verify(rpcSender).send(argumentCaptor.capture());
+        assertEquals("test", argumentCaptor.getValue().getMethod());
+        // And id for the message should be generated
+        verify(messageIdGenerator).nextId();
+        // And put into the message
+        assertEquals(25, argumentCaptor.getValue().getId());
+
+        // RPC Listener should be used too
+        verify(rpcListener).listenForResponse(eq(25), any());
     }
 
     @Test

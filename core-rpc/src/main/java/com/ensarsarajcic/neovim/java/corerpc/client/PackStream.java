@@ -33,6 +33,10 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Two-way msgpack stream that wraps reading/writing bytes and exposes
@@ -110,6 +114,33 @@ public final class PackStream implements RPCStreamer {
         RequestMessage messageToSend = requestMessage.withId(messageIdGenerator.nextId()).build();
         rpcListener.listenForResponse(messageToSend.getId(), responseCallback);
         send(messageToSend);
+    }
+
+    /**
+     * Implemented per {@link RPCStreamer#response(RequestMessage.Builder)} specification
+     */
+    @Override
+    public CompletableFuture<ResponseMessage> response(RequestMessage.Builder requestMessage) {
+        return CompletableFuture.supplyAsync(() -> {
+            // Prepare for blocking until response comes
+            CountDownLatch countDownLatch = new CountDownLatch(1);
+            AtomicReference<ResponseMessage> responseMessage = new AtomicReference<>();
+            try {
+                // Send request
+                send(requestMessage, (forId, response) -> {
+                    // Unblock and save response
+                    responseMessage.set(response);
+                    countDownLatch.countDown();
+                });
+                // Wait for response
+                countDownLatch.await();
+                return responseMessage.get();
+            } catch (IOException | InterruptedException e) {
+                e.printStackTrace();
+                // Pass down exception on any failure
+                throw new CompletionException(e);
+            }
+        });
     }
 
     /**
