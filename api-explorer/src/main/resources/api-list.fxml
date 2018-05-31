@@ -40,12 +40,12 @@
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                           <TableView fx:id="functionTable" prefHeight="367.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                               <columns>
-                                  <TableColumn fx:id="functionColMethod" editable="false" prefWidth="59.0" sortable="false" text="Method" />
-                                  <TableColumn fx:id="functionColName" editable="false" prefWidth="96.0" sortable="false" text="Name" />
-                                  <TableColumn fx:id="functionColReturnType" editable="false" prefWidth="77.0" sortable="false" text="Return Type" />
-                                  <TableColumn fx:id="functionColSince" editable="false" prefWidth="68.0" sortable="false" text="Since" />
-                                  <TableColumn fx:id="functionColDepSince" editable="false" prefWidth="62.0" sortable="false" text="Deprecated Since" />
-                                  <TableColumn fx:id="functionColParams" editable="false" prefWidth="237.0" sortable="false" text="Parameters" />
+                                  <TableColumn fx:id="functionColMethod" editable="false" prefWidth="59.0" text="Method" />
+                                  <TableColumn fx:id="functionColName" editable="false" prefWidth="96.0" text="Name" />
+                                  <TableColumn fx:id="functionColReturnType" editable="false" prefWidth="77.0" text="Return Type" />
+                                  <TableColumn fx:id="functionColSince" editable="false" prefWidth="68.0" text="Since" />
+                                  <TableColumn fx:id="functionColDepSince" editable="false" prefWidth="62.0" text="Deprecated Since" />
+                                  <TableColumn fx:id="functionColParams" editable="false" prefWidth="237.0" text="Parameters" />
                               </columns>
                           </TableView>
                       </AnchorPane>
@@ -56,8 +56,8 @@
                         <children>
                            <TableView fx:id="errorsTable" prefHeight="367.0" prefWidth="600.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                               <columns>
-                                 <TableColumn fx:id="errorsColName" editable="false" prefWidth="315.0" sortable="false" text="Name" />
-                                 <TableColumn fx:id="errorsColId" editable="false" prefWidth="284.0" sortable="false" text="Id" />
+                                 <TableColumn fx:id="errorsColName" editable="false" prefWidth="315.0" text="Name" />
+                                 <TableColumn fx:id="errorsColId" editable="false" prefWidth="284.0" text="Id" />
                               </columns>
                            </TableView>
                         </children>
@@ -70,9 +70,9 @@
                         <children>
                            <TableView fx:id="uiEventsTable" prefHeight="367.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                               <columns>
-                                 <TableColumn fx:id="uiEventsColName" editable="false" prefWidth="138.0" sortable="false" text="Name" />
-                                 <TableColumn fx:id="uiEventsColSince" editable="false" prefWidth="117.0" sortable="false" text="Since" />
-                                 <TableColumn fx:id="uiEventsColParams" editable="false" prefWidth="344.0" sortable="false" text="Parameters" />
+                                 <TableColumn fx:id="uiEventsColName" editable="false" prefWidth="138.0" text="Name" />
+                                 <TableColumn fx:id="uiEventsColSince" editable="false" prefWidth="117.0" text="Since" />
+                                 <TableColumn fx:id="uiEventsColParams" editable="false" prefWidth="344.0" text="Parameters" />
                               </columns>
                            </TableView>
                         </children>
@@ -85,9 +85,9 @@
                         <children>
                            <TableView fx:id="typesTable" prefHeight="367.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                               <columns>
-                                 <TableColumn fx:id="typesColName" editable="false" prefWidth="205.0" sortable="false" text="Name" />
-                                 <TableColumn fx:id="typesColId" editable="false" prefWidth="129.0" sortable="false" text="Id" />
-                                 <TableColumn fx:id="typesColPrefix" editable="false" prefWidth="265.0" sortable="false" text="Prefix" />
+                                 <TableColumn fx:id="typesColName" editable="false" prefWidth="205.0" text="Name" />
+                                 <TableColumn fx:id="typesColId" editable="false" prefWidth="129.0" text="Id" />
+                                 <TableColumn fx:id="typesColPrefix" editable="false" prefWidth="265.0" text="Prefix" />
                               </columns>
                            </TableView>
                         </children>
