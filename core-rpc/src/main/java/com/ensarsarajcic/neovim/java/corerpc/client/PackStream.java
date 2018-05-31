@@ -33,9 +33,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionException;
-import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
@@ -48,6 +46,9 @@ public final class PackStream implements RPCStreamer {
     private final RPCListener rpcListener;
     private final RPCSender rpcSender;
     private final MessageIdGenerator messageIdGenerator;
+
+    private final SubmissionPublisher<RequestMessage> requestMessagePublisher = new SubmissionPublisher<>();
+    private final SubmissionPublisher<NotificationMessage> notificationMessagePublisher = new SubmissionPublisher<>();
 
     private List<RPCListener.RequestCallback> requestCallbacks = new ArrayList<>();
     private List<RPCListener.NotificationCallback> notificationCallbacks = new ArrayList<>();
@@ -166,6 +167,14 @@ public final class PackStream implements RPCStreamer {
     }
 
     /**
+     * Implemented per {@link RPCStreamer#requestsFlow()} specification
+     */
+    @Override
+    public Flow.Publisher<RequestMessage> requestsFlow() {
+        return requestMessagePublisher;
+    }
+
+    /**
      * Adds a new {@link RPCListener.NotificationCallback}
      * per {@link RPCStreamer#addNotificationCallback(RPCListener.NotificationCallback)} specification
      */
@@ -187,8 +196,17 @@ public final class PackStream implements RPCStreamer {
         }
     }
 
+    /**
+     * Implemented per {@link RPCStreamer#notificationsFlow()} specification
+     */
+    @Override
+    public Flow.Publisher<NotificationMessage> notificationsFlow() {
+        return notificationMessagePublisher;
+    }
+
     private void requestReceived(RequestMessage requestMessage) {
         log.info("Request received: {}", requestMessage);
+        requestMessagePublisher.submit(requestMessage);
         for (RPCListener.RequestCallback requestCallback : requestCallbacks) {
             requestCallback.requestReceived(requestMessage);
         }
@@ -196,6 +214,7 @@ public final class PackStream implements RPCStreamer {
 
     private void notificationReceived(NotificationMessage notificationMessage) {
         log.info("Notification received: {}", notificationMessage);
+        notificationMessagePublisher.submit(notificationMessage);
         for (RPCListener.NotificationCallback notificationCallback : notificationCallbacks) {
             notificationCallback.notificationReceived(notificationMessage);
         }

@@ -25,11 +25,13 @@
 package com.ensarsarajcic.neovim.java.corerpc.client;
 
 import com.ensarsarajcic.neovim.java.corerpc.message.Message;
+import com.ensarsarajcic.neovim.java.corerpc.message.NotificationMessage;
 import com.ensarsarajcic.neovim.java.corerpc.message.RequestMessage;
 import com.ensarsarajcic.neovim.java.corerpc.message.ResponseMessage;
 
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Flow;
 
 /**
  * Interface defining a two way RPC communication stream
@@ -101,6 +103,14 @@ public interface RPCStreamer {
     void removeRequestCallback(RPCListener.RequestCallback requestCallback);
 
     /**
+     * Passes down a publisher of {@link RequestMessage} objects received
+     * It will never complete
+     * Prefer this to using {@link #addRequestCallback(RPCListener.RequestCallback)}
+     * @return {@link Flow.Publisher} passing down requests as they come
+     */
+    Flow.Publisher<RequestMessage> requestsFlow();
+
+    /**
      * Adds a new {@link RPCListener.NotificationCallback}, if it is not already added
      * It will stay attached and receive all notifications
      * until {@link #removeNotificationCallback(RPCListener.NotificationCallback)}
@@ -116,4 +126,12 @@ public interface RPCStreamer {
      * @param notificationCallback {@link RPCListener.NotificationCallback} to remove
      */
     void removeNotificationCallback(RPCListener.NotificationCallback notificationCallback);
+
+    /**
+     * Passes down a publisher of {@link NotificationMessage} objects received
+     * It will never complete
+     * Prefer this to using {@link #addNotificationCallback(RPCListener.NotificationCallback)}
+     * @return {@link Flow.Publisher} passing down notifications as they come
+     */
+    Flow.Publisher<NotificationMessage> notificationsFlow();
 }

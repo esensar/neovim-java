@@ -41,6 +41,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Flow;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
@@ -238,6 +239,27 @@ public class PackStreamTest {
     }
 
     @Test
+    public void testRequestFlow() throws IOException {
+        // Given a proper rpc listener and attached pack stream
+        packStream.attach(connection);
+
+        // When request flow is subscribed to
+        Flow.Subscriber<RequestMessage> requestMessageSubscriber = Mockito.mock(Flow.Subscriber.class);
+        doAnswer(invocationOnMock -> {
+            Flow.Subscription subscription = (Flow.Subscription) invocationOnMock.getArguments()[0];
+            subscription.request(Long.MAX_VALUE);
+            return null;
+        }).when(requestMessageSubscriber).onSubscribe(any());
+        packStream.requestsFlow()
+                .subscribe(requestMessageSubscriber);
+
+        // It should receive events when requests arrive
+        RequestMessage msg1 = new RequestMessage.Builder("test").build();
+        packStreamRequestCallback.getValue().requestReceived(msg1);
+        verify(requestMessageSubscriber).onNext(msg1);
+    }
+
+    @Test
     public void testNotificationCallback() throws IOException {
         // Given a proper rpc listener and attached pack stream
         packStream.attach(connection);
@@ -278,6 +300,27 @@ public class PackStreamTest {
         packStreamNotificationCallback.getValue().notificationReceived(msg4);
         verify(firstCallback, never()).notificationReceived(msg4);
         verify(secondCallback, never()).notificationReceived(msg4);
+    }
+
+    @Test
+    public void testNotificationFlow() throws IOException {
+        // Given a proper rpc listener and attached pack stream
+        packStream.attach(connection);
+
+        // When request flow is subscribed to
+        Flow.Subscriber<NotificationMessage> notificationMessageSubscriber = Mockito.mock(Flow.Subscriber.class);
+        doAnswer(invocationOnMock -> {
+            Flow.Subscription subscription = (Flow.Subscription) invocationOnMock.getArguments()[0];
+            subscription.request(Long.MAX_VALUE);
+            return null;
+        }).when(notificationMessageSubscriber).onSubscribe(any());
+        packStream.notificationsFlow()
+                .subscribe(notificationMessageSubscriber);
+
+        // It should receive events when notifications arrive
+        NotificationMessage msg1 = new NotificationMessage.Builder("test").build();
+        packStreamNotificationCallback.getValue().notificationReceived(msg1);
+        verify(notificationMessageSubscriber).onNext(msg1);
     }
 
     @Test(expected = NullPointerException.class)

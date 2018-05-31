@@ -26,10 +26,12 @@ package com.ensarsarajcic.neovim.java.corerpc;
 
 import com.ensarsarajcic.neovim.java.corerpc.client.*;
 import com.ensarsarajcic.neovim.java.corerpc.message.RequestMessage;
+import com.ensarsarajcic.neovim.java.corerpc.message.ResponseMessage;
 
 import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.function.Consumer;
 
 /**
  * Hello world!
@@ -45,7 +47,8 @@ public class App {
             rpcClient.attach(new TcpSocketRPCConnection(socket));
 
             for (int i = 1; i < 15; i++) {
-                rpcClient.send(new RequestMessage.Builder("nvim_input", new ArrayList<>(){{add("jjjj");}}), (forId, responseMessage) -> System.out.println(responseMessage));
+                rpcClient.response(new RequestMessage.Builder("nvim_input", new ArrayList<>(){{add("jjjj");}}))
+                        .thenAccept(System.out::println);
             }
         } catch (IOException e) {
             e.printStackTrace();

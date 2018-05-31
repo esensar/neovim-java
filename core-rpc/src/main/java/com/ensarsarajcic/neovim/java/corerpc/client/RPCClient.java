@@ -25,6 +25,7 @@
 package com.ensarsarajcic.neovim.java.corerpc.client;
 
 import com.ensarsarajcic.neovim.java.corerpc.message.Message;
+import com.ensarsarajcic.neovim.java.corerpc.message.NotificationMessage;
 import com.ensarsarajcic.neovim.java.corerpc.message.RequestMessage;
 import com.ensarsarajcic.neovim.java.corerpc.message.ResponseMessage;
 import com.fasterxml.jackson.core.JsonGenerator;
@@ -188,6 +189,11 @@ public final class RPCClient implements RPCStreamer {
     }
 
     @Override
+    public Flow.Publisher<RequestMessage> requestsFlow() {
+        return rpcStreamer.requestsFlow();
+    }
+
+    @Override
     public void addNotificationCallback(RPCListener.NotificationCallback notificationCallback) {
         rpcStreamer.addNotificationCallback(notificationCallback);
     }
@@ -195,6 +201,11 @@ public final class RPCClient implements RPCStreamer {
     @Override
     public void removeNotificationCallback(RPCListener.NotificationCallback notificationCallback) {
         rpcStreamer.removeNotificationCallback(notificationCallback);
+    }
+
+    @Override
+    public Flow.Publisher<NotificationMessage> notificationsFlow() {
+        return rpcStreamer.notificationsFlow();
     }
 
     /**

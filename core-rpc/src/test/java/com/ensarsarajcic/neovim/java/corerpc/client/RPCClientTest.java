@@ -179,6 +179,12 @@ public class RPCClientTest {
         rpcClient.response(msgBuilder);
         verify(rpcStreamer).response(msgBuilder);
 
+        rpcClient.requestsFlow();
+        verify(rpcStreamer).requestsFlow();
+
+        rpcClient.notificationsFlow();
+        verify(rpcStreamer).notificationsFlow();
+
         RPCListener.RequestCallback requestCallback = Mockito.mock(RPCListener.RequestCallback.class);
         RPCListener.NotificationCallback notificationCallback = Mockito.mock(RPCListener.NotificationCallback.class);
         rpcClient.addRequestCallback(requestCallback);
