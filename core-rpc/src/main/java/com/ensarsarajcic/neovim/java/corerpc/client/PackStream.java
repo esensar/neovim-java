@@ -158,10 +158,16 @@ public final class PackStream implements RPCStreamer {
 
     private void requestReceived(RequestMessage requestMessage) {
         log.info("Request received: {}", requestMessage);
+        for (RPCListener.RequestCallback requestCallback : requestCallbacks) {
+            requestCallback.requestReceived(requestMessage);
+        }
     }
 
     private void notificationReceived(NotificationMessage notificationMessage) {
         log.info("Notification received: {}", notificationMessage);
+        for (RPCListener.NotificationCallback notificationCallback : notificationCallbacks) {
+            notificationCallback.notificationReceived(notificationMessage);
+        }
     }
 
     private void startListening(InputStream inputStream) {

@@ -22,23 +22,37 @@
  * SOFTWARE.
  */
 
-package com.ensarsarajcic.neovim.java.corerpc;
-
-import static org.junit.Assert.assertTrue;
+package com.ensarsarajcic.neovim.java.corerpc.message;
 
 import org.junit.Test;
 
-/**
- * Unit test for simple App.
- */
-public class AppTest 
-{
-    /**
-     * Rigorous Test :-)
-     */
+import static org.junit.Assert.*;
+
+public class MessageTypeTest {
+
     @Test
-    public void shouldAnswerWithTrue()
-    {
-        assertTrue( true );
+    public void fromIntTest() {
+        // 0 should be request
+        assertEquals(MessageType.REQUEST, MessageType.fromInt(0));
+        // 1 should be response
+        assertEquals(MessageType.RESPONSE, MessageType.fromInt(1));
+        // 2 should be notification
+        assertEquals(MessageType.NOTIFICATION, MessageType.fromInt(2));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void fromInvalidIntTest() {
+        // when an invalid int is used it should throw an exception
+        MessageType.fromInt(27);
+    }
+
+    @Test
+    public void asIntTest() {
+        // 0 should be request
+        assertEquals(0, MessageType.REQUEST.asInt());
+        // 1 should be response
+        assertEquals(1, MessageType.RESPONSE.asInt());
+        // 2 should be notification
+        assertEquals(2, MessageType.NOTIFICATION.asInt());
     }
 }
