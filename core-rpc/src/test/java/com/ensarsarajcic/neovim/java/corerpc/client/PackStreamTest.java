@@ -32,22 +32,14 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.mockito.stubbing.Answer;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Flow;
-import java.util.concurrent.TimeUnit;
-import java.util.function.Consumer;
 
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
@@ -157,45 +149,6 @@ public class PackStreamTest {
     }
 
     @Test
-    public void testSendRequestCompletable() throws IOException {
-        // Given a proper message id generator and response
-        given(messageIdGenerator.nextId()).willReturn(25);
-        RequestMessage.Builder message = new RequestMessage.Builder("test");
-        ResponseMessage preparedResponse = new ResponseMessage.Builder("test").withId(25).build();
-        doAnswer(invocationOnMock -> {
-            RPCListener.ResponseCallback responseCallback = (RPCListener.ResponseCallback) invocationOnMock.getArguments()[1];
-            responseCallback.responseReceived(25, preparedResponse);
-            return null;
-        }).when(rpcListener).listenForResponse(anyInt(), any());
-
-        CountDownLatch countDownLatch = new CountDownLatch(1);
-
-        // When response is requested
-        packStream.response(message).thenAccept(responseMessage -> {
-            try {
-                assertTrue(countDownLatch.await(100, TimeUnit.MILLISECONDS));
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        });
-
-        // Ensure it does not block
-        countDownLatch.countDown();
-
-        // Rpc sender should be used
-        ArgumentCaptor<RequestMessage> argumentCaptor = ArgumentCaptor.forClass(RequestMessage.class);
-        verify(rpcSender).send(argumentCaptor.capture());
-        assertEquals("test", argumentCaptor.getValue().getMethod());
-        // And id for the message should be generated
-        verify(messageIdGenerator).nextId();
-        // And put into the message
-        assertEquals(25, argumentCaptor.getValue().getId());
-
-        // RPC Listener should be used too
-        verify(rpcListener).listenForResponse(eq(25), any());
-    }
-
-    @Test
     public void testRequestCallback() throws IOException {
         // Given a proper rpc listener and attached pack stream
         packStream.attach(connection);
@@ -239,27 +192,6 @@ public class PackStreamTest {
     }
 
     @Test
-    public void testRequestFlow() throws IOException {
-        // Given a proper rpc listener and attached pack stream
-        packStream.attach(connection);
-
-        // When request flow is subscribed to
-        Flow.Subscriber<RequestMessage> requestMessageSubscriber = Mockito.mock(Flow.Subscriber.class);
-        doAnswer(invocationOnMock -> {
-            Flow.Subscription subscription = (Flow.Subscription) invocationOnMock.getArguments()[0];
-            subscription.request(Long.MAX_VALUE);
-            return null;
-        }).when(requestMessageSubscriber).onSubscribe(any());
-        packStream.requestsFlow()
-                .subscribe(requestMessageSubscriber);
-
-        // It should receive events when requests arrive
-        RequestMessage msg1 = new RequestMessage.Builder("test").build();
-        packStreamRequestCallback.getValue().requestReceived(msg1);
-        verify(requestMessageSubscriber).onNext(msg1);
-    }
-
-    @Test
     public void testNotificationCallback() throws IOException {
         // Given a proper rpc listener and attached pack stream
         packStream.attach(connection);
@@ -300,27 +232,6 @@ public class PackStreamTest {
         packStreamNotificationCallback.getValue().notificationReceived(msg4);
         verify(firstCallback, never()).notificationReceived(msg4);
         verify(secondCallback, never()).notificationReceived(msg4);
-    }
-
-    @Test
-    public void testNotificationFlow() throws IOException {
-        // Given a proper rpc listener and attached pack stream
-        packStream.attach(connection);
-
-        // When request flow is subscribed to
-        Flow.Subscriber<NotificationMessage> notificationMessageSubscriber = Mockito.mock(Flow.Subscriber.class);
-        doAnswer(invocationOnMock -> {
-            Flow.Subscription subscription = (Flow.Subscription) invocationOnMock.getArguments()[0];
-            subscription.request(Long.MAX_VALUE);
-            return null;
-        }).when(notificationMessageSubscriber).onSubscribe(any());
-        packStream.notificationsFlow()
-                .subscribe(notificationMessageSubscriber);
-
-        // It should receive events when notifications arrive
-        NotificationMessage msg1 = new NotificationMessage.Builder("test").build();
-        packStreamNotificationCallback.getValue().notificationReceived(msg1);
-        verify(notificationMessageSubscriber).onNext(msg1);
     }
 
     @Test(expected = NullPointerException.class)

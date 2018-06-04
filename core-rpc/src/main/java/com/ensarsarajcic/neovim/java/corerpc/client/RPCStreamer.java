@@ -25,13 +25,9 @@
 package com.ensarsarajcic.neovim.java.corerpc.client;
 
 import com.ensarsarajcic.neovim.java.corerpc.message.Message;
-import com.ensarsarajcic.neovim.java.corerpc.message.NotificationMessage;
 import com.ensarsarajcic.neovim.java.corerpc.message.RequestMessage;
-import com.ensarsarajcic.neovim.java.corerpc.message.ResponseMessage;
 
 import java.io.IOException;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Flow;
 
 /**
  * Interface defining a two way RPC communication stream
@@ -75,18 +71,6 @@ public interface RPCStreamer {
     void send(RequestMessage.Builder requestMessage, RPCListener.ResponseCallback responseCallback) throws IOException;
 
     /**
-     * Specific variant of {@link #send(RequestMessage.Builder)} which uses {@link CompletableFuture}
-     * instead of {@link com.ensarsarajcic.neovim.java.corerpc.client.RPCListener.ResponseCallback}
-     *
-     * Prefer this over {@link #send(RequestMessage.Builder, RPCListener.ResponseCallback)}
-     *
-     * @param requestMessage {@link RequestMessage.Builder} of message to send
-     * @return {@link CompletableFuture} which can throw {@link IOException} or {@link IllegalStateException}
-     * @see #send(RequestMessage.Builder, RPCListener.ResponseCallback)
-     */
-    CompletableFuture<ResponseMessage> response(RequestMessage.Builder requestMessage);
-
-    /**
      * Adds a new {@link RPCListener.RequestCallback}, if it is not already added
      * It will stay attached and receive all requests until {@link #removeRequestCallback(RPCListener.RequestCallback)}
      * is called with exact same callback
@@ -101,14 +85,6 @@ public interface RPCStreamer {
      * @param requestCallback {@link RPCListener.RequestCallback} to remove
      */
     void removeRequestCallback(RPCListener.RequestCallback requestCallback);
-
-    /**
-     * Passes down a publisher of {@link RequestMessage} objects received
-     * It will never complete
-     * Prefer this to using {@link #addRequestCallback(RPCListener.RequestCallback)}
-     * @return {@link Flow.Publisher} passing down requests as they come
-     */
-    Flow.Publisher<RequestMessage> requestsFlow();
 
     /**
      * Adds a new {@link RPCListener.NotificationCallback}, if it is not already added
@@ -126,12 +102,4 @@ public interface RPCStreamer {
      * @param notificationCallback {@link RPCListener.NotificationCallback} to remove
      */
     void removeNotificationCallback(RPCListener.NotificationCallback notificationCallback);
-
-    /**
-     * Passes down a publisher of {@link NotificationMessage} objects received
-     * It will never complete
-     * Prefer this to using {@link #addNotificationCallback(RPCListener.NotificationCallback)}
-     * @return {@link Flow.Publisher} passing down notifications as they come
-     */
-    Flow.Publisher<NotificationMessage> notificationsFlow();
 }
