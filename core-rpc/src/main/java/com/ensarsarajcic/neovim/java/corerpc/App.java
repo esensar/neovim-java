@@ -45,7 +45,7 @@ public class App {
             rpcClient.attach(new TcpSocketRPCConnection(socket));
 
             for (int i = 1; i < 15; i++) {
-                rpcClient.send(new RequestMessage.Builder("nvim_input", new ArrayList<>(){{add("jjjj");}}), (forId, responseMessage) -> System.out.println(responseMessage));
+                rpcClient.send(new RequestMessage.Builder("nvim_input", new ArrayList<>(){{add("jjjj");}}), ((forId, responseMessage) -> System.out.println(responseMessage)));
             }
         } catch (IOException e) {
             e.printStackTrace();
