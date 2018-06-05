@@ -33,7 +33,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
-@NeovimApiClient(target = 3)
 public interface NeovimApi {
 
     @NeovimApiFunction(name = "nvim_call_atomic", since = 1)
