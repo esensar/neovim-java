@@ -58,4 +58,9 @@ public @interface NeovimApiFunction {
      * 0 means it is not deprecated
      */
     int deprecatedIn() default 0;
+
+    /**
+     * If function/method is deprecated, this can be used to point to function that should be used instead
+     */
+    String useFunction() default "";
 }

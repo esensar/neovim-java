@@ -37,6 +37,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
+@NeovimApiClient(name = "full_stream_api", target = 3, complete = true)
 public final class NeovimStreamApi implements NeovimApi {
 
     private ReactiveRPCStreamer reactiveRPCStreamer;
