@@ -26,6 +26,9 @@ package com.ensarsarajcic.neovim.java.api.types.apiinfo;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/**
+ * Contains definition of a custom Neovim error
+ */
 public final class ErrorInfo {
 
     private String name;

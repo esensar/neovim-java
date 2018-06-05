@@ -36,8 +36,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.Function;
 
+/**
+ * Full implementation of {@link NeovimApi} based on {@link ReactiveRPCStreamer}
+ */
 @NeovimApiClient(name = "full_stream_api", target = 3, complete = true)
 public final class NeovimStreamApi implements NeovimApi {
 

@@ -28,6 +28,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
+/**
+ * Contains definition of a Neovim API function
+ */
 public final class FunctionInfo {
 
     private boolean method;
