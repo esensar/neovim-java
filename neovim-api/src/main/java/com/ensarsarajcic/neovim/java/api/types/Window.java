@@ -22,38 +22,10 @@
  * SOFTWARE.
  */
 
-package com.ensarsarajcic.neovim.java.api;
-
-import com.ensarsarajcic.neovim.java.corerpc.client.RPCClient;
-import com.ensarsarajcic.neovim.java.corerpc.client.TcpSocketRPCConnection;
-import com.ensarsarajcic.neovim.java.corerpc.reactive.ReactiveRPCClient;
-
-import java.io.IOException;
-import java.net.Socket;
+package com.ensarsarajcic.neovim.java.api.types;
 
 /**
- * Hello world!
- *
+ * Represents a Neovim Window (custom Msgpack type)
  */
-public class App 
-{
-    public static void main( String[] args )
-    {
-        System.out.println( "Hello World!" );
-        try {
-
-            // Create a default instance
-            Socket socket = new Socket("127.0.0.1", 6666);
-
-            RPCClient rpcClient = RPCClient.getDefaultAsyncInstance();
-            rpcClient.attach(new TcpSocketRPCConnection(socket));
-
-            NeovimStreamApi neovimStreamApi = new NeovimStreamApi(ReactiveRPCClient.createDefaultInstanceWithCustomStreamer(rpcClient));
-
-            neovimStreamApi.input("jjjj").thenAccept(System.out::println);
-            neovimStreamApi.getApiInfo().thenAccept(System.out::println);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+public final class Window {
 }

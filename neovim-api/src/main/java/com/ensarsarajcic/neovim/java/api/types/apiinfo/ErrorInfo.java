@@ -22,38 +22,42 @@
  * SOFTWARE.
  */
 
-package com.ensarsarajcic.neovim.java.api;
+package com.ensarsarajcic.neovim.java.api.types.apiinfo;
 
-import com.ensarsarajcic.neovim.java.corerpc.client.RPCClient;
-import com.ensarsarajcic.neovim.java.corerpc.client.TcpSocketRPCConnection;
-import com.ensarsarajcic.neovim.java.corerpc.reactive.ReactiveRPCClient;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.io.IOException;
-import java.net.Socket;
+public final class ErrorInfo {
 
-/**
- * Hello world!
- *
- */
-public class App 
-{
-    public static void main( String[] args )
-    {
-        System.out.println( "Hello World!" );
-        try {
+    private String name;
+    private Props props;
 
-            // Create a default instance
-            Socket socket = new Socket("127.0.0.1", 6666);
+    public ErrorInfo(String name, Props props) {
+        this.name = name;
+        this.props = props;
+    }
 
-            RPCClient rpcClient = RPCClient.getDefaultAsyncInstance();
-            rpcClient.attach(new TcpSocketRPCConnection(socket));
+    static class Props {
 
-            NeovimStreamApi neovimStreamApi = new NeovimStreamApi(ReactiveRPCClient.createDefaultInstanceWithCustomStreamer(rpcClient));
+        private int id;
 
-            neovimStreamApi.input("jjjj").thenAccept(System.out::println);
-            neovimStreamApi.getApiInfo().thenAccept(System.out::println);
-        } catch (IOException e) {
-            e.printStackTrace();
+        public Props(@JsonProperty("id") int id) {
+            this.id = id;
         }
+    }
+
+    public int getId() {
+        return props.id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public String toString() {
+        return "ErrorInfo{" +
+                "id=" + props.id +
+                ", name='" + name + '\'' +
+                '}';
     }
 }

@@ -22,38 +22,48 @@
  * SOFTWARE.
  */
 
-package com.ensarsarajcic.neovim.java.api;
+package com.ensarsarajcic.neovim.java.api.types.apiinfo;
 
-import com.ensarsarajcic.neovim.java.corerpc.client.RPCClient;
-import com.ensarsarajcic.neovim.java.corerpc.client.TcpSocketRPCConnection;
-import com.ensarsarajcic.neovim.java.corerpc.reactive.ReactiveRPCClient;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.io.IOException;
-import java.net.Socket;
+import java.util.List;
 
-/**
- * Hello world!
- *
- */
-public class App 
-{
-    public static void main( String[] args )
-    {
-        System.out.println( "Hello World!" );
-        try {
+public final class UiEventInfo {
 
-            // Create a default instance
-            Socket socket = new Socket("127.0.0.1", 6666);
+    private String name;
+    private List<List<String>> parameters;
+    private int since;
 
-            RPCClient rpcClient = RPCClient.getDefaultAsyncInstance();
-            rpcClient.attach(new TcpSocketRPCConnection(socket));
+    public UiEventInfo(
+            @JsonProperty("name")
+            String name,
+            @JsonProperty("parameters")
+            List<List<String>> parameters,
+            @JsonProperty("since")
+            int since) {
+        this.name = name;
+        this.parameters = parameters;
+        this.since = since;
+    }
 
-            NeovimStreamApi neovimStreamApi = new NeovimStreamApi(ReactiveRPCClient.createDefaultInstanceWithCustomStreamer(rpcClient));
+    public String getName() {
+        return name;
+    }
 
-            neovimStreamApi.input("jjjj").thenAccept(System.out::println);
-            neovimStreamApi.getApiInfo().thenAccept(System.out::println);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public List<List<String>> getParameters() {
+        return parameters;
+    }
+
+    public int getSince() {
+        return since;
+    }
+
+    @Override
+    public String toString() {
+        return "NeovimUiEvent{" +
+                "name='" + name + '\'' +
+                ", parameters=" + parameters +
+                ", since=" + since +
+                '}';
     }
 }
