@@ -30,6 +30,7 @@ import com.ensarsarajcic.neovim.java.corerpc.reactive.ReactiveRPCClient;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Hello world!
@@ -51,8 +52,12 @@ public class App
             NeovimStreamApi neovimStreamApi = new NeovimStreamApi(ReactiveRPCClient.createDefaultInstanceWithCustomStreamer(rpcClient));
 
             neovimStreamApi.input("jjjj").thenAccept(System.out::println);
-            neovimStreamApi.getApiInfo().thenAccept(System.out::println);
+            neovimStreamApi.getApiInfo().thenAccept(System.out::println).get();
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
             e.printStackTrace();
         }
     }

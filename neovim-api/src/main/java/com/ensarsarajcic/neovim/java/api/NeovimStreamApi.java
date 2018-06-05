@@ -36,6 +36,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Function;
 
 @NeovimApiClient(name = "full_stream_api", target = 3, complete = true)
 public final class NeovimStreamApi implements NeovimApi {
@@ -125,9 +126,7 @@ public final class NeovimStreamApi implements NeovimApi {
 
     @Override
     public CompletableFuture<Integer> input(String keys) {
-        return reactiveRPCStreamer.response(new RequestMessage.Builder("nvim_input").addArgument(keys))
-                .thenApply(ResponseMessage::getResult)
-                .thenApply(Integer.class::cast);
+        return responseOfType(new RequestMessage.Builder("nvim_input").addArgument(keys), Integer.class);
     }
 
     @Override
@@ -282,8 +281,12 @@ public final class NeovimStreamApi implements NeovimApi {
 
     @Override
     public CompletableFuture<ApiInfo> getApiInfo() {
-        return reactiveRPCStreamer.response(new RequestMessage.Builder("nvim_get_api_info"))
+        return responseOfType(new RequestMessage.Builder("nvim_get_api_info"), ApiInfo.class);
+    }
+
+    private <T> CompletableFuture<T> responseOfType(RequestMessage.Builder request, Class<T> type) {
+        return reactiveRPCStreamer.response(request)
                 .thenApply(ResponseMessage::getResult)
-                .thenApply(o -> objectMapper.convertValue(o, ApiInfo.class));
+                .thenApply(o -> objectMapper.convertValue(o, type));
     }
 }
