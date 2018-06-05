@@ -53,37 +53,52 @@ public final class NeovimStreamApi implements NeovimApi {
 
     @Override
     public CompletableFuture<List> sendAtomic(AtomicCallBuilder atomicCallBuilder) {
-        return null;
+        throw new UnsupportedOperationException("Not yet implemented");
     }
 
     @Override
     public AtomicCallBuilder prepareAtomic() {
-        return null;
+        throw new UnsupportedOperationException("Not yet implemented");
     }
 
+    // TODO Add highlight definition
     @Override
     public CompletableFuture<Map> getHighlightById(int id, boolean rgb) {
-        return null;
+        return sendWithResponseOfType(
+                new RequestMessage.Builder("nvim_get_hl_by_id")
+                        .addArgument(id)
+                        .addArgument(rgb),
+                Map.class);
     }
 
     @Override
     public CompletableFuture<Map> getHighlightByName(String name, boolean rgb) {
-        return null;
+        return sendWithResponseOfType(
+                new RequestMessage.Builder("nvim_get_hl_by_name")
+                        .addArgument(name)
+                        .addArgument(rgb),
+                Map.class);
     }
 
     @Override
     public CompletableFuture<Void> attachUI(int width, int height, Map<String, String> options) {
-        return null;
+        return sendWithNoResponse(
+                new RequestMessage.Builder("nvim_ui_attach")
+                    .addArgument(width)
+                    .addArgument(height)
+                    .addArgument(options));
     }
 
     @Override
     public CompletableFuture<Void> detachUI() {
-        return null;
+        return sendWithNoResponse(new RequestMessage.Builder("nvim_ui_detach"));
     }
 
     @Override
     public CompletableFuture<Void> resizeUI(int width, int height) {
-        return null;
+        return sendWithNoResponse(new RequestMessage.Builder("nvim_ui_try_resize")
+                .addArgument(width)
+                .addArgument(height));
     }
 
     @Override
@@ -128,7 +143,7 @@ public final class NeovimStreamApi implements NeovimApi {
 
     @Override
     public CompletableFuture<Integer> input(String keys) {
-        return responseOfType(new RequestMessage.Builder("nvim_input").addArgument(keys), Integer.class);
+        return sendWithResponseOfType(new RequestMessage.Builder("nvim_input").addArgument(keys), Integer.class);
     }
 
     @Override
@@ -283,12 +298,16 @@ public final class NeovimStreamApi implements NeovimApi {
 
     @Override
     public CompletableFuture<ApiInfo> getApiInfo() {
-        return responseOfType(new RequestMessage.Builder("nvim_get_api_info"), ApiInfo.class);
+        return sendWithResponseOfType(new RequestMessage.Builder("nvim_get_api_info"), ApiInfo.class);
     }
 
-    private <T> CompletableFuture<T> responseOfType(RequestMessage.Builder request, Class<T> type) {
+    private <T> CompletableFuture<T> sendWithResponseOfType(RequestMessage.Builder request, Class<T> type) {
         return reactiveRPCStreamer.response(request)
                 .thenApply(ResponseMessage::getResult)
                 .thenApply(o -> objectMapper.convertValue(o, type));
+    }
+
+    private CompletableFuture<Void> sendWithNoResponse(RequestMessage.Builder request) {
+        return reactiveRPCStreamer.response(request).thenApply(responseMessage -> null);
     }
 }

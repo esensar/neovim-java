@@ -49,7 +49,7 @@ import java.util.ArrayList;
 public final class RequestMessage implements IdentifiableMessage {
 
     private final String method;
-    private final ArrayList<String> arguments;
+    private final ArrayList<Object> arguments;
     private final int id;
 
     private RequestMessage(Builder builder) {
@@ -64,7 +64,7 @@ public final class RequestMessage implements IdentifiableMessage {
     }
 
     @JsonProperty("arguments")
-    public ArrayList<String> getArguments() {
+    public ArrayList getArguments() {
         return arguments;
     }
 
@@ -90,7 +90,7 @@ public final class RequestMessage implements IdentifiableMessage {
     @JsonPOJOBuilder
     public static class Builder {
         private final String method;
-        private final ArrayList<String> arguments;
+        private final ArrayList<Object> arguments;
         private int id;
 
         /**
@@ -111,9 +111,9 @@ public final class RequestMessage implements IdentifiableMessage {
         @JsonCreator
         public Builder(
                 @JsonProperty("method") String method,
-                @JsonProperty("arguments") ArrayList<String> arguments) {
+                @JsonProperty("arguments") ArrayList<?> arguments) {
             this.method = method;
-            this.arguments = arguments;
+            this.arguments = new ArrayList<>(arguments);
         }
 
         /**
@@ -130,7 +130,7 @@ public final class RequestMessage implements IdentifiableMessage {
          * Adds all arguments provided
          * @param arguments argument list to add
          */
-        public Builder addArguments(ArrayList<String> arguments) {
+        public Builder addArguments(ArrayList<?> arguments) {
             this.arguments.addAll(arguments);
             return this;
         }
@@ -139,7 +139,7 @@ public final class RequestMessage implements IdentifiableMessage {
          * Adds a single argument
          * @param argument argument to add
          */
-        public Builder addArgument(String argument) {
+        public Builder addArgument(Object argument) {
             this.arguments.add(argument);
             return this;
         }
