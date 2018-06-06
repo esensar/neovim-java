@@ -25,6 +25,7 @@
 package com.ensarsarajcic.neovim.java.explorer.list;
 
 import com.ensarsarajcic.neovim.java.corerpc.client.TcpSocketRPCConnection;
+import com.ensarsarajcic.neovim.java.explorer.ApiExplorer;
 import com.ensarsarajcic.neovim.java.explorer.api.*;
 import com.ensarsarajcic.neovim.java.explorer.api.discovery.ApiDiscovery;
 import javafx.beans.property.SimpleStringProperty;
@@ -34,10 +35,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.util.Callback;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -58,6 +58,8 @@ public final class ApiListController {
     public TableColumn<NeovimFunction, Integer> functionColDepSince;
     @FXML
     public TableColumn<NeovimFunction, String> functionColParams;
+    @FXML
+    public TableColumn functionColOpenInBrowser;
     @FXML
     public TableView<NeovimFunction> functionTable;
 
@@ -115,6 +117,32 @@ public final class ApiListController {
             functionColSince.setCellValueFactory(new PropertyValueFactory<>("since"));
             functionColDepSince.setCellValueFactory(new PropertyValueFactory<>("deprecatedSince"));
             functionColParams.setCellValueFactory(new PropertyValueFactory<>("parameters"));
+            functionColOpenInBrowser.setCellFactory(new Callback<TableColumn, TableCell>() {
+                @Override
+                public TableCell call(TableColumn param) {
+                    return new TableCell<NeovimFunction, String>() {
+                        final Button btn = new Button("Read doc");
+
+                        @Override
+                        protected void updateItem(String item, boolean empty) {
+                            super.updateItem(item, empty);
+                            if (empty) {
+                                setGraphic(null);
+                                setText(null);
+                            } else {
+                                btn.setOnAction(event -> {
+                                    NeovimFunction function = getTableView().getItems().get(getIndex());
+                                    ApiExplorer.hostServices.showDocument(
+                                            String.format("https://neovim.io/doc/user/api.html#%s()", function.getName())
+                                    );
+                                });
+                                setGraphic(btn);
+                                setText(null);
+                            }
+                        }
+                    };
+                }
+            });
             functionTable.setItems(neovimFunctions);
 
             // Show Ui Events
