@@ -31,21 +31,22 @@
   ~ SOFTWARE.
   -->
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ensarsarajcic.neovim.java.explorer.list.ApiListController">
-   <AnchorPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="17.0">
+<AnchorPane prefHeight="400.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ensarsarajcic.neovim.java.explorer.list.ApiListController">
+   <AnchorPane prefHeight="200.0" prefWidth="1000.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="17.0">
       <children>
-          <TabPane prefHeight="303.0" prefWidth="376.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+          <TabPane prefHeight="303.0" prefWidth="1000.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
               <tabs>
                   <Tab closable="false" text="Functions">
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                          <TableView fx:id="functionTable" prefHeight="367.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="1000.0">
+                          <TableView fx:id="functionTable" prefHeight="367.0" prefWidth="1000.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                               <columns>
-                                  <TableColumn fx:id="functionColMethod" editable="false" prefWidth="59.0" text="Method" />
-                                  <TableColumn fx:id="functionColName" editable="false" prefWidth="96.0" text="Name" />
-                                  <TableColumn fx:id="functionColReturnType" editable="false" prefWidth="77.0" text="Return Type" />
-                                  <TableColumn fx:id="functionColSince" editable="false" prefWidth="68.0" text="Since" />
-                                  <TableColumn fx:id="functionColDepSince" editable="false" prefWidth="62.0" text="Deprecated Since" />
-                                  <TableColumn fx:id="functionColParams" editable="false" prefWidth="237.0" text="Parameters" />
+                                  <TableColumn fx:id="functionColMethod" editable="false" prefWidth="45" text="Method" />
+                                  <TableColumn fx:id="functionColName" editable="false" prefWidth="160" text="Name" />
+                                  <TableColumn fx:id="functionColReturnType" editable="false" prefWidth="90" text="Return Type" />
+                                  <TableColumn fx:id="functionColSince" editable="false" prefWidth="30" text="Since" />
+                                  <TableColumn fx:id="functionColDepSince" editable="false" prefWidth="30" text="Deprecated Since" />
+                                  <TableColumn fx:id="functionColParams" editable="false" prefWidth="450" text="Parameters" />
+                                  <TableColumn fx:id="functionColOpenInBrowser" editable="false" text="Open" />
                               </columns>
                           </TableView>
                       </AnchorPane>
