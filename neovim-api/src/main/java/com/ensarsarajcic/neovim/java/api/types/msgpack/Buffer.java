@@ -25,7 +25,7 @@
 package com.ensarsarajcic.neovim.java.api.types.msgpack;
 
 /**
- * Represents a Neovim Buffer (custom Msgpack type)
+ * Represents a NeovimApis Buffer (custom Msgpack type)
  */
 public final class Buffer {
 }

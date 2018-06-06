@@ -45,14 +45,14 @@ public @interface NeovimApiFunction {
     String name() default "";
 
     /**
-     * Version of Neovim API the function/method was introduced in
+     * Version of NeovimApis API the function/method was introduced in
      * It is used for documentation
      * It can also be used for checking if method is supported by current version
      */
     int since() default 0;
 
     /**
-     * Version of Neovim API the function/method was deprecated in
+     * Version of NeovimApis API the function/method was deprecated in
      * It is used for documentation
      * It can also be used for checking if method is supported by current version
      * 0 means it is not deprecated

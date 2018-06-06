@@ -31,52 +31,48 @@ import java.util.Map;
 
 public final class NeovimApiList {
 
-    @JsonProperty("error_types")
     private Map<String, NeovimError> errorTypes;
     private List<NeovimFunction> functions;
     private Map<String, NeovimType> types;
-    @JsonProperty("ui_events")
     private List<NeovimUiEvent> uiEvents;
     private NeovimVersion version;
 
-    public Map<String, NeovimError> getErrorTypes() {
-        return errorTypes;
+    public NeovimApiList(
+            @JsonProperty("error_types")
+            Map<String, NeovimError> errorTypes,
+            @JsonProperty("functions")
+            List<NeovimFunction> functions,
+            @JsonProperty("types")
+            Map<String, NeovimType> types,
+            @JsonProperty("ui_events")
+            List<NeovimUiEvent> uiEvents,
+            @JsonProperty("version")
+            NeovimVersion version) {
+        this.errorTypes = errorTypes;
+        this.functions = functions;
+        this.types = types;
+        this.uiEvents = uiEvents;
+        this.version = version;
     }
 
-    public void setErrorTypes(Map<String, NeovimError> errorTypes) {
-        this.errorTypes = errorTypes;
+    public Map<String, NeovimError> getErrorTypes() {
+        return errorTypes;
     }
 
     public List<NeovimFunction> getFunctions() {
         return functions;
     }
 
-    public void setFunctions(List<NeovimFunction> functions) {
-        this.functions = functions;
-    }
-
     public Map<String, NeovimType> getTypes() {
         return types;
-    }
-
-    public void setTypes(Map<String, NeovimType> types) {
-        this.types = types;
     }
 
     public List<NeovimUiEvent> getUiEvents() {
         return uiEvents;
     }
 
-    public void setUiEvents(List<NeovimUiEvent> uiEvents) {
-        this.uiEvents = uiEvents;
-    }
-
     public NeovimVersion getVersion() {
         return version;
-    }
-
-    public void setVersion(NeovimVersion version) {
-        this.version = version;
     }
 
     @Override

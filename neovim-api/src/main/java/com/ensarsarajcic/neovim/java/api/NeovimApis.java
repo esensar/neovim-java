@@ -24,5 +24,15 @@
 
 package com.ensarsarajcic.neovim.java.api;
 
-public final class Neovim {
+import com.ensarsarajcic.neovim.java.corerpc.client.RPCConnection;
+import com.ensarsarajcic.neovim.java.corerpc.reactive.ReactiveRPCClient;
+import com.ensarsarajcic.neovim.java.corerpc.reactive.ReactiveRPCStreamer;
+
+public final class NeovimApis {
+
+    public static NeovimApi getApiForConnection(RPCConnection rpcConnection) {
+        ReactiveRPCStreamer reactiveRPCStreamer = ReactiveRPCClient.getDefaultInstance();
+        reactiveRPCStreamer.attach(rpcConnection);
+        return new NeovimStreamApi(reactiveRPCStreamer);
+    }
 }

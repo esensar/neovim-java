@@ -24,6 +24,7 @@
 
 package com.ensarsarajcic.neovim.java.explorer.list;
 
+import com.ensarsarajcic.neovim.java.corerpc.client.TcpSocketRPCConnection;
 import com.ensarsarajcic.neovim.java.explorer.api.*;
 import com.ensarsarajcic.neovim.java.explorer.api.discovery.ApiDiscovery;
 import javafx.beans.property.SimpleStringProperty;
@@ -39,7 +40,9 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.io.IOException;
+import java.net.Socket;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 public final class ApiListController {
     // Functions
@@ -90,10 +93,19 @@ public final class ApiListController {
     @FXML
     public Label labelInformation;
 
-    public void initialize() {
+    public void initialize() throws ExecutionException, InterruptedException {
         try {
             // Load up API
-            NeovimApiList apiList = ApiDiscovery.discoverApi();
+            NeovimApiList apiList;
+            try {
+                apiList = ApiDiscovery.discoverApiFromConnection(new TcpSocketRPCConnection(
+                        new Socket("127.0.0.1", 6666)
+                ));
+            } catch (Exception ex) {
+                // Fallback to new nvim instance
+                System.err.println("Could not connect to Neovim instance on 127.0.0.1:6666. Falling back to 'nvim --api-info'");
+                apiList = ApiDiscovery.discoverApi();
+            }
 
             // Show Functions
             ObservableList<NeovimFunction> neovimFunctions = FXCollections.observableArrayList(apiList.getFunctions());
@@ -126,10 +138,11 @@ public final class ApiListController {
             typesTable.setItems(FXCollections.observableArrayList(neovimTypes.entrySet()));
 
             // Show information
+            NeovimApiList finalApiList = apiList;
             ObservableValue<NeovimVersion> neovimVersions = new ObservableValueBase<>() {
                 @Override
                 public NeovimVersion getValue() {
-                    return apiList.getVersion();
+                    return finalApiList.getVersion();
                 }
             };
             labelInformation.setText(getVersionInfo(neovimVersions.getValue()));

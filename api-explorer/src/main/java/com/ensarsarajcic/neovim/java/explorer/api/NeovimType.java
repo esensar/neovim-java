@@ -24,6 +24,8 @@
 
 package com.ensarsarajcic.neovim.java.explorer.api;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public final class NeovimType {
 
     private int id;
@@ -33,15 +35,14 @@ public final class NeovimType {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public String getPrefix() {
         return prefix;
     }
 
-    public void setPrefix(String prefix) {
+    public NeovimType(
+            @JsonProperty("id") int id,
+            @JsonProperty("prefix") String prefix) {
+        this.id = id;
         this.prefix = prefix;
     }
 

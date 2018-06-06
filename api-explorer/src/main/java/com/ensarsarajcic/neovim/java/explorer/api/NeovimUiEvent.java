@@ -24,6 +24,8 @@
 
 package com.ensarsarajcic.neovim.java.explorer.api;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.List;
 
 public final class NeovimUiEvent {
@@ -36,23 +38,20 @@ public final class NeovimUiEvent {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public List<List<String>> getParameters() {
         return parameters;
-    }
-
-    public void setParameters(List<List<String>> parameters) {
-        this.parameters = parameters;
     }
 
     public int getSince() {
         return since;
     }
 
-    public void setSince(int since) {
+    public NeovimUiEvent(
+            @JsonProperty("name") String name,
+            @JsonProperty("parameters") List<List<String>> parameters,
+            @JsonProperty("since") int since) {
+        this.name = name;
+        this.parameters = parameters;
         this.since = since;
     }
 

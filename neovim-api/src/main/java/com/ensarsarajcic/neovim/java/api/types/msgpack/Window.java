@@ -25,7 +25,7 @@
 package com.ensarsarajcic.neovim.java.api.types.msgpack;
 
 /**
- * Represents a Neovim Window (custom Msgpack type)
+ * Represents a NeovimApis Window (custom Msgpack type)
  */
 public final class Window {
 }

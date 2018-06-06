@@ -27,8 +27,8 @@ package com.ensarsarajcic.neovim.java.api.types.apiinfo;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * Model containing Neovim API Version Info
- * Used as a part of {@link ApiInfo} which can be fetched from Neovim instance
+ * Model containing NeovimApis API Version Info
+ * Used as a part of {@link ApiInfo} which can be fetched from NeovimApis instance
  */
 public final class VersionInfo {
     private int major;
