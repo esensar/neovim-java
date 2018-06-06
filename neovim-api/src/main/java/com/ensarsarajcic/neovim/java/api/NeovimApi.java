@@ -24,9 +24,12 @@
 
 package com.ensarsarajcic.neovim.java.api;
 
-import com.ensarsarajcic.neovim.java.api.types.Buffer;
-import com.ensarsarajcic.neovim.java.api.types.Tabpage;
-import com.ensarsarajcic.neovim.java.api.types.Window;
+import com.ensarsarajcic.neovim.java.api.types.api.VimColorMap;
+import com.ensarsarajcic.neovim.java.api.types.api.VimMapping;
+import com.ensarsarajcic.neovim.java.api.types.api.VimMode;
+import com.ensarsarajcic.neovim.java.api.types.msgpack.Buffer;
+import com.ensarsarajcic.neovim.java.api.types.msgpack.Tabpage;
+import com.ensarsarajcic.neovim.java.api.types.msgpack.Window;
 import com.ensarsarajcic.neovim.java.api.types.apiinfo.ApiInfo;
 
 import java.util.List;
@@ -84,11 +87,8 @@ public interface NeovimApi {
     @NeovimApiFunction(name = "nvim_input", since = 1)
     CompletableFuture<Integer> input(String keys);
 
-    @NeovimApiFunction(name = "nvim_set_current_line", since = 1)
-    CompletableFuture<Void> setCurrentLine(String line);
-
     @NeovimApiFunction(name = "nvim_get_keymap", since = 3)
-    CompletableFuture<List<Map>> getKeymap(String mode);
+    CompletableFuture<List<VimMapping>> getKeymap(String mode);
 
     @NeovimApiFunction(name = "nvim_ui_set_option", since = 1)
     CompletableFuture<Void> setUiOption(String name, Object value);
@@ -106,7 +106,7 @@ public interface NeovimApi {
     CompletableFuture<Object> getVimVariable(String name);
 
     @NeovimApiFunction(name = "nvim_set_option", since = 1)
-    void setOption(String name, Object value);
+    CompletableFuture<Void> setOption(String name, Object value);
 
     @NeovimApiFunction(name = "nvim_get_option", since = 1)
     CompletableFuture<Object> getOption(String name);
@@ -130,13 +130,16 @@ public interface NeovimApi {
     CompletableFuture<Void> writelnToError(String text);
 
     @NeovimApiFunction(name = "nvim_strwidth", since = 1)
-    CompletableFuture<String> stringWidth(String string);
+    CompletableFuture<Integer> stringWidth(String string);
 
     @NeovimApiFunction(name = "nvim_list_runtime_paths", since = 1)
     CompletableFuture<List<String>> listRuntimePaths();
 
     @NeovimApiFunction(name = "nvim_get_current_line", since = 1)
     CompletableFuture<String> getCurrentLine();
+
+    @NeovimApiFunction(name = "nvim_set_current_line", since = 1)
+    CompletableFuture<Void> setCurrentLine(String line);
 
     @NeovimApiFunction(name = "nvim_del_current_line", since = 1)
     CompletableFuture<Void> deleteCurrentLine();
@@ -172,10 +175,10 @@ public interface NeovimApi {
     CompletableFuture<Void> setCurrentTabpage(Tabpage tabpage);
 
     @NeovimApiFunction(name = "nvim_get_color_map", since = 1)
-    CompletableFuture<Map> getColorMap();
+    CompletableFuture<VimColorMap> getColorMap();
 
     @NeovimApiFunction(name = "nvim_get_mode", since = 2)
-    CompletableFuture<Map> getMode();
+    CompletableFuture<VimMode> getMode();
 
     @NeovimApiFunction(name = "nvim_get_api_info", since = 1)
     CompletableFuture<ApiInfo> getApiInfo();

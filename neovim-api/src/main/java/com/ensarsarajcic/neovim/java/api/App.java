@@ -30,11 +30,7 @@ import com.ensarsarajcic.neovim.java.corerpc.reactive.ReactiveRPCClient;
 
 import java.io.IOException;
 import java.net.Socket;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Map;
 import java.util.concurrent.ExecutionException;
-import java.util.function.Consumer;
 
 /**
  * Hello world!
@@ -57,10 +53,9 @@ public class App
 
             neovimStreamApi.input("jjjj").thenAccept(System.out::println);
             neovimStreamApi.getApiInfo().thenAccept(System.out::println).get();
-            neovimStreamApi.getHighlightById(1, true).thenAccept(System.out::println).get();
-            neovimStreamApi.getHighlightByName("DiffAdd", true).thenAccept(map -> System.out.println(Integer.toHexString((Integer)map.get("foreground")))).get();
-            neovimStreamApi.attachUI(200, 200, new HashMap<>());
-            neovimStreamApi.resizeUI(500, 500);
+            neovimStreamApi.listRuntimePaths().thenAccept(System.out::println).get();
+            neovimStreamApi.getColorMap().thenAccept(System.out::println).get();
+            neovimStreamApi.getMode().thenAccept(System.out::println).get();
         } catch (IOException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {

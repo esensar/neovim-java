@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package com.ensarsarajcic.neovim.java.api.types;
+package com.ensarsarajcic.neovim.java.api.types.msgpack;
 
 /**
  * Represents a Neovim Buffer (custom Msgpack type)

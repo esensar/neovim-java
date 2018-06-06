@@ -24,18 +24,23 @@
 
 package com.ensarsarajcic.neovim.java.api;
 
-import com.ensarsarajcic.neovim.java.api.types.Buffer;
-import com.ensarsarajcic.neovim.java.api.types.Tabpage;
-import com.ensarsarajcic.neovim.java.api.types.Window;
+import com.ensarsarajcic.neovim.java.api.types.api.VimColorMap;
+import com.ensarsarajcic.neovim.java.api.types.api.VimMapping;
+import com.ensarsarajcic.neovim.java.api.types.api.VimMode;
+import com.ensarsarajcic.neovim.java.api.types.msgpack.Buffer;
+import com.ensarsarajcic.neovim.java.api.types.msgpack.Tabpage;
+import com.ensarsarajcic.neovim.java.api.types.msgpack.Window;
 import com.ensarsarajcic.neovim.java.api.types.apiinfo.ApiInfo;
 import com.ensarsarajcic.neovim.java.corerpc.message.RequestMessage;
 import com.ensarsarajcic.neovim.java.corerpc.message.ResponseMessage;
 import com.ensarsarajcic.neovim.java.corerpc.reactive.ReactiveRPCStreamer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Function;
 
 /**
  * Full implementation of {@link NeovimApi} based on {@link ReactiveRPCStreamer}
@@ -84,9 +89,9 @@ public final class NeovimStreamApi implements NeovimApi {
     public CompletableFuture<Void> attachUI(int width, int height, Map<String, String> options) {
         return sendWithNoResponse(
                 new RequestMessage.Builder("nvim_ui_attach")
-                    .addArgument(width)
-                    .addArgument(height)
-                    .addArgument(options));
+                        .addArgument(width)
+                        .addArgument(height)
+                        .addArgument(options));
     }
 
     @Override
@@ -103,42 +108,47 @@ public final class NeovimStreamApi implements NeovimApi {
 
     @Override
     public CompletableFuture<Object> executeLua(String luaCode, List<String> args) {
-        return null;
+        return sendWithGenericResponse(new RequestMessage.Builder("nvim_execute_lua")
+                .addArgument(luaCode)
+                .addArgument(args));
     }
 
     @Override
     public CompletableFuture<Void> executeCommand(String command) {
-        return null;
+        return sendWithNoResponse(new RequestMessage.Builder("nvim_command").addArgument(command));
     }
 
     @Override
     public CompletableFuture<Void> setCurrentDir(String directoryPath) {
-        return null;
+        return sendWithNoResponse(new RequestMessage.Builder("nvim_set_current_dir").addArgument(directoryPath));
     }
 
     @Override
     public CompletableFuture<Void> subscribeToEvent(String event) {
-        return null;
+        return sendWithNoResponse(new RequestMessage.Builder("nvim_subscribe").addArgument(event));
     }
 
     @Override
     public CompletableFuture<Void> unsubscribeFromEvent(String event) {
-        return null;
+        return sendWithNoResponse(new RequestMessage.Builder("nvim_unsubscribe").addArgument(event));
     }
 
     @Override
     public CompletableFuture<Object> eval(String expression) {
-        return null;
+        return sendWithGenericResponse(new RequestMessage.Builder("nvim_eval").addArgument(expression));
     }
 
     @Override
     public CompletableFuture<Object> callFunction(String name, List<String> args) {
-        return null;
+        return sendWithGenericResponse(new RequestMessage.Builder("nvim_call_function").addArgument(name).addArgument(args));
     }
 
     @Override
     public CompletableFuture<Void> feedKeys(String keys, String mode, Boolean escape) {
-        return null;
+        return sendWithNoResponse(new RequestMessage.Builder("nvim_feedkeys")
+                .addArgument(keys)
+                .addArgument(mode)
+                .addArgument(escape));
     }
 
     @Override
@@ -147,153 +157,211 @@ public final class NeovimStreamApi implements NeovimApi {
     }
 
     @Override
-    public CompletableFuture<Void> setCurrentLine(String line) {
-        return null;
-    }
-
-    @Override
-    public CompletableFuture<List<Map>> getKeymap(String mode) {
-        return null;
+    public CompletableFuture<List<VimMapping>> getKeymap(String mode) {
+        return sendWithGenericResponse(
+                new RequestMessage.Builder("nvim_get_keymap")
+                        .addArgument(mode))
+                .thenApply(o -> objectMapper.convertValue(
+                        o,
+                        objectMapper.getTypeFactory()
+                                .constructCollectionType(List.class, VimMapping.class)
+                ));
     }
 
     @Override
     public CompletableFuture<Void> setUiOption(String name, Object value) {
-        return null;
+        return sendWithNoResponse(new RequestMessage.Builder("nvim_ui_set_option")
+                .addArgument(name)
+                .addArgument(value));
     }
 
     @Override
     public CompletableFuture<Void> setVariable(String name, Object value) {
-        return null;
+        return sendWithNoResponse(new RequestMessage.Builder("nvim_set_var")
+                .addArgument(name)
+                .addArgument(value));
     }
 
     @Override
     public CompletableFuture<Object> getVariable(String name) {
-        return null;
+        return sendWithGenericResponse(new RequestMessage.Builder("nvim_get_var").addArgument(name));
     }
 
     @Override
     public CompletableFuture<Void> deleteVariable(String name) {
-        return null;
+        return sendWithNoResponse(new RequestMessage.Builder("nvim_del_var").addArgument(name));
     }
 
     @Override
     public CompletableFuture<Object> getVimVariable(String name) {
-        return null;
+        return sendWithGenericResponse(new RequestMessage.Builder("nvim_get_vvar").addArgument(name));
     }
 
     @Override
-    public void setOption(String name, Object value) {
-
+    public CompletableFuture<Void> setOption(String name, Object value) {
+        return sendWithNoResponse(new RequestMessage.Builder("nvim_set_option")
+                .addArgument(name)
+                .addArgument(value));
     }
 
     @Override
     public CompletableFuture<Object> getOption(String name) {
-        return null;
+        return sendWithGenericResponse(new RequestMessage.Builder("nvim_get_option").addArgument(name));
     }
 
     @Override
     public CompletableFuture<Integer> getColorByName(String name) {
-        return null;
+        return sendWithResponseOfType(
+                new RequestMessage.Builder("nvim_get_color_by_name")
+                        .addArgument(name),
+                Integer.class);
     }
 
     @Override
     public CompletableFuture<String> replaceTermcodes(String strToReplace, boolean fromPart, boolean doLt, boolean special) {
-        return null;
+        return sendWithResponseOfType(
+                new RequestMessage.Builder("nvim_replace_termcodes")
+                        .addArgument(strToReplace)
+                        .addArgument(fromPart)
+                        .addArgument(doLt)
+                        .addArgument(special),
+                String.class
+        );
     }
 
     @Override
     public CompletableFuture<String> commandOutput(String command) {
-        return null;
+        return sendWithResponseOfType(
+                new RequestMessage.Builder("nvim_command_output")
+                        .addArgument(command),
+                String.class
+        );
     }
 
     @Override
     public CompletableFuture<Void> writeToOutput(String text) {
-        return null;
+        return sendWithNoResponse(new RequestMessage.Builder("nvim_out_write").addArgument(text));
     }
 
     @Override
     public CompletableFuture<Void> writeToError(String text) {
-        return null;
+        return sendWithNoResponse(new RequestMessage.Builder("nvim_err_write").addArgument(text));
     }
 
     @Override
     public CompletableFuture<Void> writelnToError(String text) {
-        return null;
+        return sendWithNoResponse(new RequestMessage.Builder("nvim_err_writeln").addArgument(text));
     }
 
     @Override
-    public CompletableFuture<String> stringWidth(String string) {
-        return null;
+    public CompletableFuture<Integer> stringWidth(String string) {
+        return sendWithResponseOfType(
+                new RequestMessage.Builder("nvim_strwidth")
+                        .addArgument(string),
+                Integer.class
+        );
     }
 
     @Override
     public CompletableFuture<List<String>> listRuntimePaths() {
-        return null;
+        return sendWithGenericResponse(
+                new RequestMessage.Builder("nvim_list_runtime_paths"))
+                .thenApply(o -> objectMapper.convertValue(
+                        o,
+                        objectMapper.getTypeFactory()
+                                .constructCollectionType(List.class, String.class)
+                ));
     }
 
     @Override
     public CompletableFuture<String> getCurrentLine() {
-        return null;
+        return sendWithResponseOfType(
+                new RequestMessage.Builder("nvim_get_current_line"),
+                String.class
+        );
+    }
+
+    @Override
+    public CompletableFuture<Void> setCurrentLine(String lineContent) {
+        return sendWithNoResponse(new RequestMessage.Builder("nvim_set_current_line").addArgument(lineContent));
     }
 
     @Override
     public CompletableFuture<Void> deleteCurrentLine() {
-        return null;
+        return sendWithNoResponse(new RequestMessage.Builder("nvim_del_current_line"));
     }
 
+    // TODO, MSGPACK TYPES ARE REQUIRED
     @Override
     public CompletableFuture<List<Buffer>> getBuffers() {
-        return null;
+        return sendWithGenericResponse(new RequestMessage.Builder("nvim_list_bufs"))
+                .thenApply(o -> objectMapper.convertValue(
+                        o,
+                        objectMapper.getTypeFactory().constructCollectionType(List.class, Buffer.class)));
     }
 
     @Override
     public CompletableFuture<Buffer> getCurrentBuffer() {
-        return null;
+        return sendWithResponseOfType(new RequestMessage.Builder("nvim_get_current_buf"), Buffer.class);
     }
 
     @Override
     public CompletableFuture<Void> setCurrentBuffer(Buffer buffer) {
-        return null;
+        return sendWithNoResponse(new RequestMessage.Builder("nvim_set_current_buf").addArgument(buffer));
     }
 
     @Override
     public CompletableFuture<Void> setCurrentWindow(Window window) {
-        return null;
+        return sendWithNoResponse(new RequestMessage.Builder("nvim_set_current_win").addArgument(window));
     }
 
     @Override
     public CompletableFuture<Void> setCurrentTabpage(Tabpage tabpage) {
-        return null;
+        return sendWithNoResponse(new RequestMessage.Builder("nvim_set_current_tabpage").addArgument(tabpage));
     }
 
     @Override
     public CompletableFuture<List<Window>> getWindows() {
-        return null;
+        return sendWithGenericResponse(new RequestMessage.Builder("nvim_list_wins"))
+                .thenApply(o -> objectMapper.convertValue(
+                        o,
+                        objectMapper.getTypeFactory().constructCollectionType(List.class, Window.class)
+                ));
     }
 
     @Override
     public CompletableFuture<Window> getCurrentWindow() {
-        return null;
+        return sendWithResponseOfType(new RequestMessage.Builder("nvim_get_current_win"), Window.class);
     }
 
     @Override
     public CompletableFuture<List<Tabpage>> getTabpages() {
-        return null;
+        return sendWithGenericResponse(new RequestMessage.Builder("nvim_list_tabpages"))
+                .thenApply(o -> objectMapper.convertValue(
+                        o,
+                        objectMapper.getTypeFactory().constructCollectionType(List.class, Tabpage.class)
+                ));
     }
 
     @Override
     public CompletableFuture<Tabpage> getCurrentTabpage() {
-        return null;
+        return sendWithResponseOfType(new RequestMessage.Builder("nvim_get_current_tabpage"), Tabpage.class);
     }
 
     @Override
-    public CompletableFuture<Map> getColorMap() {
-        return null;
+    public CompletableFuture<VimColorMap> getColorMap() {
+        return sendWithGenericResponse(new RequestMessage.Builder("nvim_get_color_map"))
+                .thenApply(o -> objectMapper.convertValue(
+                        o,
+                        objectMapper.getTypeFactory().constructMapType(Map.class, String.class, Integer.class)
+                ))
+                .thenApply(Map.class::cast)
+                .thenApply(VimColorMap::new);
     }
 
     @Override
-    public CompletableFuture<Map> getMode() {
-        return null;
+    public CompletableFuture<VimMode> getMode() {
+        return sendWithResponseOfType(new RequestMessage.Builder("nvim_get_mode"), VimMode.class);
     }
 
     @Override
@@ -305,6 +373,10 @@ public final class NeovimStreamApi implements NeovimApi {
         return reactiveRPCStreamer.response(request)
                 .thenApply(ResponseMessage::getResult)
                 .thenApply(o -> objectMapper.convertValue(o, type));
+    }
+
+    private CompletableFuture<Object> sendWithGenericResponse(RequestMessage.Builder request) {
+        return sendWithResponseOfType(request, Object.class);
     }
 
     private CompletableFuture<Void> sendWithNoResponse(RequestMessage.Builder request) {

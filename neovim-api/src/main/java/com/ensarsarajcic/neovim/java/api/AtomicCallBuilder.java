@@ -24,9 +24,12 @@
 
 package com.ensarsarajcic.neovim.java.api;
 
-import com.ensarsarajcic.neovim.java.api.types.Buffer;
-import com.ensarsarajcic.neovim.java.api.types.Tabpage;
-import com.ensarsarajcic.neovim.java.api.types.Window;
+import com.ensarsarajcic.neovim.java.api.types.api.VimColorMap;
+import com.ensarsarajcic.neovim.java.api.types.api.VimMapping;
+import com.ensarsarajcic.neovim.java.api.types.api.VimMode;
+import com.ensarsarajcic.neovim.java.api.types.msgpack.Buffer;
+import com.ensarsarajcic.neovim.java.api.types.msgpack.Tabpage;
+import com.ensarsarajcic.neovim.java.api.types.msgpack.Window;
 import com.ensarsarajcic.neovim.java.api.types.apiinfo.ApiInfo;
 
 import java.util.List;
@@ -124,7 +127,7 @@ public final class AtomicCallBuilder implements NeovimApi {
     }
 
     @Override
-    public CompletableFuture<List<Map>> getKeymap(String mode) {
+    public CompletableFuture<List<VimMapping>> getKeymap(String mode) {
         return null;
     }
 
@@ -154,8 +157,8 @@ public final class AtomicCallBuilder implements NeovimApi {
     }
 
     @Override
-    public void setOption(String name, Object value) {
-
+    public CompletableFuture<Void> setOption(String name, Object value) {
+        return null;
     }
 
     @Override
@@ -194,7 +197,7 @@ public final class AtomicCallBuilder implements NeovimApi {
     }
 
     @Override
-    public CompletableFuture<String> stringWidth(String string) {
+    public CompletableFuture<Integer> stringWidth(String string) {
         return null;
     }
 
@@ -259,12 +262,12 @@ public final class AtomicCallBuilder implements NeovimApi {
     }
 
     @Override
-    public CompletableFuture<Map> getColorMap() {
+    public CompletableFuture<VimColorMap> getColorMap() {
         return null;
     }
 
     @Override
-    public CompletableFuture<Map> getMode() {
+    public CompletableFuture<VimMode> getMode() {
         return null;
     }
 
