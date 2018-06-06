@@ -1,0 +1,7 @@
+.newFunc {
+    -fx-background: #ADD8E6;
+}
+
+.deprecatedFunc {
+    -fx-background: #CD5C5C;
+}

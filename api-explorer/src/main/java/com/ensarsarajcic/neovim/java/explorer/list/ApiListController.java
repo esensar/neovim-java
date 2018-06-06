@@ -41,6 +41,7 @@ import javafx.util.Callback;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
@@ -108,6 +109,7 @@ public final class ApiListController {
                 System.err.println("Could not connect to Neovim instance on 127.0.0.1:6666. Falling back to 'nvim --api-info'");
                 apiList = ApiDiscovery.discoverApi();
             }
+            NeovimApiList finalApiList = apiList;
 
             // Show Functions
             ObservableList<NeovimFunction> neovimFunctions = FXCollections.observableArrayList(apiList.getFunctions());
@@ -143,6 +145,35 @@ public final class ApiListController {
                     };
                 }
             });
+            functionTable.setRowFactory(new Callback<>() {
+                @Override
+                public TableRow<NeovimFunction> call(TableView<NeovimFunction> param) {
+                    return new TableRow<>() {
+                        @Override
+                        protected void updateItem(NeovimFunction item, boolean empty) {
+                            super.updateItem(item, empty);
+                            if (empty) {
+                                return;
+                            }
+                            if (item.getSince() == finalApiList.getVersion().getApiLevel()) {
+                                if (!getStyleClass().contains("newFunc")) {
+                                    getStyleClass().add("newFunc");
+                                }
+                            } else {
+                                getStyleClass().removeAll(Collections.singleton("newFunc"));
+                            }
+
+                            if (item.getDeprecatedSince() != 0 && item.getDeprecatedSince() <= finalApiList.getVersion().getApiLevel()) {
+                                if (!getStyleClass().contains("deprecatedFunc")) {
+                                    getStyleClass().add("deprecatedFunc");
+                                }
+                            } else {
+                                getStyleClass().removeAll(Collections.singleton("deprecatedFunc"));
+                            }
+                        }
+                    };
+                }
+            });
             functionTable.setItems(neovimFunctions);
 
             // Show Ui Events
@@ -150,6 +181,27 @@ public final class ApiListController {
             uiEventsColName.setCellValueFactory(new PropertyValueFactory<>("name"));
             uiEventsColSince.setCellValueFactory(new PropertyValueFactory<>("since"));
             uiEventsColParams.setCellValueFactory(new PropertyValueFactory<>("parameters"));
+            uiEventsTable.setRowFactory(new Callback<>() {
+                @Override
+                public TableRow<NeovimUiEvent> call(TableView<NeovimUiEvent> param) {
+                    return new TableRow<>() {
+                        @Override
+                        protected void updateItem(NeovimUiEvent item, boolean empty) {
+                            super.updateItem(item, empty);
+                            if (empty) {
+                                return;
+                            }
+                            if (item.getSince() == finalApiList.getVersion().getApiLevel()) {
+                                if (!getStyleClass().contains("newFunc")) {
+                                    getStyleClass().add("newFunc");
+                                }
+                            } else {
+                                getStyleClass().removeAll(Collections.singleton("newFunc"));
+                            }
+                        }
+                    };
+                }
+            });
             uiEventsTable.setItems(neovimUiEvents);
 
             // Show Errors
@@ -166,7 +218,6 @@ public final class ApiListController {
             typesTable.setItems(FXCollections.observableArrayList(neovimTypes.entrySet()));
 
             // Show information
-            NeovimApiList finalApiList = apiList;
             ObservableValue<NeovimVersion> neovimVersions = new ObservableValueBase<>() {
                 @Override
                 public NeovimVersion getValue() {

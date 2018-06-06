@@ -49,6 +49,7 @@ public final class ApiExplorer extends Application {
             Parent root = null;
             root = loader.load();
             Scene scene = new Scene(root);
+            scene.getStylesheets().add("styles.css");
             primaryStage.setTitle("Api Explorer v" + getClass().getPackage().getImplementationVersion());
             primaryStage.setScene(scene);
             primaryStage.show();
