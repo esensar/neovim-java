@@ -22,46 +22,26 @@
  * SOFTWARE.
  */
 
-package com.ensarsarajcic.neovim.java.corerpc.message;
+package com.ensarsarajcic.neovim.java.api.types.api;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import java.util.Map;
 
-/**
- * Class defining an error used in RPC communication
- * It is not an error in the communication itself, rather an error that is sent
- * by applications communicating to indicate an error (bad request, bad payload, etc.)
- */
-@JsonFormat(shape = JsonFormat.Shape.ARRAY)
-@JsonPropertyOrder({"id", "message"})
-public final class RPCError {
+public final class VimColorMap {
 
-    private final int id;
-    private final String message;
+    private Map<String, Integer> colorMap;
 
-    public RPCError(
-            @JsonProperty("id")
-            int id,
-            @JsonProperty("message")
-            String message) {
-        this.id = id;
-        this.message = message;
+    public VimColorMap(Map<String, Integer> colorMap) {
+        this.colorMap = colorMap;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public String getMessage() {
-        return message;
+    public Map<String, Integer> getColorMap() {
+        return colorMap;
     }
 
     @Override
     public String toString() {
-        return "RPCError{" +
-                "id=" + id +
-                ", message='" + message + '\'' +
+        return "VimColorMap{" +
+                "colorMap=" + colorMap +
                 '}';
     }
 }

@@ -22,46 +22,45 @@
  * SOFTWARE.
  */
 
-package com.ensarsarajcic.neovim.java.corerpc.message;
+package com.ensarsarajcic.neovim.java.api.types.apiinfo;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 /**
- * Class defining an error used in RPC communication
- * It is not an error in the communication itself, rather an error that is sent
- * by applications communicating to indicate an error (bad request, bad payload, etc.)
+ * Contains definition of a custom Neovim error
  */
-@JsonFormat(shape = JsonFormat.Shape.ARRAY)
-@JsonPropertyOrder({"id", "message"})
-public final class RPCError {
+public final class ErrorInfo {
 
-    private final int id;
-    private final String message;
+    private String name;
+    private Props props;
 
-    public RPCError(
-            @JsonProperty("id")
-            int id,
-            @JsonProperty("message")
-            String message) {
-        this.id = id;
-        this.message = message;
+    public ErrorInfo(String name, Props props) {
+        this.name = name;
+        this.props = props;
+    }
+
+    static class Props {
+
+        private int id;
+
+        public Props(@JsonProperty("id") int id) {
+            this.id = id;
+        }
     }
 
     public int getId() {
-        return id;
+        return props.id;
     }
 
-    public String getMessage() {
-        return message;
+    public String getName() {
+        return name;
     }
 
     @Override
     public String toString() {
-        return "RPCError{" +
-                "id=" + id +
-                ", message='" + message + '\'' +
+        return "ErrorInfo{" +
+                "id=" + props.id +
+                ", name='" + name + '\'' +
                 '}';
     }
 }

@@ -22,46 +22,22 @@
  * SOFTWARE.
  */
 
-package com.ensarsarajcic.neovim.java.corerpc.message;
+package com.ensarsarajcic.neovim.java.corerpc.reactive;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.ensarsarajcic.neovim.java.corerpc.message.RPCError;
 
-/**
- * Class defining an error used in RPC communication
- * It is not an error in the communication itself, rather an error that is sent
- * by applications communicating to indicate an error (bad request, bad payload, etc.)
- */
-@JsonFormat(shape = JsonFormat.Shape.ARRAY)
-@JsonPropertyOrder({"id", "message"})
-public final class RPCError {
+public class RPCException extends Exception {
+    private RPCError rpcError;
 
-    private final int id;
-    private final String message;
-
-    public RPCError(
-            @JsonProperty("id")
-            int id,
-            @JsonProperty("message")
-            String message) {
-        this.id = id;
-        this.message = message;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public String getMessage() {
-        return message;
+    public RPCException(RPCError rpcError) {
+        super(rpcError.toString());
+        this.rpcError = rpcError;
     }
 
     @Override
     public String toString() {
-        return "RPCError{" +
-                "id=" + id +
-                ", message='" + message + '\'' +
+        return "RPCException{" +
+                "rpcError=" + rpcError +
                 '}';
     }
 }

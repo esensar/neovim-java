@@ -22,46 +22,51 @@
  * SOFTWARE.
  */
 
-package com.ensarsarajcic.neovim.java.corerpc.message;
+package com.ensarsarajcic.neovim.java.api.types.apiinfo;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
+import java.util.List;
 
 /**
- * Class defining an error used in RPC communication
- * It is not an error in the communication itself, rather an error that is sent
- * by applications communicating to indicate an error (bad request, bad payload, etc.)
+ * Contains definition of UI Events provided by Neovim instance
  */
-@JsonFormat(shape = JsonFormat.Shape.ARRAY)
-@JsonPropertyOrder({"id", "message"})
-public final class RPCError {
+public final class UiEventInfo {
 
-    private final int id;
-    private final String message;
+    private String name;
+    private List<List<String>> parameters;
+    private int since;
 
-    public RPCError(
-            @JsonProperty("id")
-            int id,
-            @JsonProperty("message")
-            String message) {
-        this.id = id;
-        this.message = message;
+    public UiEventInfo(
+            @JsonProperty("name")
+            String name,
+            @JsonProperty("parameters")
+            List<List<String>> parameters,
+            @JsonProperty("since")
+            int since) {
+        this.name = name;
+        this.parameters = parameters;
+        this.since = since;
     }
 
-    public int getId() {
-        return id;
+    public String getName() {
+        return name;
     }
 
-    public String getMessage() {
-        return message;
+    public List<List<String>> getParameters() {
+        return parameters;
+    }
+
+    public int getSince() {
+        return since;
     }
 
     @Override
     public String toString() {
-        return "RPCError{" +
-                "id=" + id +
-                ", message='" + message + '\'' +
+        return "NeovimUiEvent{" +
+                "name='" + name + '\'' +
+                ", parameters=" + parameters +
+                ", since=" + since +
                 '}';
     }
 }

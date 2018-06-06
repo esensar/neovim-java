@@ -81,6 +81,9 @@ public final class ReactiveRPCStreamerWrapper implements ReactiveRPCStreamer {
                 });
                 // Wait for response
                 countDownLatch.await();
+                if (responseMessage.get().getError() != null) {
+                    throw new CompletionException(new RPCException(responseMessage.get().getError()));
+                }
                 return responseMessage.get();
             } catch (IOException | InterruptedException e) {
                 e.printStackTrace();

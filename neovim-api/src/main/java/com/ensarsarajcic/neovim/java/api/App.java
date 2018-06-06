@@ -24,6 +24,14 @@
 
 package com.ensarsarajcic.neovim.java.api;
 
+import com.ensarsarajcic.neovim.java.corerpc.client.RPCClient;
+import com.ensarsarajcic.neovim.java.corerpc.client.TcpSocketRPCConnection;
+import com.ensarsarajcic.neovim.java.corerpc.reactive.ReactiveRPCClient;
+
+import java.io.IOException;
+import java.net.Socket;
+import java.util.concurrent.ExecutionException;
+
 /**
  * Hello world!
  *
@@ -33,5 +41,27 @@ public class App
     public static void main( String[] args )
     {
         System.out.println( "Hello World!" );
+        try {
+
+            // Create a default instance
+            Socket socket = new Socket("127.0.0.1", 6666);
+
+            RPCClient rpcClient = RPCClient.getDefaultAsyncInstance();
+            rpcClient.attach(new TcpSocketRPCConnection(socket));
+
+            NeovimStreamApi neovimStreamApi = new NeovimStreamApi(ReactiveRPCClient.createDefaultInstanceWithCustomStreamer(rpcClient));
+
+            neovimStreamApi.input("jjjj").thenAccept(System.out::println);
+            neovimStreamApi.getApiInfo().thenAccept(System.out::println).get();
+            neovimStreamApi.listRuntimePaths().thenAccept(System.out::println).get();
+            neovimStreamApi.getColorMap().thenAccept(System.out::println).get();
+            neovimStreamApi.getMode().thenAccept(System.out::println).get();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
     }
 }

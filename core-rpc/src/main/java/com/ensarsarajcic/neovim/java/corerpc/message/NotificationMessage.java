@@ -49,7 +49,7 @@ import java.util.ArrayList;
 public final class NotificationMessage implements Message {
 
     private final String name;
-    private final ArrayList<String> arguments;
+    private final ArrayList<Object> arguments;
 
     private NotificationMessage(Builder builder) {
         this(builder.name, builder.arguments);
@@ -62,9 +62,9 @@ public final class NotificationMessage implements Message {
      * @param name notification name
      * @param arguments arguments of notification
      */
-    public NotificationMessage(String name, ArrayList<String> arguments) {
+    public NotificationMessage(String name, ArrayList<Object> arguments) {
         this.name = name;
-        this.arguments = new ArrayList<>(arguments);
+        this.arguments = new ArrayList(arguments);
     }
 
     @JsonProperty("name")
@@ -73,7 +73,7 @@ public final class NotificationMessage implements Message {
     }
 
     @JsonProperty("arguments")
-    public ArrayList<String> getArguments() {
+    public ArrayList<?> getArguments() {
         return arguments;
     }
 
@@ -94,7 +94,7 @@ public final class NotificationMessage implements Message {
     @JsonPOJOBuilder
     public static class Builder {
         private final String name;
-        private final ArrayList<String> arguments;
+        private final ArrayList<Object> arguments;
 
         /**
          * Creates a new {@link NotificationMessage.Builder} with just a name. Arguments are set to an empty array.
@@ -114,16 +114,16 @@ public final class NotificationMessage implements Message {
         @JsonCreator
         public Builder(
                 @JsonProperty("name") String name,
-                @JsonProperty("arguments") ArrayList<String> arguments) {
+                @JsonProperty("arguments") ArrayList<?> arguments) {
             this.name = name;
-            this.arguments = arguments;
+            this.arguments = new ArrayList<>(arguments);
         }
 
         /**
          * Adds all arguments provided
          * @param arguments argument list to add
          */
-        public Builder addArguments(ArrayList<String> arguments) {
+        public Builder addArguments(ArrayList<?> arguments) {
             this.arguments.addAll(arguments);
             return this;
         }
@@ -132,7 +132,7 @@ public final class NotificationMessage implements Message {
          * Adds a single argument
          * @param argument argument to add
          */
-        public Builder addArgument(String argument) {
+        public Builder addArgument(Object argument) {
             this.arguments.add(argument);
             return this;
         }

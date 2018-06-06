@@ -22,46 +22,36 @@
  * SOFTWARE.
  */
 
-package com.ensarsarajcic.neovim.java.corerpc.message;
+package com.ensarsarajcic.neovim.java.api;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import java.lang.annotation.*;
 
 /**
- * Class defining an error used in RPC communication
- * It is not an error in the communication itself, rather an error that is sent
- * by applications communicating to indicate an error (bad request, bad payload, etc.)
+ * Annotation marking that a class is a NeovimApiClient
+ * Marking with this annotation means that the class should implement some of the neovim api functions
+ *
+ * It is useful for documentation since it contains information about supported version
+ * It could also be used for generating clients and for compile time checking
  */
-@JsonFormat(shape = JsonFormat.Shape.ARRAY)
-@JsonPropertyOrder({"id", "message"})
-public final class RPCError {
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+@Inherited
+public @interface NeovimApiClient {
+    /**
+     * Custom name for the client implementation
+     * Documentation only
+     */
+    String name() default "";
 
-    private final int id;
-    private final String message;
+    /**
+     * Target neovim API version/level
+     * Useful for documentation and for checking if version is properly supported
+     */
+    int target() default 0;
 
-    public RPCError(
-            @JsonProperty("id")
-            int id,
-            @JsonProperty("message")
-            String message) {
-        this.id = id;
-        this.message = message;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    @Override
-    public String toString() {
-        return "RPCError{" +
-                "id=" + id +
-                ", message='" + message + '\'' +
-                '}';
-    }
+    /**
+     * @return true if client implements complete neovim API
+     */
+    boolean complete() default false;
 }

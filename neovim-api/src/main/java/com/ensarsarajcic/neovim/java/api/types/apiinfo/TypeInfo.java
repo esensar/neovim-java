@@ -22,46 +22,63 @@
  * SOFTWARE.
  */
 
-package com.ensarsarajcic.neovim.java.corerpc.message;
+package com.ensarsarajcic.neovim.java.api.types.apiinfo;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 /**
- * Class defining an error used in RPC communication
- * It is not an error in the communication itself, rather an error that is sent
- * by applications communicating to indicate an error (bad request, bad payload, etc.)
+ * Contains definition of custom msgpack types used by Neovim API
  */
-@JsonFormat(shape = JsonFormat.Shape.ARRAY)
-@JsonPropertyOrder({"id", "message"})
-public final class RPCError {
+public final class TypeInfo {
 
-    private final int id;
-    private final String message;
+    private String name;
+    private Props props;
 
-    public RPCError(
-            @JsonProperty("id")
-            int id,
-            @JsonProperty("message")
-            String message) {
-        this.id = id;
-        this.message = message;
+    public TypeInfo(String name, Props props) {
+        this.name = name;
+        this.props = props;
+    }
+
+    static final class Props {
+        private int id;
+        private String prefix;
+
+        public Props(
+                @JsonProperty("id")
+                int id,
+                @JsonProperty("prefix")
+                String prefix) {
+            this.id = id;
+            this.prefix = prefix;
+        }
+
+        @Override
+        public String toString() {
+            return "Props{" +
+                    "id=" + id +
+                    ", prefix='" + prefix + '\'' +
+                    '}';
+        }
+    }
+
+    public String getName() {
+        return name;
     }
 
     public int getId() {
-        return id;
+        return props.id;
     }
 
-    public String getMessage() {
-        return message;
+    public String getPrefix() {
+        return props.prefix;
     }
 
     @Override
     public String toString() {
-        return "RPCError{" +
-                "id=" + id +
-                ", message='" + message + '\'' +
+        return "TypeInfo{" +
+                "id=" + props.id +
+                ", prefix='" + props.prefix + '\'' +
+                "name='" + name + '\'' +
                 '}';
     }
 }
