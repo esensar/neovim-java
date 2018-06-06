@@ -29,7 +29,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 /**
- * Contains definition of a Neovim API function
+ * Contains definition of a NeovimApis API function
  */
 public final class FunctionInfo {
 

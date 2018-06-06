@@ -25,7 +25,7 @@
 package com.ensarsarajcic.neovim.java.api.types.msgpack;
 
 /**
- * Represents a Neovim Tabpage (custom Msgpack type)
+ * Represents a NeovimApis Tabpage (custom Msgpack type)
  */
 public final class Tabpage {
 }

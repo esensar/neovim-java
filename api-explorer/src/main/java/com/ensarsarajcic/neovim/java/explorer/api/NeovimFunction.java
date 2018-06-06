@@ -32,59 +32,54 @@ public final class NeovimFunction {
 
     private boolean method;
     private String name;
-    @JsonProperty("return_type")
     private String returnType;
     private int since;
-    @JsonProperty("deprecated_since")
     private int deprecatedSince;
     private List<List<String>> parameters;
 
-    public boolean isMethod() {
-        return method;
+    public NeovimFunction(
+            @JsonProperty("method")
+            boolean method,
+            @JsonProperty("name")
+            String name,
+            @JsonProperty("return_type")
+            String returnType,
+            @JsonProperty("since")
+            int since,
+            @JsonProperty("deprecated_since")
+            int deprecatedSince,
+            @JsonProperty("parameters")
+            List<List<String>> parameters) {
+        this.method = method;
+        this.name = name;
+        this.returnType = returnType;
+        this.since = since;
+        this.deprecatedSince = deprecatedSince;
+        this.parameters = parameters;
     }
 
-    public void setMethod(boolean method) {
-        this.method = method;
+    public boolean isMethod() {
+        return method;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getReturnType() {
         return returnType;
-    }
-
-    public void setReturnType(String returnType) {
-        this.returnType = returnType;
     }
 
     public int getSince() {
         return since;
     }
 
-    public void setSince(int since) {
-        this.since = since;
-    }
-
     public int getDeprecatedSince() {
         return deprecatedSince;
     }
 
-    public void setDeprecatedSince(int deprecatedSince) {
-        this.deprecatedSince = deprecatedSince;
-    }
-
     public List<List<String>> getParameters() {
         return parameters;
-    }
-
-    public void setParameters(List<List<String>> parameters) {
-        this.parameters = parameters;
     }
 
     @Override

@@ -24,6 +24,8 @@
 
 package com.ensarsarajcic.neovim.java.explorer.api;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public final class NeovimError {
 
     private int id;
@@ -32,7 +34,8 @@ public final class NeovimError {
         return id;
     }
 
-    public void setId(int id) {
+    public NeovimError(
+            @JsonProperty("id") int id) {
         this.id = id;
     }
 

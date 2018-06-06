@@ -29,7 +29,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 /**
- * Contains definition of UI Events provided by Neovim instance
+ * Contains definition of UI Events provided by NeovimApis instance
  */
 public final class UiEventInfo {
 
