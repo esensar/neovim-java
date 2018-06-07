@@ -24,11 +24,35 @@
 
 package com.ensarsarajcic.neovim.java.api.types.msgpack;
 
-/**
- * Represents a NeovimApis Window (custom Msgpack type)
- */
-public final class Window extends BaseCustomIdType {
-    public Window(long id) {
-        super(id);
+import java.util.function.Function;
+
+public enum NeovimCustomType {
+    BUFFER(0, Buffer.class, Buffer::new),
+    WINDOW(1, Window.class, Window::new),
+    TABPAGE(2, Tabpage.class, Tabpage::new);
+
+    private NeovimTypeSerializer<? extends BaseCustomIdType> serializer;
+    private NeovimTypeDeserializer<? extends BaseCustomIdType> deserializer;
+    private Class<? extends BaseCustomIdType> type;
+
+    <T extends BaseCustomIdType> NeovimCustomType(
+            int typeId,
+            Class<T> type,
+            Function<Long, T> constructor) {
+        this.serializer = new NeovimTypeSerializer<>((byte) typeId, type);
+        this.deserializer = new NeovimTypeDeserializer<>((byte) typeId, type, constructor);
+        this.type = type;
+    }
+
+    public NeovimTypeSerializer getSerializer() {
+        return serializer;
+    }
+
+    public NeovimTypeDeserializer getDeserializer() {
+        return deserializer;
+    }
+
+    public Class<?> getType() {
+        return type;
     }
 }

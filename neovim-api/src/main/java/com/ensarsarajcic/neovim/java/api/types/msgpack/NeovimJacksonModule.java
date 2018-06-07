@@ -24,11 +24,19 @@
 
 package com.ensarsarajcic.neovim.java.api.types.msgpack;
 
-/**
- * Represents a NeovimApis Window (custom Msgpack type)
- */
-public final class Window extends BaseCustomIdType {
-    public Window(long id) {
-        super(id);
+import com.fasterxml.jackson.databind.module.SimpleModule;
+
+public final class NeovimJacksonModule {
+
+    private NeovimJacksonModule() {
+    }
+
+    public static SimpleModule createModule() {
+        SimpleModule simpleModule = new SimpleModule();
+        for (NeovimCustomType neovimCustomType : NeovimCustomType.values()) {
+            simpleModule.addSerializer(neovimCustomType.getType(), neovimCustomType.getSerializer());
+            simpleModule.addDeserializer(neovimCustomType.getType(), neovimCustomType.getDeserializer());
+        }
+        return simpleModule;
     }
 }
