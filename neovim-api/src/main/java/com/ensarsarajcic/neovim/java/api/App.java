@@ -46,16 +46,17 @@ public class App
             // Create a default instance
             Socket socket = new Socket("127.0.0.1", 6666);
 
-            RPCClient rpcClient = RPCClient.getDefaultAsyncInstance();
+            RPCClient rpcClient = RPCClient.createDefaultAsyncInstance();
             rpcClient.attach(new TcpSocketRPCConnection(socket));
 
             NeovimStreamApi neovimStreamApi = new NeovimStreamApi(ReactiveRPCClient.createDefaultInstanceWithCustomStreamer(rpcClient));
 
-            neovimStreamApi.input("jjjj").thenAccept(System.out::println);
-            neovimStreamApi.getApiInfo().thenAccept(System.out::println).get();
-            neovimStreamApi.listRuntimePaths().thenAccept(System.out::println).get();
-            neovimStreamApi.getColorMap().thenAccept(System.out::println).get();
-            neovimStreamApi.getMode().thenAccept(System.out::println).get();
+            neovimStreamApi.getCurrentBuffer().thenAccept(System.out::println).get();
+            neovimStreamApi.getBuffers().thenAccept(System.out::println).get();
+            neovimStreamApi.getCurrentTabpage().thenAccept(System.out::println).get();
+            neovimStreamApi.getTabpages().thenAccept(System.out::println).get();
+            neovimStreamApi.getCurrentWindow().thenAccept(System.out::println).get();
+            neovimStreamApi.getWindows().thenAccept(System.out::println).get();
         } catch (IOException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {

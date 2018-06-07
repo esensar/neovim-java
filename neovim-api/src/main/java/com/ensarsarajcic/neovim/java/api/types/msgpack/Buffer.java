@@ -27,5 +27,8 @@ package com.ensarsarajcic.neovim.java.api.types.msgpack;
 /**
  * Represents a NeovimApis Buffer (custom Msgpack type)
  */
-public final class Buffer {
+public final class Buffer extends BaseCustomIdType {
+    public Buffer(long id) {
+        super(id);
+    }
 }

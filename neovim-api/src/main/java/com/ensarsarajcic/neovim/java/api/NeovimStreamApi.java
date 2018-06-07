@@ -27,18 +27,23 @@ package com.ensarsarajcic.neovim.java.api;
 import com.ensarsarajcic.neovim.java.api.types.api.VimColorMap;
 import com.ensarsarajcic.neovim.java.api.types.api.VimMapping;
 import com.ensarsarajcic.neovim.java.api.types.api.VimMode;
-import com.ensarsarajcic.neovim.java.api.types.msgpack.Buffer;
-import com.ensarsarajcic.neovim.java.api.types.msgpack.Tabpage;
-import com.ensarsarajcic.neovim.java.api.types.msgpack.Window;
+import com.ensarsarajcic.neovim.java.api.types.msgpack.*;
 import com.ensarsarajcic.neovim.java.api.types.apiinfo.ApiInfo;
 import com.ensarsarajcic.neovim.java.corerpc.message.RequestMessage;
 import com.ensarsarajcic.neovim.java.corerpc.message.ResponseMessage;
 import com.ensarsarajcic.neovim.java.corerpc.reactive.ReactiveRPCStreamer;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.msgpack.jackson.dataformat.MessagePackFactory;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
+import java.util.function.Function;
 
 /**
  * Full implementation of {@link NeovimApi} based on {@link ReactiveRPCStreamer}
@@ -51,7 +56,11 @@ public final class NeovimStreamApi implements NeovimApi {
 
     public NeovimStreamApi(ReactiveRPCStreamer reactiveRPCStreamer) {
         this.reactiveRPCStreamer = reactiveRPCStreamer;
-        this.objectMapper = new ObjectMapper();
+        MessagePackFactory factory = new MessagePackFactory();
+        factory.disable(JsonParser.Feature.AUTO_CLOSE_SOURCE);
+        factory.disable(JsonGenerator.Feature.AUTO_CLOSE_TARGET);
+        this.objectMapper = new ObjectMapper(factory);
+        objectMapper.registerModule(NeovimJacksonModule.createModule());
     }
 
     @Override
@@ -289,18 +298,14 @@ public final class NeovimStreamApi implements NeovimApi {
         return sendWithNoResponse(new RequestMessage.Builder("nvim_del_current_line"));
     }
 
-    // TODO, MSGPACK TYPES ARE REQUIRED
     @Override
     public CompletableFuture<List<Buffer>> getBuffers() {
-        return sendWithGenericResponse(new RequestMessage.Builder("nvim_list_bufs"))
-                .thenApply(o -> objectMapper.convertValue(
-                        o,
-                        objectMapper.getTypeFactory().constructCollectionType(List.class, Buffer.class)));
+        return sendWithResponseOfListOfMsgPackType(new RequestMessage.Builder("nvim_list_bufs"), Buffer.class);
     }
 
     @Override
     public CompletableFuture<Buffer> getCurrentBuffer() {
-        return sendWithResponseOfType(new RequestMessage.Builder("nvim_get_current_buf"), Buffer.class);
+        return sendWithResponseOfMsgPackType(new RequestMessage.Builder("nvim_get_current_buf"), Buffer.class);
     }
 
     @Override
@@ -320,30 +325,22 @@ public final class NeovimStreamApi implements NeovimApi {
 
     @Override
     public CompletableFuture<List<Window>> getWindows() {
-        return sendWithGenericResponse(new RequestMessage.Builder("nvim_list_wins"))
-                .thenApply(o -> objectMapper.convertValue(
-                        o,
-                        objectMapper.getTypeFactory().constructCollectionType(List.class, Window.class)
-                ));
+        return sendWithResponseOfListOfMsgPackType(new RequestMessage.Builder("nvim_list_wins"), Window.class);
     }
 
     @Override
     public CompletableFuture<Window> getCurrentWindow() {
-        return sendWithResponseOfType(new RequestMessage.Builder("nvim_get_current_win"), Window.class);
+        return sendWithResponseOfMsgPackType(new RequestMessage.Builder("nvim_get_current_win"), Window.class);
     }
 
     @Override
     public CompletableFuture<List<Tabpage>> getTabpages() {
-        return sendWithGenericResponse(new RequestMessage.Builder("nvim_list_tabpages"))
-                .thenApply(o -> objectMapper.convertValue(
-                        o,
-                        objectMapper.getTypeFactory().constructCollectionType(List.class, Tabpage.class)
-                ));
+        return sendWithResponseOfListOfMsgPackType(new RequestMessage.Builder("nvim_list_tabpages"), Tabpage.class);
     }
 
     @Override
     public CompletableFuture<Tabpage> getCurrentTabpage() {
-        return sendWithResponseOfType(new RequestMessage.Builder("nvim_get_current_tabpage"), Tabpage.class);
+        return sendWithResponseOfMsgPackType(new RequestMessage.Builder("nvim_get_current_tabpage"), Tabpage.class);
     }
 
     @Override
@@ -371,6 +368,43 @@ public final class NeovimStreamApi implements NeovimApi {
         return reactiveRPCStreamer.response(request)
                 .thenApply(ResponseMessage::getResult)
                 .thenApply(o -> objectMapper.convertValue(o, type));
+    }
+
+    private CompletableFuture<byte[]> sendWithBytesResponse(RequestMessage.Builder request) {
+        return reactiveRPCStreamer.response(request)
+                .thenApply(ResponseMessage::getResult)
+                .thenApply(o -> {
+                    try {
+                        return objectMapper.writeValueAsBytes(o);
+                    } catch (JsonProcessingException e) {
+                        e.printStackTrace();
+                        throw new CompletionException(e);
+                    }
+                });
+    }
+
+    private <T extends BaseCustomIdType> CompletableFuture<T> sendWithResponseOfMsgPackType(RequestMessage.Builder request, Class<T> type) {
+        return sendWithBytesResponse(request).thenApply(bytes -> {
+                    try {
+                        return objectMapper.readerFor(type).readValue(bytes);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        throw new CompletionException(e);
+                    }
+                });
+    }
+
+    private <T extends BaseCustomIdType> CompletableFuture<List<T>> sendWithResponseOfListOfMsgPackType(RequestMessage.Builder request, Class<T> type) {
+        return sendWithBytesResponse(request).thenApply(bytes -> {
+                    try {
+                        return objectMapper.readerFor(
+                                objectMapper.getTypeFactory().constructCollectionType(List.class, type)
+                        ).readValue(bytes);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        throw new CompletionException(e);
+                    }
+                });
     }
 
     private CompletableFuture<Object> sendWithGenericResponse(RequestMessage.Builder request) {
