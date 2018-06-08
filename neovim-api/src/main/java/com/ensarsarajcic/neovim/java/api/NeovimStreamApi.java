@@ -33,6 +33,8 @@ import com.ensarsarajcic.neovim.java.api.types.api.VimKeyMap;
 import com.ensarsarajcic.neovim.java.api.types.api.VimMode;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.*;
 import com.ensarsarajcic.neovim.java.api.types.apiinfo.ApiInfo;
+import com.ensarsarajcic.neovim.java.api.window.NeovimWindowApi;
+import com.ensarsarajcic.neovim.java.api.window.WindowStreamApi;
 import com.ensarsarajcic.neovim.java.corerpc.message.RequestMessage;
 import com.ensarsarajcic.neovim.java.corerpc.reactive.ReactiveRPCStreamer;
 
@@ -283,8 +285,7 @@ public final class NeovimStreamApi extends BaseStreamApi implements NeovimApi {
     public CompletableFuture<List<NeovimBufferApi>> getBuffers() {
         return sendWithResponseOfListOfMsgPackType(new RequestMessage.Builder(LIST_BUFS), Buffer.class)
                 .thenApply(buffers -> buffers.stream()
-                        .map((Function<Buffer, NeovimBufferApi>) buffer
-                                -> new BufferStreamApi(reactiveRPCStreamer, buffer)).collect(Collectors.toList()));
+                        .map(buffer -> new BufferStreamApi(reactiveRPCStreamer, buffer)).collect(Collectors.toList()));
     }
 
     @Override
@@ -309,21 +310,23 @@ public final class NeovimStreamApi extends BaseStreamApi implements NeovimApi {
     }
 
     @Override
-    public CompletableFuture<List<Window>> getWindows() {
-        return sendWithResponseOfListOfMsgPackType(new RequestMessage.Builder(LIST_WINS), Window.class);
+    public CompletableFuture<List<NeovimWindowApi>> getWindows() {
+        return sendWithResponseOfListOfMsgPackType(new RequestMessage.Builder(LIST_WINS), Window.class)
+                .thenApply(windows -> windows.stream()
+                        .map(window -> new WindowStreamApi(reactiveRPCStreamer, window)).collect(Collectors.toList()));
     }
 
     @Override
-    public CompletableFuture<Window> getCurrentWindow() {
-        return sendWithResponseOfMsgPackType(new RequestMessage.Builder(GET_CURRENT_WIN), Window.class);
+    public CompletableFuture<NeovimWindowApi> getCurrentWindow() {
+        return sendWithResponseOfMsgPackType(new RequestMessage.Builder(GET_CURRENT_WIN), Window.class)
+                .thenApply(window -> new WindowStreamApi(reactiveRPCStreamer, window));
     }
 
     @Override
     public CompletableFuture<List<NeovimTabpageApi>> getTabpages() {
         return sendWithResponseOfListOfMsgPackType(new RequestMessage.Builder(LIST_TABPAGES), Tabpage.class)
                 .thenApply(tabpages -> tabpages.stream()
-                        .map((Function<Tabpage, NeovimTabpageApi>) tabpage
-                                -> new TabpageStreamApi(reactiveRPCStreamer, tabpage)).collect(Collectors.toList()));
+                        .map(tabpage -> new TabpageStreamApi(reactiveRPCStreamer, tabpage)).collect(Collectors.toList()));
     }
 
     @Override

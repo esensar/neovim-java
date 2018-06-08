@@ -33,6 +33,7 @@ import com.ensarsarajcic.neovim.java.api.types.msgpack.Buffer;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.Tabpage;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.Window;
 import com.ensarsarajcic.neovim.java.api.types.apiinfo.ApiInfo;
+import com.ensarsarajcic.neovim.java.api.window.NeovimWindowApi;
 
 import java.util.List;
 import java.util.Map;
@@ -234,12 +235,12 @@ public final class AtomicCallBuilder implements NeovimApi {
     }
 
     @Override
-    public CompletableFuture<List<Window>> getWindows() {
+    public CompletableFuture<List<NeovimWindowApi>> getWindows() {
         return null;
     }
 
     @Override
-    public CompletableFuture<Window> getCurrentWindow() {
+    public CompletableFuture<NeovimWindowApi> getCurrentWindow() {
         return null;
     }
 

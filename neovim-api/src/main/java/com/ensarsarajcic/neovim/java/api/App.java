@@ -26,6 +26,7 @@ package com.ensarsarajcic.neovim.java.api;
 
 import com.ensarsarajcic.neovim.java.api.tabpage.NeovimTabpageApi;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.NeovimJacksonModule;
+import com.ensarsarajcic.neovim.java.api.window.NeovimWindowApi;
 import com.ensarsarajcic.neovim.java.corerpc.client.RPCClient;
 import com.ensarsarajcic.neovim.java.corerpc.client.TcpSocketRPCConnection;
 import com.ensarsarajcic.neovim.java.corerpc.reactive.ReactiveRPCClient;
@@ -33,6 +34,7 @@ import com.ensarsarajcic.neovim.java.corerpc.reactive.ReactiveRPCClient;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.concurrent.ExecutionException;
+import java.util.function.BiConsumer;
 
 /**
  * Hello world!
@@ -63,6 +65,21 @@ public class App
             neovimStreamApi.getCurrentWindow().thenAccept(System.out::println).get();
             neovimStreamApi.getWindows().thenAccept(System.out::println).get();
             neovimStreamApi.getCurrentBuffer().thenCompose(neovimBufferApi -> neovimBufferApi.getKeymap("n")).thenAccept(System.out::println).get();
+            neovimStreamApi.getCurrentWindow()
+                    .whenComplete(App::log)
+                    .thenCompose(NeovimWindowApi::getTabpage)
+                    .whenComplete(App::log)
+                    .thenCompose(NeovimTabpageApi::getWindow)
+                    .whenComplete(App::log)
+                    .thenCompose(NeovimWindowApi::getTabpage)
+                    .whenComplete(App::log)
+                    .thenCompose(NeovimTabpageApi::getWindow)
+                    .whenComplete(App::log)
+                    .thenCompose(NeovimWindowApi::getTabpage)
+                    .thenCompose(NeovimTabpageApi::getWindow)
+                    .thenCompose(NeovimWindowApi::getCursor)
+                    .whenComplete(App::log)
+                    .thenAccept(System.out::println).get();
         } catch (IOException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
@@ -70,5 +87,9 @@ public class App
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
+    }
+
+    private static <T> void log(T object, Throwable throwable) {
+        System.out.println(object);
     }
 }

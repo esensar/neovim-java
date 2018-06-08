@@ -171,4 +171,11 @@ public final class BufferStreamApi extends BaseStreamApi implements NeovimBuffer
     private RequestMessage.Builder prepareMessage(String name) {
         return new RequestMessage.Builder(name).addArgument(model);
     }
+
+    @Override
+    public String toString() {
+        return "BufferStreamApi{" +
+                "model=" + model +
+                '}';
+    }
 }
