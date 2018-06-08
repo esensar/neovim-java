@@ -25,6 +25,7 @@
 package com.ensarsarajcic.neovim.java.api.buffer;
 
 import com.ensarsarajcic.neovim.java.api.BaseStreamApi;
+import com.ensarsarajcic.neovim.java.api.NeovimApiClient;
 import com.ensarsarajcic.neovim.java.api.types.api.VimCoords;
 import com.ensarsarajcic.neovim.java.api.types.api.VimKeyMap;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.Buffer;
@@ -34,6 +35,10 @@ import com.ensarsarajcic.neovim.java.corerpc.reactive.ReactiveRPCStreamer;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
+/**
+ * Implementation of {@link NeovimBufferApi} based on {@link ReactiveRPCStreamer}
+ */
+@NeovimApiClient(name = "full_buffer_api", target = 3)
 public final class BufferStreamApi extends BaseStreamApi implements NeovimBufferApi {
 
     private Buffer model;

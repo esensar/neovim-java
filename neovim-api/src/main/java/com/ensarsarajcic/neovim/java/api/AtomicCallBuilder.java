@@ -25,6 +25,7 @@
 package com.ensarsarajcic.neovim.java.api;
 
 import com.ensarsarajcic.neovim.java.api.buffer.NeovimBufferApi;
+import com.ensarsarajcic.neovim.java.api.tabpage.NeovimTabpageApi;
 import com.ensarsarajcic.neovim.java.api.types.api.VimColorMap;
 import com.ensarsarajcic.neovim.java.api.types.api.VimKeyMap;
 import com.ensarsarajcic.neovim.java.api.types.api.VimMode;
@@ -248,12 +249,12 @@ public final class AtomicCallBuilder implements NeovimApi {
     }
 
     @Override
-    public CompletableFuture<List<Tabpage>> getTabpages() {
+    public CompletableFuture<List<NeovimTabpageApi>> getTabpages() {
         return null;
     }
 
     @Override
-    public CompletableFuture<Tabpage> getCurrentTabpage() {
+    public CompletableFuture<NeovimTabpageApi> getCurrentTabpage() {
         return null;
     }
 

@@ -32,6 +32,9 @@ import com.ensarsarajcic.neovim.java.api.types.msgpack.Buffer;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
+/**
+ * Interface representing neovim methods of Buffer object
+ */
 public interface NeovimBufferApi {
 
     // region Supported functions names
