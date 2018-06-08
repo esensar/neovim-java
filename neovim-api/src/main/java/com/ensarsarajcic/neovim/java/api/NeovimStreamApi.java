@@ -26,6 +26,8 @@ package com.ensarsarajcic.neovim.java.api;
 
 import com.ensarsarajcic.neovim.java.api.buffer.BufferStreamApi;
 import com.ensarsarajcic.neovim.java.api.buffer.NeovimBufferApi;
+import com.ensarsarajcic.neovim.java.api.tabpage.NeovimTabpageApi;
+import com.ensarsarajcic.neovim.java.api.tabpage.TabpageStreamApi;
 import com.ensarsarajcic.neovim.java.api.types.api.VimColorMap;
 import com.ensarsarajcic.neovim.java.api.types.api.VimKeyMap;
 import com.ensarsarajcic.neovim.java.api.types.api.VimMode;
@@ -282,8 +284,7 @@ public final class NeovimStreamApi extends BaseStreamApi implements NeovimApi {
         return sendWithResponseOfListOfMsgPackType(new RequestMessage.Builder(LIST_BUFS), Buffer.class)
                 .thenApply(buffers -> buffers.stream()
                         .map((Function<Buffer, NeovimBufferApi>) buffer
-                                        -> new BufferStreamApi(reactiveRPCStreamer, buffer))
-                        .collect(Collectors.toList()));
+                                -> new BufferStreamApi(reactiveRPCStreamer, buffer)).collect(Collectors.toList()));
     }
 
     @Override
@@ -318,13 +319,17 @@ public final class NeovimStreamApi extends BaseStreamApi implements NeovimApi {
     }
 
     @Override
-    public CompletableFuture<List<Tabpage>> getTabpages() {
-        return sendWithResponseOfListOfMsgPackType(new RequestMessage.Builder(LIST_TABPAGES), Tabpage.class);
+    public CompletableFuture<List<NeovimTabpageApi>> getTabpages() {
+        return sendWithResponseOfListOfMsgPackType(new RequestMessage.Builder(LIST_TABPAGES), Tabpage.class)
+                .thenApply(tabpages -> tabpages.stream()
+                        .map((Function<Tabpage, NeovimTabpageApi>) tabpage
+                                -> new TabpageStreamApi(reactiveRPCStreamer, tabpage)).collect(Collectors.toList()));
     }
 
     @Override
-    public CompletableFuture<Tabpage> getCurrentTabpage() {
-        return sendWithResponseOfMsgPackType(new RequestMessage.Builder(GET_CURRENT_TABPAGE), Tabpage.class);
+    public CompletableFuture<NeovimTabpageApi> getCurrentTabpage() {
+        return sendWithResponseOfMsgPackType(new RequestMessage.Builder(GET_CURRENT_TABPAGE), Tabpage.class)
+                .thenApply(tabpage -> new TabpageStreamApi(reactiveRPCStreamer, tabpage));
     }
 
     @Override

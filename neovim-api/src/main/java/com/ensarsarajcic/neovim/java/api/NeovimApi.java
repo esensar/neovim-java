@@ -25,6 +25,7 @@
 package com.ensarsarajcic.neovim.java.api;
 
 import com.ensarsarajcic.neovim.java.api.buffer.NeovimBufferApi;
+import com.ensarsarajcic.neovim.java.api.tabpage.NeovimTabpageApi;
 import com.ensarsarajcic.neovim.java.api.types.api.VimColorMap;
 import com.ensarsarajcic.neovim.java.api.types.api.VimKeyMap;
 import com.ensarsarajcic.neovim.java.api.types.api.VimMode;
@@ -215,10 +216,10 @@ public interface NeovimApi {
     CompletableFuture<Void> setCurrentWindow(Window window);
 
     @NeovimApiFunction(name = LIST_TABPAGES, since = 1)
-    CompletableFuture<List<Tabpage>> getTabpages();
+    CompletableFuture<List<NeovimTabpageApi>> getTabpages();
 
     @NeovimApiFunction(name = GET_CURRENT_TABPAGE, since = 1)
-    CompletableFuture<Tabpage> getCurrentTabpage();
+    CompletableFuture<NeovimTabpageApi> getCurrentTabpage();
 
     // Todo consider setAsCurrent method on tabpage
     @NeovimApiFunction(name = SET_CURRENT_TABPAGE, since = 1)
