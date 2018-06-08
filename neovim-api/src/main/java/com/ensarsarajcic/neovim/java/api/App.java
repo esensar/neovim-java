@@ -24,13 +24,21 @@
 
 package com.ensarsarajcic.neovim.java.api;
 
+import com.ensarsarajcic.neovim.java.api.buffer.NeovimBufferApi;
+import com.ensarsarajcic.neovim.java.api.types.msgpack.NeovimJacksonModule;
 import com.ensarsarajcic.neovim.java.corerpc.client.RPCClient;
 import com.ensarsarajcic.neovim.java.corerpc.client.TcpSocketRPCConnection;
 import com.ensarsarajcic.neovim.java.corerpc.reactive.ReactiveRPCClient;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.msgpack.jackson.dataformat.MessagePackFactory;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.util.concurrent.CompletionStage;
 import java.util.concurrent.ExecutionException;
+import java.util.function.Function;
 
 /**
  * Hello world!
@@ -46,10 +54,13 @@ public class App
             // Create a default instance
             Socket socket = new Socket("127.0.0.1", 6666);
 
-            RPCClient rpcClient = RPCClient.createDefaultAsyncInstance();
+            RPCClient rpcClient = new RPCClient.Builder()
+                    .withObjectMapper(NeovimJacksonModule.createNeovimObjectMapper()).build();
             rpcClient.attach(new TcpSocketRPCConnection(socket));
 
-            NeovimStreamApi neovimStreamApi = new NeovimStreamApi(ReactiveRPCClient.createDefaultInstanceWithCustomStreamer(rpcClient));
+            NeovimStreamApi neovimStreamApi = new NeovimStreamApi(
+                    ReactiveRPCClient.createDefaultInstanceWithCustomStreamer(rpcClient)
+            );
 
             neovimStreamApi.getCurrentBuffer().thenAccept(System.out::println).get();
             neovimStreamApi.getBuffers().thenAccept(System.out::println).get();
@@ -57,6 +68,7 @@ public class App
             neovimStreamApi.getTabpages().thenAccept(System.out::println).get();
             neovimStreamApi.getCurrentWindow().thenAccept(System.out::println).get();
             neovimStreamApi.getWindows().thenAccept(System.out::println).get();
+            neovimStreamApi.getCurrentBuffer().thenCompose(neovimBufferApi -> neovimBufferApi.getKeymap("n")).thenAccept(System.out::println).get();
         } catch (IOException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {

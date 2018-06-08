@@ -22,31 +22,36 @@
  * SOFTWARE.
  */
 
-package com.ensarsarajcic.neovim.java.api;
+package com.ensarsarajcic.neovim.java.api.types.api;
 
-import java.lang.annotation.*;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 /**
- * Annotation marking that a class is a NeovimApiClient
- * Marking with this annotation means that the class should implement some of the neovim api functions
- *
- * It is useful for documentation since it contains information about supported version
- * It could also be used for generating clients and for compile time checking
+ * Class representing vim coordinates (row and column - inside the buffer/file)
  */
-@Target(ElementType.TYPE)
-@Retention(RetentionPolicy.RUNTIME)
-@Documented
-@Inherited
-public @interface NeovimApiClient {
-    /**
-     * Custom name for the client implementation
-     * Documentation only
-     */
-    String name() default "";
+@JsonFormat(shape = JsonFormat.Shape.ARRAY)
+@JsonPropertyOrder({"row", "col"})
+public final class VimCoords {
 
-    /**
-     * Target neovim API version/level
-     * Useful for documentation and for checking if version is properly supported
-     */
-    int target() default 0;
+    private final int row;
+    private final int col;
+
+    public VimCoords(
+            @JsonProperty("row")
+            int row,
+            @JsonProperty("col")
+            int col) {
+        this.row = row;
+        this.col = col;
+    }
+
+    public int getRow() {
+        return row;
+    }
+
+    public int getCol() {
+        return col;
+    }
 }

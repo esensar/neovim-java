@@ -24,43 +24,30 @@
 
 package com.ensarsarajcic.neovim.java.api;
 
+import com.ensarsarajcic.neovim.java.api.buffer.BufferStreamApi;
+import com.ensarsarajcic.neovim.java.api.buffer.NeovimBufferApi;
 import com.ensarsarajcic.neovim.java.api.types.api.VimColorMap;
-import com.ensarsarajcic.neovim.java.api.types.api.VimMapping;
+import com.ensarsarajcic.neovim.java.api.types.api.VimKeyMap;
 import com.ensarsarajcic.neovim.java.api.types.api.VimMode;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.*;
 import com.ensarsarajcic.neovim.java.api.types.apiinfo.ApiInfo;
 import com.ensarsarajcic.neovim.java.corerpc.message.RequestMessage;
-import com.ensarsarajcic.neovim.java.corerpc.message.ResponseMessage;
 import com.ensarsarajcic.neovim.java.corerpc.reactive.ReactiveRPCStreamer;
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.msgpack.jackson.dataformat.MessagePackFactory;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionException;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * Full implementation of {@link NeovimApi} based on {@link ReactiveRPCStreamer}
  */
-@NeovimApiClient(name = "full_stream_api", target = 3, complete = true)
-public final class NeovimStreamApi implements NeovimApi {
-
-    private ReactiveRPCStreamer reactiveRPCStreamer;
-    private ObjectMapper objectMapper;
+@NeovimApiClient(name = "full_stream_api", target = 3)
+public final class NeovimStreamApi extends BaseStreamApi implements NeovimApi {
 
     public NeovimStreamApi(ReactiveRPCStreamer reactiveRPCStreamer) {
-        this.reactiveRPCStreamer = reactiveRPCStreamer;
-        MessagePackFactory factory = new MessagePackFactory();
-        factory.disable(JsonParser.Feature.AUTO_CLOSE_SOURCE);
-        factory.disable(JsonGenerator.Feature.AUTO_CLOSE_TARGET);
-        this.objectMapper = new ObjectMapper(factory);
-        objectMapper.registerModule(NeovimJacksonModule.createModule());
+        super(reactiveRPCStreamer);
     }
 
     @Override
@@ -77,7 +64,7 @@ public final class NeovimStreamApi implements NeovimApi {
     @Override
     public CompletableFuture<Map> getHighlightById(int id, boolean rgb) {
         return sendWithResponseOfType(
-                new RequestMessage.Builder("nvim_get_hl_by_id")
+                new RequestMessage.Builder(GET_HIGHLIGHT_BY_ID)
                         .addArgument(id)
                         .addArgument(rgb),
                 Map.class);
@@ -86,7 +73,7 @@ public final class NeovimStreamApi implements NeovimApi {
     @Override
     public CompletableFuture<Map> getHighlightByName(String name, boolean rgb) {
         return sendWithResponseOfType(
-                new RequestMessage.Builder("nvim_get_hl_by_name")
+                new RequestMessage.Builder(GET_HIGHLIGHT_BY_NAME)
                         .addArgument(name)
                         .addArgument(rgb),
                 Map.class);
@@ -95,7 +82,7 @@ public final class NeovimStreamApi implements NeovimApi {
     @Override
     public CompletableFuture<Void> attachUI(int width, int height, Map<String, String> options) {
         return sendWithNoResponse(
-                new RequestMessage.Builder("nvim_ui_attach")
+                new RequestMessage.Builder(ATTACH_UI)
                         .addArgument(width)
                         .addArgument(height)
                         .addArgument(options));
@@ -103,56 +90,56 @@ public final class NeovimStreamApi implements NeovimApi {
 
     @Override
     public CompletableFuture<Void> detachUI() {
-        return sendWithNoResponse(new RequestMessage.Builder("nvim_ui_detach"));
+        return sendWithNoResponse(new RequestMessage.Builder(DETACH_UI));
     }
 
     @Override
     public CompletableFuture<Void> resizeUI(int width, int height) {
-        return sendWithNoResponse(new RequestMessage.Builder("nvim_ui_try_resize")
+        return sendWithNoResponse(new RequestMessage.Builder(RESIZE_UI)
                 .addArgument(width)
                 .addArgument(height));
     }
 
     @Override
     public CompletableFuture<Object> executeLua(String luaCode, List<String> args) {
-        return sendWithGenericResponse(new RequestMessage.Builder("nvim_execute_lua")
+        return sendWithGenericResponse(new RequestMessage.Builder(EXECUTE_LUA)
                 .addArgument(luaCode)
                 .addArgument(args));
     }
 
     @Override
     public CompletableFuture<Void> executeCommand(String command) {
-        return sendWithNoResponse(new RequestMessage.Builder("nvim_command").addArgument(command));
+        return sendWithNoResponse(new RequestMessage.Builder(EXECUTE_COMMAND).addArgument(command));
     }
 
     @Override
     public CompletableFuture<Void> setCurrentDir(String directoryPath) {
-        return sendWithNoResponse(new RequestMessage.Builder("nvim_set_current_dir").addArgument(directoryPath));
+        return sendWithNoResponse(new RequestMessage.Builder(SET_CURRENT_DIR).addArgument(directoryPath));
     }
 
     @Override
     public CompletableFuture<Void> subscribeToEvent(String event) {
-        return sendWithNoResponse(new RequestMessage.Builder("nvim_subscribe").addArgument(event));
+        return sendWithNoResponse(new RequestMessage.Builder(SUBSCRIBE_TO_EVENT).addArgument(event));
     }
 
     @Override
     public CompletableFuture<Void> unsubscribeFromEvent(String event) {
-        return sendWithNoResponse(new RequestMessage.Builder("nvim_unsubscribe").addArgument(event));
+        return sendWithNoResponse(new RequestMessage.Builder(UNSUBSCRIBE_FROM_EVENT).addArgument(event));
     }
 
     @Override
     public CompletableFuture<Object> eval(String expression) {
-        return sendWithGenericResponse(new RequestMessage.Builder("nvim_eval").addArgument(expression));
+        return sendWithGenericResponse(new RequestMessage.Builder(EVAL).addArgument(expression));
     }
 
     @Override
     public CompletableFuture<Object> callFunction(String name, List<String> args) {
-        return sendWithGenericResponse(new RequestMessage.Builder("nvim_call_function").addArgument(name).addArgument(args));
+        return sendWithGenericResponse(new RequestMessage.Builder(CALL_FUNCTION).addArgument(name).addArgument(args));
     }
 
     @Override
     public CompletableFuture<Void> feedKeys(String keys, String mode, Boolean escape) {
-        return sendWithNoResponse(new RequestMessage.Builder("nvim_feedkeys")
+        return sendWithNoResponse(new RequestMessage.Builder(FEEDKEYS)
                 .addArgument(keys)
                 .addArgument(mode)
                 .addArgument(escape));
@@ -160,66 +147,63 @@ public final class NeovimStreamApi implements NeovimApi {
 
     @Override
     public CompletableFuture<Integer> input(String keys) {
-        return sendWithResponseOfType(new RequestMessage.Builder("nvim_input").addArgument(keys), Integer.class);
+        return sendWithResponseOfType(new RequestMessage.Builder(INPUT).addArgument(keys), Integer.class);
     }
 
     @Override
-    public CompletableFuture<List<VimMapping>> getKeymap(String mode) {
-        return sendWithGenericResponse(
-                new RequestMessage.Builder("nvim_get_keymap")
-                        .addArgument(mode))
-                .thenApply(o -> objectMapper.convertValue(
-                        o,
-                        objectMapper.getTypeFactory()
-                                .constructCollectionType(List.class, VimMapping.class)
-                ));
+    public CompletableFuture<List<VimKeyMap>> getKeymap(String mode) {
+        return sendWithResponseOfListType(
+                new RequestMessage.Builder(GET_KEYMAP)
+                        .addArgument(mode),
+                VimKeyMap.class
+        );
     }
 
     @Override
     public CompletableFuture<Void> setUiOption(String name, Object value) {
-        return sendWithNoResponse(new RequestMessage.Builder("nvim_ui_set_option")
+        return sendWithNoResponse(new RequestMessage.Builder(SET_UI_OPTION)
                 .addArgument(name)
                 .addArgument(value));
     }
 
     @Override
     public CompletableFuture<Void> setVariable(String name, Object value) {
-        return sendWithNoResponse(new RequestMessage.Builder("nvim_set_var")
+        return sendWithNoResponse(new RequestMessage.Builder(SET_VAR)
                 .addArgument(name)
                 .addArgument(value));
     }
 
     @Override
     public CompletableFuture<Object> getVariable(String name) {
-        return sendWithGenericResponse(new RequestMessage.Builder("nvim_get_var").addArgument(name));
+        return sendWithGenericResponse(new RequestMessage.Builder(GET_VAR).addArgument(name));
     }
 
     @Override
     public CompletableFuture<Void> deleteVariable(String name) {
-        return sendWithNoResponse(new RequestMessage.Builder("nvim_del_var").addArgument(name));
+        return sendWithNoResponse(new RequestMessage.Builder(DEL_VAR).addArgument(name));
     }
 
     @Override
     public CompletableFuture<Object> getVimVariable(String name) {
-        return sendWithGenericResponse(new RequestMessage.Builder("nvim_get_vvar").addArgument(name));
+        return sendWithGenericResponse(new RequestMessage.Builder(GET_VIM_VARIABLE).addArgument(name));
     }
 
     @Override
     public CompletableFuture<Void> setOption(String name, Object value) {
-        return sendWithNoResponse(new RequestMessage.Builder("nvim_set_option")
+        return sendWithNoResponse(new RequestMessage.Builder(SET_OPTION)
                 .addArgument(name)
                 .addArgument(value));
     }
 
     @Override
     public CompletableFuture<Object> getOption(String name) {
-        return sendWithGenericResponse(new RequestMessage.Builder("nvim_get_option").addArgument(name));
+        return sendWithGenericResponse(new RequestMessage.Builder(GET_OPTION).addArgument(name));
     }
 
     @Override
     public CompletableFuture<Integer> getColorByName(String name) {
         return sendWithResponseOfType(
-                new RequestMessage.Builder("nvim_get_color_by_name")
+                new RequestMessage.Builder(GET_COLOR_BY_NAME)
                         .addArgument(name),
                 Integer.class);
     }
@@ -227,7 +211,7 @@ public final class NeovimStreamApi implements NeovimApi {
     @Override
     public CompletableFuture<String> replaceTermcodes(String strToReplace, boolean fromPart, boolean doLt, boolean special) {
         return sendWithResponseOfType(
-                new RequestMessage.Builder("nvim_replace_termcodes")
+                new RequestMessage.Builder(REPLACE_TERMCODES)
                         .addArgument(strToReplace)
                         .addArgument(fromPart)
                         .addArgument(doLt)
@@ -239,7 +223,7 @@ public final class NeovimStreamApi implements NeovimApi {
     @Override
     public CompletableFuture<String> commandOutput(String command) {
         return sendWithResponseOfType(
-                new RequestMessage.Builder("nvim_command_output")
+                new RequestMessage.Builder(COMMAND_OUTPUT)
                         .addArgument(command),
                 String.class
         );
@@ -247,23 +231,23 @@ public final class NeovimStreamApi implements NeovimApi {
 
     @Override
     public CompletableFuture<Void> writeToOutput(String text) {
-        return sendWithNoResponse(new RequestMessage.Builder("nvim_out_write").addArgument(text));
+        return sendWithNoResponse(new RequestMessage.Builder(OUT_WRITE).addArgument(text));
     }
 
     @Override
     public CompletableFuture<Void> writeToError(String text) {
-        return sendWithNoResponse(new RequestMessage.Builder("nvim_err_write").addArgument(text));
+        return sendWithNoResponse(new RequestMessage.Builder(ERR_WRITE).addArgument(text));
     }
 
     @Override
     public CompletableFuture<Void> writelnToError(String text) {
-        return sendWithNoResponse(new RequestMessage.Builder("nvim_err_writeln").addArgument(text));
+        return sendWithNoResponse(new RequestMessage.Builder(ERR_WRITELN).addArgument(text));
     }
 
     @Override
     public CompletableFuture<Integer> stringWidth(String string) {
         return sendWithResponseOfType(
-                new RequestMessage.Builder("nvim_strwidth")
+                new RequestMessage.Builder(STRWIDTH)
                         .addArgument(string),
                 Integer.class
         );
@@ -271,147 +255,92 @@ public final class NeovimStreamApi implements NeovimApi {
 
     @Override
     public CompletableFuture<List<String>> listRuntimePaths() {
-        return sendWithGenericResponse(
-                new RequestMessage.Builder("nvim_list_runtime_paths"))
-                .thenApply(o -> objectMapper.convertValue(
-                        o,
-                        objectMapper.getTypeFactory()
-                                .constructCollectionType(List.class, String.class)
-                ));
+        return sendWithResponseOfListType(
+                new RequestMessage.Builder(LIST_RUNTIME_PATHS), String.class);
     }
 
     @Override
     public CompletableFuture<String> getCurrentLine() {
         return sendWithResponseOfType(
-                new RequestMessage.Builder("nvim_get_current_line"),
+                new RequestMessage.Builder(GET_CURRENT_LINE),
                 String.class
         );
     }
 
     @Override
     public CompletableFuture<Void> setCurrentLine(String lineContent) {
-        return sendWithNoResponse(new RequestMessage.Builder("nvim_set_current_line").addArgument(lineContent));
+        return sendWithNoResponse(new RequestMessage.Builder(SET_CURRENT_LINE).addArgument(lineContent));
     }
 
     @Override
     public CompletableFuture<Void> deleteCurrentLine() {
-        return sendWithNoResponse(new RequestMessage.Builder("nvim_del_current_line"));
+        return sendWithNoResponse(new RequestMessage.Builder(DEL_CURRENT_LINE));
     }
 
     @Override
-    public CompletableFuture<List<Buffer>> getBuffers() {
-        return sendWithResponseOfListOfMsgPackType(new RequestMessage.Builder("nvim_list_bufs"), Buffer.class);
+    public CompletableFuture<List<NeovimBufferApi>> getBuffers() {
+        return sendWithResponseOfListOfMsgPackType(new RequestMessage.Builder(LIST_BUFS), Buffer.class)
+                .thenApply(buffers -> buffers.stream()
+                        .map((Function<Buffer, NeovimBufferApi>) buffer
+                                        -> new BufferStreamApi(reactiveRPCStreamer, buffer))
+                        .collect(Collectors.toList()));
     }
 
     @Override
-    public CompletableFuture<Buffer> getCurrentBuffer() {
-        return sendWithResponseOfMsgPackType(new RequestMessage.Builder("nvim_get_current_buf"), Buffer.class);
+    public CompletableFuture<NeovimBufferApi> getCurrentBuffer() {
+        return sendWithResponseOfMsgPackType(new RequestMessage.Builder(GET_CURRENT_BUF), Buffer.class)
+                .thenApply(buffer -> new BufferStreamApi(reactiveRPCStreamer, buffer));
     }
 
     @Override
     public CompletableFuture<Void> setCurrentBuffer(Buffer buffer) {
-        return sendWithNoResponse(new RequestMessage.Builder("nvim_set_current_buf").addArgument(buffer));
+        return sendWithNoResponse(new RequestMessage.Builder(SET_CURRENT_BUF).addArgument(buffer));
     }
 
     @Override
     public CompletableFuture<Void> setCurrentWindow(Window window) {
-        return sendWithNoResponse(new RequestMessage.Builder("nvim_set_current_win").addArgument(window));
+        return sendWithNoResponse(new RequestMessage.Builder(SET_CURRENT_WIN).addArgument(window));
     }
 
     @Override
     public CompletableFuture<Void> setCurrentTabpage(Tabpage tabpage) {
-        return sendWithNoResponse(new RequestMessage.Builder("nvim_set_current_tabpage").addArgument(tabpage));
+        return sendWithNoResponse(new RequestMessage.Builder(SET_CURRENT_TABPAGE).addArgument(tabpage));
     }
 
     @Override
     public CompletableFuture<List<Window>> getWindows() {
-        return sendWithResponseOfListOfMsgPackType(new RequestMessage.Builder("nvim_list_wins"), Window.class);
+        return sendWithResponseOfListOfMsgPackType(new RequestMessage.Builder(LIST_WINS), Window.class);
     }
 
     @Override
     public CompletableFuture<Window> getCurrentWindow() {
-        return sendWithResponseOfMsgPackType(new RequestMessage.Builder("nvim_get_current_win"), Window.class);
+        return sendWithResponseOfMsgPackType(new RequestMessage.Builder(GET_CURRENT_WIN), Window.class);
     }
 
     @Override
     public CompletableFuture<List<Tabpage>> getTabpages() {
-        return sendWithResponseOfListOfMsgPackType(new RequestMessage.Builder("nvim_list_tabpages"), Tabpage.class);
+        return sendWithResponseOfListOfMsgPackType(new RequestMessage.Builder(LIST_TABPAGES), Tabpage.class);
     }
 
     @Override
     public CompletableFuture<Tabpage> getCurrentTabpage() {
-        return sendWithResponseOfMsgPackType(new RequestMessage.Builder("nvim_get_current_tabpage"), Tabpage.class);
+        return sendWithResponseOfMsgPackType(new RequestMessage.Builder(GET_CURRENT_TABPAGE), Tabpage.class);
     }
 
     @Override
     public CompletableFuture<VimColorMap> getColorMap() {
-        return sendWithGenericResponse(new RequestMessage.Builder("nvim_get_color_map"))
-                .thenApply(o -> objectMapper.convertValue(
-                        o,
-                        objectMapper.getTypeFactory().constructMapType(Map.class, String.class, Integer.class)
-                ))
-                .thenApply(Map.class::cast)
+        return sendWithResponseOfMapType(new RequestMessage.Builder(GET_COLOR_MAP), String.class, Integer.class)
                 .thenApply(VimColorMap::new);
     }
 
     @Override
     public CompletableFuture<VimMode> getMode() {
-        return sendWithResponseOfType(new RequestMessage.Builder("nvim_get_mode"), VimMode.class);
+        return sendWithResponseOfType(new RequestMessage.Builder(GET_MODE), VimMode.class);
     }
 
     @Override
     public CompletableFuture<ApiInfo> getApiInfo() {
-        return sendWithResponseOfType(new RequestMessage.Builder("nvim_get_api_info"), ApiInfo.class);
+        return sendWithResponseOfType(new RequestMessage.Builder(GET_API_INFO), ApiInfo.class);
     }
 
-    private <T> CompletableFuture<T> sendWithResponseOfType(RequestMessage.Builder request, Class<T> type) {
-        return reactiveRPCStreamer.response(request)
-                .thenApply(ResponseMessage::getResult)
-                .thenApply(o -> objectMapper.convertValue(o, type));
-    }
-
-    private CompletableFuture<byte[]> sendWithBytesResponse(RequestMessage.Builder request) {
-        return reactiveRPCStreamer.response(request)
-                .thenApply(ResponseMessage::getResult)
-                .thenApply(o -> {
-                    try {
-                        return objectMapper.writeValueAsBytes(o);
-                    } catch (JsonProcessingException e) {
-                        e.printStackTrace();
-                        throw new CompletionException(e);
-                    }
-                });
-    }
-
-    private <T extends BaseCustomIdType> CompletableFuture<T> sendWithResponseOfMsgPackType(RequestMessage.Builder request, Class<T> type) {
-        return sendWithBytesResponse(request).thenApply(bytes -> {
-                    try {
-                        return objectMapper.readerFor(type).readValue(bytes);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        throw new CompletionException(e);
-                    }
-                });
-    }
-
-    private <T extends BaseCustomIdType> CompletableFuture<List<T>> sendWithResponseOfListOfMsgPackType(RequestMessage.Builder request, Class<T> type) {
-        return sendWithBytesResponse(request).thenApply(bytes -> {
-                    try {
-                        return objectMapper.readerFor(
-                                objectMapper.getTypeFactory().constructCollectionType(List.class, type)
-                        ).readValue(bytes);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        throw new CompletionException(e);
-                    }
-                });
-    }
-
-    private CompletableFuture<Object> sendWithGenericResponse(RequestMessage.Builder request) {
-        return sendWithResponseOfType(request, Object.class);
-    }
-
-    private CompletableFuture<Void> sendWithNoResponse(RequestMessage.Builder request) {
-        return reactiveRPCStreamer.response(request).thenApply(responseMessage -> null);
-    }
 }

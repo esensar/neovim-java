@@ -24,8 +24,9 @@
 
 package com.ensarsarajcic.neovim.java.api;
 
+import com.ensarsarajcic.neovim.java.api.buffer.NeovimBufferApi;
 import com.ensarsarajcic.neovim.java.api.types.api.VimColorMap;
-import com.ensarsarajcic.neovim.java.api.types.api.VimMapping;
+import com.ensarsarajcic.neovim.java.api.types.api.VimKeyMap;
 import com.ensarsarajcic.neovim.java.api.types.api.VimMode;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.Buffer;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.Tabpage;
@@ -127,7 +128,7 @@ public final class AtomicCallBuilder implements NeovimApi {
     }
 
     @Override
-    public CompletableFuture<List<VimMapping>> getKeymap(String mode) {
+    public CompletableFuture<List<VimKeyMap>> getKeymap(String mode) {
         return null;
     }
 
@@ -217,12 +218,12 @@ public final class AtomicCallBuilder implements NeovimApi {
     }
 
     @Override
-    public CompletableFuture<List<Buffer>> getBuffers() {
+    public CompletableFuture<List<NeovimBufferApi>> getBuffers() {
         return null;
     }
 
     @Override
-    public CompletableFuture<Buffer> getCurrentBuffer() {
+    public CompletableFuture<NeovimBufferApi> getCurrentBuffer() {
         return null;
     }
 
