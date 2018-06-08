@@ -22,50 +22,75 @@
  * SOFTWARE.
  */
 
-package com.ensarsarajcic.neovim.java.api.tabpage;
+package com.ensarsarajcic.neovim.java.api.window;
 
 import com.ensarsarajcic.neovim.java.api.BaseStreamApi;
 import com.ensarsarajcic.neovim.java.api.NeovimApiClient;
+import com.ensarsarajcic.neovim.java.api.buffer.BufferStreamApi;
+import com.ensarsarajcic.neovim.java.api.buffer.NeovimBufferApi;
+import com.ensarsarajcic.neovim.java.api.tabpage.NeovimTabpageApi;
+import com.ensarsarajcic.neovim.java.api.tabpage.TabpageStreamApi;
+import com.ensarsarajcic.neovim.java.api.types.api.VimCoords;
+import com.ensarsarajcic.neovim.java.api.types.msgpack.Buffer;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.Tabpage;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.Window;
-import com.ensarsarajcic.neovim.java.api.window.NeovimWindowApi;
-import com.ensarsarajcic.neovim.java.api.window.WindowStreamApi;
 import com.ensarsarajcic.neovim.java.corerpc.message.RequestMessage;
 import com.ensarsarajcic.neovim.java.corerpc.reactive.ReactiveRPCStreamer;
 
-import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.stream.Collectors;
 
 /**
- * Implementation of {@link TabpageStreamApi} based on {@link ReactiveRPCStreamer}
+ * Implementation of {@link NeovimWindowApi} based on {@link ReactiveRPCStreamer}
  */
-@NeovimApiClient(name = "full_tabpage_api", target = 3)
-public final class TabpageStreamApi extends BaseStreamApi implements NeovimTabpageApi {
+@NeovimApiClient(name = "full_window_api", target = 3)
+public final class WindowStreamApi extends BaseStreamApi implements NeovimWindowApi {
 
-    private Tabpage model;
+    private Window model;
 
-    public TabpageStreamApi(ReactiveRPCStreamer reactiveRPCStreamer, Tabpage model) {
+    public WindowStreamApi(ReactiveRPCStreamer reactiveRPCStreamer, Window model) {
         super(reactiveRPCStreamer);
         this.model = model;
     }
 
     @Override
-    public Tabpage get() {
+    public Window get() {
         return model;
     }
 
     @Override
-    public CompletableFuture<List<NeovimWindowApi>> getWindows() {
-        return sendWithResponseOfListOfMsgPackType(prepareMessage(LIST_WINDOWS), Window.class)
-                .thenApply(windows -> windows.stream()
-                        .map(window -> new WindowStreamApi(reactiveRPCStreamer, window)).collect(Collectors.toList()));
+    public CompletableFuture<NeovimBufferApi> getBuffer() {
+        return sendWithResponseOfMsgPackType(prepareMessage(GET_BUFFER), Buffer.class)
+                .thenApply(buffer -> new BufferStreamApi(reactiveRPCStreamer, buffer));
     }
 
     @Override
-    public CompletableFuture<NeovimWindowApi> getWindow() {
-        return sendWithResponseOfMsgPackType(prepareMessage(GET_WINDOW), Window.class)
-                .thenApply(window -> new WindowStreamApi(reactiveRPCStreamer, window));
+    public CompletableFuture<VimCoords> getCursor() {
+        return sendWithResponseOfType(prepareMessage(GET_CURSOR), VimCoords.class);
+    }
+
+    @Override
+    public CompletableFuture<Void> setCursor(VimCoords vimCoords) {
+        return sendWithNoResponse(prepareMessage(SET_CURSOR).addArgument(vimCoords));
+    }
+
+    @Override
+    public CompletableFuture<Integer> getHeight() {
+        return sendWithResponseOfType(prepareMessage(GET_HEIGHT), Integer.class);
+    }
+
+    @Override
+    public CompletableFuture<Void> setHeight(int height) {
+        return sendWithNoResponse(prepareMessage(SET_HEIGHT).addArgument(height));
+    }
+
+    @Override
+    public CompletableFuture<Integer> getWidth() {
+        return sendWithResponseOfType(prepareMessage(GET_WIDTH), Integer.class);
+    }
+
+    @Override
+    public CompletableFuture<Void> setWidth(int width) {
+        return sendWithNoResponse(prepareMessage(SET_WIDTH).addArgument(width));
     }
 
     @Override
@@ -84,6 +109,22 @@ public final class TabpageStreamApi extends BaseStreamApi implements NeovimTabpa
     }
 
     @Override
+    public CompletableFuture<Object> getOption(String name) {
+        return sendWithGenericResponse(prepareMessage(GET_OPTION).addArgument(name));
+    }
+
+    @Override
+    public CompletableFuture<Void> setOption(String name, Object value) {
+        return sendWithNoResponse(prepareMessage(SET_OPTION).addArgument(name).addArgument(value));
+    }
+
+    @Override
+    public CompletableFuture<NeovimTabpageApi> getTabpage() {
+        return sendWithResponseOfMsgPackType(prepareMessage(GET_TABPAGE), Tabpage.class)
+                .thenApply(tabpage -> new TabpageStreamApi(reactiveRPCStreamer, tabpage));
+    }
+
+    @Override
     public CompletableFuture<Integer> getNumber() {
         return sendWithResponseOfType(prepareMessage(GET_NUMBER), Integer.class);
     }
@@ -99,7 +140,7 @@ public final class TabpageStreamApi extends BaseStreamApi implements NeovimTabpa
 
     @Override
     public String toString() {
-        return "TabpageStreamApi{" +
+        return "WindowStreamApi{" +
                 "model=" + model +
                 '}';
     }

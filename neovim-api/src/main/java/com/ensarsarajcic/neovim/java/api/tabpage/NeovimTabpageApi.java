@@ -26,11 +26,14 @@ package com.ensarsarajcic.neovim.java.api.tabpage;
 
 import com.ensarsarajcic.neovim.java.api.NeovimApiFunction;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.Tabpage;
-import com.ensarsarajcic.neovim.java.api.types.msgpack.Window;
+import com.ensarsarajcic.neovim.java.api.window.NeovimWindowApi;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
+/**
+ * Interface representing neovim tabpage methods
+ */
 public interface NeovimTabpageApi {
 
     // region Supported functions names
@@ -46,10 +49,10 @@ public interface NeovimTabpageApi {
     Tabpage get();
 
     @NeovimApiFunction(name = LIST_WINDOWS, since = 1)
-    CompletableFuture<List<Window>> getWindows();
+    CompletableFuture<List<NeovimWindowApi>> getWindows();
 
     @NeovimApiFunction(name = GET_WINDOW, since = 1)
-    CompletableFuture<Window> getWindow();
+    CompletableFuture<NeovimWindowApi> getWindow();
 
     @NeovimApiFunction(name = GET_VAR, since = 1)
     CompletableFuture<Object> getVar(String name);

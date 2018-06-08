@@ -33,6 +33,7 @@ import com.ensarsarajcic.neovim.java.api.types.msgpack.Buffer;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.Tabpage;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.Window;
 import com.ensarsarajcic.neovim.java.api.types.apiinfo.ApiInfo;
+import com.ensarsarajcic.neovim.java.api.window.NeovimWindowApi;
 
 import java.util.List;
 import java.util.Map;
@@ -206,10 +207,10 @@ public interface NeovimApi {
     CompletableFuture<Void> setCurrentBuffer(Buffer buffer);
 
     @NeovimApiFunction(name = LIST_WINS, since = 1)
-    CompletableFuture<List<Window>> getWindows();
+    CompletableFuture<List<NeovimWindowApi>> getWindows();
 
     @NeovimApiFunction(name = GET_CURRENT_WIN, since = 1)
-    CompletableFuture<Window> getCurrentWindow();
+    CompletableFuture<NeovimWindowApi> getCurrentWindow();
 
     // Todo consider setAsCurrent method on window
     @NeovimApiFunction(name = SET_CURRENT_WIN, since = 1)

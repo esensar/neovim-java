@@ -54,4 +54,12 @@ public final class VimCoords {
     public int getCol() {
         return col;
     }
+
+    @Override
+    public String toString() {
+        return "VimCoords{" +
+                "row=" + row +
+                ", col=" + col +
+                '}';
+    }
 }
