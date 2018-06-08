@@ -24,43 +24,30 @@
 
 package com.ensarsarajcic.neovim.java.api;
 
+import com.ensarsarajcic.neovim.java.api.buffer.BufferStreamApi;
+import com.ensarsarajcic.neovim.java.api.buffer.NeovimBufferApi;
 import com.ensarsarajcic.neovim.java.api.types.api.VimColorMap;
-import com.ensarsarajcic.neovim.java.api.types.api.VimMapping;
+import com.ensarsarajcic.neovim.java.api.types.api.VimKeyMap;
 import com.ensarsarajcic.neovim.java.api.types.api.VimMode;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.*;
 import com.ensarsarajcic.neovim.java.api.types.apiinfo.ApiInfo;
 import com.ensarsarajcic.neovim.java.corerpc.message.RequestMessage;
-import com.ensarsarajcic.neovim.java.corerpc.message.ResponseMessage;
 import com.ensarsarajcic.neovim.java.corerpc.reactive.ReactiveRPCStreamer;
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.msgpack.jackson.dataformat.MessagePackFactory;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionException;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * Full implementation of {@link NeovimApi} based on {@link ReactiveRPCStreamer}
  */
-@NeovimApiClient(name = "full_stream_api", target = 3, complete = true)
-public final class NeovimStreamApi implements NeovimApi {
-
-    private ReactiveRPCStreamer reactiveRPCStreamer;
-    private ObjectMapper objectMapper;
+@NeovimApiClient(name = "full_stream_api", target = 3)
+public final class NeovimStreamApi extends BaseStreamApi implements NeovimApi {
 
     public NeovimStreamApi(ReactiveRPCStreamer reactiveRPCStreamer) {
-        this.reactiveRPCStreamer = reactiveRPCStreamer;
-        MessagePackFactory factory = new MessagePackFactory();
-        factory.disable(JsonParser.Feature.AUTO_CLOSE_SOURCE);
-        factory.disable(JsonGenerator.Feature.AUTO_CLOSE_TARGET);
-        this.objectMapper = new ObjectMapper(factory);
-        objectMapper.registerModule(NeovimJacksonModule.createModule());
+        super(reactiveRPCStreamer);
     }
 
     @Override
@@ -164,15 +151,12 @@ public final class NeovimStreamApi implements NeovimApi {
     }
 
     @Override
-    public CompletableFuture<List<VimMapping>> getKeymap(String mode) {
-        return sendWithGenericResponse(
+    public CompletableFuture<List<VimKeyMap>> getKeymap(String mode) {
+        return sendWithResponseOfListType(
                 new RequestMessage.Builder("nvim_get_keymap")
-                        .addArgument(mode))
-                .thenApply(o -> objectMapper.convertValue(
-                        o,
-                        objectMapper.getTypeFactory()
-                                .constructCollectionType(List.class, VimMapping.class)
-                ));
+                        .addArgument(mode),
+                VimKeyMap.class
+        );
     }
 
     @Override
@@ -271,13 +255,8 @@ public final class NeovimStreamApi implements NeovimApi {
 
     @Override
     public CompletableFuture<List<String>> listRuntimePaths() {
-        return sendWithGenericResponse(
-                new RequestMessage.Builder("nvim_list_runtime_paths"))
-                .thenApply(o -> objectMapper.convertValue(
-                        o,
-                        objectMapper.getTypeFactory()
-                                .constructCollectionType(List.class, String.class)
-                ));
+        return sendWithResponseOfListType(
+                new RequestMessage.Builder("nvim_list_runtime_paths"), String.class);
     }
 
     @Override
@@ -299,13 +278,18 @@ public final class NeovimStreamApi implements NeovimApi {
     }
 
     @Override
-    public CompletableFuture<List<Buffer>> getBuffers() {
-        return sendWithResponseOfListOfMsgPackType(new RequestMessage.Builder("nvim_list_bufs"), Buffer.class);
+    public CompletableFuture<List<NeovimBufferApi>> getBuffers() {
+        return sendWithResponseOfListOfMsgPackType(new RequestMessage.Builder("nvim_list_bufs"), Buffer.class)
+                .thenApply(buffers -> buffers.stream()
+                        .map((Function<Buffer, NeovimBufferApi>) buffer
+                                        -> new BufferStreamApi(reactiveRPCStreamer, buffer))
+                        .collect(Collectors.toList()));
     }
 
     @Override
-    public CompletableFuture<Buffer> getCurrentBuffer() {
-        return sendWithResponseOfMsgPackType(new RequestMessage.Builder("nvim_get_current_buf"), Buffer.class);
+    public CompletableFuture<NeovimBufferApi> getCurrentBuffer() {
+        return sendWithResponseOfMsgPackType(new RequestMessage.Builder("nvim_get_current_buf"), Buffer.class)
+                .thenApply(buffer -> new BufferStreamApi(reactiveRPCStreamer, buffer));
     }
 
     @Override
@@ -345,12 +329,7 @@ public final class NeovimStreamApi implements NeovimApi {
 
     @Override
     public CompletableFuture<VimColorMap> getColorMap() {
-        return sendWithGenericResponse(new RequestMessage.Builder("nvim_get_color_map"))
-                .thenApply(o -> objectMapper.convertValue(
-                        o,
-                        objectMapper.getTypeFactory().constructMapType(Map.class, String.class, Integer.class)
-                ))
-                .thenApply(Map.class::cast)
+        return sendWithResponseOfMapType(new RequestMessage.Builder("nvim_get_color_map"), String.class, Integer.class)
                 .thenApply(VimColorMap::new);
     }
 
@@ -364,54 +343,4 @@ public final class NeovimStreamApi implements NeovimApi {
         return sendWithResponseOfType(new RequestMessage.Builder("nvim_get_api_info"), ApiInfo.class);
     }
 
-    private <T> CompletableFuture<T> sendWithResponseOfType(RequestMessage.Builder request, Class<T> type) {
-        return reactiveRPCStreamer.response(request)
-                .thenApply(ResponseMessage::getResult)
-                .thenApply(o -> objectMapper.convertValue(o, type));
-    }
-
-    private CompletableFuture<byte[]> sendWithBytesResponse(RequestMessage.Builder request) {
-        return reactiveRPCStreamer.response(request)
-                .thenApply(ResponseMessage::getResult)
-                .thenApply(o -> {
-                    try {
-                        return objectMapper.writeValueAsBytes(o);
-                    } catch (JsonProcessingException e) {
-                        e.printStackTrace();
-                        throw new CompletionException(e);
-                    }
-                });
-    }
-
-    private <T extends BaseCustomIdType> CompletableFuture<T> sendWithResponseOfMsgPackType(RequestMessage.Builder request, Class<T> type) {
-        return sendWithBytesResponse(request).thenApply(bytes -> {
-                    try {
-                        return objectMapper.readerFor(type).readValue(bytes);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        throw new CompletionException(e);
-                    }
-                });
-    }
-
-    private <T extends BaseCustomIdType> CompletableFuture<List<T>> sendWithResponseOfListOfMsgPackType(RequestMessage.Builder request, Class<T> type) {
-        return sendWithBytesResponse(request).thenApply(bytes -> {
-                    try {
-                        return objectMapper.readerFor(
-                                objectMapper.getTypeFactory().constructCollectionType(List.class, type)
-                        ).readValue(bytes);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        throw new CompletionException(e);
-                    }
-                });
-    }
-
-    private CompletableFuture<Object> sendWithGenericResponse(RequestMessage.Builder request) {
-        return sendWithResponseOfType(request, Object.class);
-    }
-
-    private CompletableFuture<Void> sendWithNoResponse(RequestMessage.Builder request) {
-        return reactiveRPCStreamer.response(request).thenApply(responseMessage -> null);
-    }
 }

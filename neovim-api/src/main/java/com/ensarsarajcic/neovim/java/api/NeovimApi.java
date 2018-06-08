@@ -24,8 +24,9 @@
 
 package com.ensarsarajcic.neovim.java.api;
 
+import com.ensarsarajcic.neovim.java.api.buffer.NeovimBufferApi;
 import com.ensarsarajcic.neovim.java.api.types.api.VimColorMap;
-import com.ensarsarajcic.neovim.java.api.types.api.VimMapping;
+import com.ensarsarajcic.neovim.java.api.types.api.VimKeyMap;
 import com.ensarsarajcic.neovim.java.api.types.api.VimMode;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.Buffer;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.Tabpage;
@@ -88,7 +89,7 @@ public interface NeovimApi {
     CompletableFuture<Integer> input(String keys);
 
     @NeovimApiFunction(name = "nvim_get_keymap", since = 3)
-    CompletableFuture<List<VimMapping>> getKeymap(String mode);
+    CompletableFuture<List<VimKeyMap>> getKeymap(String mode);
 
     @NeovimApiFunction(name = "nvim_ui_set_option", since = 1)
     CompletableFuture<Void> setUiOption(String name, Object value);
@@ -145,10 +146,10 @@ public interface NeovimApi {
     CompletableFuture<Void> deleteCurrentLine();
 
     @NeovimApiFunction(name = "nvim_list_bufs", since = 1)
-    CompletableFuture<List<Buffer>> getBuffers();
+    CompletableFuture<List<NeovimBufferApi>> getBuffers();
 
     @NeovimApiFunction(name = "nvim_get_current_buf", since = 1)
-    CompletableFuture<Buffer> getCurrentBuffer();
+    CompletableFuture<NeovimBufferApi> getCurrentBuffer();
 
     // Todo consider setAsCurrent method on buffer
     @NeovimApiFunction(name = "nvim_set_current_buf", since = 1)

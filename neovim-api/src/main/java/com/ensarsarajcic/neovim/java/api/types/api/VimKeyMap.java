@@ -29,7 +29,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 /**
  * Model describing a (Neo)Vim key mapping
  */
-public final class VimMapping {
+public final class VimKeyMap {
 
     private boolean silent;
     private boolean noRemap;
@@ -41,7 +41,7 @@ public final class VimMapping {
     private int sid;
     private boolean buffer;
 
-    public VimMapping(
+    public VimKeyMap(
             @JsonProperty("silent")
                     int silent,
             @JsonProperty("noremap")
@@ -109,7 +109,7 @@ public final class VimMapping {
 
     @Override
     public String toString() {
-        return "VimMapping{" +
+        return "VimKeyMap{" +
                 "silent=" + silent +
                 ", noRemap=" + noRemap +
                 ", keyStroke='" + keyStroke + '\'' +
