@@ -48,6 +48,7 @@ public final class ApiInfo {
         private List<FunctionInfo> functions;
         private Map<String, TypeInfo.Props> types;
         private List<UiEventInfo> uiEvents;
+        private List<String> uiOptions;
         private VersionInfo version;
 
         public ApiInfoInternal(
@@ -59,12 +60,15 @@ public final class ApiInfo {
                 Map<String, TypeInfo.Props> types,
                 @JsonProperty("ui_events")
                 List<UiEventInfo> uiEvents,
+                @JsonProperty("ui_options")
+                List<String> uiOptions,
                 @JsonProperty("version")
                 VersionInfo version) {
             this.errorTypes = errorTypes;
             this.functions = functions;
             this.types = types;
             this.uiEvents = uiEvents;
+            this.uiOptions = uiOptions;
             this.version = version;
         }
     }
@@ -95,6 +99,10 @@ public final class ApiInfo {
 
     public List<UiEventInfo> getUiEvents() {
         return apiInfoInternal.uiEvents;
+    }
+
+    public List<String> getUiOptions() {
+        return apiInfoInternal.uiOptions;
     }
 
     public VersionInfo getVersion() {

@@ -35,6 +35,7 @@ public final class NeovimApiList {
     private List<NeovimFunction> functions;
     private Map<String, NeovimType> types;
     private List<NeovimUiEvent> uiEvents;
+    private List<String> uiOptions;
     private NeovimVersion version;
 
     public NeovimApiList(
@@ -46,12 +47,15 @@ public final class NeovimApiList {
             Map<String, NeovimType> types,
             @JsonProperty("ui_events")
             List<NeovimUiEvent> uiEvents,
+            @JsonProperty("ui_options")
+            List<String> uiOptions,
             @JsonProperty("version")
             NeovimVersion version) {
         this.errorTypes = errorTypes;
         this.functions = functions;
         this.types = types;
         this.uiEvents = uiEvents;
+        this.uiOptions = uiOptions;
         this.version = version;
     }
 
@@ -69,6 +73,10 @@ public final class NeovimApiList {
 
     public List<NeovimUiEvent> getUiEvents() {
         return uiEvents;
+    }
+
+    public List<String> getUiOptions() {
+        return uiOptions;
     }
 
     public NeovimVersion getVersion() {

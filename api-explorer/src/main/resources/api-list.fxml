@@ -65,6 +65,19 @@
                      </AnchorPane>
                       </content>
                   </Tab>
+                  <Tab closable="false" text="UIOptions">
+                      <content>
+                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                              <children>
+                                  <TableView fx:id="uiOptionsTable" prefHeight="367.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                      <columns>
+                                          <TableColumn fx:id="uiOptionsColName" editable="false" prefWidth="138.0" text="Name" />
+                                      </columns>
+                                  </TableView>
+                              </children>
+                          </AnchorPane>
+                      </content>
+                  </Tab>
                   <Tab closable="false" text="UIEvents">
                       <content>
                           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
