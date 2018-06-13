@@ -26,12 +26,14 @@ package com.ensarsarajcic.neovim.java.rxapi;
 
 import com.ensarsarajcic.neovim.java.api.NeovimApiFunction;
 import com.ensarsarajcic.neovim.java.api.buffer.NeovimBufferApi;
+import com.ensarsarajcic.neovim.java.api.types.api.GetCommandsOptions;
 import com.ensarsarajcic.neovim.java.api.types.api.VimCoords;
 import com.ensarsarajcic.neovim.java.api.types.api.VimKeyMap;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.Buffer;
 import io.reactivex.Single;
 
 import java.util.List;
+import java.util.Map;
 
 public interface NeovimBufferRxApi {
     Buffer get();
@@ -86,4 +88,13 @@ public interface NeovimBufferRxApi {
 
     @NeovimApiFunction(name = NeovimBufferApi.CLEAR_HIGHLIGHT, since = 1)
     Single<Void> clearHighlight(int srcId, int lineStart, int lineEnd);
+
+    @NeovimApiFunction(name = NeovimBufferApi.ATTACH_BUFFER, since = 4)
+    Single<Boolean> attach(boolean loadFullBufferOnStart, Map opts);
+
+    @NeovimApiFunction(name = NeovimBufferApi.DETACH_BUFFER, since = 4)
+    Single<Boolean> detach();
+
+    @NeovimApiFunction(name = NeovimBufferApi.GET_COMMANDS, since = 4)
+    Single<Map> getCommands(GetCommandsOptions commandsOptions);
 }
