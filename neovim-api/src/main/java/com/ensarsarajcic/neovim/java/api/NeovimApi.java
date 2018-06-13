@@ -26,9 +26,7 @@ package com.ensarsarajcic.neovim.java.api;
 
 import com.ensarsarajcic.neovim.java.api.buffer.NeovimBufferApi;
 import com.ensarsarajcic.neovim.java.api.tabpage.NeovimTabpageApi;
-import com.ensarsarajcic.neovim.java.api.types.api.VimColorMap;
-import com.ensarsarajcic.neovim.java.api.types.api.VimKeyMap;
-import com.ensarsarajcic.neovim.java.api.types.api.VimMode;
+import com.ensarsarajcic.neovim.java.api.types.api.*;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.Buffer;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.Tabpage;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.Window;
@@ -91,6 +89,15 @@ public interface NeovimApi {
     String GET_COLOR_MAP = "nvim_get_color_map";
     String GET_MODE = "nvim_get_mode";
     String GET_API_INFO = "nvim_get_api_info";
+    String CALL_DICT_FUNCTION = "nvim_call_dict_function";
+    String GET_COMMANDS = "nvim_get_commands";
+    String SET_CLIENT_INFO = "nvim_set_client_info";
+    String GET_CHANNEL_INFO = "nvim_get_chan_info";
+    String LIST_CHANNELS = "nvim_list_chans";
+    String PARSE_EXPRESSION = "nvim_parse_expression";
+    String LIST_UIS = "nvim_list_uis";
+    String GET_PROC_CHILDREN = "nvim_get_proc_children";
+    String GET_PROC = "nvim_get_proc";
     // endregion
 
     @NeovimApiFunction(name = CALL_ATOMIC, since = 1)
@@ -234,4 +241,31 @@ public interface NeovimApi {
 
     @NeovimApiFunction(name = GET_API_INFO, since = 1)
     CompletableFuture<ApiInfo> getApiInfo();
+
+    @NeovimApiFunction(name = CALL_DICT_FUNCTION, since = 4)
+    CompletableFuture<Object> callDictFunction(Map map, String function, List args);
+
+    @NeovimApiFunction(name = GET_COMMANDS, since = 4)
+    CompletableFuture<Map> getCommands(GetCommandsOptions getCommandsOptions);
+
+    @NeovimApiFunction(name = SET_CLIENT_INFO, since = 4)
+    CompletableFuture<Void> setClientInfo(String name, ClientVersionInfo clientVersionInfo, ClientType clientType, Map<String, MethodInfo> methods, ClientAttributes clientAttributes);
+
+    @NeovimApiFunction(name = GET_CHANNEL_INFO, since = 4)
+    CompletableFuture<ChannelInfo> getChannelInfo(int channel);
+
+    @NeovimApiFunction(name = LIST_CHANNELS, since = 4)
+    CompletableFuture<List<ChannelInfo>> getChannels();
+
+    @NeovimApiFunction(name = PARSE_EXPRESSION, since = 4)
+    CompletableFuture<Map> parseExpression(String expression, String flags, boolean highlight);
+
+    @NeovimApiFunction(name = LIST_UIS, since = 4)
+    CompletableFuture<List<UiInfo>> getUis();
+
+    @NeovimApiFunction(name = GET_PROC_CHILDREN, since = 4)
+    CompletableFuture<List<Integer>> getProcessChildren();
+
+    @NeovimApiFunction(name = GET_PROC, since = 4)
+    CompletableFuture<Object> getProccess();
 }

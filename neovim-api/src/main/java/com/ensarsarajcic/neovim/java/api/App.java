@@ -24,7 +24,13 @@
 
 package com.ensarsarajcic.neovim.java.api;
 
+import com.ensarsarajcic.neovim.java.api.buffer.NeovimBufferApi;
 import com.ensarsarajcic.neovim.java.api.tabpage.NeovimTabpageApi;
+import com.ensarsarajcic.neovim.java.api.types.api.ClientAttributes;
+import com.ensarsarajcic.neovim.java.api.types.api.ClientType;
+import com.ensarsarajcic.neovim.java.api.types.api.ClientVersionInfo;
+import com.ensarsarajcic.neovim.java.api.types.api.GetCommandsOptions;
+import com.ensarsarajcic.neovim.java.api.types.apiinfo.ApiInfo;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.NeovimJacksonModule;
 import com.ensarsarajcic.neovim.java.api.window.NeovimWindowApi;
 import com.ensarsarajcic.neovim.java.corerpc.client.RPCClient;
@@ -33,8 +39,11 @@ import com.ensarsarajcic.neovim.java.corerpc.reactive.ReactiveRPCClient;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.util.HashMap;
+import java.util.concurrent.CompletionStage;
 import java.util.concurrent.ExecutionException;
 import java.util.function.BiConsumer;
+import java.util.function.Function;
 
 /**
  * Hello world!
@@ -65,21 +74,17 @@ public class App
             neovimStreamApi.getCurrentWindow().thenAccept(System.out::println).get();
             neovimStreamApi.getWindows().thenAccept(System.out::println).get();
             neovimStreamApi.getCurrentBuffer().thenCompose(neovimBufferApi -> neovimBufferApi.getKeymap("n")).thenAccept(System.out::println).get();
-            neovimStreamApi.getCurrentWindow()
-                    .whenComplete(App::log)
-                    .thenCompose(NeovimWindowApi::getTabpage)
-                    .whenComplete(App::log)
-                    .thenCompose(NeovimTabpageApi::getWindow)
-                    .whenComplete(App::log)
-                    .thenCompose(NeovimWindowApi::getTabpage)
-                    .whenComplete(App::log)
-                    .thenCompose(NeovimTabpageApi::getWindow)
-                    .whenComplete(App::log)
-                    .thenCompose(NeovimWindowApi::getTabpage)
-                    .thenCompose(NeovimTabpageApi::getWindow)
-                    .thenCompose(NeovimWindowApi::getCursor)
-                    .whenComplete(App::log)
-                    .thenAccept(System.out::println).get();
+            neovimStreamApi.setClientInfo("megaClient",
+                    new ClientVersionInfo(0, 0, 0, "dev"),
+                    ClientType.REMOTE,
+                    new HashMap<>(),
+                    new ClientAttributes("https://github.com", "MIT", "none")).thenAccept(System.out::println).get();
+            neovimStreamApi.getChannels().thenAccept(System.out::println).get();
+            neovimStreamApi.getUis().thenAccept(System.out::println).get();
+            neovimStreamApi.getChannelInfo(2).thenAccept(System.out::println).get();
+            neovimStreamApi.getApiInfo().thenCompose(apiInfo -> neovimStreamApi.getChannelInfo(apiInfo.getChannelId())).thenAccept(System.out::println).get();
+            neovimStreamApi.getCurrentBuffer().thenCompose(neovimBufferApi -> neovimBufferApi.attach(false, new HashMap())).thenAccept(System.out::println).get();
+            neovimStreamApi.getCurrentBuffer().thenCompose(neovimBufferApi -> neovimBufferApi.getCommands(new GetCommandsOptions(true))).thenAccept(System.out::println).get();
         } catch (IOException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {

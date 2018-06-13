@@ -73,6 +73,7 @@ public final class ApiDiscovery {
                 transformFunctions(apiInfo.getFunctions()),
                 transformTypes(apiInfo.getTypes()),
                 transformUIEvents(apiInfo.getUiEvents()),
+                apiInfo.getUiOptions(),
                 transform(apiInfo.getVersion())
         );
     }

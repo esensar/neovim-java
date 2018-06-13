@@ -42,6 +42,7 @@ import javafx.util.Callback;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
@@ -95,6 +96,8 @@ public final class ApiListController {
     // Version info
     @FXML
     public Label labelInformation;
+    public TableView<String> uiOptionsTable;
+    public TableColumn<String, String> uiOptionsColName;
 
     public void initialize() throws ExecutionException, InterruptedException {
         try {
@@ -203,6 +206,11 @@ public final class ApiListController {
                 }
             });
             uiEventsTable.setItems(neovimUiEvents);
+
+            // Show Ui Options
+            ObservableList<String> neovimUiOptions = FXCollections.observableArrayList(apiList.getUiOptions());
+            uiOptionsColName.setCellValueFactory(c -> new SimpleStringProperty(c.getValue()));
+            uiOptionsTable.setItems(neovimUiOptions);
 
             // Show Errors
             ObservableMap<String, NeovimError> neovimErrors = FXCollections.observableMap(apiList.getErrorTypes());

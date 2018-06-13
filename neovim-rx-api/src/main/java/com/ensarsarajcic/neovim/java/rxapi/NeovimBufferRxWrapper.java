@@ -25,12 +25,14 @@
 package com.ensarsarajcic.neovim.java.rxapi;
 
 import com.ensarsarajcic.neovim.java.api.buffer.NeovimBufferApi;
+import com.ensarsarajcic.neovim.java.api.types.api.GetCommandsOptions;
 import com.ensarsarajcic.neovim.java.api.types.api.VimCoords;
 import com.ensarsarajcic.neovim.java.api.types.api.VimKeyMap;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.Buffer;
 import io.reactivex.Single;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 public final class NeovimBufferRxWrapper implements NeovimBufferRxApi {
@@ -130,5 +132,20 @@ public final class NeovimBufferRxWrapper implements NeovimBufferRxApi {
     @Override
     public Single<Void> clearHighlight(int srcId, int lineStart, int lineEnd) {
         return Single.fromFuture(neovimBufferApi.clearHighlight(srcId, lineStart, lineEnd));
+    }
+
+    @Override
+    public Single<Boolean> attach(boolean loadFullBufferOnStart, Map opts) {
+        return Single.fromFuture(neovimBufferApi.attach(loadFullBufferOnStart, opts));
+    }
+
+    @Override
+    public Single<Boolean> detach() {
+        return Single.fromFuture(neovimBufferApi.detach());
+    }
+
+    @Override
+    public Single<Map> getCommands(GetCommandsOptions commandsOptions) {
+        return Single.fromFuture(neovimBufferApi.getCommands(commandsOptions));
     }
 }

@@ -22,37 +22,26 @@
  * SOFTWARE.
  */
 
-package com.ensarsarajcic.neovim.java.rxapi;
+package com.ensarsarajcic.neovim.java.api.types.api;
 
-import com.ensarsarajcic.neovim.java.api.NeovimApiFunction;
-import com.ensarsarajcic.neovim.java.api.tabpage.NeovimTabpageApi;
-import com.ensarsarajcic.neovim.java.api.types.msgpack.Tabpage;
-import io.reactivex.Single;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.List;
+public final class MethodInfo {
 
-public interface NeovimTabpageRxApi {
+    private boolean async;
+    @JsonProperty("nargs")
+    private int numberOfArguments;
 
-    Tabpage get();
+    public MethodInfo(boolean async, int numberOfArguments) {
+        this.async = async;
+        this.numberOfArguments = numberOfArguments;
+    }
 
-    @NeovimApiFunction(name = NeovimTabpageApi.LIST_WINDOWS, since = 1)
-    Single<List<NeovimWindowRxApi>> getWindows();
+    public boolean isAsync() {
+        return async;
+    }
 
-    @NeovimApiFunction(name = NeovimTabpageApi.GET_WINDOW, since = 1)
-    Single<NeovimWindowRxApi> getWindow();
-
-    @NeovimApiFunction(name = NeovimTabpageApi.GET_VAR, since = 1)
-    Single<Object> getVar(String name);
-
-    @NeovimApiFunction(name = NeovimTabpageApi.SET_VAR, since = 1)
-    Single<Void> setVar(String name, Object value);
-
-    @NeovimApiFunction(name = NeovimTabpageApi.DEL_VAR, since = 1)
-    Single<Void> deleteVar(String name);
-
-    @NeovimApiFunction(name = NeovimTabpageApi.GET_NUMBER, since = 1)
-    Single<Integer> getNumber();
-
-    @NeovimApiFunction(name = NeovimTabpageApi.IS_VALID, since = 1)
-    Single<Boolean> isValid();
+    public int getNumberOfArguments() {
+        return numberOfArguments;
+    }
 }

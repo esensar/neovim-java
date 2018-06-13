@@ -22,37 +22,44 @@
  * SOFTWARE.
  */
 
-package com.ensarsarajcic.neovim.java.rxapi;
+package com.ensarsarajcic.neovim.java.api.types.api;
 
-import com.ensarsarajcic.neovim.java.api.NeovimApiFunction;
-import com.ensarsarajcic.neovim.java.api.tabpage.NeovimTabpageApi;
-import com.ensarsarajcic.neovim.java.api.types.msgpack.Tabpage;
-import io.reactivex.Single;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonValue;
 
-import java.util.List;
+@JsonFormat(shape = JsonFormat.Shape.STRING)
+public enum ClientType {
+    REMOTE("remote"),
+    UI("ui"),
+    HOST("host"),
+    PLUGIN("plugin");
 
-public interface NeovimTabpageRxApi {
+    private String value;
 
-    Tabpage get();
+    @JsonCreator
+    public static ClientType fromString(String value) {
+        for (ClientType clientType : values()) {
+            if (clientType.value.equals(value)) {
+                return clientType;
+            }
+        }
+        throw new IllegalArgumentException(String.format("ClientType (%s) does not exist", value));
+    }
 
-    @NeovimApiFunction(name = NeovimTabpageApi.LIST_WINDOWS, since = 1)
-    Single<List<NeovimWindowRxApi>> getWindows();
+    ClientType(String value) {
+        this.value = value;
+    }
 
-    @NeovimApiFunction(name = NeovimTabpageApi.GET_WINDOW, since = 1)
-    Single<NeovimWindowRxApi> getWindow();
+    @JsonValue
+    public String getValue() {
+        return value;
+    }
 
-    @NeovimApiFunction(name = NeovimTabpageApi.GET_VAR, since = 1)
-    Single<Object> getVar(String name);
-
-    @NeovimApiFunction(name = NeovimTabpageApi.SET_VAR, since = 1)
-    Single<Void> setVar(String name, Object value);
-
-    @NeovimApiFunction(name = NeovimTabpageApi.DEL_VAR, since = 1)
-    Single<Void> deleteVar(String name);
-
-    @NeovimApiFunction(name = NeovimTabpageApi.GET_NUMBER, since = 1)
-    Single<Integer> getNumber();
-
-    @NeovimApiFunction(name = NeovimTabpageApi.IS_VALID, since = 1)
-    Single<Boolean> isValid();
+    @Override
+    public String toString() {
+        return "ClientType{" +
+                "value='" + value + '\'' +
+                '}';
+    }
 }

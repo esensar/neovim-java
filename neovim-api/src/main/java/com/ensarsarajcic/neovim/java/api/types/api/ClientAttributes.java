@@ -22,37 +22,48 @@
  * SOFTWARE.
  */
 
-package com.ensarsarajcic.neovim.java.rxapi;
+package com.ensarsarajcic.neovim.java.api.types.api;
 
-import com.ensarsarajcic.neovim.java.api.NeovimApiFunction;
-import com.ensarsarajcic.neovim.java.api.tabpage.NeovimTabpageApi;
-import com.ensarsarajcic.neovim.java.api.types.msgpack.Tabpage;
-import io.reactivex.Single;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.List;
+public class ClientAttributes {
+    private String website;
+    private String license;
+    private String logo;
 
-public interface NeovimTabpageRxApi {
+    public ClientAttributes(
+            @JsonProperty("website")
+            String website,
+            @JsonProperty("license")
+            String license,
+            @JsonProperty("logo")
+            String logo) {
+        this.website = website;
+        this.license = license;
+        this.logo = logo;
+    }
 
-    Tabpage get();
+    @JsonProperty("website")
+    public String getWebsite() {
+        return website;
+    }
 
-    @NeovimApiFunction(name = NeovimTabpageApi.LIST_WINDOWS, since = 1)
-    Single<List<NeovimWindowRxApi>> getWindows();
+    @JsonProperty("license")
+    public String getLicense() {
+        return license;
+    }
 
-    @NeovimApiFunction(name = NeovimTabpageApi.GET_WINDOW, since = 1)
-    Single<NeovimWindowRxApi> getWindow();
+    @JsonProperty("logo")
+    public String getLogo() {
+        return logo;
+    }
 
-    @NeovimApiFunction(name = NeovimTabpageApi.GET_VAR, since = 1)
-    Single<Object> getVar(String name);
-
-    @NeovimApiFunction(name = NeovimTabpageApi.SET_VAR, since = 1)
-    Single<Void> setVar(String name, Object value);
-
-    @NeovimApiFunction(name = NeovimTabpageApi.DEL_VAR, since = 1)
-    Single<Void> deleteVar(String name);
-
-    @NeovimApiFunction(name = NeovimTabpageApi.GET_NUMBER, since = 1)
-    Single<Integer> getNumber();
-
-    @NeovimApiFunction(name = NeovimTabpageApi.IS_VALID, since = 1)
-    Single<Boolean> isValid();
+    @Override
+    public String toString() {
+        return "ClientAttributes{" +
+                "website='" + website + '\'' +
+                ", license='" + license + '\'' +
+                ", logo='" + logo + '\'' +
+                '}';
+    }
 }

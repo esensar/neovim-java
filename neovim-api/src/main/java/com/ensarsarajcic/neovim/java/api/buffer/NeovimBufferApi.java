@@ -25,11 +25,13 @@
 package com.ensarsarajcic.neovim.java.api.buffer;
 
 import com.ensarsarajcic.neovim.java.api.NeovimApiFunction;
+import com.ensarsarajcic.neovim.java.api.types.api.GetCommandsOptions;
 import com.ensarsarajcic.neovim.java.api.types.api.VimCoords;
 import com.ensarsarajcic.neovim.java.api.types.api.VimKeyMap;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.Buffer;
 
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -55,6 +57,9 @@ public interface NeovimBufferApi {
     String GET_KEYMAP = "nvim_buf_get_keymap";
     String ADD_HIGHLIGHT = "nvim_buf_add_highlight";
     String CLEAR_HIGHLIGHT = "nvim_buf_clear_highlight";
+    String ATTACH_BUFFER = "nvim_buf_attach";
+    String DETACH_BUFFER = "nvim_buf_detach";
+    String GET_COMMANDS = "nvim_buf_get_commands";
     // endregion
 
     Buffer get();
@@ -109,4 +114,13 @@ public interface NeovimBufferApi {
 
     @NeovimApiFunction(name = CLEAR_HIGHLIGHT, since = 1)
     CompletableFuture<Void> clearHighlight(int srcId, int lineStart, int lineEnd);
+
+    @NeovimApiFunction(name = ATTACH_BUFFER, since = 4)
+    CompletableFuture<Boolean> attach(boolean loadFullBufferOnStart, Map opts);
+
+    @NeovimApiFunction(name = DETACH_BUFFER, since = 4)
+    CompletableFuture<Boolean> detach();
+
+    @NeovimApiFunction(name = GET_COMMANDS, since = 4)
+    CompletableFuture<Map> getCommands(GetCommandsOptions commandsOptions);
 }

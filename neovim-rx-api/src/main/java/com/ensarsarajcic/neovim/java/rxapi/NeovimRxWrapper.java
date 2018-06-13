@@ -26,9 +26,7 @@ package com.ensarsarajcic.neovim.java.rxapi;
 
 import com.ensarsarajcic.neovim.java.api.AtomicCallBuilder;
 import com.ensarsarajcic.neovim.java.api.NeovimApi;
-import com.ensarsarajcic.neovim.java.api.types.api.VimColorMap;
-import com.ensarsarajcic.neovim.java.api.types.api.VimKeyMap;
-import com.ensarsarajcic.neovim.java.api.types.api.VimMode;
+import com.ensarsarajcic.neovim.java.api.types.api.*;
 import com.ensarsarajcic.neovim.java.api.types.apiinfo.ApiInfo;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.Buffer;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.Tabpage;
@@ -294,5 +292,50 @@ public final class NeovimRxWrapper implements NeovimRxApi {
     @Override
     public Single<ApiInfo> getApiInfo() {
         return Single.fromFuture(neovimApi.getApiInfo());
+    }
+
+    @Override
+    public Single<Object> callDictFunction(Map map, String function, List args) {
+        return Single.fromFuture(neovimApi.callDictFunction(map, function, args));
+    }
+
+    @Override
+    public Single<Map> getCommands(GetCommandsOptions getCommandsOptions) {
+        return Single.fromFuture(neovimApi.getCommands(getCommandsOptions));
+    }
+
+    @Override
+    public Single<Void> setClientInfo(String name, ClientVersionInfo clientVersionInfo, ClientType clientType, Map<String, MethodInfo> methods, ClientAttributes clientAttributes) {
+        return Single.fromFuture(neovimApi.setClientInfo(name, clientVersionInfo, clientType, methods, clientAttributes));
+    }
+
+    @Override
+    public Single<ChannelInfo> getChannelInfo(int channel) {
+        return Single.fromFuture(neovimApi.getChannelInfo(channel));
+    }
+
+    @Override
+    public Single<List<ChannelInfo>> getChannels() {
+        return Single.fromFuture(neovimApi.getChannels());
+    }
+
+    @Override
+    public Single<Map> parseExpression(String expression, String flags, boolean highlight) {
+        return Single.fromFuture(neovimApi.parseExpression(expression, flags, highlight));
+    }
+
+    @Override
+    public Single<List<UiInfo>> getUis() {
+        return Single.fromFuture(neovimApi.getUis());
+    }
+
+    @Override
+    public Single<List<Integer>> getProcessChildren() {
+        return Single.fromFuture(neovimApi.getProcessChildren());
+    }
+
+    @Override
+    public Single<Object> getProccess() {
+        return Single.fromFuture(neovimApi.getProccess());
     }
 }
