@@ -25,6 +25,7 @@
 package com.ensarsarajcic.neovim.java.rxapi;
 
 import com.ensarsarajcic.neovim.java.api.NeovimApiFunction;
+import com.ensarsarajcic.neovim.java.api.tabpage.NeovimTabpageApi;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.Tabpage;
 import io.reactivex.Single;
 
@@ -32,36 +33,26 @@ import java.util.List;
 
 public interface NeovimTabpageRxApi {
 
-    // region Supported functions names
-    String LIST_WINDOWS = "nvim_tabpage_list_wins";
-    String GET_WINDOW = "nvim_tabpage_get_win";
-    String GET_VAR = "nvim_tabpage_get_var";
-    String DEL_VAR = "nvim_tabpage_del_var";
-    String SET_VAR = "nvim_tabpage_set_var";
-    String GET_NUMBER = "nvim_tabpage_get_number";
-    String IS_VALID = "nvim_tabpage_is_valid";
-    // endregion
-
     Tabpage get();
 
-    @NeovimApiFunction(name = LIST_WINDOWS, since = 1)
+    @NeovimApiFunction(name = NeovimTabpageApi.LIST_WINDOWS, since = 1)
     Single<List<NeovimWindowRxApi>> getWindows();
 
-    @NeovimApiFunction(name = GET_WINDOW, since = 1)
+    @NeovimApiFunction(name = NeovimTabpageApi.GET_WINDOW, since = 1)
     Single<NeovimWindowRxApi> getWindow();
 
-    @NeovimApiFunction(name = GET_VAR, since = 1)
+    @NeovimApiFunction(name = NeovimTabpageApi.GET_VAR, since = 1)
     Single<Object> getVar(String name);
 
-    @NeovimApiFunction(name = SET_VAR, since = 1)
+    @NeovimApiFunction(name = NeovimTabpageApi.SET_VAR, since = 1)
     Single<Void> setVar(String name, Object value);
 
-    @NeovimApiFunction(name = DEL_VAR, since = 1)
+    @NeovimApiFunction(name = NeovimTabpageApi.DEL_VAR, since = 1)
     Single<Void> deleteVar(String name);
 
-    @NeovimApiFunction(name = GET_NUMBER, since = 1)
+    @NeovimApiFunction(name = NeovimTabpageApi.GET_NUMBER, since = 1)
     Single<Integer> getNumber();
 
-    @NeovimApiFunction(name = IS_VALID, since = 1)
+    @NeovimApiFunction(name = NeovimTabpageApi.IS_VALID, since = 1)
     Single<Boolean> isValid();
 }
