@@ -26,9 +26,7 @@ package com.ensarsarajcic.neovim.java.api;
 
 import com.ensarsarajcic.neovim.java.api.buffer.NeovimBufferApi;
 import com.ensarsarajcic.neovim.java.api.tabpage.NeovimTabpageApi;
-import com.ensarsarajcic.neovim.java.api.types.api.VimColorMap;
-import com.ensarsarajcic.neovim.java.api.types.api.VimKeyMap;
-import com.ensarsarajcic.neovim.java.api.types.api.VimMode;
+import com.ensarsarajcic.neovim.java.api.types.api.*;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.Buffer;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.Tabpage;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.Window;
@@ -276,6 +274,51 @@ public final class AtomicCallBuilder implements NeovimApi {
 
     @Override
     public CompletableFuture<ApiInfo> getApiInfo() {
+        return null;
+    }
+
+    @Override
+    public CompletableFuture<Object> callDictFunction(Map map, String function, List args) {
+        return null;
+    }
+
+    @Override
+    public CompletableFuture<Map> getCommands(GetCommandsOptions getCommandsOptions) {
+        return null;
+    }
+
+    @Override
+    public CompletableFuture<ChannelInfo> getChannelInfo(int channel) {
+        return null;
+    }
+
+    @Override
+    public CompletableFuture<Void> setClientInfo(String name, ClientVersionInfo clientVersionInfo, ClientType clientType, Map<String, MethodInfo> methods, ClientAttributes clientAttributes) {
+        return null;
+    }
+
+    @Override
+    public CompletableFuture<List<ChannelInfo>> getChannels() {
+        return null;
+    }
+
+    @Override
+    public CompletableFuture<Map> parseExpression(String expression, String flags, boolean highlight) {
+        return null;
+    }
+
+    @Override
+    public CompletableFuture<List<UiInfo>> getUis() {
+        return null;
+    }
+
+    @Override
+    public CompletableFuture<List<Integer>> getProcessChildren() {
+        return null;
+    }
+
+    @Override
+    public CompletableFuture<Object> getProccess() {
         return null;
     }
 }

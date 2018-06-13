@@ -28,9 +28,7 @@ import com.ensarsarajcic.neovim.java.api.buffer.BufferStreamApi;
 import com.ensarsarajcic.neovim.java.api.buffer.NeovimBufferApi;
 import com.ensarsarajcic.neovim.java.api.tabpage.NeovimTabpageApi;
 import com.ensarsarajcic.neovim.java.api.tabpage.TabpageStreamApi;
-import com.ensarsarajcic.neovim.java.api.types.api.VimColorMap;
-import com.ensarsarajcic.neovim.java.api.types.api.VimKeyMap;
-import com.ensarsarajcic.neovim.java.api.types.api.VimMode;
+import com.ensarsarajcic.neovim.java.api.types.api.*;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.*;
 import com.ensarsarajcic.neovim.java.api.types.apiinfo.ApiInfo;
 import com.ensarsarajcic.neovim.java.api.window.NeovimWindowApi;
@@ -41,7 +39,6 @@ import com.ensarsarajcic.neovim.java.corerpc.reactive.ReactiveRPCStreamer;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -351,4 +348,82 @@ public final class NeovimStreamApi extends BaseStreamApi implements NeovimApi {
         return sendWithResponseOfType(new RequestMessage.Builder(GET_API_INFO), ApiInfo.class);
     }
 
+    @Override
+    public CompletableFuture<Object> callDictFunction(Map map, String function, List args) {
+        return sendWithGenericResponse(
+                new RequestMessage.Builder(CALL_DICT_FUNCTION)
+                        .addArgument(map)
+                        .addArgument(function)
+                        .addArgument(args)
+        );
+    }
+
+    @Override
+    public CompletableFuture<Map> getCommands(GetCommandsOptions getCommandsOptions) {
+        return sendWithResponseOfType(
+                new RequestMessage.Builder(GET_COMMANDS)
+                        .addArgument(getCommandsOptions),
+                Map.class
+        );
+    }
+
+    @Override
+    public CompletableFuture<Void> setClientInfo(String name, ClientVersionInfo clientVersionInfo, ClientType clientType, Map<String, MethodInfo> methods, ClientAttributes clientAttributes) {
+        return sendWithNoResponse(
+                new RequestMessage.Builder(SET_CLIENT_INFO)
+                        .addArgument(name)
+                        .addArgument(clientVersionInfo)
+                        .addArgument(clientType)
+                        .addArgument(methods)
+                        .addArgument(clientAttributes)
+        );
+    }
+
+    @Override
+    public CompletableFuture<ChannelInfo> getChannelInfo(int channel) {
+        return sendWithResponseOfType(
+                new RequestMessage.Builder(GET_CHANNEL_INFO).addArgument(channel),
+                ChannelInfo.class
+        );
+    }
+
+    @Override
+    public CompletableFuture<List<ChannelInfo>> getChannels() {
+        return sendWithResponseOfListType(
+                new RequestMessage.Builder(LIST_CHANNELS),
+                ChannelInfo.class
+        );
+    }
+
+    @Override
+    public CompletableFuture<Map> parseExpression(String expression, String flags, boolean highlight) {
+        return sendWithResponseOfType(
+                new RequestMessage.Builder(PARSE_EXPRESSION)
+                        .addArgument(expression)
+                        .addArgument(flags)
+                        .addArgument(highlight),
+                Map.class
+        );
+    }
+
+    @Override
+    public CompletableFuture<List<UiInfo>> getUis() {
+        return sendWithResponseOfListType(
+                new RequestMessage.Builder(LIST_UIS),
+                UiInfo.class
+        );
+    }
+
+    @Override
+    public CompletableFuture<List<Integer>> getProcessChildren() {
+        return sendWithResponseOfListType(
+                new RequestMessage.Builder(GET_PROC_CHILDREN),
+                Integer.class
+        );
+    }
+
+    @Override
+    public CompletableFuture<Object> getProccess() {
+        return sendWithGenericResponse(new RequestMessage.Builder(GET_PROC));
+    }
 }
