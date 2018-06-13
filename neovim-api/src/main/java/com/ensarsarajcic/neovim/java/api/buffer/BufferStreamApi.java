@@ -26,6 +26,7 @@ package com.ensarsarajcic.neovim.java.api.buffer;
 
 import com.ensarsarajcic.neovim.java.api.BaseStreamApi;
 import com.ensarsarajcic.neovim.java.api.NeovimApiClient;
+import com.ensarsarajcic.neovim.java.api.types.api.GetCommandsOptions;
 import com.ensarsarajcic.neovim.java.api.types.api.VimCoords;
 import com.ensarsarajcic.neovim.java.api.types.api.VimKeyMap;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.Buffer;
@@ -33,6 +34,7 @@ import com.ensarsarajcic.neovim.java.corerpc.message.RequestMessage;
 import com.ensarsarajcic.neovim.java.corerpc.reactive.ReactiveRPCStreamer;
 
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -165,6 +167,32 @@ public final class BufferStreamApi extends BaseStreamApi implements NeovimBuffer
                         .addArgument(srcId)
                         .addArgument(lineStart)
                         .addArgument(lineEnd)
+        );
+    }
+
+    @Override
+    public CompletableFuture<Boolean> attach(boolean loadFullBufferOnStart, Map opts) {
+        return sendWithResponseOfType(
+                prepareMessage(ATTACH_BUFFER)
+                        .addArgument(loadFullBufferOnStart)
+                        .addArgument(opts),
+                Boolean.class
+        );
+    }
+
+    @Override
+    public CompletableFuture<Boolean> detach() {
+        return sendWithResponseOfType(
+                prepareMessage(DETACH_BUFFER),
+                Boolean.class
+        );
+    }
+
+    @Override
+    public CompletableFuture<Map> getCommands(GetCommandsOptions commandsOptions) {
+        return sendWithResponseOfType(
+                prepareMessage(GET_COMMANDS).addArgument(commandsOptions),
+                Map.class
         );
     }
 

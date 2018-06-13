@@ -38,4 +38,11 @@ public final class GetCommandsOptions {
     public boolean isBuiltin() {
         return builtin;
     }
+
+    @Override
+    public String toString() {
+        return "GetCommandsOptions{" +
+                "builtin=" + builtin +
+                '}';
+    }
 }

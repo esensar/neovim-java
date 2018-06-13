@@ -24,10 +24,12 @@
 
 package com.ensarsarajcic.neovim.java.api;
 
+import com.ensarsarajcic.neovim.java.api.buffer.NeovimBufferApi;
 import com.ensarsarajcic.neovim.java.api.tabpage.NeovimTabpageApi;
 import com.ensarsarajcic.neovim.java.api.types.api.ClientAttributes;
 import com.ensarsarajcic.neovim.java.api.types.api.ClientType;
 import com.ensarsarajcic.neovim.java.api.types.api.ClientVersionInfo;
+import com.ensarsarajcic.neovim.java.api.types.api.GetCommandsOptions;
 import com.ensarsarajcic.neovim.java.api.types.apiinfo.ApiInfo;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.NeovimJacksonModule;
 import com.ensarsarajcic.neovim.java.api.window.NeovimWindowApi;
@@ -81,6 +83,8 @@ public class App
             neovimStreamApi.getUis().thenAccept(System.out::println).get();
             neovimStreamApi.getChannelInfo(2).thenAccept(System.out::println).get();
             neovimStreamApi.getApiInfo().thenCompose(apiInfo -> neovimStreamApi.getChannelInfo(apiInfo.getChannelId())).thenAccept(System.out::println).get();
+            neovimStreamApi.getCurrentBuffer().thenCompose(neovimBufferApi -> neovimBufferApi.attach(false, new HashMap())).thenAccept(System.out::println).get();
+            neovimStreamApi.getCurrentBuffer().thenCompose(neovimBufferApi -> neovimBufferApi.getCommands(new GetCommandsOptions(true))).thenAccept(System.out::println).get();
         } catch (IOException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
