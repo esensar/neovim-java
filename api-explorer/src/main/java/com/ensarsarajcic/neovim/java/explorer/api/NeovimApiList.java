@@ -29,6 +29,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Represents full Neovim API Information
+ * Used only by API Explorer for display
+ */
 public final class NeovimApiList {
 
     private Map<String, NeovimError> errorTypes;

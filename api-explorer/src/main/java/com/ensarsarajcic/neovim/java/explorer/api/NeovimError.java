@@ -26,6 +26,11 @@ package com.ensarsarajcic.neovim.java.explorer.api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/**
+ * Definition of Error in Neovim API Info
+ * Name of the error is not a part of the class, since this is directly mapped from api info response
+ * Used only by API Explorer
+ */
 public final class NeovimError {
 
     private int id;

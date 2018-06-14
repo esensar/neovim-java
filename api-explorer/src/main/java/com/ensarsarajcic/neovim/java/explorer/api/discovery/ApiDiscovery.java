@@ -43,8 +43,14 @@ import java.util.concurrent.ExecutionException;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+/**
+ * Collection of utils for collecting API Info for API Explorer GUI
+ */
 public final class ApiDiscovery {
 
+    /**
+     * Generates a process call for loading up API info
+     */
     private static List<String> createArgs(String executable) {
         List<String> allArgs = new ArrayList<>(2);
         allArgs.add(executable);
@@ -52,6 +58,9 @@ public final class ApiDiscovery {
         return allArgs;
     }
 
+    /**
+     * Loads API Info from --api-info
+     */
     public static NeovimApiList discoverApi() throws IOException {
         ProcessBuilder pb = new ProcessBuilder(createArgs("nvim"));
         Process neovim = pb.start();
@@ -61,6 +70,10 @@ public final class ApiDiscovery {
         return new ObjectMapper(factory).readerFor(NeovimApiList.class).readValue(neovim.getInputStream());
     }
 
+    /**
+     * Loads API Info from running Neovim instance, represented with {@link RPCConnection}
+     * @param rpcConnection connection to Neovim instance
+     */
     public static NeovimApiList discoverApiFromConnection(RPCConnection rpcConnection) throws ExecutionException, InterruptedException {
         NeovimApi neovimApi = NeovimApis.getApiForConnection(rpcConnection);
         ApiInfo apiInfo = neovimApi.getApiInfo().get();

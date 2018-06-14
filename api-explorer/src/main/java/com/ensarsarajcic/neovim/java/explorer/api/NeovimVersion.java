@@ -26,6 +26,10 @@ package com.ensarsarajcic.neovim.java.explorer.api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/**
+ * Neovim API Version info as provided by Neovim API Info
+ * Used only by API Explorer
+ */
 public final class NeovimVersion {
 
     private int apiCompatible;

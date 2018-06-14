@@ -26,6 +26,11 @@ package com.ensarsarajcic.neovim.java.explorer.api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/**
+ * Definition of a Neovim type (custom msgpack type) as returned by API info
+ * Name of the type is not a part of the class, since this is directly mapped from api info response
+ * Used only by API Explorer
+ */
 public final class NeovimType {
 
     private int id;
