@@ -58,6 +58,11 @@ public class NeovimRxWrapperTest {
     @InjectMocks
     NeovimRxWrapper neovimRxWrapper;
 
+    @Test(expected = NullPointerException.class)
+    public void cantBeCreatedWithNullApi() {
+        new NeovimRxWrapper(null);
+    }
+
     @Test
     public void delegatesAttachUi() {
         var options = new HashMap<String, String>();
