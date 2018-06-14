@@ -24,10 +24,7 @@
 
 package com.ensarsarajcic.neovim.java.testing;
 
-import java.util.AbstractMap;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.*;
 import java.util.stream.Collectors;
 
@@ -38,7 +35,7 @@ public final class ManualQueueExecutorService implements ExecutorService {
 
     private ExecutorService executorService;
 
-    private List<Map.Entry<CountDownLatch, Callable>> callables;
+    private List<Map.Entry<CountDownLatch, Callable>> callables = new ArrayList<>();
 
     public ManualQueueExecutorService(ExecutorService executorService) {
         this.executorService = executorService;
@@ -138,7 +135,7 @@ public final class ManualQueueExecutorService implements ExecutorService {
                 e.printStackTrace();
             }
             return null;
-        }, executorService);
+        });
     }
 
     public void runOne() {
