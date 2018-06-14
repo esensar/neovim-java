@@ -165,7 +165,7 @@ public class BackgroundRPCListenerTest {
         verify(notificationCallback, never()).notificationReceived(any());
     }
 
-    @Test
+    @Test(timeout = 2000)
     public void testStopping() throws IOException, InterruptedException {
         // Given a proper executor service and object mapper
         MultiLatch multiLatch = new MultiLatch(10);
