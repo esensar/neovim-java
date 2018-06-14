@@ -46,7 +46,7 @@ public final class MultiLatch {
         countDownLatches.get(awaitIndex.getAndIncrement()).await();
     }
 
-    public synchronized void countDown() {
+    public void countDown() {
         countDownLatches.get(countDownIndex.getAndIncrement()).countDown();
     }
 }

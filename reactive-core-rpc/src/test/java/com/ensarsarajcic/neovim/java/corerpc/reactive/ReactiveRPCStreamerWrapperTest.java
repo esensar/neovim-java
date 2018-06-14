@@ -51,6 +51,7 @@ import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -151,7 +152,7 @@ public class ReactiveRPCStreamerWrapperTest {
         // It should receive events when requests arrive
         RequestMessage msg1 = new RequestMessage.Builder("test").build();
         requestCallbackArgumentCaptor.getValue().requestReceived(msg1);
-        verify(requestMessageSubscriber).onNext(msg1);
+        verify(requestMessageSubscriber, timeout(100)).onNext(msg1);
     }
 
     @Test
@@ -173,7 +174,7 @@ public class ReactiveRPCStreamerWrapperTest {
         // It should receive events when notifications arrive
         NotificationMessage msg1 = new NotificationMessage.Builder("test").build();
         notificationCallbackArgumentCaptor.getValue().notificationReceived(msg1);
-        verify(notificationMessageSubscriber).onNext(msg1);
+        verify(notificationMessageSubscriber, timeout(100)).onNext(msg1);
     }
 
     private void verifyAndAttachCallbacks() {
