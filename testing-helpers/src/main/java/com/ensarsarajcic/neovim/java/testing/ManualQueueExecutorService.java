@@ -128,13 +128,14 @@ public final class ManualQueueExecutorService implements ExecutorService {
                 countDownLatch.await();
             } catch (InterruptedException e) {
                 e.printStackTrace();
+                throw new RuntimeException(e);
             }
             try {
                 return executorService.submit(task).get();
             } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
+                throw new RuntimeException(e);
             }
-            return null;
         });
     }
 

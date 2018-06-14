@@ -34,6 +34,7 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.*;
@@ -78,13 +79,19 @@ public class ManualQueueExecutorServiceTest {
 
     @Test
     public void doesNotImmediatelySubmitToExecutorService() throws InterruptedException, TimeoutException, ExecutionException {
-        manualQueueExecutorService.submit(() -> {});
+        manualQueueExecutorService.execute(() -> {
+        });
+        verify(executorService, never()).execute(any(Runnable.class));
+
+        manualQueueExecutorService.submit(() -> {
+        });
         verify(executorService, never()).submit(any(Runnable.class));
 
         manualQueueExecutorService.submit(() -> null);
         verify(executorService, never()).submit(any(Callable.class));
 
-        manualQueueExecutorService.submit(() -> {}, null);
+        manualQueueExecutorService.submit(() -> {
+        }, null);
         verify(executorService, never()).submit(any(Runnable.class), any());
 
         manualQueueExecutorService.invokeAll(Collections.singletonList(() -> null));
@@ -117,9 +124,11 @@ public class ManualQueueExecutorServiceTest {
 
     @Test
     public void submitsWhenManuallyRun() throws InterruptedException, ExecutionException {
-        Future future = Mockito.mock(Future.class);
-        given(executorService.submit(any(Callable.class))).willReturn(future);
-        Runnable runnable = () -> {};
+        doAnswer(invocationOnMock -> CompletableFuture.completedFuture(((Callable) invocationOnMock.getArguments()[0]).call()))
+                .when(executorService)
+                .submit(any(Callable.class));
+        Runnable runnable = () -> {
+        };
         Future first = manualQueueExecutorService.submit(runnable);
         verify(executorService, never()).submit(runnable);
 
@@ -136,44 +145,59 @@ public class ManualQueueExecutorServiceTest {
         manualQueueExecutorService.runOne();
         manualQueueExecutorService.runOne();
 
-        second.get();
+        assertNull(second.get());
 
         verify(executorService, times(3)).submit(any(Callable.class));
 
         manualQueueExecutorService.runOne();
         manualQueueExecutorService.runOne();
 
-        third.get();
+        assertNull(third.get());
 
         verify(executorService, times(5)).submit(any(Callable.class));
 
-        Future fourth = manualQueueExecutorService.submit(() -> {}, null);
+        Future fourth = manualQueueExecutorService.submit(() -> {
+        }, null);
         verify(executorService, times(5)).submit(any(Callable.class));
 
         manualQueueExecutorService.runOne();
-        fourth.get();
+        assertNull(fourth.get());
         verify(executorService, times(6)).submit(any(Callable.class));
 
         List<Future<Object>> fifth = manualQueueExecutorService.invokeAll(Lists.newArrayList(() -> null, Object::new));
         verify(executorService, times(6)).submit(any(Callable.class));
 
         manualQueueExecutorService.runOne();
-        fifth.get(0).get();
+        assertNull(fifth.get(0).get());
         verify(executorService, times(7)).submit(any(Callable.class));
 
         manualQueueExecutorService.runOne();
-        fifth.get(1).get();
+        assertNotNull(fifth.get(1).get());
         verify(executorService, times(8)).submit(any(Callable.class));
 
         List<Future<Object>> sixth = manualQueueExecutorService.invokeAll(Lists.newArrayList(() -> null, Object::new), 100, TimeUnit.MILLISECONDS);
         verify(executorService, times(8)).submit(any(Callable.class));
 
         manualQueueExecutorService.runOne();
-        sixth.get(0).get();
+        assertNull(sixth.get(0).get());
         verify(executorService, times(9)).submit(any(Callable.class));
 
         manualQueueExecutorService.runOne();
-        sixth.get(1).get();
+        assertNotNull(sixth.get(1).get());
         verify(executorService, times(10)).submit(any(Callable.class));
+    }
+
+    @Test(expected = ExecutionException.class)
+    public void propagatesExecutionException() throws ExecutionException, InterruptedException {
+        doAnswer(invocationOnMock -> CompletableFuture.completedFuture(((Callable) invocationOnMock.getArguments()[0]).call())).when(executorService)
+                .submit(any(Callable.class));
+        Runnable runnable = () -> {
+            throw new RuntimeException(new IOException());
+        };
+        Future first = manualQueueExecutorService.submit(runnable);
+        verify(executorService, never()).submit(runnable);
+        manualQueueExecutorService.runOne();
+        assertNull(first.get());
+        verify(executorService).submit(any(Callable.class));
     }
 }
