@@ -129,7 +129,7 @@ public class ReactiveRPCStreamerWrapperTest {
 
         // Rpc streamer should be used
         ArgumentCaptor<RequestMessage.Builder> builderArgumentCaptor = ArgumentCaptor.forClass(RequestMessage.Builder.class);
-        verify(rpcStreamer).send(builderArgumentCaptor.capture(), any());
+        verify(rpcStreamer, timeout(100)).send(builderArgumentCaptor.capture(), any());
         assertEquals(message, builderArgumentCaptor.getValue());
     }
 
