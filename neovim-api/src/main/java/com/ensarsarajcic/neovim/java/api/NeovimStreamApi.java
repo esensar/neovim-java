@@ -423,7 +423,7 @@ public final class NeovimStreamApi extends BaseStreamApi implements NeovimApi {
     }
 
     @Override
-    public CompletableFuture<Object> getProccess() {
+    public CompletableFuture<Object> getProcess() {
         return sendWithGenericResponse(new RequestMessage.Builder(GET_PROC));
     }
 }

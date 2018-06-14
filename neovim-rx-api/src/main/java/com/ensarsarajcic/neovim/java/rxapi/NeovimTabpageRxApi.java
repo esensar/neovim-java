@@ -27,6 +27,7 @@ package com.ensarsarajcic.neovim.java.rxapi;
 import com.ensarsarajcic.neovim.java.api.NeovimApiFunction;
 import com.ensarsarajcic.neovim.java.api.tabpage.NeovimTabpageApi;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.Tabpage;
+import io.reactivex.Completable;
 import io.reactivex.Single;
 
 import java.util.List;
@@ -45,10 +46,10 @@ public interface NeovimTabpageRxApi {
     Single<Object> getVar(String name);
 
     @NeovimApiFunction(name = NeovimTabpageApi.SET_VAR, since = 1)
-    Single<Void> setVar(String name, Object value);
+    Completable setVar(String name, Object value);
 
     @NeovimApiFunction(name = NeovimTabpageApi.DEL_VAR, since = 1)
-    Single<Void> deleteVar(String name);
+    Completable deleteVar(String name);
 
     @NeovimApiFunction(name = NeovimTabpageApi.GET_NUMBER, since = 1)
     Single<Integer> getNumber();

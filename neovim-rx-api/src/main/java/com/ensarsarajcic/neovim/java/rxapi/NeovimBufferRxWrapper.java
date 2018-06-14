@@ -29,6 +29,7 @@ import com.ensarsarajcic.neovim.java.api.types.api.GetCommandsOptions;
 import com.ensarsarajcic.neovim.java.api.types.api.VimCoords;
 import com.ensarsarajcic.neovim.java.api.types.api.VimKeyMap;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.Buffer;
+import io.reactivex.Completable;
 import io.reactivex.Single;
 
 import java.util.List;
@@ -60,8 +61,8 @@ public final class NeovimBufferRxWrapper implements NeovimBufferRxApi {
     }
 
     @Override
-    public Single<Void> setLines(int start, int end, boolean strictIndexing, List<String> replacement) {
-        return Single.fromFuture(neovimBufferApi.setLines(start, end, strictIndexing, replacement));
+    public Completable setLines(int start, int end, boolean strictIndexing, List<String> replacement) {
+        return Completable.fromFuture(neovimBufferApi.setLines(start, end, strictIndexing, replacement));
     }
 
     @Override
@@ -70,13 +71,13 @@ public final class NeovimBufferRxWrapper implements NeovimBufferRxApi {
     }
 
     @Override
-    public Single<Void> deleteVar(String name) {
-        return Single.fromFuture(neovimBufferApi.deleteVar(name));
+    public Completable deleteVar(String name) {
+        return Completable.fromFuture(neovimBufferApi.deleteVar(name));
     }
 
     @Override
-    public Single<Void> setVar(String name, Object value) {
-        return Single.fromFuture(neovimBufferApi.setVar(name, value));
+    public Completable setVar(String name, Object value) {
+        return Completable.fromFuture(neovimBufferApi.setVar(name, value));
     }
 
     @Override
@@ -85,8 +86,8 @@ public final class NeovimBufferRxWrapper implements NeovimBufferRxApi {
     }
 
     @Override
-    public Single<Void> setOption(String name, Object value) {
-        return Single.fromFuture(neovimBufferApi.setOption(name, value));
+    public Completable setOption(String name, Object value) {
+        return Completable.fromFuture(neovimBufferApi.setOption(name, value));
     }
 
     @Override
@@ -100,8 +101,8 @@ public final class NeovimBufferRxWrapper implements NeovimBufferRxApi {
     }
 
     @Override
-    public Single<Void> setName(String name) {
-        return Single.fromFuture(neovimBufferApi.setName(name));
+    public Completable setName(String name) {
+        return Completable.fromFuture(neovimBufferApi.setName(name));
     }
 
     @Override
@@ -130,8 +131,8 @@ public final class NeovimBufferRxWrapper implements NeovimBufferRxApi {
     }
 
     @Override
-    public Single<Void> clearHighlight(int srcId, int lineStart, int lineEnd) {
-        return Single.fromFuture(neovimBufferApi.clearHighlight(srcId, lineStart, lineEnd));
+    public Completable clearHighlight(int srcId, int lineStart, int lineEnd) {
+        return Completable.fromFuture(neovimBufferApi.clearHighlight(srcId, lineStart, lineEnd));
     }
 
     @Override

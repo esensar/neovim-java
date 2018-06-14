@@ -318,7 +318,7 @@ public final class AtomicCallBuilder implements NeovimApi {
     }
 
     @Override
-    public CompletableFuture<Object> getProccess() {
+    public CompletableFuture<Object> getProcess() {
         return null;
     }
 }

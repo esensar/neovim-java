@@ -31,6 +31,7 @@ import com.ensarsarajcic.neovim.java.api.types.apiinfo.ApiInfo;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.Buffer;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.Tabpage;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.Window;
+import io.reactivex.Completable;
 import io.reactivex.Single;
 
 import java.util.List;
@@ -68,18 +69,18 @@ public final class NeovimRxWrapper implements NeovimRxApi {
     }
 
     @Override
-    public Single<Void> attachUI(int width, int height, Map<String, String> options) {
-        return Single.fromFuture(neovimApi.attachUI(width, height, options));
+    public Completable attachUI(int width, int height, Map<String, String> options) {
+        return Completable.fromFuture(neovimApi.attachUI(width, height, options));
     }
 
     @Override
-    public Single<Void> detachUI() {
-        return Single.fromFuture(neovimApi.detachUI());
+    public Completable detachUI() {
+        return Completable.fromFuture(neovimApi.detachUI());
     }
 
     @Override
-    public Single<Void> resizeUI(int width, int height) {
-        return Single.fromFuture(neovimApi.resizeUI(width, height));
+    public Completable resizeUI(int width, int height) {
+        return Completable.fromFuture(neovimApi.resizeUI(width, height));
     }
 
     @Override
@@ -88,23 +89,23 @@ public final class NeovimRxWrapper implements NeovimRxApi {
     }
 
     @Override
-    public Single<Void> executeCommand(String command) {
-        return Single.fromFuture(neovimApi.executeCommand(command));
+    public Completable executeCommand(String command) {
+        return Completable.fromFuture(neovimApi.executeCommand(command));
     }
 
     @Override
-    public Single<Void> setCurrentDir(String directoryPath) {
-        return Single.fromFuture(neovimApi.setCurrentDir(directoryPath));
+    public Completable setCurrentDir(String directoryPath) {
+        return Completable.fromFuture(neovimApi.setCurrentDir(directoryPath));
     }
 
     @Override
-    public Single<Void> subscribeToEvent(String event) {
-        return Single.fromFuture(neovimApi.subscribeToEvent(event));
+    public Completable subscribeToEvent(String event) {
+        return Completable.fromFuture(neovimApi.subscribeToEvent(event));
     }
 
     @Override
-    public Single<Void> unsubscribeFromEvent(String event) {
-        return Single.fromFuture(neovimApi.unsubscribeFromEvent(event));
+    public Completable unsubscribeFromEvent(String event) {
+        return Completable.fromFuture(neovimApi.unsubscribeFromEvent(event));
     }
 
     @Override
@@ -118,8 +119,8 @@ public final class NeovimRxWrapper implements NeovimRxApi {
     }
 
     @Override
-    public Single<Void> feedKeys(String keys, String mode, Boolean escape) {
-        return Single.fromFuture(neovimApi.feedKeys(keys, mode, escape));
+    public Completable feedKeys(String keys, String mode, Boolean escape) {
+        return Completable.fromFuture(neovimApi.feedKeys(keys, mode, escape));
     }
 
     @Override
@@ -133,13 +134,13 @@ public final class NeovimRxWrapper implements NeovimRxApi {
     }
 
     @Override
-    public Single<Void> setUiOption(String name, Object value) {
-        return Single.fromFuture(neovimApi.setUiOption(name, value));
+    public Completable setUiOption(String name, Object value) {
+        return Completable.fromFuture(neovimApi.setUiOption(name, value));
     }
 
     @Override
-    public Single<Void> setVariable(String name, Object value) {
-        return Single.fromFuture(neovimApi.setVariable(name, value));
+    public Completable setVariable(String name, Object value) {
+        return Completable.fromFuture(neovimApi.setVariable(name, value));
     }
 
     @Override
@@ -148,8 +149,8 @@ public final class NeovimRxWrapper implements NeovimRxApi {
     }
 
     @Override
-    public Single<Void> deleteVariable(String name) {
-        return Single.fromFuture(neovimApi.deleteVariable(name));
+    public Completable deleteVariable(String name) {
+        return Completable.fromFuture(neovimApi.deleteVariable(name));
     }
 
     @Override
@@ -158,8 +159,8 @@ public final class NeovimRxWrapper implements NeovimRxApi {
     }
 
     @Override
-    public Single<Void> setOption(String name, Object value) {
-        return Single.fromFuture(neovimApi.setOption(name, value));
+    public Completable setOption(String name, Object value) {
+        return Completable.fromFuture(neovimApi.setOption(name, value));
     }
 
     @Override
@@ -183,18 +184,18 @@ public final class NeovimRxWrapper implements NeovimRxApi {
     }
 
     @Override
-    public Single<Void> writeToOutput(String text) {
-        return Single.fromFuture(neovimApi.writeToOutput(text));
+    public Completable writeToOutput(String text) {
+        return Completable.fromFuture(neovimApi.writeToOutput(text));
     }
 
     @Override
-    public Single<Void> writeToError(String text) {
-        return Single.fromFuture(neovimApi.writeToError(text));
+    public Completable writeToError(String text) {
+        return Completable.fromFuture(neovimApi.writeToError(text));
     }
 
     @Override
-    public Single<Void> writelnToError(String text) {
-        return Single.fromFuture(neovimApi.writelnToError(text));
+    public Completable writelnToError(String text) {
+        return Completable.fromFuture(neovimApi.writelnToError(text));
     }
 
     @Override
@@ -213,13 +214,13 @@ public final class NeovimRxWrapper implements NeovimRxApi {
     }
 
     @Override
-    public Single<Void> setCurrentLine(String line) {
-        return Single.fromFuture(neovimApi.setCurrentLine(line));
+    public Completable setCurrentLine(String line) {
+        return Completable.fromFuture(neovimApi.setCurrentLine(line));
     }
 
     @Override
-    public Single<Void> deleteCurrentLine() {
-        return Single.fromFuture(neovimApi.deleteCurrentLine());
+    public Completable deleteCurrentLine() {
+        return Completable.fromFuture(neovimApi.deleteCurrentLine());
     }
 
     @Override
@@ -237,8 +238,8 @@ public final class NeovimRxWrapper implements NeovimRxApi {
     }
 
     @Override
-    public Single<Void> setCurrentBuffer(Buffer buffer) {
-        return Single.fromFuture(neovimApi.setCurrentBuffer(buffer));
+    public Completable setCurrentBuffer(Buffer buffer) {
+        return Completable.fromFuture(neovimApi.setCurrentBuffer(buffer));
     }
 
     @Override
@@ -256,8 +257,8 @@ public final class NeovimRxWrapper implements NeovimRxApi {
     }
 
     @Override
-    public Single<Void> setCurrentWindow(Window window) {
-        return Single.fromFuture(neovimApi.setCurrentWindow(window));
+    public Completable setCurrentWindow(Window window) {
+        return Completable.fromFuture(neovimApi.setCurrentWindow(window));
     }
 
     @Override
@@ -275,8 +276,8 @@ public final class NeovimRxWrapper implements NeovimRxApi {
     }
 
     @Override
-    public Single<Void> setCurrentTabpage(Tabpage tabpage) {
-        return Single.fromFuture(neovimApi.setCurrentTabpage(tabpage));
+    public Completable setCurrentTabpage(Tabpage tabpage) {
+        return Completable.fromFuture(neovimApi.setCurrentTabpage(tabpage));
     }
 
     @Override
@@ -305,8 +306,8 @@ public final class NeovimRxWrapper implements NeovimRxApi {
     }
 
     @Override
-    public Single<Void> setClientInfo(String name, ClientVersionInfo clientVersionInfo, ClientType clientType, Map<String, MethodInfo> methods, ClientAttributes clientAttributes) {
-        return Single.fromFuture(neovimApi.setClientInfo(name, clientVersionInfo, clientType, methods, clientAttributes));
+    public Completable setClientInfo(String name, ClientVersionInfo clientVersionInfo, ClientType clientType, Map<String, MethodInfo> methods, ClientAttributes clientAttributes) {
+        return Completable.fromFuture(neovimApi.setClientInfo(name, clientVersionInfo, clientType, methods, clientAttributes));
     }
 
     @Override
@@ -335,7 +336,7 @@ public final class NeovimRxWrapper implements NeovimRxApi {
     }
 
     @Override
-    public Single<Object> getProccess() {
-        return Single.fromFuture(neovimApi.getProccess());
+    public Single<Object> getProcess() {
+        return Single.fromFuture(neovimApi.getProcess());
     }
 }

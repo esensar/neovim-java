@@ -267,5 +267,5 @@ public interface NeovimApi {
     CompletableFuture<List<Integer>> getProcessChildren();
 
     @NeovimApiFunction(name = GET_PROC, since = 4)
-    CompletableFuture<Object> getProccess();
+    CompletableFuture<Object> getProcess();
 }
