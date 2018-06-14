@@ -22,33 +22,35 @@
  * SOFTWARE.
  */
 
-package com.ensarsarajcic.neovim.java.corerpc;
+package com.ensarsarajcic.neovim.java.corerpc.reactive;
 
-import com.ensarsarajcic.neovim.java.corerpc.client.*;
-import com.ensarsarajcic.neovim.java.corerpc.message.RequestMessage;
+import com.ensarsarajcic.neovim.java.corerpc.message.RPCError;
+import org.hamcrest.BaseMatcher;
+import org.hamcrest.Description;
+import org.junit.Test;
 
-import java.io.IOException;
-import java.net.Socket;
-import java.util.ArrayList;
+import static org.junit.Assert.*;
 
-/**
- * Hello world!
- */
-public class App {
-    public static void main(String[] args) {
-        try {
+public class RPCExceptionTest {
 
-            // Create a default instance
-            Socket socket = new Socket("127.0.0.1", 6666);
+    @Test
+    public void testConstructorAndToStringNotCrashing() {
+        new RPCException(new RPCError(1, "message")).toString();
+    }
 
-            RPCClient rpcClient = RPCClient.getDefaultAsyncInstance();
-            rpcClient.attach(new TcpSocketRPCConnection(socket));
-
-            for (int i = 1; i < 15; i++) {
-                rpcClient.send(new RequestMessage.Builder("nvim_input", new ArrayList<>(){{add("jjjj");}}), ((forId, responseMessage) -> System.out.println(responseMessage)));
+    @Test
+    public void testStoresRPCError() {
+        RPCError error = new RPCError(1, "msg");
+        assertThat(new RPCException(error).toString(), new BaseMatcher<>() {
+            @Override
+            public boolean matches(Object o) {
+                return o.toString().contains("msg");
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("Contains rpcerror");
+            }
+        });
     }
 }
