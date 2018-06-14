@@ -28,6 +28,7 @@ import com.ensarsarajcic.neovim.java.corerpc.message.MessageType;
 import com.ensarsarajcic.neovim.java.corerpc.message.NotificationMessage;
 import com.ensarsarajcic.neovim.java.corerpc.message.RequestMessage;
 import com.ensarsarajcic.neovim.java.corerpc.message.ResponseMessage;
+import com.ensarsarajcic.neovim.java.testing.MultiLatch;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
@@ -38,16 +39,12 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.mockito.stubbing.Answer;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.atomic.AtomicReference;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -168,17 +165,18 @@ public class BackgroundRPCListenerTest {
         verify(notificationCallback, never()).notificationReceived(any());
     }
 
-    @Test
+    @Test(timeout = 2000)
     public void testStopping() throws IOException, InterruptedException {
         // Given a proper executor service and object mapper
-        executorService = Executors.newSingleThreadExecutor();
+        MultiLatch multiLatch = new MultiLatch(10);
+        executorService = Executors.newSingleThreadScheduledExecutor();
         backgroundRPCListener = new BackgroundRPCListener(executorService, objectMapper);
         given(objectMapper.reader()).willReturn(objectReader);
         ArrayNode notificationNode = prepareNotificationNode();
         NotificationMessage notificationMessage = new NotificationMessage.Builder("test").build();
         given(objectMapper.treeToValue(any(), eq(NotificationMessage.class))).willReturn(notificationMessage);
         given(objectReader.readTree(inputStream)).will(invocationOnMock -> {
-            Thread.sleep(20);
+            multiLatch.await();
             return notificationNode;
         });
 
@@ -191,12 +189,17 @@ public class BackgroundRPCListenerTest {
         backgroundRPCListener.listenForNotifications(notificationCallback);
         backgroundRPCListener.start(inputStream);
 
+        multiLatch.countDown();
         verify(notificationCallback, timeout(100)).notificationReceived(notificationMessage);
+        multiLatch.countDown();
         verify(notificationCallback, timeout(100)).notificationReceived(notificationMessage);
 
         // After listener is stopped, no more notifications should arrive
         backgroundRPCListener.stop();
-        Thread.sleep(80);
+        multiLatch.countDown();
+        multiLatch.countDown();
+        multiLatch.countDown();
+        multiLatch.countDown();
         verifyNoMoreInteractions(notificationCallback);
     }
 

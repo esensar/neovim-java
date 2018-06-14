@@ -38,5 +38,11 @@
             <artifactId>commons-lang3</artifactId>
             <version>${apache.commons.version}</version>
         </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>testing-helpers</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 </project>

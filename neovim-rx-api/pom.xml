@@ -27,5 +27,11 @@
             <artifactId>rxjava</artifactId>
             <version>${rxjava2.version}</version>
         </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>testing-helpers</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 </project>
