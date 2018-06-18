@@ -29,6 +29,7 @@ import com.ensarsarajcic.neovim.java.corerpc.message.RequestMessage;
 import com.ensarsarajcic.neovim.java.corerpc.message.ResponseMessage;
 import com.ensarsarajcic.neovim.java.corerpc.reactive.RPCException;
 import com.ensarsarajcic.neovim.java.corerpc.reactive.ReactiveRPCStreamer;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -36,6 +37,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -81,18 +83,12 @@ public class NeovimStreamApiTest {
     @Test
     public void getHightlightByIdTest() throws ExecutionException, InterruptedException {
         // Happy case
-        ArgumentCaptor<RequestMessage.Builder> argumentCaptor = prepareArgumentCaptor(
-                CompletableFuture.completedFuture(new ResponseMessage(1, null, Map.of())));
-        CompletableFuture<Map> result = neovimStreamApi.getHighlightById(1, true);
-        RequestMessage requestMessage = argumentCaptor.getValue().build();
-        assertMethodAndArguments(
-                requestMessage,
-                NeovimApi.GET_HIGHLIGHT_BY_ID,
-                1,
-                true
+        assertNormalBehavior(
+                () -> CompletableFuture.completedFuture(new ResponseMessage(1, null, Map.of())),
+                () -> neovimStreamApi.getHighlightById(1, true),
+                request -> assertMethodAndArguments(request, NeovimApi.GET_HIGHLIGHT_BY_ID, 1, true),
+                result -> assertTrue(result.isEmpty())
         );
-        verify(reactiveRPCStreamer).response(any());
-        assertTrue(result.get().isEmpty());
 
         // Error case
         assertErrorBehavior(
@@ -104,18 +100,12 @@ public class NeovimStreamApiTest {
     @Test
     public void getHightlightByNameTest() throws ExecutionException, InterruptedException {
         // Happy case
-        ArgumentCaptor<RequestMessage.Builder> argumentCaptor = prepareArgumentCaptor(
-                CompletableFuture.completedFuture(new ResponseMessage(1, null, Map.of())));
-        CompletableFuture<Map> result = neovimStreamApi.getHighlightByName("name", true);
-        RequestMessage requestMessage = argumentCaptor.getValue().build();
-        assertMethodAndArguments(
-                requestMessage,
-                NeovimApi.GET_HIGHLIGHT_BY_NAME,
-                "name",
-                true
+        assertNormalBehavior(
+                () -> CompletableFuture.completedFuture(new ResponseMessage(1, null, Map.of())),
+                () -> neovimStreamApi.getHighlightByName("name", true),
+                request -> assertMethodAndArguments(request, NeovimApi.GET_HIGHLIGHT_BY_NAME, "name", true),
+                result -> assertTrue(result.isEmpty())
         );
-        verify(reactiveRPCStreamer).response(any());
-        assertTrue(result.get().isEmpty());
 
         // Error case
         assertErrorBehavior(
@@ -124,7 +114,126 @@ public class NeovimStreamApiTest {
         );
     }
 
+    @Test
+    public void attachUITest() throws InterruptedException, ExecutionException {
+        // Happy case
+        Map<String, String> opts = Map.of("Test", "Value");
+        assertNormalBehavior(
+                () -> CompletableFuture.completedFuture(new ResponseMessage(1, null, null)),
+                () -> neovimStreamApi.attachUI(500, 500, opts),
+                request -> assertMethodAndArguments(request, NeovimApi.ATTACH_UI, 500, 500, opts),
+                Assert::assertNull
+        );
+
+        // Error case
+        assertErrorBehavior(
+                () -> neovimStreamApi.detachUI(),
+                request -> assertMethodAndArguments(request, NeovimApi.DETACH_UI)
+        );
+    }
+
+    @Test
+    public void resizeUITest() throws InterruptedException, ExecutionException {
+        // Happy case
+        assertNormalBehavior(
+                () -> CompletableFuture.completedFuture(new ResponseMessage(1, null, null)),
+                () -> neovimStreamApi.resizeUI(500, 500),
+                request -> assertMethodAndArguments(request, NeovimApi.RESIZE_UI, 500, 500),
+                Assert::assertNull
+        );
+
+        // Error case
+        assertErrorBehavior(
+                () -> neovimStreamApi.resizeUI(150, 450),
+                request -> assertMethodAndArguments(request, NeovimApi.RESIZE_UI, 150, 450)
+        );
+    }
+
+    @Test
+    public void executeLuaTest() throws InterruptedException, ExecutionException {
+        // Happy case
+        String realLuaResult = "lua exec result";
+        List<String> args = List.of("lua arg1");
+        assertNormalBehavior(
+                () -> CompletableFuture.completedFuture(new ResponseMessage(1, null, realLuaResult)),
+                () -> neovimStreamApi.executeLua("real lua code", args),
+                request -> assertMethodAndArguments(request, NeovimApi.EXECUTE_LUA, "real lua code", args),
+                result -> assertEquals(result, realLuaResult)
+        );
+
+        // Error case
+        List<String> badArgs = List.of();
+        assertErrorBehavior(
+                () -> neovimStreamApi.executeLua("bad lua code", badArgs),
+                request -> assertMethodAndArguments(request, NeovimApi.EXECUTE_LUA, "bad lua code", badArgs)
+        );
+    }
+
+    @Test
+    public void executeCommandTest() throws InterruptedException, ExecutionException {
+        // Happy case
+        assertNormalBehavior(
+                () -> CompletableFuture.completedFuture(new ResponseMessage(1, null, null)),
+                () -> neovimStreamApi.executeCommand("real vim command"),
+                request -> assertMethodAndArguments(request, NeovimApi.EXECUTE_COMMAND, "real vim command"),
+                Assert::assertNull
+        );
+
+        // Error case
+        assertErrorBehavior(
+                () -> neovimStreamApi.executeCommand("bad vim command"),
+                request -> assertMethodAndArguments(request, NeovimApi.EXECUTE_COMMAND, "bad vim command")
+        );
+    }
+
+    @Test
+    public void setCurrentDirTest() throws InterruptedException, ExecutionException {
+        // Happy case
+        assertNormalBehavior(
+                () -> CompletableFuture.completedFuture(new ResponseMessage(1, null, null)),
+                () -> neovimStreamApi.setCurrentDir("/home"),
+                request -> assertMethodAndArguments(request, NeovimApi.SET_CURRENT_DIR, "/home"),
+                Assert::assertNull
+        );
+
+        // Error case
+        assertErrorBehavior(
+                () -> neovimStreamApi.setCurrentDir("badDir"),
+                request -> assertMethodAndArguments(request, NeovimApi.SET_CURRENT_DIR, "badDir")
+        );
+    }
+
+    @Test
+    public void subscribeToEventTest() throws InterruptedException, ExecutionException {
+        // Happy case
+        assertNormalBehavior(
+                () -> CompletableFuture.completedFuture(new ResponseMessage(1, null, null)),
+                () -> neovimStreamApi.subscribeToEvent("real event"),
+                request -> assertMethodAndArguments(request, NeovimApi.SUBSCRIBE_TO_EVENT, "real event"),
+                Assert::assertNull
+        );
+
+        // Error case
+        assertErrorBehavior(
+                () -> neovimStreamApi.subscribeToEvent("bad event"),
+                request -> assertMethodAndArguments(request, NeovimApi.SUBSCRIBE_TO_EVENT, "bad event")
+        );
+    }
     // region Testing helpers
+    private <T> void assertNormalBehavior(
+            Supplier<CompletableFuture<ResponseMessage>> preparedResponse,
+            Supplier<CompletableFuture<T>> callSupplier,
+            Consumer<RequestMessage> requestAsserter,
+            Consumer<T> resultAsserter
+    ) throws ExecutionException, InterruptedException {
+        ArgumentCaptor<RequestMessage.Builder> argumentCaptor = prepareArgumentCaptor(preparedResponse.get());
+        CompletableFuture<T> result = callSupplier.get();
+        RequestMessage requestMessage = argumentCaptor.getValue().build();
+        requestAsserter.accept(requestMessage);
+        verify(reactiveRPCStreamer, atLeastOnce()).response(any());
+        resultAsserter.accept(result.get());
+    }
+
     private void assertErrorBehavior(
             Supplier<CompletableFuture<?>> completableFutureSupplier,
             Consumer<RequestMessage> requestAsserter) throws InterruptedException {
