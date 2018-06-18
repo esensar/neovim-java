@@ -113,7 +113,7 @@ public final class AtomicCallBuilder implements NeovimApi {
     }
 
     @Override
-    public CompletableFuture<Void> feedKeys(String keys, String mode, Boolean escape) {
+    public CompletableFuture<Void> feedKeys(String keys, String mode, boolean escape) {
         return null;
     }
 

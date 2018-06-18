@@ -139,7 +139,7 @@ public final class NeovimStreamApi extends BaseStreamApi implements NeovimApi {
     }
 
     @Override
-    public CompletableFuture<Void> feedKeys(String keys, String mode, Boolean escape) {
+    public CompletableFuture<Void> feedKeys(String keys, String mode, boolean escape) {
         return sendWithNoResponse(new RequestMessage.Builder(FEEDKEYS)
                 .addArgument(keys)
                 .addArgument(mode)
