@@ -121,8 +121,7 @@ public class NeovimStreamApiTest {
         assertNormalBehavior(
                 () -> CompletableFuture.completedFuture(new ResponseMessage(1, null, null)),
                 () -> neovimStreamApi.attachUI(500, 500, opts),
-                request -> assertMethodAndArguments(request, NeovimApi.ATTACH_UI, 500, 500, opts),
-                Assert::assertNull
+                request -> assertMethodAndArguments(request, NeovimApi.ATTACH_UI, 500, 500, opts)
         );
 
         // Error case
@@ -138,8 +137,7 @@ public class NeovimStreamApiTest {
         assertNormalBehavior(
                 () -> CompletableFuture.completedFuture(new ResponseMessage(1, null, null)),
                 () -> neovimStreamApi.resizeUI(500, 500),
-                request -> assertMethodAndArguments(request, NeovimApi.RESIZE_UI, 500, 500),
-                Assert::assertNull
+                request -> assertMethodAndArguments(request, NeovimApi.RESIZE_UI, 500, 500)
         );
 
         // Error case
@@ -175,8 +173,7 @@ public class NeovimStreamApiTest {
         assertNormalBehavior(
                 () -> CompletableFuture.completedFuture(new ResponseMessage(1, null, null)),
                 () -> neovimStreamApi.executeCommand("real vim command"),
-                request -> assertMethodAndArguments(request, NeovimApi.EXECUTE_COMMAND, "real vim command"),
-                Assert::assertNull
+                request -> assertMethodAndArguments(request, NeovimApi.EXECUTE_COMMAND, "real vim command")
         );
 
         // Error case
@@ -192,8 +189,7 @@ public class NeovimStreamApiTest {
         assertNormalBehavior(
                 () -> CompletableFuture.completedFuture(new ResponseMessage(1, null, null)),
                 () -> neovimStreamApi.setCurrentDir("/home"),
-                request -> assertMethodAndArguments(request, NeovimApi.SET_CURRENT_DIR, "/home"),
-                Assert::assertNull
+                request -> assertMethodAndArguments(request, NeovimApi.SET_CURRENT_DIR, "/home")
         );
 
         // Error case
@@ -209,8 +205,7 @@ public class NeovimStreamApiTest {
         assertNormalBehavior(
                 () -> CompletableFuture.completedFuture(new ResponseMessage(1, null, null)),
                 () -> neovimStreamApi.subscribeToEvent("real event"),
-                request -> assertMethodAndArguments(request, NeovimApi.SUBSCRIBE_TO_EVENT, "real event"),
-                Assert::assertNull
+                request -> assertMethodAndArguments(request, NeovimApi.SUBSCRIBE_TO_EVENT, "real event")
         );
 
         // Error case
@@ -220,6 +215,14 @@ public class NeovimStreamApiTest {
         );
     }
     // region Testing helpers
+    private void assertNormalBehavior(
+            Supplier<CompletableFuture<ResponseMessage>> preparedResponse,
+            Supplier<CompletableFuture<Void>> callSupplier,
+            Consumer<RequestMessage> requestAsserter
+    ) throws ExecutionException, InterruptedException {
+        assertNormalBehavior(preparedResponse, callSupplier, requestAsserter, Assert::assertNull);
+    }
+
     private <T> void assertNormalBehavior(
             Supplier<CompletableFuture<ResponseMessage>> preparedResponse,
             Supplier<CompletableFuture<T>> callSupplier,
