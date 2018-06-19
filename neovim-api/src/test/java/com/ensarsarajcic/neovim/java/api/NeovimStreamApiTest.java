@@ -33,41 +33,22 @@ import com.ensarsarajcic.neovim.java.api.types.msgpack.Buffer;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.NeovimCustomType;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.Tabpage;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.Window;
-import com.ensarsarajcic.neovim.java.corerpc.message.RPCError;
-import com.ensarsarajcic.neovim.java.corerpc.message.RequestMessage;
 import com.ensarsarajcic.neovim.java.corerpc.message.ResponseMessage;
-import com.ensarsarajcic.neovim.java.corerpc.reactive.RPCException;
-import com.ensarsarajcic.neovim.java.corerpc.reactive.ReactiveRPCStreamer;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.msgpack.jackson.dataformat.MessagePackExtensionType;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 import static org.junit.Assert.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.nullable;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.atLeastOnce;
-import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
-public class NeovimStreamApiTest {
-
-    @Mock
-    ReactiveRPCStreamer reactiveRPCStreamer;
+public class NeovimStreamApiTest extends BaseStreamApiTest {
 
     @InjectMocks
     NeovimStreamApi neovimStreamApi;
@@ -1393,65 +1374,4 @@ public class NeovimStreamApiTest {
         );
     }
 
-    // region Testing helpers
-    private void assertNormalBehavior(
-            Supplier<CompletableFuture<ResponseMessage>> preparedResponse,
-            Supplier<CompletableFuture<Void>> callSupplier,
-            Consumer<RequestMessage> requestAsserter
-    ) throws ExecutionException, InterruptedException {
-        assertNormalBehavior(preparedResponse, callSupplier, requestAsserter, Assert::assertNull);
-    }
-
-    private <T> void assertNormalBehavior(
-            Supplier<CompletableFuture<ResponseMessage>> preparedResponse,
-            Supplier<CompletableFuture<T>> callSupplier,
-            Consumer<RequestMessage> requestAsserter,
-            Consumer<T> resultAsserter
-    ) throws ExecutionException, InterruptedException {
-        ArgumentCaptor<RequestMessage.Builder> argumentCaptor = prepareArgumentCaptor(preparedResponse.get());
-        CompletableFuture<T> result = callSupplier.get();
-        RequestMessage requestMessage = argumentCaptor.getValue().build();
-        requestAsserter.accept(requestMessage);
-        verify(reactiveRPCStreamer, atLeastOnce()).response(any());
-        resultAsserter.accept(result.get());
-    }
-
-    private void assertErrorBehavior(
-            Supplier<CompletableFuture<?>> completableFutureSupplier,
-            Consumer<RequestMessage> requestAsserter) throws InterruptedException {
-        ArgumentCaptor<RequestMessage.Builder> errorArgumentCaptor = prepareArgumentCaptor(
-                CompletableFuture.failedFuture(new RPCException(new RPCError(1, "error"))));
-        CompletableFuture errorResult = completableFutureSupplier.get();
-        RequestMessage errorResponse = errorArgumentCaptor.getValue().build();
-        requestAsserter.accept(errorResponse);
-        verify(reactiveRPCStreamer, atLeastOnce()).response(any());
-        verifyError(errorResult);
-    }
-
-    private void assertMethodAndArguments(RequestMessage message, String method, Object... arguments) {
-        assertEquals(message.getMethod(), method);
-        int i = 0;
-        for (Object arg : arguments) {
-            assertEquals(message.getArguments().get(i), arg);
-            i++;
-        }
-    }
-
-    private void verifyError(CompletableFuture completableFuture) throws InterruptedException {
-        try {
-            completableFuture.get();
-            fail("Should have thrown an error");
-        } catch (ExecutionException ex) {
-            if (!(ex.getCause() instanceof RPCException)) {
-                fail("Should have been an RCP Exception");
-            }
-        }
-    }
-
-    private ArgumentCaptor<RequestMessage.Builder> prepareArgumentCaptor(CompletableFuture<ResponseMessage> responseMessageCompletableFuture) {
-        ArgumentCaptor<RequestMessage.Builder> argumentCaptor = ArgumentCaptor.forClass(RequestMessage.Builder.class);
-        given(reactiveRPCStreamer.response(argumentCaptor.capture())).willReturn(responseMessageCompletableFuture);
-        return argumentCaptor;
-    }
-    // endregion
 }
