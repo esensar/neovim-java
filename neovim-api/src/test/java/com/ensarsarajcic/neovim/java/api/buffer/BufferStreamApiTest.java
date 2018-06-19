@@ -69,6 +69,11 @@ public class BufferStreamApiTest extends BaseStreamApiTest {
     }
 
     @Test
+    public void toStringDoesntCrash() {
+        bufferStreamApi.toString();
+    }
+
+    @Test
     public void getLineCountTest() throws ExecutionException, InterruptedException {
         // Happy case
         assertNormalBehavior(
