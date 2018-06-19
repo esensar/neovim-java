@@ -26,6 +26,7 @@ package com.ensarsarajcic.neovim.java.rxapi;
 
 import com.ensarsarajcic.neovim.java.api.tabpage.NeovimTabpageApi;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.Tabpage;
+import io.reactivex.Completable;
 import io.reactivex.Single;
 
 import java.util.List;
@@ -66,13 +67,13 @@ public final class NeovimTabpageRxWrapper implements NeovimTabpageRxApi {
     }
 
     @Override
-    public Single<Void> setVar(String name, Object value) {
-        return Single.fromFuture(neovimTabpageApi.setVar(name, value));
+    public Completable setVar(String name, Object value) {
+        return Completable.fromFuture(neovimTabpageApi.setVar(name, value));
     }
 
     @Override
-    public Single<Void> deleteVar(String name) {
-        return Single.fromFuture(neovimTabpageApi.deleteVar(name));
+    public Completable deleteVar(String name) {
+        return Completable.fromFuture(neovimTabpageApi.deleteVar(name));
     }
 
     @Override

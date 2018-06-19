@@ -38,7 +38,7 @@ public final class FunctionInfo {
     private String returnType;
     private int since;
     private int deprecatedSince;
-    private List<List<String>> parameters;
+    private List<ParamInfo> parameters;
 
     public FunctionInfo(
             @JsonProperty("method")
@@ -52,7 +52,7 @@ public final class FunctionInfo {
             @JsonProperty("deprecated_since")
             int deprecatedSince,
             @JsonProperty("parameters")
-            List<List<String>> parameters) {
+            List<ParamInfo> parameters) {
         this.method = method;
         this.name = name;
         this.returnType = returnType;
@@ -81,7 +81,7 @@ public final class FunctionInfo {
         return deprecatedSince;
     }
 
-    public List<List<String>> getParameters() {
+    public List<ParamInfo> getParameters() {
         return parameters;
     }
 

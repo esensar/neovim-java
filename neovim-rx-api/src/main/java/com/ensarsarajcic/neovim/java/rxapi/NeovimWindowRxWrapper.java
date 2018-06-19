@@ -27,6 +27,7 @@ package com.ensarsarajcic.neovim.java.rxapi;
 import com.ensarsarajcic.neovim.java.api.types.api.VimCoords;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.Window;
 import com.ensarsarajcic.neovim.java.api.window.NeovimWindowApi;
+import io.reactivex.Completable;
 import io.reactivex.Single;
 
 import java.util.Objects;
@@ -57,8 +58,8 @@ public final class NeovimWindowRxWrapper implements NeovimWindowRxApi {
     }
 
     @Override
-    public Single<Void> setCursor(VimCoords vimCoords) {
-        return Single.fromFuture(neovimWindowApi.setCursor(vimCoords));
+    public Completable setCursor(VimCoords vimCoords) {
+        return Completable.fromFuture(neovimWindowApi.setCursor(vimCoords));
     }
 
     @Override
@@ -67,8 +68,8 @@ public final class NeovimWindowRxWrapper implements NeovimWindowRxApi {
     }
 
     @Override
-    public Single<Void> setHeight(int height) {
-        return Single.fromFuture(neovimWindowApi.setHeight(height));
+    public Completable setHeight(int height) {
+        return Completable.fromFuture(neovimWindowApi.setHeight(height));
     }
 
     @Override
@@ -77,8 +78,8 @@ public final class NeovimWindowRxWrapper implements NeovimWindowRxApi {
     }
 
     @Override
-    public Single<Void> setWidth(int width) {
-        return Single.fromFuture(neovimWindowApi.setWidth(width));
+    public Completable setWidth(int width) {
+        return Completable.fromFuture(neovimWindowApi.setWidth(width));
     }
 
     @Override
@@ -87,13 +88,13 @@ public final class NeovimWindowRxWrapper implements NeovimWindowRxApi {
     }
 
     @Override
-    public Single<Void> setVar(String name, Object value) {
-        return Single.fromFuture(neovimWindowApi.setVar(name, value));
+    public Completable setVar(String name, Object value) {
+        return Completable.fromFuture(neovimWindowApi.setVar(name, value));
     }
 
     @Override
-    public Single<Void> deleteVar(String name) {
-        return Single.fromFuture(neovimWindowApi.deleteVar(name));
+    public Completable deleteVar(String name) {
+        return Completable.fromFuture(neovimWindowApi.deleteVar(name));
     }
 
     @Override
@@ -102,8 +103,8 @@ public final class NeovimWindowRxWrapper implements NeovimWindowRxApi {
     }
 
     @Override
-    public Single<Void> setOption(String name, Object value) {
-        return Single.fromFuture(neovimWindowApi.setOption(name, value));
+    public Completable setOption(String name, Object value) {
+        return Completable.fromFuture(neovimWindowApi.setOption(name, value));
     }
 
     @Override

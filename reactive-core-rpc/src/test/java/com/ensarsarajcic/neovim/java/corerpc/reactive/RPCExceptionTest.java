@@ -22,43 +22,35 @@
  * SOFTWARE.
  */
 
-package com.ensarsarajcic.neovim.java.api.types.msgpack;
+package com.ensarsarajcic.neovim.java.corerpc.reactive;
 
-import java.util.function.Function;
+import com.ensarsarajcic.neovim.java.corerpc.message.RPCError;
+import org.hamcrest.BaseMatcher;
+import org.hamcrest.Description;
+import org.junit.Test;
 
-public enum NeovimCustomType {
-    BUFFER(0, Buffer.class, Buffer::new),
-    WINDOW(1, Window.class, Window::new),
-    TABPAGE(2, Tabpage.class, Tabpage::new);
+import static org.junit.Assert.*;
 
-    private NeovimTypeSerializer<? extends BaseCustomIdType> serializer;
-    private NeovimTypeDeserializer<? extends BaseCustomIdType> deserializer;
-    private Class<? extends BaseCustomIdType> type;
-    private int typeId;
+public class RPCExceptionTest {
 
-    <T extends BaseCustomIdType> NeovimCustomType(
-            int typeId,
-            Class<T> type,
-            Function<Long, T> constructor) {
-        this.serializer = new NeovimTypeSerializer<>((byte) typeId, type);
-        this.deserializer = new NeovimTypeDeserializer<>((byte) typeId, type, constructor);
-        this.type = type;
-        this.typeId = typeId;
+    @Test
+    public void testConstructorAndToStringNotCrashing() {
+        new RPCException(new RPCError(1, "message")).toString();
     }
 
-    public NeovimTypeSerializer getSerializer() {
-        return serializer;
-    }
+    @Test
+    public void testStoresRPCError() {
+        RPCError error = new RPCError(1, "msg");
+        assertThat(new RPCException(error).toString(), new BaseMatcher<>() {
+            @Override
+            public boolean matches(Object o) {
+                return o.toString().contains("msg");
+            }
 
-    public NeovimTypeDeserializer getDeserializer() {
-        return deserializer;
-    }
-
-    public Class<?> getType() {
-        return type;
-    }
-
-    public int getTypeId() {
-        return typeId;
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("Contains rpcerror");
+            }
+        });
     }
 }

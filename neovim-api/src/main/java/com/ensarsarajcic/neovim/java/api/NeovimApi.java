@@ -141,7 +141,7 @@ public interface NeovimApi {
     CompletableFuture<Object> callFunction(String name, List<String> args);
 
     @NeovimApiFunction(name = FEEDKEYS, since = 1)
-    CompletableFuture<Void> feedKeys(String keys, String mode, Boolean escape);
+    CompletableFuture<Void> feedKeys(String keys, String mode, boolean escape);
 
     @NeovimApiFunction(name = INPUT, since = 1)
     CompletableFuture<Integer> input(String keys);
@@ -267,5 +267,5 @@ public interface NeovimApi {
     CompletableFuture<List<Integer>> getProcessChildren();
 
     @NeovimApiFunction(name = GET_PROC, since = 4)
-    CompletableFuture<Object> getProccess();
+    CompletableFuture<Object> getProcess();
 }

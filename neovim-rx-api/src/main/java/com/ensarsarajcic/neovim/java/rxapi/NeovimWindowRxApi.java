@@ -28,6 +28,7 @@ import com.ensarsarajcic.neovim.java.api.NeovimApiFunction;
 import com.ensarsarajcic.neovim.java.api.types.api.VimCoords;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.Window;
 import com.ensarsarajcic.neovim.java.api.window.NeovimWindowApi;
+import io.reactivex.Completable;
 import io.reactivex.Single;
 
 public interface NeovimWindowRxApi {
@@ -41,34 +42,34 @@ public interface NeovimWindowRxApi {
     Single<VimCoords> getCursor();
 
     @NeovimApiFunction(name = NeovimWindowApi.SET_CURSOR, since = 1)
-    Single<Void> setCursor(VimCoords vimCoords);
+    Completable setCursor(VimCoords vimCoords);
 
     @NeovimApiFunction(name = NeovimWindowApi.GET_HEIGHT, since = 1)
     Single<Integer> getHeight();
 
     @NeovimApiFunction(name = NeovimWindowApi.SET_HEIGHT, since = 1)
-    Single<Void> setHeight(int height);
+    Completable setHeight(int height);
 
     @NeovimApiFunction(name = NeovimWindowApi.GET_WIDTH, since = 1)
     Single<Integer> getWidth();
 
     @NeovimApiFunction(name = NeovimWindowApi.SET_WIDTH, since = 1)
-    Single<Void> setWidth(int width);
+    Completable setWidth(int width);
 
     @NeovimApiFunction(name = NeovimWindowApi.GET_VAR, since = 1)
     Single<Object> getVar(String name);
 
     @NeovimApiFunction(name = NeovimWindowApi.SET_VAR, since = 1)
-    Single<Void> setVar(String name, Object value);
+    Completable setVar(String name, Object value);
 
     @NeovimApiFunction(name = NeovimWindowApi.DEL_VAR, since = 1)
-    Single<Void> deleteVar(String name);
+    Completable deleteVar(String name);
 
     @NeovimApiFunction(name = NeovimWindowApi.GET_OPTION, since = 1)
     Single<Object> getOption(String name);
 
     @NeovimApiFunction(name = NeovimWindowApi.SET_OPTION, since = 1)
-    Single<Void> setOption(String name, Object value);
+    Completable setOption(String name, Object value);
 
     @NeovimApiFunction(name = NeovimWindowApi.GET_TABPAGE, since = 1)
     Single<NeovimTabpageRxApi> getTabpage();

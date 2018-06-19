@@ -38,6 +38,7 @@ import org.msgpack.jackson.dataformat.MessagePackFactory;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
 
@@ -51,6 +52,7 @@ public abstract class BaseStreamApi {
     protected ObjectMapper objectMapper;
 
     public BaseStreamApi(ReactiveRPCStreamer reactiveRPCStreamer) {
+        Objects.requireNonNull(reactiveRPCStreamer, "reactiveRpcStreamer is required for stream API");
         this.reactiveRPCStreamer = reactiveRPCStreamer;
         MessagePackFactory factory = new MessagePackFactory();
         factory.disable(JsonParser.Feature.AUTO_CLOSE_SOURCE);

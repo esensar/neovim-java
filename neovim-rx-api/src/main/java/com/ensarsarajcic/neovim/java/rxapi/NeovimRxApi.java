@@ -32,6 +32,7 @@ import com.ensarsarajcic.neovim.java.api.types.apiinfo.ApiInfo;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.Buffer;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.Tabpage;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.Window;
+import io.reactivex.Completable;
 import io.reactivex.Single;
 
 import java.util.List;
@@ -49,28 +50,28 @@ public interface NeovimRxApi {
     Single<Map> getHighlightByName(String name, boolean rgb);
 
     @NeovimApiFunction(name = NeovimApi.ATTACH_UI, since = 1)
-    Single<Void> attachUI(int width, int height, Map<String, String> options);
+    Completable attachUI(int width, int height, Map<String, String> options);
 
     @NeovimApiFunction(name = NeovimApi.DETACH_UI, since = 1)
-    Single<Void> detachUI();
+    Completable detachUI();
 
     @NeovimApiFunction(name = NeovimApi.RESIZE_UI, since = 1)
-    Single<Void> resizeUI(int width, int height);
+    Completable resizeUI(int width, int height);
 
     @NeovimApiFunction(name = NeovimApi.EXECUTE_LUA, since = 3)
     Single<Object> executeLua(String luaCode, List<String> args);
 
     @NeovimApiFunction(name = NeovimApi.EXECUTE_COMMAND, since = 1)
-    Single<Void> executeCommand(String command);
+    Completable executeCommand(String command);
 
     @NeovimApiFunction(name = NeovimApi.SET_CURRENT_DIR, since = 1)
-    Single<Void> setCurrentDir(String directoryPath);
+    Completable setCurrentDir(String directoryPath);
 
     @NeovimApiFunction(name = NeovimApi.SUBSCRIBE_TO_EVENT, since = 1)
-    Single<Void> subscribeToEvent(String event);
+    Completable subscribeToEvent(String event);
 
     @NeovimApiFunction(name = NeovimApi.UNSUBSCRIBE_FROM_EVENT, since = 1)
-    Single<Void> unsubscribeFromEvent(String event);
+    Completable unsubscribeFromEvent(String event);
 
     @NeovimApiFunction(name = NeovimApi.EVAL, since = 1)
     Single<Object> eval(String expression);
@@ -79,7 +80,7 @@ public interface NeovimRxApi {
     Single<Object> callFunction(String name, List<String> args);
 
     @NeovimApiFunction(name = NeovimApi.FEEDKEYS, since = 1)
-    Single<Void> feedKeys(String keys, String mode, Boolean escape);
+    Completable feedKeys(String keys, String mode, Boolean escape);
 
     @NeovimApiFunction(name = NeovimApi.INPUT, since = 1)
     Single<Integer> input(String keys);
@@ -88,22 +89,22 @@ public interface NeovimRxApi {
     Single<List<VimKeyMap>> getKeymap(String mode);
 
     @NeovimApiFunction(name = NeovimApi.SET_UI_OPTION, since = 1)
-    Single<Void> setUiOption(String name, Object value);
+    Completable setUiOption(String name, Object value);
 
     @NeovimApiFunction(name = NeovimApi.SET_VAR, since = 1)
-    Single<Void> setVariable(String name, Object value);
+    Completable setVariable(String name, Object value);
 
     @NeovimApiFunction(name = NeovimApi.GET_VAR, since = 1)
     Single<Object> getVariable(String name);
 
     @NeovimApiFunction(name = NeovimApi.DEL_VAR, since = 1)
-    Single<Void> deleteVariable(String name);
+    Completable deleteVariable(String name);
 
     @NeovimApiFunction(name = NeovimApi.GET_VIM_VARIABLE, since = 1)
     Single<Object> getVimVariable(String name);
 
     @NeovimApiFunction(name = NeovimApi.SET_OPTION, since = 1)
-    Single<Void> setOption(String name, Object value);
+    Completable setOption(String name, Object value);
 
     @NeovimApiFunction(name = NeovimApi.GET_OPTION, since = 1)
     Single<Object> getOption(String name);
@@ -118,13 +119,13 @@ public interface NeovimRxApi {
     Single<String> commandOutput(String command);
 
     @NeovimApiFunction(name = NeovimApi.OUT_WRITE, since = 1)
-    Single<Void> writeToOutput(String text);
+    Completable writeToOutput(String text);
 
     @NeovimApiFunction(name = NeovimApi.ERR_WRITE, since = 1)
-    Single<Void> writeToError(String text);
+    Completable writeToError(String text);
 
     @NeovimApiFunction(name = NeovimApi.ERR_WRITELN, since = 1)
-    Single<Void> writelnToError(String text);
+    Completable writelnToError(String text);
 
     @NeovimApiFunction(name = NeovimApi.STRWIDTH, since = 1)
     Single<Integer> stringWidth(String string);
@@ -136,10 +137,10 @@ public interface NeovimRxApi {
     Single<String> getCurrentLine();
 
     @NeovimApiFunction(name = NeovimApi.SET_CURRENT_LINE, since = 1)
-    Single<Void> setCurrentLine(String line);
+    Completable setCurrentLine(String line);
 
     @NeovimApiFunction(name = NeovimApi.DEL_CURRENT_LINE, since = 1)
-    Single<Void> deleteCurrentLine();
+    Completable deleteCurrentLine();
 
     @NeovimApiFunction(name = NeovimApi.LIST_BUFS, since = 1)
     Single<List<NeovimBufferRxApi>> getBuffers();
@@ -148,7 +149,7 @@ public interface NeovimRxApi {
     Single<NeovimBufferRxApi> getCurrentBuffer();
 
     @NeovimApiFunction(name = NeovimApi.SET_CURRENT_BUF, since = 1)
-    Single<Void> setCurrentBuffer(Buffer buffer);
+    Completable setCurrentBuffer(Buffer buffer);
 
     @NeovimApiFunction(name = NeovimApi.LIST_WINS, since = 1)
     Single<List<NeovimWindowRxApi>> getWindows();
@@ -157,7 +158,7 @@ public interface NeovimRxApi {
     Single<NeovimWindowRxApi> getCurrentWindow();
 
     @NeovimApiFunction(name = NeovimApi.SET_CURRENT_WIN, since = 1)
-    Single<Void> setCurrentWindow(Window window);
+    Completable setCurrentWindow(Window window);
 
     @NeovimApiFunction(name = NeovimApi.LIST_TABPAGES, since = 1)
     Single<List<NeovimTabpageRxApi>> getTabpages();
@@ -166,7 +167,7 @@ public interface NeovimRxApi {
     Single<NeovimTabpageRxApi> getCurrentTabpage();
 
     @NeovimApiFunction(name = NeovimApi.SET_CURRENT_TABPAGE, since = 1)
-    Single<Void> setCurrentTabpage(Tabpage tabpage);
+    Completable setCurrentTabpage(Tabpage tabpage);
 
     @NeovimApiFunction(name = NeovimApi.GET_COLOR_MAP, since = 1)
     Single<VimColorMap> getColorMap();
@@ -184,7 +185,7 @@ public interface NeovimRxApi {
     Single<Map> getCommands(GetCommandsOptions getCommandsOptions);
 
     @NeovimApiFunction(name = NeovimApi.SET_CLIENT_INFO, since = 4)
-    Single<Void> setClientInfo(String name, ClientVersionInfo clientVersionInfo, ClientType clientType, Map<String, MethodInfo> methods, ClientAttributes clientAttributes);
+    Completable setClientInfo(String name, ClientVersionInfo clientVersionInfo, ClientType clientType, Map<String, MethodInfo> methods, ClientAttributes clientAttributes);
 
     @NeovimApiFunction(name = NeovimApi.GET_CHANNEL_INFO, since = 4)
     Single<ChannelInfo> getChannelInfo(int channel);
@@ -202,5 +203,5 @@ public interface NeovimRxApi {
     Single<List<Integer>> getProcessChildren();
 
     @NeovimApiFunction(name = NeovimApi.GET_PROC, since = 4)
-    Single<Object> getProccess();
+    Single<Object> getProcess();
 }

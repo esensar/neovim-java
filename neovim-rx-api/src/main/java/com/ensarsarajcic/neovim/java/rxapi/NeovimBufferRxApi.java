@@ -30,6 +30,7 @@ import com.ensarsarajcic.neovim.java.api.types.api.GetCommandsOptions;
 import com.ensarsarajcic.neovim.java.api.types.api.VimCoords;
 import com.ensarsarajcic.neovim.java.api.types.api.VimKeyMap;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.Buffer;
+import io.reactivex.Completable;
 import io.reactivex.Single;
 
 import java.util.List;
@@ -45,22 +46,22 @@ public interface NeovimBufferRxApi {
     Single<List<String>> getLines(int start, int end, boolean strictIndexing);
 
     @NeovimApiFunction(name = NeovimBufferApi.SET_LINES, since = 1)
-    Single<Void> setLines(int start, int end, boolean strictIndexing, List<String> replacement);
+    Completable setLines(int start, int end, boolean strictIndexing, List<String> replacement);
 
     @NeovimApiFunction(name = NeovimBufferApi.GET_VAR, since = 1)
     Single<Object> getVar(String name);
 
     @NeovimApiFunction(name = NeovimBufferApi.DEL_VAR, since = 1)
-    Single<Void> deleteVar(String name);
+    Completable deleteVar(String name);
 
     @NeovimApiFunction(name = NeovimBufferApi.SET_VAR, since = 1)
-    Single<Void> setVar(String name, Object value);
+    Completable setVar(String name, Object value);
 
     @NeovimApiFunction(name = NeovimBufferApi.GET_OPTION, since = 1)
     Single<Object> getOption(String name);
 
     @NeovimApiFunction(name = NeovimBufferApi.SET_OPTION, since = 1)
-    Single<Void> setOption(String name, Object value);
+    Completable setOption(String name, Object value);
 
     @NeovimApiFunction(name = NeovimBufferApi.GET_NUMBER, since = 1, deprecatedIn = 2)
     Single<Integer> getNumber();
@@ -69,7 +70,7 @@ public interface NeovimBufferRxApi {
     Single<String> getName();
 
     @NeovimApiFunction(name = NeovimBufferApi.SET_NAME, since = 1)
-    Single<Void> setName(String name);
+    Completable setName(String name);
 
     @NeovimApiFunction(name = NeovimBufferApi.IS_VALID, since = 1)
     Single<Boolean> isValid();
@@ -87,7 +88,7 @@ public interface NeovimBufferRxApi {
     Single<Integer> addHighlight(int srcId, String hlGroup, int line, int colStart, int colEnd);
 
     @NeovimApiFunction(name = NeovimBufferApi.CLEAR_HIGHLIGHT, since = 1)
-    Single<Void> clearHighlight(int srcId, int lineStart, int lineEnd);
+    Completable clearHighlight(int srcId, int lineStart, int lineEnd);
 
     @NeovimApiFunction(name = NeovimBufferApi.ATTACH_BUFFER, since = 4)
     Single<Boolean> attach(boolean loadFullBufferOnStart, Map opts);

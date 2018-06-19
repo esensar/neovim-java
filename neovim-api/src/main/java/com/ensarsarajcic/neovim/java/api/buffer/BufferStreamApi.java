@@ -35,12 +35,13 @@ import com.ensarsarajcic.neovim.java.corerpc.reactive.ReactiveRPCStreamer;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 /**
  * Implementation of {@link NeovimBufferApi} based on {@link ReactiveRPCStreamer}
  */
-@NeovimApiClient(name = "full_buffer_api", target = 3)
+@NeovimApiClient(name = "full_buffer_api", target = 4)
 public final class BufferStreamApi extends BaseStreamApi implements NeovimBufferApi {
 
     private Buffer model;
@@ -48,6 +49,7 @@ public final class BufferStreamApi extends BaseStreamApi implements NeovimBuffer
     public BufferStreamApi(ReactiveRPCStreamer reactiveRPCStreamer,
                            Buffer model) {
         super(reactiveRPCStreamer);
+        Objects.requireNonNull(model, "buffer model is required to work with it");
         this.model = model;
     }
 
@@ -99,7 +101,7 @@ public final class BufferStreamApi extends BaseStreamApi implements NeovimBuffer
 
     @Override
     public CompletableFuture<Void> setVar(String name, Object value) {
-        return sendWithNoResponse(prepareMessage(SET_NAME).addArgument(name).addArgument(value));
+        return sendWithNoResponse(prepareMessage(SET_VAR).addArgument(name).addArgument(value));
     }
 
     @Override

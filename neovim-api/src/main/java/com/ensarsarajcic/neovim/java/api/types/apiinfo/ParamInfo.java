@@ -22,33 +22,43 @@
  * SOFTWARE.
  */
 
-package com.ensarsarajcic.neovim.java.corerpc;
+package com.ensarsarajcic.neovim.java.api.types.apiinfo;
 
-import com.ensarsarajcic.neovim.java.corerpc.client.*;
-import com.ensarsarajcic.neovim.java.corerpc.message.RequestMessage;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
-import java.io.IOException;
-import java.net.Socket;
-import java.util.ArrayList;
+@JsonFormat(shape = JsonFormat.Shape.ARRAY)
+@JsonPropertyOrder({"type", "name"})
+public final class ParamInfo {
 
-/**
- * Hello world!
- */
-public class App {
-    public static void main(String[] args) {
-        try {
+    @JsonProperty("type")
+    private String type;
+    @JsonProperty("name")
+    private String name;
 
-            // Create a default instance
-            Socket socket = new Socket("127.0.0.1", 6666);
+    public ParamInfo(
+            @JsonProperty("type")
+            String type,
+            @JsonProperty("name")
+            String name) {
+        this.type = type;
+        this.name = name;
+    }
 
-            RPCClient rpcClient = RPCClient.getDefaultAsyncInstance();
-            rpcClient.attach(new TcpSocketRPCConnection(socket));
+    public String getType() {
+        return type;
+    }
 
-            for (int i = 1; i < 15; i++) {
-                rpcClient.send(new RequestMessage.Builder("nvim_input", new ArrayList<>(){{add("jjjj");}}), ((forId, responseMessage) -> System.out.println(responseMessage)));
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public String toString() {
+        return "ParamInfo{" +
+                "type='" + type + '\'' +
+                ", name='" + name + '\'' +
+                '}';
     }
 }

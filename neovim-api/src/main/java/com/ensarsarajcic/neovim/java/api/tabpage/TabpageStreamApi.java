@@ -34,19 +34,21 @@ import com.ensarsarajcic.neovim.java.corerpc.message.RequestMessage;
 import com.ensarsarajcic.neovim.java.corerpc.reactive.ReactiveRPCStreamer;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 /**
  * Implementation of {@link TabpageStreamApi} based on {@link ReactiveRPCStreamer}
  */
-@NeovimApiClient(name = "full_tabpage_api", target = 3)
+@NeovimApiClient(name = "full_tabpage_api", target = 4)
 public final class TabpageStreamApi extends BaseStreamApi implements NeovimTabpageApi {
 
     private Tabpage model;
 
     public TabpageStreamApi(ReactiveRPCStreamer reactiveRPCStreamer, Tabpage model) {
         super(reactiveRPCStreamer);
+        Objects.requireNonNull(model, "tabpage model is required to work with it");
         this.model = model;
     }
 
