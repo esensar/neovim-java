@@ -41,7 +41,7 @@ import java.util.concurrent.CompletableFuture;
 /**
  * Implementation of {@link NeovimBufferApi} based on {@link ReactiveRPCStreamer}
  */
-@NeovimApiClient(name = "full_buffer_api", target = 3)
+@NeovimApiClient(name = "full_buffer_api", target = 4)
 public final class BufferStreamApi extends BaseStreamApi implements NeovimBufferApi {
 
     private Buffer model;
