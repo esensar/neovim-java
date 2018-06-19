@@ -34,6 +34,7 @@ public enum NeovimCustomType {
     private NeovimTypeSerializer<? extends BaseCustomIdType> serializer;
     private NeovimTypeDeserializer<? extends BaseCustomIdType> deserializer;
     private Class<? extends BaseCustomIdType> type;
+    private int typeId;
 
     <T extends BaseCustomIdType> NeovimCustomType(
             int typeId,
@@ -42,6 +43,7 @@ public enum NeovimCustomType {
         this.serializer = new NeovimTypeSerializer<>((byte) typeId, type);
         this.deserializer = new NeovimTypeDeserializer<>((byte) typeId, type, constructor);
         this.type = type;
+        this.typeId = typeId;
     }
 
     public NeovimTypeSerializer getSerializer() {
@@ -54,5 +56,9 @@ public enum NeovimCustomType {
 
     public Class<?> getType() {
         return type;
+    }
+
+    public int getTypeId() {
+        return typeId;
     }
 }

@@ -68,6 +68,7 @@ public class App
             );
 
             neovimStreamApi.getCurrentBuffer().thenAccept(System.out::println).get();
+            neovimStreamApi.getCommands(new GetCommandsOptions(false)).thenAccept(System.out::println).get();
             neovimStreamApi.getBuffers().thenAccept(System.out::println).get();
             neovimStreamApi.getCurrentTabpage().thenAccept(System.out::println).get();
             neovimStreamApi.getTabpages().thenAccept(System.out::println).get();

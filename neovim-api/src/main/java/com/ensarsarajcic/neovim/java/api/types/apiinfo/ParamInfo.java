@@ -24,76 +24,41 @@
 
 package com.ensarsarajcic.neovim.java.api.types.apiinfo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
-import java.util.List;
+@JsonFormat(shape = JsonFormat.Shape.ARRAY)
+@JsonPropertyOrder({"type", "name"})
+public final class ParamInfo {
 
-/**
- * Contains definition of a NeovimApis API function
- */
-public final class FunctionInfo {
-
-    private boolean method;
+    @JsonProperty("type")
+    private String type;
+    @JsonProperty("name")
     private String name;
-    private String returnType;
-    private int since;
-    private int deprecatedSince;
-    private List<ParamInfo> parameters;
 
-    public FunctionInfo(
-            @JsonProperty("method")
-            boolean method,
+    public ParamInfo(
+            @JsonProperty("type")
+            String type,
             @JsonProperty("name")
-            String name,
-            @JsonProperty("return_type")
-            String returnType,
-            @JsonProperty("since")
-            int since,
-            @JsonProperty("deprecated_since")
-            int deprecatedSince,
-            @JsonProperty("parameters")
-            List<ParamInfo> parameters) {
-        this.method = method;
+            String name) {
+        this.type = type;
         this.name = name;
-        this.returnType = returnType;
-        this.since = since;
-        this.deprecatedSince = deprecatedSince;
-        this.parameters = parameters;
     }
 
-    public boolean isMethod() {
-        return method;
+    public String getType() {
+        return type;
     }
 
     public String getName() {
         return name;
     }
 
-    public String getReturnType() {
-        return returnType;
-    }
-
-    public int getSince() {
-        return since;
-    }
-
-    public int getDeprecatedSince() {
-        return deprecatedSince;
-    }
-
-    public List<ParamInfo> getParameters() {
-        return parameters;
-    }
-
     @Override
     public String toString() {
-        return "NeovimFunction{" +
-                "method=" + method +
+        return "ParamInfo{" +
+                "type='" + type + '\'' +
                 ", name='" + name + '\'' +
-                ", returnType='" + returnType + '\'' +
-                ", since=" + since +
-                ", deprecatedSince=" + deprecatedSince +
-                ", parameters=" + parameters +
                 '}';
     }
 }

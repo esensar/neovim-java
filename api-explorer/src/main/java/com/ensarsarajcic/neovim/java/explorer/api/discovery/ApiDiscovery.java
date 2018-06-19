@@ -118,7 +118,7 @@ public final class ApiDiscovery {
                         functionInfo.getReturnType(),
                         functionInfo.getSince(),
                         functionInfo.getDeprecatedSince(),
-                        functionInfo.getParameters()
+                        transformParamInfo(functionInfo.getParameters())
                 )).collect(Collectors.toList());
     }
 
@@ -134,8 +134,13 @@ public final class ApiDiscovery {
         return uiEventInfos.stream()
                 .map(functionInfo -> new NeovimUiEvent(
                         functionInfo.getName(),
-                        functionInfo.getParameters(),
+                        transformParamInfo(functionInfo.getParameters()),
                         functionInfo.getSince()
                 )).collect(Collectors.toList());
+    }
+
+    private static List<List<String>> transformParamInfo(List<ParamInfo> paramInfos) {
+        return paramInfos.stream()
+                .map(paramInfo -> List.of(paramInfo.getType(), paramInfo.getName())).collect(Collectors.toList());
     }
 }

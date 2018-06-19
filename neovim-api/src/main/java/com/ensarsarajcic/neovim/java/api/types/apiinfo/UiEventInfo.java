@@ -34,14 +34,14 @@ import java.util.List;
 public final class UiEventInfo {
 
     private String name;
-    private List<List<String>> parameters;
+    private List<ParamInfo> parameters;
     private int since;
 
     public UiEventInfo(
             @JsonProperty("name")
             String name,
             @JsonProperty("parameters")
-            List<List<String>> parameters,
+            List<ParamInfo> parameters,
             @JsonProperty("since")
             int since) {
         this.name = name;
@@ -53,7 +53,7 @@ public final class UiEventInfo {
         return name;
     }
 
-    public List<List<String>> getParameters() {
+    public List<ParamInfo> getParameters() {
         return parameters;
     }
 
