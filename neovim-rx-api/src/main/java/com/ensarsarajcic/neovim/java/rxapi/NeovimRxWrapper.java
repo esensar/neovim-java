@@ -301,7 +301,7 @@ public final class NeovimRxWrapper implements NeovimRxApi {
     }
 
     @Override
-    public Single<Map> getCommands(GetCommandsOptions getCommandsOptions) {
+    public Single<Map<String, CommandInfo>> getCommands(GetCommandsOptions getCommandsOptions) {
         return Single.fromFuture(neovimApi.getCommands(getCommandsOptions));
     }
 

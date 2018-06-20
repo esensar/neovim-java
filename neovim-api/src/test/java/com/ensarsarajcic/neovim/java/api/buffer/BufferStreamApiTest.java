@@ -25,6 +25,7 @@
 package com.ensarsarajcic.neovim.java.api.buffer;
 
 import com.ensarsarajcic.neovim.java.api.BaseStreamApiTest;
+import com.ensarsarajcic.neovim.java.api.types.api.CommandInfo;
 import com.ensarsarajcic.neovim.java.api.types.api.GetCommandsOptions;
 import com.ensarsarajcic.neovim.java.api.types.api.VimKeyMap;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.Buffer;
@@ -40,8 +41,7 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class BufferStreamApiTest extends BaseStreamApiTest {
@@ -452,14 +452,55 @@ public class BufferStreamApiTest extends BaseStreamApiTest {
     public void getCommandsTest() throws ExecutionException, InterruptedException {
         // Happy case
         Map commands = Map.of(
-                "cmd", "val"
+                "command1", Map.of(
+                        "name", "command1",
+                        "definition", ":noh",
+                        "script_id", 55,
+                        "bang", false,
+                        "bar", true,
+                        "register", false,
+                        "nargs", "+"
+                ),
+                "command2", Map.of(
+                        "name", "command2",
+                        "definition", ":ls",
+                        "script_id", 55,
+                        "bang", true,
+                        "bar", false,
+                        "register", true,
+                        "nargs", "?"
+                )
         );
         GetCommandsOptions commandsOptions = new GetCommandsOptions(false);
         assertNormalBehavior(
                 () -> CompletableFuture.completedFuture(new ResponseMessage(1, null, commands)),
                 () -> bufferStreamApi.getCommands(commandsOptions),
                 request -> assertMethodAndArguments(request, NeovimBufferApi.GET_COMMANDS, buffer, commandsOptions),
-                result -> assertEquals(commands, result)
+                result -> {
+                    assertEquals(2, result.size());
+                    CommandInfo command1 = result.get("command1");
+                    assertEquals("command1", command1.getName());
+                    assertEquals(":noh", command1.getDefinition());
+                    assertEquals(55, command1.getScriptId());
+                    assertFalse(command1.isBang());
+                    assertTrue(command1.isBar());
+                    assertFalse(command1.isRegister());
+                    assertEquals(1, command1.getNumberOfArgs().getMin());
+                    assertNull(command1.getNumberOfArgs().getMax());
+
+                    CommandInfo command2 = result.get("command2");
+                    assertEquals("command2", command2.getName());
+                    assertEquals(":ls", command2.getDefinition());
+                    assertEquals(55, command2.getScriptId());
+                    assertTrue(command2.isBang());
+                    assertFalse(command2.isBar());
+                    assertTrue(command2.isRegister());
+                    assertEquals(0, command2.getNumberOfArgs().getMin());
+                    assertEquals(1, command2.getNumberOfArgs().getMax().intValue());
+
+                    // Ensure to string doesn't crash
+                    result.toString();
+                }
         );
 
         // Error case

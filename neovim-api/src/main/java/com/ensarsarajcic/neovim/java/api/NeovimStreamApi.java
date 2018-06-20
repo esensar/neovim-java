@@ -359,11 +359,11 @@ public final class NeovimStreamApi extends BaseStreamApi implements NeovimApi {
     }
 
     @Override
-    public CompletableFuture<Map> getCommands(GetCommandsOptions getCommandsOptions) {
-        return sendWithResponseOfType(
+    public CompletableFuture<Map<String, CommandInfo>> getCommands(GetCommandsOptions getCommandsOptions) {
+        return sendWithResponseOfMapType(
                 new RequestMessage.Builder(GET_COMMANDS)
                         .addArgument(getCommandsOptions),
-                Map.class
+                String.class, CommandInfo.class
         );
     }
 

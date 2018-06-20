@@ -283,7 +283,7 @@ public final class AtomicCallBuilder implements NeovimApi {
     }
 
     @Override
-    public CompletableFuture<Map> getCommands(GetCommandsOptions getCommandsOptions) {
+    public CompletableFuture<Map<String, CommandInfo>> getCommands(GetCommandsOptions getCommandsOptions) {
         return null;
     }
 

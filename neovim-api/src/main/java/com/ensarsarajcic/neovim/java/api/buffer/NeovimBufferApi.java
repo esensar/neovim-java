@@ -25,6 +25,7 @@
 package com.ensarsarajcic.neovim.java.api.buffer;
 
 import com.ensarsarajcic.neovim.java.api.NeovimApiFunction;
+import com.ensarsarajcic.neovim.java.api.types.api.CommandInfo;
 import com.ensarsarajcic.neovim.java.api.types.api.GetCommandsOptions;
 import com.ensarsarajcic.neovim.java.api.types.api.VimCoords;
 import com.ensarsarajcic.neovim.java.api.types.api.VimKeyMap;
@@ -122,5 +123,5 @@ public interface NeovimBufferApi {
     CompletableFuture<Boolean> detach();
 
     @NeovimApiFunction(name = GET_COMMANDS, since = 4)
-    CompletableFuture<Map> getCommands(GetCommandsOptions commandsOptions);
+    CompletableFuture<Map<String, CommandInfo>> getCommands(GetCommandsOptions commandsOptions);
 }

@@ -26,6 +26,7 @@ package com.ensarsarajcic.neovim.java.rxapi;
 
 import com.ensarsarajcic.neovim.java.api.NeovimApiFunction;
 import com.ensarsarajcic.neovim.java.api.buffer.NeovimBufferApi;
+import com.ensarsarajcic.neovim.java.api.types.api.CommandInfo;
 import com.ensarsarajcic.neovim.java.api.types.api.GetCommandsOptions;
 import com.ensarsarajcic.neovim.java.api.types.api.VimCoords;
 import com.ensarsarajcic.neovim.java.api.types.api.VimKeyMap;
@@ -97,5 +98,5 @@ public interface NeovimBufferRxApi {
     Single<Boolean> detach();
 
     @NeovimApiFunction(name = NeovimBufferApi.GET_COMMANDS, since = 4)
-    Single<Map> getCommands(GetCommandsOptions commandsOptions);
+    Single<Map<String, CommandInfo>> getCommands(GetCommandsOptions commandsOptions);
 }
