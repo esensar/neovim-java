@@ -246,7 +246,7 @@ public interface NeovimApi {
     CompletableFuture<Object> callDictFunction(Map map, String function, List args);
 
     @NeovimApiFunction(name = GET_COMMANDS, since = 4)
-    CompletableFuture<Map> getCommands(GetCommandsOptions getCommandsOptions);
+    CompletableFuture<Map<String, CommandInfo>> getCommands(GetCommandsOptions getCommandsOptions);
 
     @NeovimApiFunction(name = SET_CLIENT_INFO, since = 4)
     CompletableFuture<Void> setClientInfo(String name, ClientVersionInfo clientVersionInfo, ClientType clientType, Map<String, MethodInfo> methods, ClientAttributes clientAttributes);

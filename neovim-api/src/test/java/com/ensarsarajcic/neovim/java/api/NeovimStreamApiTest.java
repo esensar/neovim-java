@@ -1058,14 +1058,55 @@ public class NeovimStreamApiTest extends BaseStreamApiTest {
     public void getCommandsTest() throws InterruptedException, ExecutionException {
         // Happy case
         Map map = Map.of(
-                "command1", "realcommand"
+                "command1", Map.of(
+                        "name", "command1",
+                        "definition", ":q!",
+                        "script_id", 55,
+                        "bang", false,
+                        "bar", true,
+                        "register", false,
+                        "nargs", "0"
+                ),
+                "command2", Map.of(
+                        "name", "command2",
+                        "definition", ":wq!",
+                        "script_id", 55,
+                        "bang", true,
+                        "bar", false,
+                        "register", true,
+                        "nargs", "*"
+                )
         );
         GetCommandsOptions commandsOptions = new GetCommandsOptions(false);
         assertNormalBehavior(
                 () -> CompletableFuture.completedFuture(new ResponseMessage(1, null, map)),
                 () -> neovimStreamApi.getCommands(commandsOptions),
                 request -> assertMethodAndArguments(request, NeovimApi.GET_COMMANDS, commandsOptions),
-                result -> assertEquals(map, result)
+                result -> {
+                    assertEquals(2, result.size());
+                    CommandInfo command1 = result.get("command1");
+                    assertEquals("command1", command1.getName());
+                    assertEquals(":q!", command1.getDefinition());
+                    assertEquals(55, command1.getScriptId());
+                    assertFalse(command1.isBang());
+                    assertTrue(command1.isBar());
+                    assertFalse(command1.isRegister());
+                    assertEquals(0, command1.getNumberOfArgs().getMin());
+                    assertEquals(0, command1.getNumberOfArgs().getMax().intValue());
+
+                    CommandInfo command2 = result.get("command2");
+                    assertEquals("command2", command2.getName());
+                    assertEquals(":wq!", command2.getDefinition());
+                    assertEquals(55, command2.getScriptId());
+                    assertTrue(command2.isBang());
+                    assertFalse(command2.isBar());
+                    assertTrue(command2.isRegister());
+                    assertEquals(0, command2.getNumberOfArgs().getMin());
+                    assertNull(command2.getNumberOfArgs().getMax());
+
+                    // Ensure to string doesn't crash
+                    result.toString();
+                }
         );
 
         // Error case

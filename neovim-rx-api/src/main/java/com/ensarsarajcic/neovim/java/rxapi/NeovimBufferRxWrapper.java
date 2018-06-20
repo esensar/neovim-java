@@ -25,6 +25,7 @@
 package com.ensarsarajcic.neovim.java.rxapi;
 
 import com.ensarsarajcic.neovim.java.api.buffer.NeovimBufferApi;
+import com.ensarsarajcic.neovim.java.api.types.api.CommandInfo;
 import com.ensarsarajcic.neovim.java.api.types.api.GetCommandsOptions;
 import com.ensarsarajcic.neovim.java.api.types.api.VimCoords;
 import com.ensarsarajcic.neovim.java.api.types.api.VimKeyMap;
@@ -146,7 +147,7 @@ public final class NeovimBufferRxWrapper implements NeovimBufferRxApi {
     }
 
     @Override
-    public Single<Map> getCommands(GetCommandsOptions commandsOptions) {
+    public Single<Map<String, CommandInfo>> getCommands(GetCommandsOptions commandsOptions) {
         return Single.fromFuture(neovimBufferApi.getCommands(commandsOptions));
     }
 }

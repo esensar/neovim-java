@@ -26,6 +26,7 @@ package com.ensarsarajcic.neovim.java.api.buffer;
 
 import com.ensarsarajcic.neovim.java.api.BaseStreamApi;
 import com.ensarsarajcic.neovim.java.api.NeovimApiClient;
+import com.ensarsarajcic.neovim.java.api.types.api.CommandInfo;
 import com.ensarsarajcic.neovim.java.api.types.api.GetCommandsOptions;
 import com.ensarsarajcic.neovim.java.api.types.api.VimCoords;
 import com.ensarsarajcic.neovim.java.api.types.api.VimKeyMap;
@@ -191,10 +192,10 @@ public final class BufferStreamApi extends BaseStreamApi implements NeovimBuffer
     }
 
     @Override
-    public CompletableFuture<Map> getCommands(GetCommandsOptions commandsOptions) {
-        return sendWithResponseOfType(
+    public CompletableFuture<Map<String, CommandInfo>> getCommands(GetCommandsOptions commandsOptions) {
+        return sendWithResponseOfMapType(
                 prepareMessage(GET_COMMANDS).addArgument(commandsOptions),
-                Map.class
+                String.class, CommandInfo.class
         );
     }
 

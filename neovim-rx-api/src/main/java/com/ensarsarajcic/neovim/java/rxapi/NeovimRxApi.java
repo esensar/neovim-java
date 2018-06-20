@@ -182,7 +182,7 @@ public interface NeovimRxApi {
     Single<Object> callDictFunction(Map map, String function, List args);
 
     @NeovimApiFunction(name = NeovimApi.GET_COMMANDS, since = 4)
-    Single<Map> getCommands(GetCommandsOptions getCommandsOptions);
+    Single<Map<String, CommandInfo>> getCommands(GetCommandsOptions getCommandsOptions);
 
     @NeovimApiFunction(name = NeovimApi.SET_CLIENT_INFO, since = 4)
     Completable setClientInfo(String name, ClientVersionInfo clientVersionInfo, ClientType clientType, Map<String, MethodInfo> methods, ClientAttributes clientAttributes);
