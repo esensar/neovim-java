@@ -24,50 +24,30 @@
 
 package com.ensarsarajcic.neovim.java.corerpc.client;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.Socket;
 import java.util.Objects;
 
-/**
- * Simple implementation of {@link RPCConnection} based on a TCP {@link Socket}
- */
-public final class TcpSocketRPCConnection implements RPCConnection {
-    public static final Logger log = LoggerFactory.getLogger(TcpSocketRPCConnection.class);
+public final class ProcessRPCConnection implements RPCConnection {
 
-    private Socket socket;
+    private Process process;
 
     /**
-     * Creates a new {@link TcpSocketRPCConnection} based on passed {@link Socket}
-     * It uses input and output streams of given {@link Socket} to communicate
-     * @param socket instance of {@link Socket} to use for communication
+     * Creates a new {@link ProcessRPCConnection} based on a {@link Process}'s input and output streams
+     * @param process instance of {@link Process} to connect to
      */
-    public TcpSocketRPCConnection(Socket socket) {
-        Objects.requireNonNull(socket, "socket is required to properly implement a RPCConnection");
-        this.socket = socket;
+    public ProcessRPCConnection(Process process) {
+        Objects.requireNonNull(process, "process is required to properly implement a RPCConnection");
+        this.process = process;
     }
 
     @Override
     public InputStream getIncomingStream() {
-        try {
-            return socket.getInputStream();
-        } catch (IOException e) {
-            log.error("Failed to get incoming stream", e);
-            throw new RuntimeException(e);
-        }
+        return process.getInputStream();
     }
 
     @Override
     public OutputStream getOutgoingStream() {
-        try {
-            return socket.getOutputStream();
-        } catch (IOException e) {
-            log.error("Failed to get outgoing stream", e);
-            throw new RuntimeException(e);
-        }
+        return process.getOutputStream();
     }
 }

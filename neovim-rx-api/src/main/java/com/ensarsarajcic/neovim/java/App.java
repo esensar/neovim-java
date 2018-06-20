@@ -2,14 +2,12 @@ package com.ensarsarajcic.neovim.java;
 
 import com.ensarsarajcic.neovim.java.api.NeovimStreamApi;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.NeovimJacksonModule;
+import com.ensarsarajcic.neovim.java.corerpc.client.ProcessRPCConnection;
 import com.ensarsarajcic.neovim.java.corerpc.client.RPCClient;
-import com.ensarsarajcic.neovim.java.corerpc.client.TcpSocketRPCConnection;
 import com.ensarsarajcic.neovim.java.corerpc.reactive.ReactiveRPCClient;
 import com.ensarsarajcic.neovim.java.rxapi.*;
-import io.reactivex.SingleTransformer;
 
 import java.io.IOException;
-import java.net.Socket;
 
 /**
  * Hello world!
@@ -20,11 +18,12 @@ public class App {
 
 
         // Create a default instance
-        Socket socket = new Socket("127.0.0.1", 6666);
+        ProcessBuilder pb = new ProcessBuilder("nvim", "--embed");
+        Process neovim = pb.start();
 
         RPCClient rpcClient = new RPCClient.Builder()
                 .withObjectMapper(NeovimJacksonModule.createNeovimObjectMapper()).build();
-        rpcClient.attach(new TcpSocketRPCConnection(socket));
+        rpcClient.attach(new ProcessRPCConnection(neovim));
 
         NeovimStreamApi neovimStreamApi = new NeovimStreamApi(
                 ReactiveRPCClient.createDefaultInstanceWithCustomStreamer(rpcClient)

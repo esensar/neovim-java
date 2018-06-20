@@ -24,26 +24,18 @@
 
 package com.ensarsarajcic.neovim.java.api;
 
-import com.ensarsarajcic.neovim.java.api.buffer.NeovimBufferApi;
-import com.ensarsarajcic.neovim.java.api.tabpage.NeovimTabpageApi;
 import com.ensarsarajcic.neovim.java.api.types.api.ClientAttributes;
 import com.ensarsarajcic.neovim.java.api.types.api.ClientType;
 import com.ensarsarajcic.neovim.java.api.types.api.ClientVersionInfo;
 import com.ensarsarajcic.neovim.java.api.types.api.GetCommandsOptions;
-import com.ensarsarajcic.neovim.java.api.types.apiinfo.ApiInfo;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.NeovimJacksonModule;
-import com.ensarsarajcic.neovim.java.api.window.NeovimWindowApi;
+import com.ensarsarajcic.neovim.java.corerpc.client.ProcessRPCConnection;
 import com.ensarsarajcic.neovim.java.corerpc.client.RPCClient;
-import com.ensarsarajcic.neovim.java.corerpc.client.TcpSocketRPCConnection;
 import com.ensarsarajcic.neovim.java.corerpc.reactive.ReactiveRPCClient;
 
 import java.io.IOException;
-import java.net.Socket;
 import java.util.HashMap;
-import java.util.concurrent.CompletionStage;
 import java.util.concurrent.ExecutionException;
-import java.util.function.BiConsumer;
-import java.util.function.Function;
 
 /**
  * Hello world!
@@ -57,11 +49,12 @@ public class App
         try {
 
             // Create a default instance
-            Socket socket = new Socket("127.0.0.1", 6666);
+            ProcessBuilder pb = new ProcessBuilder("nvim", "--embed");
+            Process neovim = pb.start();
 
             RPCClient rpcClient = new RPCClient.Builder()
                     .withObjectMapper(NeovimJacksonModule.createNeovimObjectMapper()).build();
-            rpcClient.attach(new TcpSocketRPCConnection(socket));
+            rpcClient.attach(new ProcessRPCConnection(neovim));
 
             NeovimStreamApi neovimStreamApi = new NeovimStreamApi(
                     ReactiveRPCClient.createDefaultInstanceWithCustomStreamer(rpcClient)
