@@ -24,10 +24,7 @@
 
 package com.ensarsarajcic.neovim.java.api;
 
-import com.ensarsarajcic.neovim.java.api.types.api.ClientAttributes;
-import com.ensarsarajcic.neovim.java.api.types.api.ClientType;
-import com.ensarsarajcic.neovim.java.api.types.api.ClientVersionInfo;
-import com.ensarsarajcic.neovim.java.api.types.api.GetCommandsOptions;
+import com.ensarsarajcic.neovim.java.api.types.api.*;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.NeovimJacksonModule;
 import com.ensarsarajcic.neovim.java.corerpc.client.ProcessRPCConnection;
 import com.ensarsarajcic.neovim.java.corerpc.client.RPCClient;
@@ -59,6 +56,8 @@ public class App
             NeovimStreamApi neovimStreamApi = new NeovimStreamApi(
                     ReactiveRPCClient.createDefaultInstanceWithCustomStreamer(rpcClient)
             );
+
+            neovimStreamApi.attachUI(100, 100, UiOptions.TERMINAL).thenAccept(System.out::println).get();
 
             neovimStreamApi.getCurrentBuffer().thenAccept(System.out::println).get();
             neovimStreamApi.getCommands(new GetCommandsOptions(false)).thenAccept(System.out::println).get();

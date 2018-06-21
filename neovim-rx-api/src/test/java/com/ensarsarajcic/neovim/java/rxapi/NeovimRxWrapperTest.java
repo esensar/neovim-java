@@ -65,7 +65,7 @@ public class NeovimRxWrapperTest {
 
     @Test
     public void delegatesAttachUi() {
-        var options = new HashMap<String, String>();
+        var options = UiOptions.TERMINAL;
         given(neovimApi.attachUI(1, 1, options)).willReturn(CompletableFuture.completedFuture(null));
         neovimRxWrapper.attachUI(1, 1, options)
                 .test()

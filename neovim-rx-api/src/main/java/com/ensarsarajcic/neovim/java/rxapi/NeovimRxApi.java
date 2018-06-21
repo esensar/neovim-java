@@ -50,7 +50,7 @@ public interface NeovimRxApi {
     Single<Map> getHighlightByName(String name, boolean rgb);
 
     @NeovimApiFunction(name = NeovimApi.ATTACH_UI, since = 1)
-    Completable attachUI(int width, int height, Map<String, String> options);
+    Completable attachUI(int width, int height, UiOptions options);
 
     @NeovimApiFunction(name = NeovimApi.DETACH_UI, since = 1)
     Completable detachUI();

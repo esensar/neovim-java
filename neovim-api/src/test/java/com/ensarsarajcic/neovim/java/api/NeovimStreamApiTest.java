@@ -111,7 +111,7 @@ public class NeovimStreamApiTest extends BaseStreamApiTest {
     @Test
     public void attachUITest() throws InterruptedException, ExecutionException {
         // Happy case
-        Map<String, String> opts = Map.of("Test", "Value");
+        var opts = UiOptions.FULL_UI;
         assertNormalBehavior(
                 () -> CompletableFuture.completedFuture(new ResponseMessage(1, null, null)),
                 () -> neovimStreamApi.attachUI(500, 500, opts),

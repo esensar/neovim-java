@@ -63,7 +63,7 @@ public final class AtomicCallBuilder implements NeovimApi {
     }
 
     @Override
-    public CompletableFuture<Void> attachUI(int width, int height, Map<String, String> options) {
+    public CompletableFuture<Void> attachUI(int width, int height, UiOptions options) {
         return null;
     }
 

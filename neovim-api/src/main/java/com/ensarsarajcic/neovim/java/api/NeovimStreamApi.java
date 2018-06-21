@@ -81,7 +81,7 @@ public final class NeovimStreamApi extends BaseStreamApi implements NeovimApi {
     }
 
     @Override
-    public CompletableFuture<Void> attachUI(int width, int height, Map<String, String> options) {
+    public CompletableFuture<Void> attachUI(int width, int height, UiOptions options) {
         return sendWithNoResponse(
                 new RequestMessage.Builder(ATTACH_UI)
                         .addArgument(width)

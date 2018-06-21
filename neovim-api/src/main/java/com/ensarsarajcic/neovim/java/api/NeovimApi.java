@@ -111,7 +111,7 @@ public interface NeovimApi {
     CompletableFuture<Map> getHighlightByName(String name, boolean rgb);
 
     @NeovimApiFunction(name = ATTACH_UI, since = 1)
-    CompletableFuture<Void> attachUI(int width, int height, Map<String, String> options);
+    CompletableFuture<Void> attachUI(int width, int height, UiOptions options);
 
     @NeovimApiFunction(name = DETACH_UI, since = 1)
     CompletableFuture<Void> detachUI();

@@ -25,6 +25,7 @@
 package com.ensarsarajcic.neovim.java.api;
 
 import com.ensarsarajcic.neovim.java.api.types.api.GetCommandsOptions;
+import com.ensarsarajcic.neovim.java.api.types.api.UiOptions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
@@ -40,7 +41,7 @@ public class AtomicCallBuilderTest {
     @Test
     public void allMethodsReturnNullSinceUnimplemented() {
         AtomicCallBuilder atomicCallBuilder = new AtomicCallBuilder();
-        assertNull(atomicCallBuilder.attachUI(1, 1, Map.of()));
+        assertNull(atomicCallBuilder.attachUI(1, 1, UiOptions.TERMINAL));
         assertNull(atomicCallBuilder.callDictFunction(Map.of(), "", List.of()));
         assertNull(atomicCallBuilder.callFunction("", List.of()));
         assertNull(atomicCallBuilder.commandOutput(""));
