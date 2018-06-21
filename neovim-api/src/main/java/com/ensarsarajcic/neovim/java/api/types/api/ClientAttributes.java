@@ -24,8 +24,10 @@
 
 package com.ensarsarajcic.neovim.java.api.types.api;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ClientAttributes {
     private String website;
     private String license;

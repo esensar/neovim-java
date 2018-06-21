@@ -25,11 +25,13 @@
 package com.ensarsarajcic.neovim.java.api.types.apiinfo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonFormat(shape = JsonFormat.Shape.ARRAY)
 @JsonPropertyOrder({"type", "name"})
+@JsonIgnoreProperties(ignoreUnknown = true)
 public final class ParamInfo {
 
     @JsonProperty("type")

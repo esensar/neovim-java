@@ -25,6 +25,7 @@
 package com.ensarsarajcic.neovim.java.api.types.api;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
@@ -33,6 +34,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
  */
 @JsonFormat(shape = JsonFormat.Shape.ARRAY)
 @JsonPropertyOrder({"row", "col"})
+@JsonIgnoreProperties(ignoreUnknown = true)
 public final class VimCoords {
 
     private final int row;

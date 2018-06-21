@@ -24,11 +24,13 @@
 
 package com.ensarsarajcic.neovim.java.api.types.api;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Model describing a (Neo)Vim key mapping
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public final class VimKeyMap {
 
     private boolean silent;

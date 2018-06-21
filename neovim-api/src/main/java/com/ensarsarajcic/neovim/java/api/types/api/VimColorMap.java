@@ -24,8 +24,11 @@
 
 package com.ensarsarajcic.neovim.java.api.types.api;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.util.Map;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public final class VimColorMap {
 
     private Map<String, Integer> colorMap;

@@ -24,11 +24,13 @@
 
 package com.ensarsarajcic.neovim.java.api.types.apiinfo;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Contains definition of custom msgpack types used by NeovimApis API
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public final class TypeInfo {
 
     private String name;

@@ -24,10 +24,12 @@
 
 package com.ensarsarajcic.neovim.java.api.types.api;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Map;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public final class ClientInfo {
 
     private String name;

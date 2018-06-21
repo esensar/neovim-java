@@ -26,6 +26,7 @@ package com.ensarsarajcic.neovim.java.api.types.api;
 
 import com.fasterxml.jackson.annotation.*;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public final class ChannelInfo {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING)

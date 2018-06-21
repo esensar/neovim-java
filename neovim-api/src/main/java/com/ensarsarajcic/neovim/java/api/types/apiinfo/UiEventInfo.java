@@ -24,6 +24,7 @@
 
 package com.ensarsarajcic.neovim.java.api.types.apiinfo;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
@@ -31,6 +32,7 @@ import java.util.List;
 /**
  * Contains definition of UI Events provided by NeovimApis instance
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public final class UiEventInfo {
 
     private String name;
