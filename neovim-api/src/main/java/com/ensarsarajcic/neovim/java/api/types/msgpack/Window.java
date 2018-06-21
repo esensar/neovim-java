@@ -24,11 +24,26 @@
 
 package com.ensarsarajcic.neovim.java.api.types.msgpack;
 
+import java.util.Objects;
+
 /**
  * Represents a NeovimApis Window (custom Msgpack type)
  */
 public final class Window extends BaseCustomIdType {
     public Window(long id) {
         super(id);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Window buffer = (Window) o;
+        return getId() == buffer.getId();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
     }
 }

@@ -24,11 +24,26 @@
 
 package com.ensarsarajcic.neovim.java.api.types.msgpack;
 
+import java.util.Objects;
+
 /**
  * Represents a NeovimApis Buffer (custom Msgpack type)
  */
 public final class Buffer extends BaseCustomIdType {
     public Buffer(long id) {
         super(id);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Buffer buffer = (Buffer) o;
+        return getId() == buffer.getId();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
     }
 }
