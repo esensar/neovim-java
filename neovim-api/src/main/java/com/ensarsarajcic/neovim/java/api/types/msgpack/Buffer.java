@@ -29,7 +29,7 @@ import java.util.Objects;
 /**
  * Represents a NeovimApis Buffer (custom Msgpack type)
  */
-public final class Buffer extends BaseCustomIdType {
+public final class Buffer extends BaseCustomIdType implements Comparable<Buffer> {
     public Buffer(long id) {
         super(id);
     }
@@ -45,5 +45,10 @@ public final class Buffer extends BaseCustomIdType {
     @Override
     public int hashCode() {
         return Objects.hash(getId());
+    }
+
+    @Override
+    public int compareTo(Buffer o) {
+        return Long.compare(getId(), o.getId());
     }
 }

@@ -29,7 +29,7 @@ import java.util.Objects;
 /**
  * Represents a NeovimApis Tabpage (custom Msgpack type)
  */
-public final class Tabpage extends BaseCustomIdType {
+public final class Tabpage extends BaseCustomIdType implements Comparable<Tabpage> {
     public Tabpage(long id) {
         super(id);
     }
@@ -45,5 +45,10 @@ public final class Tabpage extends BaseCustomIdType {
     @Override
     public int hashCode() {
         return Objects.hash(getId());
+    }
+
+    @Override
+    public int compareTo(Tabpage o) {
+        return Long.compare(getId(), o.getId());
     }
 }

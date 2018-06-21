@@ -29,7 +29,7 @@ import java.util.Objects;
 /**
  * Represents a NeovimApis Window (custom Msgpack type)
  */
-public final class Window extends BaseCustomIdType {
+public final class Window extends BaseCustomIdType implements Comparable<Window> {
     public Window(long id) {
         super(id);
     }
@@ -45,5 +45,10 @@ public final class Window extends BaseCustomIdType {
     @Override
     public int hashCode() {
         return Objects.hash(getId());
+    }
+
+    @Override
+    public int compareTo(Window o) {
+        return Long.compare(getId(), o.getId());
     }
 }
