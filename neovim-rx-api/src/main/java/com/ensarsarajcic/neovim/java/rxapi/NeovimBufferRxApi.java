@@ -65,6 +65,7 @@ public interface NeovimBufferRxApi {
     Completable setOption(String name, Object value);
 
     @NeovimApiFunction(name = NeovimBufferApi.GET_NUMBER, since = 1, deprecatedIn = 2)
+    @Deprecated
     Single<Integer> getNumber();
 
     @NeovimApiFunction(name = NeovimBufferApi.GET_NAME, since = 1)

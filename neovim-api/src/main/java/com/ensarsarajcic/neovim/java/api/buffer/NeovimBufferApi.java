@@ -90,6 +90,7 @@ public interface NeovimBufferApi {
     CompletableFuture<Void> setOption(String name, Object value);
 
     @NeovimApiFunction(name = GET_NUMBER, since = 1, deprecatedIn = 2)
+    @Deprecated
     CompletableFuture<Integer> getNumber();
 
     @NeovimApiFunction(name = GET_NAME, since = 1)
