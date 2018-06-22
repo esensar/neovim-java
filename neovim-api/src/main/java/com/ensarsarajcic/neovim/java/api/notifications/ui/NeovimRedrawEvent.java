@@ -30,6 +30,7 @@ import java.util.Collections;
 import java.util.List;
 
 public abstract class NeovimRedrawEvent implements NeovimNotification {
+    public static String NAME = "redraw";
 
     private List<UIEvent> uiEvents;
 
@@ -39,7 +40,7 @@ public abstract class NeovimRedrawEvent implements NeovimNotification {
 
     @Override
     public final String getName() {
-        return "redraw";
+        return NAME;
     }
 
     public List<UIEvent> getUiEvents() {
