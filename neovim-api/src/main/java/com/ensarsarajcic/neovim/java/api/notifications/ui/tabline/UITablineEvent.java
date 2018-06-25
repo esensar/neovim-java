@@ -22,7 +22,9 @@
  * SOFTWARE.
  */
 
-package com.ensarsarajcic.neovim.java.api.notifications.ui;
+package com.ensarsarajcic.neovim.java.api.notifications.ui.tabline;
 
-public interface UIGlobalEvent extends UIEvent {
+import com.ensarsarajcic.neovim.java.api.notifications.ui.UIEvent;
+
+public interface UITablineEvent extends UIEvent {
 }

@@ -22,7 +22,13 @@
  * SOFTWARE.
  */
 
-package com.ensarsarajcic.neovim.java.api.notifications.ui;
+package com.ensarsarajcic.neovim.java.api.notifications.ui.global;
 
-public interface UICmdlineEvent extends UIEvent {
+public final class BellEvent implements UIGlobalEvent {
+    public static final String NAME = "bell";
+
+    @Override
+    public String getEventName() {
+        return NAME;
+    }
 }

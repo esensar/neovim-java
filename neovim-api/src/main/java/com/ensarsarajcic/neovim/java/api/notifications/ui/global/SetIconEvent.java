@@ -22,7 +22,23 @@
  * SOFTWARE.
  */
 
-package com.ensarsarajcic.neovim.java.api.notifications.ui;
+package com.ensarsarajcic.neovim.java.api.notifications.ui.global;
 
-public interface UIPopupmenuEvent extends UIEvent {
+public final class SetIconEvent implements UIGlobalEvent {
+    public static final String NAME = "set_icon";
+
+    private String icon;
+
+    public SetIconEvent(String icon) {
+        this.icon = icon;
+    }
+
+    public String getIcon() {
+        return icon;
+    }
+
+    @Override
+    public String getEventName() {
+        return NAME;
+    }
 }

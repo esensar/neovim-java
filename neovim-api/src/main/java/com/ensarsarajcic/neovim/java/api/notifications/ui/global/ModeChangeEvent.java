@@ -22,8 +22,29 @@
  * SOFTWARE.
  */
 
-package com.ensarsarajcic.neovim.java.api.notifications;
+package com.ensarsarajcic.neovim.java.api.notifications.ui.global;
 
-public interface NeovimNotification {
-    String getNotificationName();
+public final class ModeChangeEvent implements UIGlobalEvent {
+    public static final String NAME = "mode_change";
+
+    private String mode;
+    private int modeId;
+
+    public ModeChangeEvent(String mode, int modeId) {
+        this.mode = mode;
+        this.modeId = modeId;
+    }
+
+    public String getMode() {
+        return mode;
+    }
+
+    public int getModeId() {
+        return modeId;
+    }
+
+    @Override
+    public String getEventName() {
+        return NAME;
+    }
 }

@@ -22,7 +22,31 @@
  * SOFTWARE.
  */
 
-package com.ensarsarajcic.neovim.java.api.notifications.ui;
+package com.ensarsarajcic.neovim.java.api.notifications.ui.global;
 
-public interface UIWildmenuEvent extends UIEvent {
+import java.util.List;
+
+public final class ModeInfoSetEvent implements UIGlobalEvent {
+    public static final String NAME = "mode_info_set";
+
+    private boolean cursorStyleEnabled;
+    private List<ModeInfo> modeInfoList;
+
+    public ModeInfoSetEvent(boolean cursorStyleEnabled, List<ModeInfo> modeInfoList) {
+        this.cursorStyleEnabled = cursorStyleEnabled;
+        this.modeInfoList = modeInfoList;
+    }
+
+    public boolean isCursorStyleEnabled() {
+        return cursorStyleEnabled;
+    }
+
+    public List<ModeInfo> getModeInfoList() {
+        return modeInfoList;
+    }
+
+    @Override
+    public String getEventName() {
+        return NAME;
+    }
 }

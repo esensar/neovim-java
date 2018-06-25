@@ -22,7 +22,13 @@
  * SOFTWARE.
  */
 
-package com.ensarsarajcic.neovim.java.api.notifications.ui;
+package com.ensarsarajcic.neovim.java.api.notifications.ui.global;
 
-public interface UITablineEvent extends UIEvent {
+public final class UpdateMenuEvent implements UIGlobalEvent {
+    public static final String NAME = "update_menu";
+
+    @Override
+    public String getEventName() {
+        return NAME;
+    }
 }

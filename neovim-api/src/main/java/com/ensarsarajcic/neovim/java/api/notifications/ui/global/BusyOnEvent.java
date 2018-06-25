@@ -22,8 +22,13 @@
  * SOFTWARE.
  */
 
-package com.ensarsarajcic.neovim.java.api.notifications;
+package com.ensarsarajcic.neovim.java.api.notifications.ui.global;
 
-public interface NeovimNotification {
-    String getNotificationName();
+public final class BusyOnEvent implements UIGlobalEvent {
+    public static final String NAME = "busy_on";
+
+    @Override
+    public String getEventName() {
+        return NAME;
+    }
 }

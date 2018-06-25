@@ -22,8 +22,9 @@
  * SOFTWARE.
  */
 
-package com.ensarsarajcic.neovim.java.api.notifications;
+package com.ensarsarajcic.neovim.java.api.notifications.ui.grid;
 
-public interface NeovimNotification {
-    String getNotificationName();
+import com.ensarsarajcic.neovim.java.api.notifications.ui.UIEvent;
+
+public interface UIGridEvent extends UIEvent {
 }

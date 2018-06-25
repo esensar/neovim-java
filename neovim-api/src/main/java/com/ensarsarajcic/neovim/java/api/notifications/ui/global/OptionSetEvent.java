@@ -22,7 +22,29 @@
  * SOFTWARE.
  */
 
-package com.ensarsarajcic.neovim.java.api.notifications.ui;
+package com.ensarsarajcic.neovim.java.api.notifications.ui.global;
 
-public interface UIGridEvent extends UIEvent {
+public final class OptionSetEvent implements UIGlobalEvent {
+    public static final String NAME = "option_set";
+
+    private String optionName;
+    private Object value;
+
+    public OptionSetEvent(String optionName, Object value) {
+        this.optionName = optionName;
+        this.value = value;
+    }
+
+    public String getOptionName() {
+        return optionName;
+    }
+
+    public Object getValue() {
+        return value;
+    }
+
+    @Override
+    public String getEventName() {
+        return NAME;
+    }
 }

@@ -25,5 +25,5 @@
 package com.ensarsarajcic.neovim.java.api.notifications.ui;
 
 public interface UIEvent {
-    String getName();
+    String getEventName();
 }

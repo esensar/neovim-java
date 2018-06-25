@@ -39,7 +39,7 @@ public abstract class NeovimRedrawEvent implements NeovimNotification {
     }
 
     @Override
-    public final String getName() {
+    public final String getNotificationName() {
         return NAME;
     }
 
