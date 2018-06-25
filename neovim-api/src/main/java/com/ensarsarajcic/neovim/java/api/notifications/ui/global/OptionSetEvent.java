@@ -27,6 +27,41 @@ package com.ensarsarajcic.neovim.java.api.notifications.ui.global;
 public final class OptionSetEvent implements UIGlobalEvent {
     public static final String NAME = "option_set";
 
+    public enum Option {
+        ARABIC_SHAPE("arabicshape"),
+        AMBIGUOUS_WIDTH("ambiwidth"),
+        EMOJI("emoji"),
+        GUI_FONT("guifont"),
+        GUI_FONT_SET("guifontset"),
+        GUI_FONT_WIDE("guifontwide"),
+        LINE_SPACE("linespace"),
+        SHOW_TABLINE("showtabline"),
+        TERMINAL_GUI_COLORS("termguicolors"),
+        EXT_POPUP_MENU("ext_popupmenu"),
+        EXT_TABLINE("ext_tabline"),
+        EXT_CMDLINE("ext_cmdline"),
+        EXT_WILD_MENU("ext_wildmenu"),;
+
+        private String rawValue;
+
+        Option(String rawValue) {
+            this.rawValue = rawValue;
+        }
+
+        public static Option fromString(String value) {
+            for (Option option : values()) {
+                if (option.rawValue.equals(value)) {
+                    return option;
+                }
+            }
+            throw new IllegalArgumentException(String.format("Option (%s) does not exist.", value));
+        }
+
+        public String getRawValue() {
+            return rawValue;
+        }
+    }
+
     private String optionName;
     private Object value;
 
@@ -37,6 +72,10 @@ public final class OptionSetEvent implements UIGlobalEvent {
 
     public String getOptionName() {
         return optionName;
+    }
+
+    public Option getOption() {
+        return Option.fromString(optionName);
     }
 
     public Object getValue() {
