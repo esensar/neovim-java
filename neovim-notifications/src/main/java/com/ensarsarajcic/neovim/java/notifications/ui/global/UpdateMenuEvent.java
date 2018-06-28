@@ -24,8 +24,15 @@
 
 package com.ensarsarajcic.neovim.java.notifications.ui.global;
 
+import com.ensarsarajcic.neovim.java.notifications.ui.UIEvent;
+
+import java.util.List;
+import java.util.function.Function;
+
 public final class UpdateMenuEvent implements UIGlobalEvent {
     public static final String NAME = "update_menu";
+
+    public static final Function<List, UIEvent> CREATOR = list -> new UpdateMenuEvent();
 
     @Override
     public String getEventName() {

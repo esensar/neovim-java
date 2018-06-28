@@ -24,8 +24,18 @@
 
 package com.ensarsarajcic.neovim.java.notifications.ui.global;
 
+import com.ensarsarajcic.neovim.java.notifications.ui.UIEvent;
+
+import java.util.List;
+import java.util.function.Function;
+
 public final class OptionSetEvent implements UIGlobalEvent {
     public static final String NAME = "option_set";
+
+    public static final Function<List, UIEvent> CREATOR = list -> new OptionSetEvent(
+            (String) list.get(1),
+            list.get(2)
+    );
 
     public enum Option {
         ARABIC_SHAPE("arabicshape"),
@@ -40,7 +50,7 @@ public final class OptionSetEvent implements UIGlobalEvent {
         EXT_POPUP_MENU("ext_popupmenu"),
         EXT_TABLINE("ext_tabline"),
         EXT_CMDLINE("ext_cmdline"),
-        EXT_WILD_MENU("ext_wildmenu"),;
+        EXT_WILD_MENU("ext_wildmenu");
 
         private String rawValue;
 

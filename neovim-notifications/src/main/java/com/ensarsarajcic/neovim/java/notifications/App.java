@@ -31,6 +31,7 @@ import com.ensarsarajcic.neovim.java.corerpc.message.ResponseMessage;
 import com.ensarsarajcic.neovim.java.corerpc.reactive.ReactiveRPCStreamer;
 import com.ensarsarajcic.neovim.java.corerpc.reactive.ReactiveRPCStreamerWrapper;
 import com.ensarsarajcic.neovim.java.notifications.NeovimStreamNotificationHandler;
+import com.ensarsarajcic.neovim.java.notifications.buffer.BufferDetachEvent;
 import com.ensarsarajcic.neovim.java.notifications.ui.NeovimRedrawEvent;
 import com.ensarsarajcic.neovim.java.notifications.ui.cmdline.CmdlineHideEvent;
 import com.ensarsarajcic.neovim.java.notifications.ui.cmdline.CmdlinePosEvent;
@@ -100,6 +101,7 @@ public class App
                 .addArgument(Collections.singletonList(CmdlineHideEvent.NAME))
                 .addArgument(Arrays.asList(CmdlinePosEvent.NAME, 1, 1))
                 .build());
+        submissionPublisher.submit(new NotificationMessage.Builder(BufferDetachEvent.NAME).build());
         Thread.sleep(100000);
     }
 }

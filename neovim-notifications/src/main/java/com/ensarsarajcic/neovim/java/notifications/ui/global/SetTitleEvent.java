@@ -24,8 +24,15 @@
 
 package com.ensarsarajcic.neovim.java.notifications.ui.global;
 
+import com.ensarsarajcic.neovim.java.notifications.ui.UIEvent;
+
+import java.util.List;
+import java.util.function.Function;
+
 public final class SetTitleEvent implements UIGlobalEvent {
     public static final String NAME = "set_title";
+
+    public static final Function<List, UIEvent> CREATOR = list -> new SetTitleEvent((String) list.get(1));
 
     private final String title;
 

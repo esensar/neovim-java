@@ -24,8 +24,16 @@
 
 package com.ensarsarajcic.neovim.java.notifications.ui.global;
 
+import java.util.List;
+import java.util.function.Function;
+
 public final class ModeChangeEvent implements UIGlobalEvent {
     public static final String NAME = "mode_change";
+
+    public static final Function<List, ModeChangeEvent> CREATOR = list -> new ModeChangeEvent(
+            (String) list.get(1),
+            (Integer) list.get(2)
+    );
 
     private String mode;
     private int modeId;

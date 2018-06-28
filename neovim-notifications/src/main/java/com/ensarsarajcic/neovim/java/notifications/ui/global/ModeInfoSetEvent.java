@@ -24,10 +24,24 @@
 
 package com.ensarsarajcic.neovim.java.notifications.ui.global;
 
+import com.ensarsarajcic.neovim.java.api.util.ObjectMappers;
+import com.ensarsarajcic.neovim.java.notifications.ui.UIEvent;
+
 import java.util.List;
+import java.util.function.Function;
 
 public final class ModeInfoSetEvent implements UIGlobalEvent {
     public static final String NAME = "mode_info_set";
+
+    public static final Function<List, UIEvent> CREATOR = list -> new ModeInfoSetEvent(
+            (Boolean) list.get(1),
+            ObjectMappers.defaultNeovimMapper().convertValue(
+                    list.get(2),
+                    ObjectMappers.defaultNeovimMapper()
+                            .getTypeFactory()
+                            .constructCollectionType(List.class, ModeInfo.class)
+            )
+    );
 
     private boolean cursorStyleEnabled;
     private List<ModeInfo> modeInfoList;

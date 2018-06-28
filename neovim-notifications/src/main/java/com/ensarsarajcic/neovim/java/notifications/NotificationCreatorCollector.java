@@ -46,7 +46,7 @@ final class NotificationCreatorCollector {
     private static Map<String, Function<List, UIEvent>> createUIEventCreators() {
         Map<String, Function<List, UIEvent>> uiEventCreators = new HashMap<>();
         try {
-            Class[] classes = ReflectionUtils.getClasses("com.ensarsarajcic.neovim.java.notifications");
+            Class[] classes = ReflectionUtils.getClasses(UIEvent.class.getPackageName());
             for (Class clazz : classes) {
                 if (!UIEvent.class.isAssignableFrom(clazz)) {
                     continue;
@@ -63,9 +63,7 @@ final class NotificationCreatorCollector {
                     e.printStackTrace();
                 }
             }
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (ClassNotFoundException | IOException e) {
             e.printStackTrace();
         }
         return uiEventCreators;
@@ -73,17 +71,26 @@ final class NotificationCreatorCollector {
 
     private static Map<String, Function<List, BufferEvent>> createBufferEventCreators() {
         Map<String, Function<List, BufferEvent>> bufferEventCreators = new HashMap<>();
-        Set<Class<? extends BufferEvent>> uiEventClassSet = new HashSet<>();
-        for (Class<? extends BufferEvent> uiEventClass : uiEventClassSet) {
-            try {
-                Field nameField = uiEventClass.getDeclaredField("NAME");
-                Field creatorField = uiEventClass.getDeclaredField("CREATOR");
-                String name = (String) nameField.get(null);
-                Function<List, BufferEvent> creator = (Function<List, BufferEvent>) creatorField.get(null);
-                bufferEventCreators.put(name, creator);
-            } catch (NoSuchFieldException | IllegalAccessException e) {
-                e.printStackTrace();
+        try {
+            Class[] classes = ReflectionUtils.getClasses(BufferEvent.class.getPackageName());
+            for (Class clazz : classes) {
+                if (!BufferEvent.class.isAssignableFrom(clazz)) {
+                    continue;
+                }
+                Class<? extends BufferEvent> bufferEventClass = clazz;
+
+                try {
+                    Field nameField = bufferEventClass.getDeclaredField("NAME");
+                    Field creatorField = bufferEventClass.getDeclaredField("CREATOR");
+                    String name = (String) nameField.get(null);
+                    Function<List, BufferEvent> creator = (Function<List, BufferEvent>) creatorField.get(null);
+                    bufferEventCreators.put(name, creator);
+                } catch (NoSuchFieldException | IllegalAccessException e) {
+                    e.printStackTrace();
+                }
             }
+        } catch (ClassNotFoundException | IOException e) {
+            e.printStackTrace();
         }
         return bufferEventCreators;
     }

@@ -24,8 +24,15 @@
 
 package com.ensarsarajcic.neovim.java.notifications.ui.global;
 
+import com.ensarsarajcic.neovim.java.notifications.ui.UIEvent;
+
+import java.util.List;
+import java.util.function.Function;
+
 public final class BusyOffEvent implements UIGlobalEvent {
     public static final String NAME = "busy_off";
+
+    public static final Function<List, UIEvent> CREATOR = list -> new BusyOffEvent();
 
     @Override
     public String getEventName() {

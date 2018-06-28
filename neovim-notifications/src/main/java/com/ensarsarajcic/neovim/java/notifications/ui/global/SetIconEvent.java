@@ -24,8 +24,15 @@
 
 package com.ensarsarajcic.neovim.java.notifications.ui.global;
 
+import com.ensarsarajcic.neovim.java.notifications.ui.UIEvent;
+
+import java.util.List;
+import java.util.function.Function;
+
 public final class SetIconEvent implements UIGlobalEvent {
     public static final String NAME = "set_icon";
+
+    public static final Function<List, UIEvent> CREATOR = list -> new SetIconEvent((String) list.get(1));
 
     private String icon;
 
