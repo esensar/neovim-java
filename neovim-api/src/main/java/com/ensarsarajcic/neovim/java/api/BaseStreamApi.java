@@ -26,6 +26,7 @@ package com.ensarsarajcic.neovim.java.api;
 
 import com.ensarsarajcic.neovim.java.api.types.msgpack.BaseCustomIdType;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.NeovimJacksonModule;
+import com.ensarsarajcic.neovim.java.api.util.ObjectMappers;
 import com.ensarsarajcic.neovim.java.corerpc.message.RequestMessage;
 import com.ensarsarajcic.neovim.java.corerpc.message.ResponseMessage;
 import com.ensarsarajcic.neovim.java.corerpc.reactive.ReactiveRPCStreamer;
@@ -54,11 +55,7 @@ public abstract class BaseStreamApi {
     public BaseStreamApi(ReactiveRPCStreamer reactiveRPCStreamer) {
         Objects.requireNonNull(reactiveRPCStreamer, "reactiveRpcStreamer is required for stream API");
         this.reactiveRPCStreamer = reactiveRPCStreamer;
-        MessagePackFactory factory = new MessagePackFactory();
-        factory.disable(JsonParser.Feature.AUTO_CLOSE_SOURCE);
-        factory.disable(JsonGenerator.Feature.AUTO_CLOSE_TARGET);
-        this.objectMapper = new ObjectMapper(factory);
-        objectMapper.registerModule(NeovimJacksonModule.createModule());
+        this.objectMapper = ObjectMappers.defaultNeovimMapper();
     }
 
     protected <T> CompletableFuture<T> sendWithResponseOfType(RequestMessage.Builder request, Class<T> type) {
