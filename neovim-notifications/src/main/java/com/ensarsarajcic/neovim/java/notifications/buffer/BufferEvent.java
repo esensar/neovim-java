@@ -24,7 +24,7 @@
 
 package com.ensarsarajcic.neovim.java.notifications.buffer;
 
-import com.ensarsarajcic.neovim.java.api.notifications.NeovimNotification;
+import com.ensarsarajcic.neovim.java.notifications.NeovimNotification;
 
 public interface BufferEvent extends NeovimNotification {
     String PREFIX = "nvim_buf";

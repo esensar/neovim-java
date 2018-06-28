@@ -24,8 +24,15 @@
 
 package com.ensarsarajcic.neovim.java.notifications.ui.cmdline;
 
+import com.ensarsarajcic.neovim.java.notifications.ui.UIEvent;
+
+import java.util.List;
+import java.util.function.Function;
+
 public final class CmdlineBlockAppend implements UICmdlineEvent {
     public static final String NAME = "cmdline_block_append";
+
+    public static final Function<List, UIEvent> CREATOR = list -> new CmdlineBlockAppend((String) list.get(1));
 
     private String line;
 
@@ -40,5 +47,12 @@ public final class CmdlineBlockAppend implements UICmdlineEvent {
     @Override
     public String getEventName() {
         return NAME;
+    }
+
+    @Override
+    public String toString() {
+        return "CmdlineBlockAppend{" +
+                "line='" + line + '\'' +
+                '}';
     }
 }

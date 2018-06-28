@@ -24,8 +24,19 @@
 
 package com.ensarsarajcic.neovim.java.notifications.ui.cmdline;
 
+import com.ensarsarajcic.neovim.java.notifications.ui.UIEvent;
+
+import java.util.List;
+import java.util.function.Function;
+
 public final class CmdlineSpecialCharEvent implements UICmdlineEvent {
     public static final String NAME = "cmdline_special_char";
+
+    public static final Function<List, UIEvent> CREATOR = list -> new CmdlineSpecialCharEvent(
+            (String) list.get(0),
+            (Boolean) list.get(1),
+            (Integer) list.get(2)
+    );
 
     private String character;
     private boolean shift;
@@ -52,5 +63,14 @@ public final class CmdlineSpecialCharEvent implements UICmdlineEvent {
     @Override
     public String getEventName() {
         return NAME;
+    }
+
+    @Override
+    public String toString() {
+        return "CmdlineSpecialCharEvent{" +
+                "character='" + character + '\'' +
+                ", shift=" + shift +
+                ", level=" + level +
+                '}';
     }
 }

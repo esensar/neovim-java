@@ -45,7 +45,11 @@ public final class MappingProcessor<T, R> extends SubmissionPublisher<R> impleme
 
     @Override
     public void onNext(T item) {
-        submit(mapFunction.apply(item));
+        try {
+            submit(mapFunction.apply(item));
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }
         subscription.request(1);
     }
 

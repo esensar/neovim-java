@@ -24,8 +24,15 @@
 
 package com.ensarsarajcic.neovim.java.notifications.ui.popupmenu;
 
+import com.ensarsarajcic.neovim.java.notifications.ui.UIEvent;
+
+import java.util.List;
+import java.util.function.Function;
+
 public final class PopupmenuSelectEvent implements UIPopupmenuEvent {
     public static final String NAME = "popupmenu_select";
+
+    public static final Function<List, UIEvent> CREATOR = list -> new PopupmenuSelectEvent((Integer) list.get(1));
 
     private int selected;
 
@@ -40,5 +47,12 @@ public final class PopupmenuSelectEvent implements UIPopupmenuEvent {
     @Override
     public String getEventName() {
         return NAME;
+    }
+
+    @Override
+    public String toString() {
+        return "PopupmenuSelectEvent{" +
+                "selected=" + selected +
+                '}';
     }
 }

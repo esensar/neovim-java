@@ -24,7 +24,7 @@
 
 package com.ensarsarajcic.neovim.java.notifications.ui;
 
-import com.ensarsarajcic.neovim.java.api.notifications.NeovimNotification;
+import com.ensarsarajcic.neovim.java.notifications.NeovimNotification;
 
 import java.util.Collections;
 import java.util.List;
@@ -45,5 +45,12 @@ public final class NeovimRedrawEvent implements NeovimNotification {
 
     public List<UIEvent> getUiEvents() {
         return uiEvents;
+    }
+
+    @Override
+    public String toString() {
+        return "NeovimRedrawEvent{" +
+                "uiEvents=" + uiEvents +
+                '}';
     }
 }

@@ -59,7 +59,6 @@
         <rxjava2.version>2.1.14</rxjava2.version>
         <jackson.databind.version>2.9.5</jackson.databind.version>
         <apache.commons.version>3.4</apache.commons.version>
-        <reflections.version>0.9.9-RC1</reflections.version>
         <slf4j.version>1.7.25</slf4j.version>
         <maven.compiler.source>10</maven.compiler.source>
         <maven.compiler.target>10</maven.compiler.target>

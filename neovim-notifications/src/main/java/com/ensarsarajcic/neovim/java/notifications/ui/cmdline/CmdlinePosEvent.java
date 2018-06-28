@@ -24,8 +24,15 @@
 
 package com.ensarsarajcic.neovim.java.notifications.ui.cmdline;
 
+import com.ensarsarajcic.neovim.java.notifications.ui.UIEvent;
+
+import java.util.List;
+import java.util.function.Function;
+
 public final class CmdlinePosEvent implements UICmdlineEvent {
     public static final String NAME = "cmdline_pos";
+
+    public static final Function<List, UIEvent> CREATOR = list -> new CmdlinePosEvent((Integer) list.get(1), (Integer) list.get(2));
 
     private int pos;
     private int level;
@@ -46,5 +53,13 @@ public final class CmdlinePosEvent implements UICmdlineEvent {
     @Override
     public String getEventName() {
         return NAME;
+    }
+
+    @Override
+    public String toString() {
+        return "CmdlinePosEvent{" +
+                "pos=" + pos +
+                ", level=" + level +
+                '}';
     }
 }

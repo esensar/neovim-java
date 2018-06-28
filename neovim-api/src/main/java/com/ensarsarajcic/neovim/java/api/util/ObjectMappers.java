@@ -32,16 +32,29 @@ import org.msgpack.jackson.dataformat.MessagePackFactory;
 
 public final class ObjectMappers {
 
+    private static ObjectMapper defaultNeovimMapper = null;
+
     private ObjectMappers() {
         throw new AssertionError("No instances");
     }
 
-    public static final ObjectMapper defaultNeovimMapper() {
+    private static final ObjectMapper createDefaultNeovimMapper() {
         MessagePackFactory factory = new MessagePackFactory();
         factory.disable(JsonParser.Feature.AUTO_CLOSE_SOURCE);
         factory.disable(JsonGenerator.Feature.AUTO_CLOSE_TARGET);
         ObjectMapper objectMapper = new ObjectMapper(factory);
         objectMapper.registerModule(NeovimJacksonModule.createModule());
         return objectMapper;
+    }
+
+    public static final ObjectMapper defaultNeovimMapper() {
+        if (defaultNeovimMapper == null) {
+            synchronized (ObjectMappers.class) {
+                if (defaultNeovimMapper == null) {
+                    defaultNeovimMapper = createDefaultNeovimMapper();
+                }
+            }
+        }
+        return defaultNeovimMapper;
     }
 }

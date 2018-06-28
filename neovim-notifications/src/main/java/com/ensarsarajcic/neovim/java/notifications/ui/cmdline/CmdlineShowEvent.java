@@ -24,10 +24,22 @@
 
 package com.ensarsarajcic.neovim.java.notifications.ui.cmdline;
 
+import com.ensarsarajcic.neovim.java.notifications.ui.UIEvent;
+
 import java.util.List;
+import java.util.function.Function;
 
 public final class CmdlineShowEvent implements UICmdlineEvent {
     public static final String NAME = "cmdline_show";
+
+    public static final Function<List, UIEvent> CREATOR = list -> new CmdlineShowEvent(
+            (List<List>) list.get(1),
+            (Integer) list.get(2),
+            (String) list.get(3),
+            (String) list.get(4),
+            (Integer) list.get(5),
+            (Integer) list.get(6)
+    );
 
     private List<List> content;
     private int pos;
@@ -72,5 +84,17 @@ public final class CmdlineShowEvent implements UICmdlineEvent {
     @Override
     public String getEventName() {
         return NAME;
+    }
+
+    @Override
+    public String toString() {
+        return "CmdlineShowEvent{" +
+                "content=" + content +
+                ", pos=" + pos +
+                ", firstc='" + firstc + '\'' +
+                ", prompt='" + prompt + '\'' +
+                ", indent=" + indent +
+                ", level=" + level +
+                '}';
     }
 }
