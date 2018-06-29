@@ -40,7 +40,7 @@ public final class BufferLinesEvent implements BufferEvent {
             ObjectMapper objectMapper = ObjectMappers.defaultNeovimMapper();
             return new BufferLinesEvent(
                     objectMapper.readerFor(Buffer.class).readValue(objectMapper.writeValueAsBytes(list.get(0))),
-                    (Long) list.get(1),
+                    (Integer) list.get(1),
                     (Integer) list.get(2),
                     (Integer) list.get(3),
                     (List<String>) list.get(4),
@@ -53,13 +53,13 @@ public final class BufferLinesEvent implements BufferEvent {
     };
 
     private Buffer buffer;
-    private long changedTick;
+    private int changedTick;
     private int firstLine;
     private int lastLine;
     private List<String> lineData;
     private boolean more;
 
-    public BufferLinesEvent(Buffer buffer, long changedTick, int firstLine, int lastLine, List<String> lineData, boolean more) {
+    public BufferLinesEvent(Buffer buffer, int changedTick, int firstLine, int lastLine, List<String> lineData, boolean more) {
         this.buffer = buffer;
         this.changedTick = changedTick;
         this.firstLine = firstLine;
@@ -72,7 +72,7 @@ public final class BufferLinesEvent implements BufferEvent {
         return buffer;
     }
 
-    public long getChangedTick() {
+    public int getChangedTick() {
         return changedTick;
     }
 

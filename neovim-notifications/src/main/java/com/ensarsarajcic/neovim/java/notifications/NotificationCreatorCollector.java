@@ -80,7 +80,7 @@ final class NotificationCreatorCollector {
         try {
             Class[] classes = ReflectionUtils.getClasses(BufferEvent.class.getPackageName());
             for (Class clazz : classes) {
-                if (!BufferEvent.class.isAssignableFrom(clazz)) {
+                if (!BufferEvent.class.isAssignableFrom(clazz) || clazz.isInterface()) {
                     continue;
                 }
                 Class<? extends BufferEvent> bufferEventClass = clazz;

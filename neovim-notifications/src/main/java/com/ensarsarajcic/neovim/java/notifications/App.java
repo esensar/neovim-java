@@ -25,6 +25,7 @@
 package com.ensarsarajcic.neovim.java.notifications;
 
 import com.ensarsarajcic.neovim.java.api.NeovimStreamApi;
+import com.ensarsarajcic.neovim.java.api.buffer.NeovimBufferApi;
 import com.ensarsarajcic.neovim.java.api.types.api.UiOptions;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.NeovimJacksonModule;
 import com.ensarsarajcic.neovim.java.corerpc.client.ProcessRPCConnection;
@@ -39,6 +40,7 @@ import com.ensarsarajcic.neovim.java.corerpc.reactive.ReactiveRPCStreamer;
 import com.ensarsarajcic.neovim.java.corerpc.reactive.ReactiveRPCStreamerWrapper;
 import com.ensarsarajcic.neovim.java.notifications.NeovimStreamNotificationHandler;
 import com.ensarsarajcic.neovim.java.notifications.buffer.BufferDetachEvent;
+import com.ensarsarajcic.neovim.java.notifications.buffer.BufferEvent;
 import com.ensarsarajcic.neovim.java.notifications.ui.NeovimRedrawEvent;
 import com.ensarsarajcic.neovim.java.notifications.ui.cmdline.CmdlineHideEvent;
 import com.ensarsarajcic.neovim.java.notifications.ui.cmdline.CmdlinePosEvent;
@@ -49,10 +51,9 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Flow;
-import java.util.concurrent.SubmissionPublisher;
+import java.util.Map;
+import java.util.concurrent.*;
+import java.util.function.Function;
 
 /**
  * Hello world!
@@ -101,6 +102,31 @@ public class App
                 System.out.println("DONE");
             }
         });
+        neovimStreamNotificationHandler.bufferEvents().subscribe(new Flow.Subscriber<>() {
+            private Flow.Subscription subscription;
+            @Override
+            public void onSubscribe(Flow.Subscription subscription) {
+                subscription.request(1);
+                this.subscription = subscription;
+            }
+
+            @Override
+            public void onNext(BufferEvent item) {
+                System.out.println(item);
+                subscription.request(1);
+            }
+
+            @Override
+            public void onError(Throwable throwable) {
+                throwable.printStackTrace();
+            }
+
+            @Override
+            public void onComplete() {
+                System.out.println("DONE");
+            }
+        });
         neovimStreamApi.attachUI(100, 100, UiOptions.TERMINAL).thenAccept(System.out::println).get();
+        neovimStreamApi.getCurrentBuffer().thenCompose(neovimBufferApi -> neovimBufferApi.attach(true, Map.of())).thenAccept(System.out::println).get();
     }
 }
