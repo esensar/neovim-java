@@ -25,11 +25,28 @@
 package com.ensarsarajcic.neovim.java.notifications.buffer;
 
 import com.ensarsarajcic.neovim.java.api.types.msgpack.Buffer;
+import com.ensarsarajcic.neovim.java.api.util.ObjectMappers;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.function.Function;
 
 public final class BufferChangedTickEvent implements BufferEvent {
     public static final String NAME = "nvim_buf_changedtick_event";
+
+    public static final Function<List, BufferEvent> CREATOR = list -> {
+        try {
+            ObjectMapper objectMapper = ObjectMappers.defaultNeovimMapper();
+            return new BufferChangedTickEvent(
+                    objectMapper.readerFor(Buffer.class).readValue(objectMapper.writeValueAsBytes(list.get(1))),
+                    (Long) list.get(2)
+            );
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    };
 
     private Buffer buffer;
     private long changedTick;

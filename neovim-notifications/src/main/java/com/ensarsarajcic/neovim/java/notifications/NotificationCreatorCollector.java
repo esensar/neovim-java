@@ -24,6 +24,7 @@
 
 package com.ensarsarajcic.neovim.java.notifications;
 
+import com.ensarsarajcic.neovim.java.api.util.ObjectMappers;
 import com.ensarsarajcic.neovim.java.notifications.buffer.BufferEvent;
 import com.ensarsarajcic.neovim.java.notifications.ui.UIEvent;
 import com.ensarsarajcic.neovim.java.notifications.util.ReflectionUtils;
@@ -55,9 +56,14 @@ final class NotificationCreatorCollector {
 
                 try {
                     Field nameField = uiEventClass.getDeclaredField("NAME");
-                    Field creatorField = uiEventClass.getDeclaredField("CREATOR");
+                    Function<List, UIEvent> creator = null;
+                    try {
+                        Field creatorField = uiEventClass.getDeclaredField("CREATOR");
+                        creator = (Function<List, UIEvent>) creatorField.get(null);
+                    } catch (NoSuchFieldException ex) {
+                        creator = list -> ObjectMappers.defaultNeovimMapper().convertValue(list, uiEventClass);
+                    }
                     String name = (String) nameField.get(null);
-                    Function<List, UIEvent> creator = (Function<List, UIEvent>) creatorField.get(null);
                     uiEventCreators.put(name, creator);
                 } catch (NoSuchFieldException | IllegalAccessException e) {
                     e.printStackTrace();
@@ -81,9 +87,14 @@ final class NotificationCreatorCollector {
 
                 try {
                     Field nameField = bufferEventClass.getDeclaredField("NAME");
-                    Field creatorField = bufferEventClass.getDeclaredField("CREATOR");
+                    Function<List, BufferEvent> creator = null;
+                    try {
+                        Field creatorField = bufferEventClass.getDeclaredField("CREATOR");
+                        creator = (Function<List, BufferEvent>) creatorField.get(null);
+                    } catch (NoSuchFieldException ex) {
+                        creator = list -> ObjectMappers.defaultNeovimMapper().convertValue(list, bufferEventClass);
+                    }
                     String name = (String) nameField.get(null);
-                    Function<List, BufferEvent> creator = (Function<List, BufferEvent>) creatorField.get(null);
                     bufferEventCreators.put(name, creator);
                 } catch (NoSuchFieldException | IllegalAccessException e) {
                     e.printStackTrace();
