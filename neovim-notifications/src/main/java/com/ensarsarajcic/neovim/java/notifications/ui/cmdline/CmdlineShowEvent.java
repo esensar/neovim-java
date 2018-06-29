@@ -24,22 +24,14 @@
 
 package com.ensarsarajcic.neovim.java.notifications.ui.cmdline;
 
-import com.ensarsarajcic.neovim.java.notifications.ui.UIEvent;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
-import java.util.function.Function;
 
+@JsonFormat(shape = JsonFormat.Shape.ARRAY)
 public final class CmdlineShowEvent implements UICmdlineEvent {
     public static final String NAME = "cmdline_show";
-
-    public static final Function<List, UIEvent> CREATOR = list -> new CmdlineShowEvent(
-            (List<List>) list.get(1),
-            (Integer) list.get(2),
-            (String) list.get(3),
-            (String) list.get(4),
-            (Integer) list.get(5),
-            (Integer) list.get(6)
-    );
 
     private List<List> content;
     private int pos;
@@ -48,7 +40,13 @@ public final class CmdlineShowEvent implements UICmdlineEvent {
     private int indent;
     private int level;
 
-    public CmdlineShowEvent(List<List> content, int pos, String firstc, String prompt, int indent, int level) {
+    public CmdlineShowEvent(
+            @JsonProperty(value = "content", index = 0) List<List> content,
+            @JsonProperty(value = "pos", index = 1) int pos,
+            @JsonProperty(value = "firstc", index = 2) String firstc,
+            @JsonProperty(value = "prompt", index = 3) String prompt,
+            @JsonProperty(value = "indent", index = 4) int indent,
+            @JsonProperty(value = "level", index = 5) int level) {
         this.content = content;
         this.pos = pos;
         this.firstc = firstc;

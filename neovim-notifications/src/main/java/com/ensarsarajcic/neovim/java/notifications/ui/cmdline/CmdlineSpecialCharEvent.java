@@ -24,25 +24,21 @@
 
 package com.ensarsarajcic.neovim.java.notifications.ui.cmdline;
 
-import com.ensarsarajcic.neovim.java.notifications.ui.UIEvent;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.List;
-import java.util.function.Function;
-
+@JsonFormat(shape = JsonFormat.Shape.ARRAY)
 public final class CmdlineSpecialCharEvent implements UICmdlineEvent {
     public static final String NAME = "cmdline_special_char";
-
-    public static final Function<List, UIEvent> CREATOR = list -> new CmdlineSpecialCharEvent(
-            (String) list.get(0),
-            (Boolean) list.get(1),
-            (Integer) list.get(2)
-    );
 
     private String character;
     private boolean shift;
     private int level;
 
-    public CmdlineSpecialCharEvent(String character, boolean shift, int level) {
+    public CmdlineSpecialCharEvent(
+            @JsonProperty(value = "character", index = 0) String character,
+            @JsonProperty(value = "shift", index = 1) boolean shift,
+            @JsonProperty(value = "level", index = 2) int level) {
         this.character = character;
         this.shift = shift;
         this.level = level;

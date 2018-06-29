@@ -24,19 +24,17 @@
 
 package com.ensarsarajcic.neovim.java.notifications.ui.popupmenu;
 
-import com.ensarsarajcic.neovim.java.notifications.ui.UIEvent;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.List;
-import java.util.function.Function;
-
+@JsonFormat(shape = JsonFormat.Shape.ARRAY)
 public final class PopupmenuSelectEvent implements UIPopupmenuEvent {
     public static final String NAME = "popupmenu_select";
 
-    public static final Function<List, UIEvent> CREATOR = list -> new PopupmenuSelectEvent((Integer) list.get(1));
-
     private int selected;
 
-    public PopupmenuSelectEvent(int selected) {
+    public PopupmenuSelectEvent(
+            @JsonProperty(value = "selected", index = 0) int selected) {
         this.selected = selected;
     }
 

@@ -24,15 +24,11 @@
 
 package com.ensarsarajcic.neovim.java.notifications.ui.global;
 
-import com.ensarsarajcic.neovim.java.notifications.ui.UIEvent;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
-import java.util.List;
-import java.util.function.Function;
-
+@JsonFormat(shape = JsonFormat.Shape.ARRAY)
 public final class BellEvent implements UIGlobalEvent {
     public static final String NAME = "bell";
-
-    public static final Function<List, UIEvent> CREATOR = list -> new BellEvent();
 
     @Override
     public String getEventName() {

@@ -32,10 +32,14 @@ import com.ensarsarajcic.neovim.java.notifications.ui.NeovimRedrawEvent;
 import com.ensarsarajcic.neovim.java.notifications.ui.UIEvent;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.Flow;
+import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public final class NeovimStreamNotificationHandler implements NeovimNotificationHandler {
 
@@ -59,6 +63,7 @@ public final class NeovimStreamNotificationHandler implements NeovimNotification
                     return new NeovimRedrawEvent(
                             rawEvents.stream()
                                     .map(NeovimStreamNotificationHandler::eventFromRawData)
+                                    .flatMap(Collection::stream)
                                     .collect(Collectors.toList())
                     );
                 });
@@ -83,11 +88,15 @@ public final class NeovimStreamNotificationHandler implements NeovimNotification
         return bufferEventMappingProcessor;
     }
 
-    private static UIEvent eventFromRawData(List data) {
+    private static List<UIEvent> eventFromRawData(List data) {
         if (data.isEmpty()) {
             throw new IllegalArgumentException("Empty data!");
         }
         String name = (String) data.get(0);
-        return NotificationCreatorCollector.getUIEventCreators().get(name).apply(data);
+        List<Object> eventsList = (List<Object>) data.get(1);
+        List<UIEvent> result = new ArrayList<>();
+        return eventsList.stream()
+                .map(o -> NotificationCreatorCollector.getUIEventCreators().get(name).apply(result))
+                .collect(Collectors.toList());
     }
 }

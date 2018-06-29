@@ -24,19 +24,17 @@
 
 package com.ensarsarajcic.neovim.java.notifications.ui.global;
 
-import com.ensarsarajcic.neovim.java.notifications.ui.UIEvent;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.List;
-import java.util.function.Function;
-
+@JsonFormat(shape = JsonFormat.Shape.ARRAY)
 public final class SetIconEvent implements UIGlobalEvent {
     public static final String NAME = "set_icon";
 
-    public static final Function<List, UIEvent> CREATOR = list -> new SetIconEvent((String) list.get(1));
-
     private String icon;
 
-    public SetIconEvent(String icon) {
+    public SetIconEvent(
+            @JsonProperty(value = "icon", index = 0) String icon) {
         this.icon = icon;
     }
 

@@ -24,20 +24,19 @@
 
 package com.ensarsarajcic.neovim.java.notifications.ui.grid;
 
-import com.ensarsarajcic.neovim.java.notifications.ui.UIEvent;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.List;
-import java.util.function.Function;
-
+@JsonFormat(shape = JsonFormat.Shape.ARRAY)
 public final class CursorGotoEvent implements UIGridEvent {
     public static final String NAME = "cursor_goto";
-
-    public static final Function<List, UIEvent> CREATOR = list -> new CursorGotoEvent((Integer) list.get(1), (Integer) list.get(2));
 
     private int row;
     private int col;
 
-    public CursorGotoEvent(int row, int col) {
+    public CursorGotoEvent(
+            @JsonProperty(value = "row", index = 0) int row,
+            @JsonProperty(value = "col", index = 1) int col) {
         this.row = row;
         this.col = col;
     }

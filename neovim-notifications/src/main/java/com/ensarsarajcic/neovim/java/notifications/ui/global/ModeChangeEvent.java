@@ -24,21 +24,22 @@
 
 package com.ensarsarajcic.neovim.java.notifications.ui.global;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.List;
 import java.util.function.Function;
 
+@JsonFormat(shape = JsonFormat.Shape.ARRAY)
 public final class ModeChangeEvent implements UIGlobalEvent {
     public static final String NAME = "mode_change";
-
-    public static final Function<List, ModeChangeEvent> CREATOR = list -> new ModeChangeEvent(
-            (String) list.get(1),
-            (Integer) list.get(2)
-    );
 
     private String mode;
     private int modeId;
 
-    public ModeChangeEvent(String mode, int modeId) {
+    public ModeChangeEvent(
+            @JsonProperty(value = "mode", index = 0) String mode,
+            @JsonProperty(value = "modeId", index = 1) int modeId) {
         this.mode = mode;
         this.modeId = modeId;
     }

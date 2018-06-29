@@ -24,19 +24,17 @@
 
 package com.ensarsarajcic.neovim.java.notifications.ui.grid;
 
-import com.ensarsarajcic.neovim.java.notifications.ui.UIEvent;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.List;
-import java.util.function.Function;
-
+@JsonFormat(shape = JsonFormat.Shape.ARRAY)
 public final class UpdateSpecialColorEvent implements UIGridEvent {
     public static final String NAME = "update_sp";
 
-    public static final Function<List, UIEvent> CREATOR = list -> new UpdateSpecialColorEvent((Integer) list.get(1));
-
     private int color;
 
-    public UpdateSpecialColorEvent(int color) {
+    public UpdateSpecialColorEvent(
+            @JsonProperty(value = "color", index = 0) int color) {
         this.color = color;
     }
 

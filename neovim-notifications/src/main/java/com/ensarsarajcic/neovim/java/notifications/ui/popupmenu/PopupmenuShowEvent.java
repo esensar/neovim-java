@@ -24,32 +24,27 @@
 
 package com.ensarsarajcic.neovim.java.notifications.ui.popupmenu;
 
-import com.ensarsarajcic.neovim.java.api.util.ObjectMappers;
-import com.ensarsarajcic.neovim.java.notifications.ui.UIEvent;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
-import java.util.function.Function;
 
+@JsonFormat(shape = JsonFormat.Shape.ARRAY)
 public final class PopupmenuShowEvent implements UIPopupmenuEvent {
     public static final String NAME = "popupmenu_show";
 
-    public static final Function<List, UIEvent> CREATOR = list -> new PopupmenuShowEvent(
-            ObjectMappers.defaultNeovimMapper().convertValue(
-                    list.get(1),
-                    ObjectMappers.defaultNeovimMapper().getTypeFactory().constructCollectionType(List.class, Item.class)
-            ),
-            (Integer) list.get(2),
-            (Integer) list.get(3),
-            (Integer) list.get(4)
-    );
-
+    @JsonFormat(shape = JsonFormat.Shape.ARRAY)
     public static final class Item {
         private String word;
         private String kind;
         private String menu;
         private String info;
 
-        public Item(String word, String kind, String menu, String info) {
+        public Item(
+                @JsonProperty(value = "word", index = 0) String word,
+                @JsonProperty(value = "kind", index = 1) String kind,
+                @JsonProperty(value = "menu", index = 2) String menu,
+                @JsonProperty(value = "info", index = 3) String info) {
             this.word = word;
             this.kind = kind;
             this.menu = menu;
@@ -78,7 +73,11 @@ public final class PopupmenuShowEvent implements UIPopupmenuEvent {
     private int row;
     private int col;
 
-    public PopupmenuShowEvent(List<Item> items, int selected, int row, int col) {
+    public PopupmenuShowEvent(
+            @JsonProperty(value = "items", index = 0) List<Item> items,
+            @JsonProperty(value = "selected", index = 1) int selected,
+            @JsonProperty(value = "row", index = 2) int row,
+            @JsonProperty(value = "col", index = 3) int col) {
         this.items = items;
         this.selected = selected;
         this.row = row;

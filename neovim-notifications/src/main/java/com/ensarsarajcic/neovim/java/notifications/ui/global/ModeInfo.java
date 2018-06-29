@@ -24,12 +24,47 @@
 
 package com.ensarsarajcic.neovim.java.notifications.ui.global;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
+
+@JsonFormat(shape = JsonFormat.Shape.ARRAY)
 public final class ModeInfo {
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private enum CursorShape {
-        BLOCK,
-        HORIZONTAL,
-        VERTICAL
+        BLOCK("block"),
+        HORIZONTAL("horizontal"),
+        VERTICAL("vertical");
+
+        private String value;
+
+        @JsonCreator
+        public static CursorShape fromString(String value) {
+            for (CursorShape cursorShape : values()) {
+                if (cursorShape.value.equals(value)) {
+                    return cursorShape;
+                }
+            }
+            throw new IllegalArgumentException(String.format("CursorShape (%s) does not exist", value));
+        }
+
+        CursorShape(String value) {
+            this.value = value;
+        }
+
+        @JsonValue
+        public String getValue() {
+            return value;
+        }
+
+        @Override
+        public String toString() {
+            return "CursorShape{" +
+                    "value='" + value + '\'' +
+                    '}';
+        }
     }
 
     private CursorShape cursorShape;
@@ -43,16 +78,17 @@ public final class ModeInfo {
     private String fullName;
     private Object mouseShape;
 
-    public ModeInfo(CursorShape cursorShape,
-                    int cellPercentage,
-                    int blinkWait,
-                    int blinkOn,
-                    int blinkOff,
-                    int highlightId,
-                    int highlightLangmapId,
-                    String shortName,
-                    String fullName,
-                    Object mouseShape) {
+    public ModeInfo(
+            @JsonProperty(value = "cursor_shape", index = 0) CursorShape cursorShape,
+            @JsonProperty(value = "cell_percentage", index = 1) int cellPercentage,
+            @JsonProperty(value = "blink_wait", index = 2) int blinkWait,
+            @JsonProperty(value = "blink_on", index = 3) int blinkOn,
+            @JsonProperty(value = "blink_off", index = 4) int blinkOff,
+            @JsonProperty(value = "highlight_id", index = 5) int highlightId,
+            @JsonProperty(value = "highlight_langmap_id", index = 6) int highlightLangmapId,
+            @JsonProperty(value = "short_name", index = 7) String shortName,
+            @JsonProperty(value = "full_name", index = 8) String fullName,
+            @JsonProperty(value = "mouse_shape", index = 9) Object mouseShape) {
         this.cursorShape = cursorShape;
         this.cellPercentage = cellPercentage;
         this.blinkWait = blinkWait;

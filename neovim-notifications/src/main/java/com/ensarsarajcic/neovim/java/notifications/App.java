@@ -24,10 +24,17 @@
 
 package com.ensarsarajcic.neovim.java.notifications;
 
+import com.ensarsarajcic.neovim.java.api.NeovimStreamApi;
+import com.ensarsarajcic.neovim.java.api.types.api.UiOptions;
+import com.ensarsarajcic.neovim.java.api.types.msgpack.NeovimJacksonModule;
+import com.ensarsarajcic.neovim.java.corerpc.client.ProcessRPCConnection;
+import com.ensarsarajcic.neovim.java.corerpc.client.RPCClient;
 import com.ensarsarajcic.neovim.java.corerpc.client.RPCConnection;
+import com.ensarsarajcic.neovim.java.corerpc.client.TcpSocketRPCConnection;
 import com.ensarsarajcic.neovim.java.corerpc.message.NotificationMessage;
 import com.ensarsarajcic.neovim.java.corerpc.message.RequestMessage;
 import com.ensarsarajcic.neovim.java.corerpc.message.ResponseMessage;
+import com.ensarsarajcic.neovim.java.corerpc.reactive.ReactiveRPCClient;
 import com.ensarsarajcic.neovim.java.corerpc.reactive.ReactiveRPCStreamer;
 import com.ensarsarajcic.neovim.java.corerpc.reactive.ReactiveRPCStreamerWrapper;
 import com.ensarsarajcic.neovim.java.notifications.NeovimStreamNotificationHandler;
@@ -37,10 +44,13 @@ import com.ensarsarajcic.neovim.java.notifications.ui.cmdline.CmdlineHideEvent;
 import com.ensarsarajcic.neovim.java.notifications.ui.cmdline.CmdlinePosEvent;
 import com.ensarsarajcic.neovim.java.notifications.ui.cmdline.CmdlineShowEvent;
 
+import java.io.IOException;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Flow;
 import java.util.concurrent.SubmissionPublisher;
 
@@ -50,41 +60,57 @@ import java.util.concurrent.SubmissionPublisher;
  */
 public class App 
 {
-    public static void main( String[] args ) throws InterruptedException {
+    public static void main( String[] args ) throws InterruptedException, IOException, ExecutionException {
 
-        SubmissionPublisher<NotificationMessage> submissionPublisher = new SubmissionPublisher<>();
-        ReactiveRPCStreamer reactiveRPCStreamer = new ReactiveRPCStreamer() {
-            @Override
-            public void attach(RPCConnection rpcConnection) {
-            }
+        RPCConnection rpcConnection = new TcpSocketRPCConnection(new Socket("127.0.0.1", 6666));
 
-            @Override
-            public CompletableFuture<ResponseMessage> response(RequestMessage.Builder requestMessage) {
-                return null;
-            }
+        RPCClient rpcClient = new RPCClient.Builder()
+                .withObjectMapper(NeovimJacksonModule.createNeovimObjectMapper()).build();
 
-            @Override
-            public Flow.Publisher<RequestMessage> requestsFlow() {
-                return null;
-            }
-
-            @Override
-            public Flow.Publisher<NotificationMessage> notificationsFlow() {
-                return submissionPublisher;
-            }
-        };
-        NeovimStreamNotificationHandler neovimStreamNotificationHandler = new NeovimStreamNotificationHandler(
-                reactiveRPCStreamer
+        ReactiveRPCClient reactiveRPCClient = ReactiveRPCClient.createDefaultInstanceWithCustomStreamer(rpcClient);
+        reactiveRPCClient.attach(rpcConnection);
+        NeovimStreamApi neovimStreamApi = new NeovimStreamApi(
+                reactiveRPCClient
         );
-        neovimStreamNotificationHandler.uiEvents().subscribe(new Flow.Subscriber<>() {
+
+        NeovimStreamNotificationHandler neovimStreamNotificationHandler = new NeovimStreamNotificationHandler(
+                reactiveRPCClient
+        );
+
+        reactiveRPCClient.notificationsFlow().subscribe(new Flow.Subscriber<NotificationMessage>() {
             @Override
             public void onSubscribe(Flow.Subscription subscription) {
                 subscription.request(Long.MAX_VALUE);
             }
 
             @Override
+            public void onNext(NotificationMessage item) {
+                System.out.println(item);
+            }
+
+            @Override
+            public void onError(Throwable throwable) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+
+        neovimStreamNotificationHandler.uiEvents().subscribe(new Flow.Subscriber<>() {
+            private Flow.Subscription subscription;
+            @Override
+            public void onSubscribe(Flow.Subscription subscription) {
+                subscription.request(1);
+                this.subscription = subscription;
+            }
+
+            @Override
             public void onNext(NeovimRedrawEvent item) {
                 System.out.println(item);
+                subscription.request(1);
             }
 
             @Override
@@ -97,11 +123,6 @@ public class App
                 System.out.println("DONE");
             }
         });
-        submissionPublisher.submit(new NotificationMessage.Builder("redraw")
-                .addArgument(Collections.singletonList(CmdlineHideEvent.NAME))
-                .addArgument(Arrays.asList(CmdlinePosEvent.NAME, 1, 1))
-                .build());
-        submissionPublisher.submit(new NotificationMessage.Builder(BufferDetachEvent.NAME).build());
-        Thread.sleep(100000);
+        neovimStreamApi.attachUI(100, 100, UiOptions.TERMINAL).thenAccept(System.out::println).get();
     }
 }

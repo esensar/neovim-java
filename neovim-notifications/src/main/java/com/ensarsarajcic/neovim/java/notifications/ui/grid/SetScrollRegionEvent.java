@@ -24,27 +24,24 @@
 
 package com.ensarsarajcic.neovim.java.notifications.ui.grid;
 
-import com.ensarsarajcic.neovim.java.notifications.ui.UIEvent;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.List;
-import java.util.function.Function;
-
+@JsonFormat(shape = JsonFormat.Shape.ARRAY)
 public final class SetScrollRegionEvent implements UIGridEvent {
     public static final String NAME = "set_scroll_region";
-
-    public static final Function<List, UIEvent> CREATOR = list -> new SetScrollRegionEvent(
-            (Integer) list.get(1),
-            (Integer) list.get(2),
-            (Integer) list.get(3),
-            (Integer) list.get(4)
-    );
 
     private int top;
     private int bot;
     private int left;
     private int right;
 
-    public SetScrollRegionEvent(int top, int bot, int left, int right) {
+    public SetScrollRegionEvent(
+            @JsonProperty(value = "top", index = 0) int top,
+            @JsonProperty(value = "bot", index = 1) int bot,
+            @JsonProperty(value = "left", index = 2) int left,
+            @JsonProperty(value = "right", index = 3) int right
+    ) {
         this.top = top;
         this.bot = bot;
         this.left = left;

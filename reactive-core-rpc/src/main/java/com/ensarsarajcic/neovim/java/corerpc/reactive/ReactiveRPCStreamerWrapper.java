@@ -25,6 +25,7 @@
 package com.ensarsarajcic.neovim.java.corerpc.reactive;
 
 import com.ensarsarajcic.neovim.java.corerpc.client.RPCConnection;
+import com.ensarsarajcic.neovim.java.corerpc.client.RPCListener;
 import com.ensarsarajcic.neovim.java.corerpc.client.RPCStreamer;
 import com.ensarsarajcic.neovim.java.corerpc.message.NotificationMessage;
 import com.ensarsarajcic.neovim.java.corerpc.message.RequestMessage;

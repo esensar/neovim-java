@@ -39,7 +39,7 @@ public final class BufferDetachEvent implements BufferEvent {
         try {
             ObjectMapper objectMapper = ObjectMappers.defaultNeovimMapper();
             return new BufferDetachEvent(
-                    objectMapper.readerFor(Buffer.class).readValue(objectMapper.writeValueAsBytes(list.get(1)))
+                    objectMapper.readerFor(Buffer.class).readValue(objectMapper.writeValueAsBytes(list.get(0)))
             );
         } catch (IOException e) {
             e.printStackTrace();

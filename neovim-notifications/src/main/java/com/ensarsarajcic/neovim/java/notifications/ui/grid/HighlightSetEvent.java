@@ -24,20 +24,12 @@
 
 package com.ensarsarajcic.neovim.java.notifications.ui.grid;
 
-import com.ensarsarajcic.neovim.java.api.util.ObjectMappers;
-import com.ensarsarajcic.neovim.java.notifications.ui.UIEvent;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.List;
-import java.util.function.Function;
-
+@JsonFormat(shape = JsonFormat.Shape.ARRAY)
 public final class HighlightSetEvent implements UIGridEvent {
     public static final String NAME = "highlight_set";
-
-    public static final Function<List, UIEvent> CREATOR = list -> new HighlightSetEvent(
-            (Integer) list.get(1),
-            ObjectMappers.defaultNeovimMapper().convertValue(list.get(2), Attributes.class)
-    );
 
     @JsonFormat(shape = JsonFormat.Shape.ARRAY)
     public static final class Attributes {
@@ -50,14 +42,15 @@ public final class HighlightSetEvent implements UIGridEvent {
         private boolean underline;
         private boolean undercurl;
 
-        public Attributes(int foreground,
-                          int background,
-                          int special,
-                          boolean reverse,
-                          boolean italic,
-                          boolean bold,
-                          boolean underline,
-                          boolean undercurl) {
+        public Attributes(
+                @JsonProperty(value = "foreground", index = 1) int foreground,
+                @JsonProperty(value = "background", index = 2) int background,
+                @JsonProperty(value = "special", index = 3) int special,
+                @JsonProperty(value = "reverse", index = 4) boolean reverse,
+                @JsonProperty(value = "italic", index = 5) boolean italic,
+                @JsonProperty(value = "bold", index = 6) boolean bold,
+                @JsonProperty(value = "underline", index = 7) boolean underline,
+                @JsonProperty(value = "undercurl", index = 8) boolean undercurl) {
             this.foreground = foreground;
             this.background = background;
             this.special = special;
@@ -104,7 +97,9 @@ public final class HighlightSetEvent implements UIGridEvent {
     private int color;
     private Attributes attributes;
 
-    public HighlightSetEvent(int color, Attributes attributes) {
+    public HighlightSetEvent(
+            @JsonProperty(value = "color", index = 0) int color,
+            @JsonProperty(value = "attributes", index = 1) Attributes attributes) {
         this.color = color;
         this.attributes = attributes;
     }

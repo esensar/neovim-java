@@ -25,19 +25,22 @@
 package com.ensarsarajcic.neovim.java.notifications.ui.cmdline;
 
 import com.ensarsarajcic.neovim.java.notifications.ui.UIEvent;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 import java.util.function.Function;
 
+@JsonFormat(shape = JsonFormat.Shape.ARRAY)
 public final class CmdlinePosEvent implements UICmdlineEvent {
     public static final String NAME = "cmdline_pos";
-
-    public static final Function<List, UIEvent> CREATOR = list -> new CmdlinePosEvent((Integer) list.get(1), (Integer) list.get(2));
 
     private int pos;
     private int level;
 
-    public CmdlinePosEvent(int pos, int level) {
+    public CmdlinePosEvent(
+            @JsonProperty(value = "pos", index = 0) int pos,
+            @JsonProperty(value = "level", index = 1) int level) {
         this.pos = pos;
         this.level = level;
     }

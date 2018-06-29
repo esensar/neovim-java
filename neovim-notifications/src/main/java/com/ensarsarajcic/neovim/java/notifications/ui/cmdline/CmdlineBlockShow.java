@@ -24,15 +24,13 @@
 
 package com.ensarsarajcic.neovim.java.notifications.ui.cmdline;
 
-import com.ensarsarajcic.neovim.java.notifications.ui.UIEvent;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.util.List;
-import java.util.function.Function;
 
+@JsonFormat(shape = JsonFormat.Shape.ARRAY)
 public final class CmdlineBlockShow implements UICmdlineEvent {
     public static final String NAME = "cmdline_block_show";
-
-    public static final Function<List, UIEvent> CREATOR = list -> new CmdlineBlockShow((List<List>) list.get(1));
 
     private List<List> lines;
 

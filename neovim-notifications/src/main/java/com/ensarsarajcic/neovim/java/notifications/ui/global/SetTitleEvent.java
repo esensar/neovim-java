@@ -24,19 +24,17 @@
 
 package com.ensarsarajcic.neovim.java.notifications.ui.global;
 
-import com.ensarsarajcic.neovim.java.notifications.ui.UIEvent;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.List;
-import java.util.function.Function;
-
+@JsonFormat(shape = JsonFormat.Shape.ARRAY)
 public final class SetTitleEvent implements UIGlobalEvent {
     public static final String NAME = "set_title";
 
-    public static final Function<List, UIEvent> CREATOR = list -> new SetTitleEvent((String) list.get(1));
-
     private final String title;
 
-    public SetTitleEvent(String title) {
+    public SetTitleEvent(
+            @JsonProperty(value = "title", index = 0) String title) {
         this.title = title;
     }
 

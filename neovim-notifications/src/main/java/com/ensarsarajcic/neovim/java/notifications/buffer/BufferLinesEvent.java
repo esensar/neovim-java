@@ -39,12 +39,12 @@ public final class BufferLinesEvent implements BufferEvent {
         try {
             ObjectMapper objectMapper = ObjectMappers.defaultNeovimMapper();
             return new BufferLinesEvent(
-                    objectMapper.readerFor(Buffer.class).readValue(objectMapper.writeValueAsBytes(list.get(1))),
-                    (Long) list.get(2),
+                    objectMapper.readerFor(Buffer.class).readValue(objectMapper.writeValueAsBytes(list.get(0))),
+                    (Long) list.get(1),
+                    (Integer) list.get(2),
                     (Integer) list.get(3),
-                    (Integer) list.get(4),
-                    (List<String>) list.get(5),
-                    (Boolean) list.get(6)
+                    (List<String>) list.get(4),
+                    (Boolean) list.get(5)
             );
         } catch (IOException e) {
             e.printStackTrace();

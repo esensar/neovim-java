@@ -24,19 +24,17 @@
 
 package com.ensarsarajcic.neovim.java.notifications.ui.grid;
 
-import com.ensarsarajcic.neovim.java.notifications.ui.UIEvent;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.List;
-import java.util.function.Function;
-
+@JsonFormat(shape = JsonFormat.Shape.ARRAY)
 public final class PutEvent implements UIGridEvent {
     public static final String NAME = "put";
 
-    public static final Function<List, UIEvent> CREATOR = list -> new PutEvent((String) list.get(1));
-
     private String text;
 
-    public PutEvent(String text) {
+    public PutEvent(
+            @JsonProperty(value = "text", index = 0) String text) {
         this.text = text;
     }
 

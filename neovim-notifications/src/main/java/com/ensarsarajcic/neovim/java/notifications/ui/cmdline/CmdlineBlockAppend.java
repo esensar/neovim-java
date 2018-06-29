@@ -24,15 +24,11 @@
 
 package com.ensarsarajcic.neovim.java.notifications.ui.cmdline;
 
-import com.ensarsarajcic.neovim.java.notifications.ui.UIEvent;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
-import java.util.List;
-import java.util.function.Function;
-
+@JsonFormat(shape = JsonFormat.Shape.ARRAY)
 public final class CmdlineBlockAppend implements UICmdlineEvent {
     public static final String NAME = "cmdline_block_append";
-
-    public static final Function<List, UIEvent> CREATOR = list -> new CmdlineBlockAppend((String) list.get(1));
 
     private String line;
 

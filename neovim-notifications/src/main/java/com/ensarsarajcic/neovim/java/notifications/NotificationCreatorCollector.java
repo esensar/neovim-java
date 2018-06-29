@@ -49,7 +49,7 @@ final class NotificationCreatorCollector {
         try {
             Class[] classes = ReflectionUtils.getClasses(UIEvent.class.getPackageName());
             for (Class clazz : classes) {
-                if (!UIEvent.class.isAssignableFrom(clazz)) {
+                if (!UIEvent.class.isAssignableFrom(clazz) || clazz.isInterface()) {
                     continue;
                 }
                 Class<? extends UIEvent> uiEventClass = clazz;

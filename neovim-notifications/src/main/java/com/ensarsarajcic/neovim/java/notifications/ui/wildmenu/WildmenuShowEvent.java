@@ -24,19 +24,19 @@
 
 package com.ensarsarajcic.neovim.java.notifications.ui.wildmenu;
 
-import com.ensarsarajcic.neovim.java.notifications.ui.UIEvent;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
-import java.util.function.Function;
 
+@JsonFormat(shape = JsonFormat.Shape.ARRAY)
 public final class WildmenuShowEvent implements UIWildmenuEvent {
     public static final String NAME = "wildmenu_show";
 
-    public static final Function<List, UIEvent> CREATOR = list -> new WildmenuShowEvent((List<String>) list.get(1));
-
     private List<String> items;
 
-    public WildmenuShowEvent(List<String> items) {
+    public WildmenuShowEvent(
+            @JsonProperty(value = "items", index = 0) List<String> items) {
         this.items = items;
     }
 

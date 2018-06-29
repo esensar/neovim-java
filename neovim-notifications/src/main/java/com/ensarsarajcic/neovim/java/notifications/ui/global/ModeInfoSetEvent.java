@@ -24,29 +24,21 @@
 
 package com.ensarsarajcic.neovim.java.notifications.ui.global;
 
-import com.ensarsarajcic.neovim.java.api.util.ObjectMappers;
-import com.ensarsarajcic.neovim.java.notifications.ui.UIEvent;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
-import java.util.function.Function;
 
+@JsonFormat(shape = JsonFormat.Shape.ARRAY)
 public final class ModeInfoSetEvent implements UIGlobalEvent {
     public static final String NAME = "mode_info_set";
-
-    public static final Function<List, UIEvent> CREATOR = list -> new ModeInfoSetEvent(
-            (Boolean) list.get(1),
-            ObjectMappers.defaultNeovimMapper().convertValue(
-                    list.get(2),
-                    ObjectMappers.defaultNeovimMapper()
-                            .getTypeFactory()
-                            .constructCollectionType(List.class, ModeInfo.class)
-            )
-    );
 
     private boolean cursorStyleEnabled;
     private List<ModeInfo> modeInfoList;
 
-    public ModeInfoSetEvent(boolean cursorStyleEnabled, List<ModeInfo> modeInfoList) {
+    public ModeInfoSetEvent(
+            @JsonProperty(value = "cursor_style_enabled", index = 0) boolean cursorStyleEnabled,
+            @JsonProperty(value = "mode_info", index = 1) List<ModeInfo> modeInfoList) {
         this.cursorStyleEnabled = cursorStyleEnabled;
         this.modeInfoList = modeInfoList;
     }
