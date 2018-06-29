@@ -96,4 +96,16 @@ public final class BufferLinesEvent implements BufferEvent {
     public String getNotificationName() {
         return NAME;
     }
+
+    @Override
+    public String toString() {
+        return "BufferLinesEvent{" +
+                "buffer=" + buffer +
+                ", changedTick=" + changedTick +
+                ", firstLine=" + firstLine +
+                ", lastLine=" + lastLine +
+                ", lineData=" + lineData +
+                ", more=" + more +
+                '}';
+    }
 }

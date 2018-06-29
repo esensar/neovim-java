@@ -46,4 +46,11 @@ public final class WildmenuSelectEvent implements UIWildmenuEvent {
     public String getEventName() {
         return NAME;
     }
+
+    @Override
+    public String toString() {
+        return "WildmenuSelectEvent{" +
+                "selectedIndex=" + selectedIndex +
+                '}';
+    }
 }

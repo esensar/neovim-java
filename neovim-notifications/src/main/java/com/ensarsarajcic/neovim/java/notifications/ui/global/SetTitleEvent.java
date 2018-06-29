@@ -46,4 +46,11 @@ public final class SetTitleEvent implements UIGlobalEvent {
     public String getEventName() {
         return NAME;
     }
+
+    @Override
+    public String toString() {
+        return "SetTitleEvent{" +
+                "title='" + title + '\'' +
+                '}';
+    }
 }

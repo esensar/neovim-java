@@ -82,6 +82,14 @@ public final class TablineUpdateEvent implements UITablineEvent {
         public String getName() {
             return name;
         }
+
+        @Override
+        public String toString() {
+            return "TabInfo{" +
+                    "tab=" + tab +
+                    ", name='" + name + '\'' +
+                    '}';
+        }
     }
 
     private Tabpage currentTabpage;
@@ -103,5 +111,13 @@ public final class TablineUpdateEvent implements UITablineEvent {
     @Override
     public String getEventName() {
         return NAME;
+    }
+
+    @Override
+    public String toString() {
+        return "TablineUpdateEvent{" +
+                "currentTabpage=" + currentTabpage +
+                ", tabs=" + tabs +
+                '}';
     }
 }

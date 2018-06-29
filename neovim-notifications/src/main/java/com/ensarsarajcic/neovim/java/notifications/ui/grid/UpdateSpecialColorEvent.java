@@ -46,4 +46,11 @@ public final class UpdateSpecialColorEvent implements UIGridEvent {
     public String getEventName() {
         return NAME;
     }
+
+    @Override
+    public String toString() {
+        return "UpdateSpecialColorEvent{" +
+                "color=" + color +
+                '}';
+    }
 }

@@ -46,4 +46,11 @@ public final class UpdateBackgroundEvent implements UIGridEvent {
     public String getEventName() {
         return NAME;
     }
+
+    @Override
+    public String toString() {
+        return "UpdateBackgroundEvent{" +
+                "color=" + color +
+                '}';
+    }
 }

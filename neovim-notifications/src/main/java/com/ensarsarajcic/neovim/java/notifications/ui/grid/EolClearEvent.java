@@ -34,4 +34,9 @@ public final class EolClearEvent implements UIGridEvent {
     public String getEventName() {
         return NAME;
     }
+
+    @Override
+    public String toString() {
+        return "EolClearEvent{}";
+    }
 }

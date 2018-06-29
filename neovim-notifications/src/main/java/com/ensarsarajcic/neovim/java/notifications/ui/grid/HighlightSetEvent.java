@@ -25,13 +25,14 @@
 package com.ensarsarajcic.neovim.java.notifications.ui.grid;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonFormat(shape = JsonFormat.Shape.ARRAY)
 public final class HighlightSetEvent implements UIGridEvent {
     public static final String NAME = "highlight_set";
 
-    @JsonFormat(shape = JsonFormat.Shape.ARRAY)
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Attributes {
         private int foreground;
         private int background;
@@ -92,20 +93,27 @@ public final class HighlightSetEvent implements UIGridEvent {
         public boolean isUndercurl() {
             return undercurl;
         }
+
+        @Override
+        public String toString() {
+            return "Attributes{" +
+                    "foreground=" + foreground +
+                    ", background=" + background +
+                    ", special=" + special +
+                    ", reverse=" + reverse +
+                    ", italic=" + italic +
+                    ", bold=" + bold +
+                    ", underline=" + underline +
+                    ", undercurl=" + undercurl +
+                    '}';
+        }
     }
 
-    private int color;
     private Attributes attributes;
 
     public HighlightSetEvent(
-            @JsonProperty(value = "color", index = 0) int color,
-            @JsonProperty(value = "attributes", index = 1) Attributes attributes) {
-        this.color = color;
+            @JsonProperty(value = "attributes", index = 0) Attributes attributes) {
         this.attributes = attributes;
-    }
-
-    public int getColor() {
-        return color;
     }
 
     public Attributes getAttributes() {
@@ -115,5 +123,12 @@ public final class HighlightSetEvent implements UIGridEvent {
     @Override
     public String getEventName() {
         return NAME;
+    }
+
+    @Override
+    public String toString() {
+        return "HighlightSetEvent{" +
+                "attributes=" + attributes +
+                '}';
     }
 }

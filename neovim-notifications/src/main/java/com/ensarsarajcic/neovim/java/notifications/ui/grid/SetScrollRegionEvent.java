@@ -68,4 +68,14 @@ public final class SetScrollRegionEvent implements UIGridEvent {
     public String getEventName() {
         return NAME;
     }
+
+    @Override
+    public String toString() {
+        return "SetScrollRegionEvent{" +
+                "top=" + top +
+                ", bot=" + bot +
+                ", left=" + left +
+                ", right=" + right +
+                '}';
+    }
 }

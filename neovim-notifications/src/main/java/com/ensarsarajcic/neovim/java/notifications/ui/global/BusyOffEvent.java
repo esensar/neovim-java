@@ -28,10 +28,15 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 @JsonFormat(shape = JsonFormat.Shape.ARRAY)
 public final class BusyOffEvent implements UIGlobalEvent {
-    public static final String NAME = "busy_off";
+    public static final String NAME = "busy_stop";
 
     @Override
     public String getEventName() {
         return NAME;
+    }
+
+    @Override
+    public String toString() {
+        return "BusyOffEvent{}";
     }
 }

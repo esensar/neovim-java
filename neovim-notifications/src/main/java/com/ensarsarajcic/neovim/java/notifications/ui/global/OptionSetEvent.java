@@ -92,4 +92,12 @@ public final class OptionSetEvent implements UIGlobalEvent {
     public String getEventName() {
         return NAME;
     }
+
+    @Override
+    public String toString() {
+        return "OptionSetEvent{" +
+                "optionName='" + optionName + '\'' +
+                ", value=" + value +
+                '}';
+    }
 }

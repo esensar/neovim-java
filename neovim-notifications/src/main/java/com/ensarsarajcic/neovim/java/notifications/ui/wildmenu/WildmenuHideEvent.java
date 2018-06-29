@@ -34,4 +34,9 @@ public final class WildmenuHideEvent implements UIWildmenuEvent {
     public String getEventName() {
         return NAME;
     }
+
+    @Override
+    public String toString() {
+        return "WildmenuHideEvent{}";
+    }
 }

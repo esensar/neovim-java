@@ -93,10 +93,16 @@ public final class NeovimStreamNotificationHandler implements NeovimNotification
             throw new IllegalArgumentException("Empty data!");
         }
         String name = (String) data.get(0);
-        List<Object> eventsList = (List<Object>) data.get(1);
-        List<UIEvent> result = new ArrayList<>();
+        List<List> eventsList = (List<List>) data.subList(1, data.size());
         return eventsList.stream()
-                .map(o -> NotificationCreatorCollector.getUIEventCreators().get(name).apply(result))
+                .map(o -> {
+                    try {
+                        return NotificationCreatorCollector.getUIEventCreators().get(name).apply(o);
+                    } catch (NullPointerException ex) {
+                        System.err.println("MISSING NAME: " + name);
+                        throw ex;
+                    }
+                })
                 .collect(Collectors.toList());
     }
 }

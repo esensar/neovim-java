@@ -68,4 +68,12 @@ public final class BufferChangedTickEvent implements BufferEvent {
     public String getNotificationName() {
         return NAME;
     }
+
+    @Override
+    public String toString() {
+        return "BufferChangedTickEvent{" +
+                "buffer=" + buffer +
+                ", changedTick=" + changedTick +
+                '}';
+    }
 }

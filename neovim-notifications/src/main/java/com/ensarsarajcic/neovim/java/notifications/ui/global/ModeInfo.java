@@ -29,7 +29,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-@JsonFormat(shape = JsonFormat.Shape.ARRAY)
 public final class ModeInfo {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING)
@@ -81,13 +80,13 @@ public final class ModeInfo {
     public ModeInfo(
             @JsonProperty(value = "cursor_shape", index = 0) CursorShape cursorShape,
             @JsonProperty(value = "cell_percentage", index = 1) int cellPercentage,
-            @JsonProperty(value = "blink_wait", index = 2) int blinkWait,
-            @JsonProperty(value = "blink_on", index = 3) int blinkOn,
-            @JsonProperty(value = "blink_off", index = 4) int blinkOff,
-            @JsonProperty(value = "highlight_id", index = 5) int highlightId,
-            @JsonProperty(value = "highlight_langmap_id", index = 6) int highlightLangmapId,
+            @JsonProperty(value = "blinkwait", index = 2) int blinkWait,
+            @JsonProperty(value = "blinkon", index = 3) int blinkOn,
+            @JsonProperty(value = "blinkoff", index = 4) int blinkOff,
+            @JsonProperty(value = "hl_id", index = 5) int highlightId,
+            @JsonProperty(value = "id_lm", index = 6) int highlightLangmapId,
             @JsonProperty(value = "short_name", index = 7) String shortName,
-            @JsonProperty(value = "full_name", index = 8) String fullName,
+            @JsonProperty(value = "name", index = 8) String fullName,
             @JsonProperty(value = "mouse_shape", index = 9) Object mouseShape) {
         this.cursorShape = cursorShape;
         this.cellPercentage = cellPercentage;
@@ -139,5 +138,21 @@ public final class ModeInfo {
 
     public Object getMouseShape() {
         return mouseShape;
+    }
+
+    @Override
+    public String toString() {
+        return "ModeInfo{" +
+                "cursorShape=" + cursorShape +
+                ", cellPercentage=" + cellPercentage +
+                ", blinkWait=" + blinkWait +
+                ", blinkOn=" + blinkOn +
+                ", blinkOff=" + blinkOff +
+                ", highlightId=" + highlightId +
+                ", highlightLangmapId=" + highlightLangmapId +
+                ", shortName='" + shortName + '\'' +
+                ", fullName='" + fullName + '\'' +
+                ", mouseShape=" + mouseShape +
+                '}';
     }
 }

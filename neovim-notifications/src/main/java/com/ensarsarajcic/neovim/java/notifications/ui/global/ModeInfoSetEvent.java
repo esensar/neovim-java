@@ -55,4 +55,12 @@ public final class ModeInfoSetEvent implements UIGlobalEvent {
     public String getEventName() {
         return NAME;
     }
+
+    @Override
+    public String toString() {
+        return "ModeInfoSetEvent{" +
+                "cursorStyleEnabled=" + cursorStyleEnabled +
+                ", modeInfoList=" + modeInfoList +
+                '}';
+    }
 }

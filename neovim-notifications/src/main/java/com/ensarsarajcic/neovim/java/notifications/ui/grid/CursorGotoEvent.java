@@ -53,4 +53,12 @@ public final class CursorGotoEvent implements UIGridEvent {
     public String getEventName() {
         return NAME;
     }
+
+    @Override
+    public String toString() {
+        return "CursorGotoEvent{" +
+                "row=" + row +
+                ", col=" + col +
+                '}';
+    }
 }

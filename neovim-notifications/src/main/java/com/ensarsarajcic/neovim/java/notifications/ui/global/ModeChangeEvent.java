@@ -56,4 +56,12 @@ public final class ModeChangeEvent implements UIGlobalEvent {
     public String getEventName() {
         return NAME;
     }
+
+    @Override
+    public String toString() {
+        return "ModeChangeEvent{" +
+                "mode='" + mode + '\'' +
+                ", modeId=" + modeId +
+                '}';
+    }
 }

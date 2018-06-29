@@ -46,4 +46,11 @@ public final class PutEvent implements UIGridEvent {
     public String getEventName() {
         return NAME;
     }
+
+    @Override
+    public String toString() {
+        return "PutEvent{" +
+                "text='" + text + '\'' +
+                '}';
+    }
 }

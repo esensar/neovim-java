@@ -53,4 +53,12 @@ public final class ResizeEvent implements UIGridEvent {
     public String getEventName() {
         return NAME;
     }
+
+    @Override
+    public String toString() {
+        return "ResizeEvent{" +
+                "width=" + width +
+                ", height=" + height +
+                '}';
+    }
 }

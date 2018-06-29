@@ -48,4 +48,11 @@ public final class WildmenuShowEvent implements UIWildmenuEvent {
     public String getEventName() {
         return NAME;
     }
+
+    @Override
+    public String toString() {
+        return "WildmenuShowEvent{" +
+                "items=" + items +
+                '}';
+    }
 }

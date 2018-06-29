@@ -77,28 +77,6 @@ public class App
                 reactiveRPCClient
         );
 
-        reactiveRPCClient.notificationsFlow().subscribe(new Flow.Subscriber<NotificationMessage>() {
-            @Override
-            public void onSubscribe(Flow.Subscription subscription) {
-                subscription.request(Long.MAX_VALUE);
-            }
-
-            @Override
-            public void onNext(NotificationMessage item) {
-                System.out.println(item);
-            }
-
-            @Override
-            public void onError(Throwable throwable) {
-
-            }
-
-            @Override
-            public void onComplete() {
-
-            }
-        });
-
         neovimStreamNotificationHandler.uiEvents().subscribe(new Flow.Subscriber<>() {
             private Flow.Subscription subscription;
             @Override

@@ -46,4 +46,11 @@ public final class ScrollEvent implements UIGridEvent {
     public String getEventName() {
         return NAME;
     }
+
+    @Override
+    public String toString() {
+        return "ScrollEvent{" +
+                "count=" + count +
+                '}';
+    }
 }

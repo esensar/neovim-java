@@ -46,4 +46,11 @@ public final class SetIconEvent implements UIGlobalEvent {
     public String getEventName() {
         return NAME;
     }
+
+    @Override
+    public String toString() {
+        return "SetIconEvent{" +
+                "icon='" + icon + '\'' +
+                '}';
+    }
 }

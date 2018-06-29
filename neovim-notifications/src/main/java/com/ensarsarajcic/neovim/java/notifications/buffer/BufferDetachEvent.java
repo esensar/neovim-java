@@ -61,4 +61,11 @@ public final class BufferDetachEvent implements BufferEvent {
     public String getNotificationName() {
         return NAME;
     }
+
+    @Override
+    public String toString() {
+        return "BufferDetachEvent{" +
+                "buffer=" + buffer +
+                '}';
+    }
 }

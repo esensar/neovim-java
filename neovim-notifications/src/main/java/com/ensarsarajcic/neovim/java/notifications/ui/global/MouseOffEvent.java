@@ -34,4 +34,9 @@ public final class MouseOffEvent implements UIGlobalEvent {
     public String getEventName() {
         return NAME;
     }
+
+    @Override
+    public String toString() {
+        return "MouseOffEvent{}";
+    }
 }
