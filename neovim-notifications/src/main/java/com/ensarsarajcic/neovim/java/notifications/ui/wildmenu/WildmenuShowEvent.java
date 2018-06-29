@@ -24,10 +24,15 @@
 
 package com.ensarsarajcic.neovim.java.notifications.ui.wildmenu;
 
+import com.ensarsarajcic.neovim.java.notifications.ui.UIEvent;
+
 import java.util.List;
+import java.util.function.Function;
 
 public final class WildmenuShowEvent implements UIWildmenuEvent {
     public static final String NAME = "wildmenu_show";
+
+    public static final Function<List, UIEvent> CREATOR = list -> new WildmenuShowEvent((List<String>) list.get(1));
 
     private List<String> items;
 

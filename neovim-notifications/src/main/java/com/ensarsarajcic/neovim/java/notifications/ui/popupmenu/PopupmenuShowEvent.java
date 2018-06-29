@@ -24,6 +24,7 @@
 
 package com.ensarsarajcic.neovim.java.notifications.ui.popupmenu;
 
+import com.ensarsarajcic.neovim.java.api.util.ObjectMappers;
 import com.ensarsarajcic.neovim.java.notifications.ui.UIEvent;
 
 import java.util.List;
@@ -32,7 +33,15 @@ import java.util.function.Function;
 public final class PopupmenuShowEvent implements UIPopupmenuEvent {
     public static final String NAME = "popupmenu_show";
 
-    public static final Function<List, UIEvent> CREATOR = list -> null;
+    public static final Function<List, UIEvent> CREATOR = list -> new PopupmenuShowEvent(
+            ObjectMappers.defaultNeovimMapper().convertValue(
+                    list.get(1),
+                    ObjectMappers.defaultNeovimMapper().getTypeFactory().constructCollectionType(List.class, Item.class)
+            ),
+            (Integer) list.get(2),
+            (Integer) list.get(3),
+            (Integer) list.get(4)
+    );
 
     public static final class Item {
         private String word;

@@ -24,8 +24,15 @@
 
 package com.ensarsarajcic.neovim.java.notifications.ui.wildmenu;
 
+import com.ensarsarajcic.neovim.java.notifications.ui.UIEvent;
+
+import java.util.List;
+import java.util.function.Function;
+
 public final class WildmenuSelectEvent implements UIWildmenuEvent {
     public static final String NAME = "wildmenu_select";
+
+    public static final Function<List, UIEvent> CREATOR = list -> new WildmenuSelectEvent((Integer) list.get(1));
 
     private int selectedIndex;
 
