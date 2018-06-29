@@ -24,11 +24,14 @@
 
 package com.ensarsarajcic.neovim.java.api.types.msgpack;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Objects;
 
 /**
  * Represents a NeovimApis Tabpage (custom Msgpack type)
  */
+@JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public final class Tabpage extends BaseCustomIdType implements Comparable<Tabpage> {
     public Tabpage(long id) {
         super(id);
