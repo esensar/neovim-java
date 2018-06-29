@@ -24,8 +24,15 @@
 
 package com.ensarsarajcic.neovim.java.notifications.ui.grid;
 
+import com.ensarsarajcic.neovim.java.notifications.ui.UIEvent;
+
+import java.util.List;
+import java.util.function.Function;
+
 public final class ResizeEvent implements UIGridEvent {
     public static final String NAME = "resize";
+
+    public static final Function<List, UIEvent> CREATOR = list -> new ResizeEvent((Integer) list.get(1), (Integer) list.get(2));
 
     private int width;
     private int height;

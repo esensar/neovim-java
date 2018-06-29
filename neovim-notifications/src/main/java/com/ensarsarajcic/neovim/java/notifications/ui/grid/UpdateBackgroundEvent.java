@@ -24,8 +24,15 @@
 
 package com.ensarsarajcic.neovim.java.notifications.ui.grid;
 
+import com.ensarsarajcic.neovim.java.notifications.ui.UIEvent;
+
+import java.util.List;
+import java.util.function.Function;
+
 public final class UpdateBackgroundEvent implements UIGridEvent {
     public static final String NAME = "update_bg";
+
+    public static final Function<List, UIEvent> CREATOR = list -> new UpdateBackgroundEvent((Integer) list.get(1));
 
     private int color;
 

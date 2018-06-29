@@ -24,8 +24,15 @@
 
 package com.ensarsarajcic.neovim.java.notifications.ui.grid;
 
+import com.ensarsarajcic.neovim.java.notifications.ui.UIEvent;
+
+import java.util.List;
+import java.util.function.Function;
+
 public final class PutEvent implements UIGridEvent {
     public static final String NAME = "put";
+
+    public static final Function<List, UIEvent> CREATOR = list -> new PutEvent((String) list.get(1));
 
     private String text;
 

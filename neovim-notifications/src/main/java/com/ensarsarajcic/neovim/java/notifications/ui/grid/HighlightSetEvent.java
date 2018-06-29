@@ -24,9 +24,22 @@
 
 package com.ensarsarajcic.neovim.java.notifications.ui.grid;
 
+import com.ensarsarajcic.neovim.java.api.util.ObjectMappers;
+import com.ensarsarajcic.neovim.java.notifications.ui.UIEvent;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import java.util.List;
+import java.util.function.Function;
+
 public final class HighlightSetEvent implements UIGridEvent {
     public static final String NAME = "highlight_set";
 
+    public static final Function<List, UIEvent> CREATOR = list -> new HighlightSetEvent(
+            (Integer) list.get(1),
+            ObjectMappers.defaultNeovimMapper().convertValue(list.get(2), Attributes.class)
+    );
+
+    @JsonFormat(shape = JsonFormat.Shape.ARRAY)
     public static final class Attributes {
         private int foreground;
         private int background;

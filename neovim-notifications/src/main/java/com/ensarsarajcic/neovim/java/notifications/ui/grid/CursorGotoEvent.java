@@ -24,8 +24,15 @@
 
 package com.ensarsarajcic.neovim.java.notifications.ui.grid;
 
+import com.ensarsarajcic.neovim.java.notifications.ui.UIEvent;
+
+import java.util.List;
+import java.util.function.Function;
+
 public final class CursorGotoEvent implements UIGridEvent {
     public static final String NAME = "cursor_goto";
+
+    public static final Function<List, UIEvent> CREATOR = list -> new CursorGotoEvent((Integer) list.get(1), (Integer) list.get(2));
 
     private int row;
     private int col;

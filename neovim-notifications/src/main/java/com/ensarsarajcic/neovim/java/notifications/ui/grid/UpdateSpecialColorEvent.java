@@ -24,8 +24,15 @@
 
 package com.ensarsarajcic.neovim.java.notifications.ui.grid;
 
+import com.ensarsarajcic.neovim.java.notifications.ui.UIEvent;
+
+import java.util.List;
+import java.util.function.Function;
+
 public final class UpdateSpecialColorEvent implements UIGridEvent {
     public static final String NAME = "update_sp";
+
+    public static final Function<List, UIEvent> CREATOR = list -> new UpdateSpecialColorEvent((Integer) list.get(1));
 
     private int color;
 

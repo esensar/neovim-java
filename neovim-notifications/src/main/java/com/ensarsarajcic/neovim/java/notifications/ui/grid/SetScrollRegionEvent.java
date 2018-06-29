@@ -24,8 +24,20 @@
 
 package com.ensarsarajcic.neovim.java.notifications.ui.grid;
 
+import com.ensarsarajcic.neovim.java.notifications.ui.UIEvent;
+
+import java.util.List;
+import java.util.function.Function;
+
 public final class SetScrollRegionEvent implements UIGridEvent {
     public static final String NAME = "set_scroll_region";
+
+    public static final Function<List, UIEvent> CREATOR = list -> new SetScrollRegionEvent(
+            (Integer) list.get(1),
+            (Integer) list.get(2),
+            (Integer) list.get(3),
+            (Integer) list.get(4)
+    );
 
     private int top;
     private int bot;

@@ -24,8 +24,15 @@
 
 package com.ensarsarajcic.neovim.java.notifications.ui.grid;
 
+import com.ensarsarajcic.neovim.java.notifications.ui.UIEvent;
+
+import java.util.List;
+import java.util.function.Function;
+
 public final class ScrollEvent implements UIGridEvent {
     public static final String NAME = "scroll";
+
+    public static final Function<List, UIEvent> CREATOR = list -> new ScrollEvent((Integer) list.get(1));
 
     private int count;
 
