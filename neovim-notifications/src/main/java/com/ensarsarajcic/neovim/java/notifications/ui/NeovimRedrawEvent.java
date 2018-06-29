@@ -22,36 +22,35 @@
  * SOFTWARE.
  */
 
-package com.ensarsarajcic.neovim.java.api.types.msgpack;
+package com.ensarsarajcic.neovim.java.notifications.ui;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.ensarsarajcic.neovim.java.notifications.NeovimNotification;
 
-import java.util.Objects;
+import java.util.Collections;
+import java.util.List;
 
-/**
- * Represents a NeovimApis Tabpage (custom Msgpack type)
- */
-@JsonFormat(shape = JsonFormat.Shape.OBJECT)
-public final class Tabpage extends BaseCustomIdType implements Comparable<Tabpage> {
-    public Tabpage(long id) {
-        super(id);
+public final class NeovimRedrawEvent implements NeovimNotification {
+    public static final String NAME = "redraw";
+
+    private List<UIEvent> uiEvents;
+
+    public NeovimRedrawEvent(List<UIEvent> uiEvents) {
+        this.uiEvents = Collections.unmodifiableList(uiEvents);
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Tabpage buffer = (Tabpage) o;
-        return getId() == buffer.getId();
+    public final String getNotificationName() {
+        return NAME;
+    }
+
+    public List<UIEvent> getUiEvents() {
+        return uiEvents;
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(getId());
-    }
-
-    @Override
-    public int compareTo(Tabpage o) {
-        return Long.compare(getId(), o.getId());
+    public String toString() {
+        return "NeovimRedrawEvent{" +
+                "uiEvents=" + uiEvents +
+                '}';
     }
 }

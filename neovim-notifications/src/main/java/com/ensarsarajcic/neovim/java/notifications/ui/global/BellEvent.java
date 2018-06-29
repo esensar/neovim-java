@@ -22,36 +22,21 @@
  * SOFTWARE.
  */
 
-package com.ensarsarajcic.neovim.java.api.types.msgpack;
+package com.ensarsarajcic.neovim.java.notifications.ui.global;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import java.util.Objects;
+@JsonFormat(shape = JsonFormat.Shape.ARRAY)
+public final class BellEvent implements UIGlobalEvent {
+    public static final String NAME = "bell";
 
-/**
- * Represents a NeovimApis Tabpage (custom Msgpack type)
- */
-@JsonFormat(shape = JsonFormat.Shape.OBJECT)
-public final class Tabpage extends BaseCustomIdType implements Comparable<Tabpage> {
-    public Tabpage(long id) {
-        super(id);
+    @Override
+    public String getEventName() {
+        return NAME;
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Tabpage buffer = (Tabpage) o;
-        return getId() == buffer.getId();
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId());
-    }
-
-    @Override
-    public int compareTo(Tabpage o) {
-        return Long.compare(getId(), o.getId());
+    public String toString() {
+        return "BellEvent{}";
     }
 }

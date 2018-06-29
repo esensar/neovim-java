@@ -22,36 +22,35 @@
  * SOFTWARE.
  */
 
-package com.ensarsarajcic.neovim.java.api.types.msgpack;
+package com.ensarsarajcic.neovim.java.notifications.ui.wildmenu;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.Objects;
+@JsonFormat(shape = JsonFormat.Shape.ARRAY)
+public final class WildmenuSelectEvent implements UIWildmenuEvent {
+    public static final String NAME = "wildmenu_select";
 
-/**
- * Represents a NeovimApis Tabpage (custom Msgpack type)
- */
-@JsonFormat(shape = JsonFormat.Shape.OBJECT)
-public final class Tabpage extends BaseCustomIdType implements Comparable<Tabpage> {
-    public Tabpage(long id) {
-        super(id);
+    private int selectedIndex;
+
+    public WildmenuSelectEvent(
+            @JsonProperty(value = "selected_index", index = 0) int selectedIndex) {
+        this.selectedIndex = selectedIndex;
+    }
+
+    public int getSelectedIndex() {
+        return selectedIndex;
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Tabpage buffer = (Tabpage) o;
-        return getId() == buffer.getId();
+    public String getEventName() {
+        return NAME;
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(getId());
-    }
-
-    @Override
-    public int compareTo(Tabpage o) {
-        return Long.compare(getId(), o.getId());
+    public String toString() {
+        return "WildmenuSelectEvent{" +
+                "selectedIndex=" + selectedIndex +
+                '}';
     }
 }

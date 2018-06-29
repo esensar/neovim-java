@@ -22,36 +22,9 @@
  * SOFTWARE.
  */
 
-package com.ensarsarajcic.neovim.java.api.types.msgpack;
+package com.ensarsarajcic.neovim.java.notifications.ui.grid;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.ensarsarajcic.neovim.java.notifications.ui.UIEvent;
 
-import java.util.Objects;
-
-/**
- * Represents a NeovimApis Tabpage (custom Msgpack type)
- */
-@JsonFormat(shape = JsonFormat.Shape.OBJECT)
-public final class Tabpage extends BaseCustomIdType implements Comparable<Tabpage> {
-    public Tabpage(long id) {
-        super(id);
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Tabpage buffer = (Tabpage) o;
-        return getId() == buffer.getId();
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId());
-    }
-
-    @Override
-    public int compareTo(Tabpage o) {
-        return Long.compare(getId(), o.getId());
-    }
+public interface UIGridEvent extends UIEvent {
 }

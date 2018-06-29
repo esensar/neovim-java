@@ -22,36 +22,51 @@
  * SOFTWARE.
  */
 
-package com.ensarsarajcic.neovim.java.api.types.msgpack;
+package com.ensarsarajcic.neovim.java.notifications.ui.cmdline;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.Objects;
+@JsonFormat(shape = JsonFormat.Shape.ARRAY)
+public final class CmdlineSpecialCharEvent implements UICmdlineEvent {
+    public static final String NAME = "cmdline_special_char";
 
-/**
- * Represents a NeovimApis Tabpage (custom Msgpack type)
- */
-@JsonFormat(shape = JsonFormat.Shape.OBJECT)
-public final class Tabpage extends BaseCustomIdType implements Comparable<Tabpage> {
-    public Tabpage(long id) {
-        super(id);
+    private String character;
+    private boolean shift;
+    private int level;
+
+    public CmdlineSpecialCharEvent(
+            @JsonProperty(value = "character", index = 0) String character,
+            @JsonProperty(value = "shift", index = 1) boolean shift,
+            @JsonProperty(value = "level", index = 2) int level) {
+        this.character = character;
+        this.shift = shift;
+        this.level = level;
+    }
+
+    public String getCharacter() {
+        return character;
+    }
+
+    public boolean isShift() {
+        return shift;
+    }
+
+    public int getLevel() {
+        return level;
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Tabpage buffer = (Tabpage) o;
-        return getId() == buffer.getId();
+    public String getEventName() {
+        return NAME;
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(getId());
-    }
-
-    @Override
-    public int compareTo(Tabpage o) {
-        return Long.compare(getId(), o.getId());
+    public String toString() {
+        return "CmdlineSpecialCharEvent{" +
+                "character='" + character + '\'' +
+                ", shift=" + shift +
+                ", level=" + level +
+                '}';
     }
 }

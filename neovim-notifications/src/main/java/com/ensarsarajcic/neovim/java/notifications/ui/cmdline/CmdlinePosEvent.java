@@ -22,36 +22,47 @@
  * SOFTWARE.
  */
 
-package com.ensarsarajcic.neovim.java.api.types.msgpack;
+package com.ensarsarajcic.neovim.java.notifications.ui.cmdline;
 
+import com.ensarsarajcic.neovim.java.notifications.ui.UIEvent;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.Objects;
+import java.util.List;
+import java.util.function.Function;
 
-/**
- * Represents a NeovimApis Tabpage (custom Msgpack type)
- */
-@JsonFormat(shape = JsonFormat.Shape.OBJECT)
-public final class Tabpage extends BaseCustomIdType implements Comparable<Tabpage> {
-    public Tabpage(long id) {
-        super(id);
+@JsonFormat(shape = JsonFormat.Shape.ARRAY)
+public final class CmdlinePosEvent implements UICmdlineEvent {
+    public static final String NAME = "cmdline_pos";
+
+    private int pos;
+    private int level;
+
+    public CmdlinePosEvent(
+            @JsonProperty(value = "pos", index = 0) int pos,
+            @JsonProperty(value = "level", index = 1) int level) {
+        this.pos = pos;
+        this.level = level;
+    }
+
+    public int getPos() {
+        return pos;
+    }
+
+    public int getLevel() {
+        return level;
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Tabpage buffer = (Tabpage) o;
-        return getId() == buffer.getId();
+    public String getEventName() {
+        return NAME;
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(getId());
-    }
-
-    @Override
-    public int compareTo(Tabpage o) {
-        return Long.compare(getId(), o.getId());
+    public String toString() {
+        return "CmdlinePosEvent{" +
+                "pos=" + pos +
+                ", level=" + level +
+                '}';
     }
 }

@@ -22,36 +22,42 @@
  * SOFTWARE.
  */
 
-package com.ensarsarajcic.neovim.java.api.types.msgpack;
+package com.ensarsarajcic.neovim.java.notifications;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import java.util.concurrent.Flow;
+import java.util.concurrent.SubmissionPublisher;
+import java.util.function.Function;
 
-import java.util.Objects;
+public final class FilterProcessor<T> extends SubmissionPublisher<T> implements Flow.Processor<T, T> {
 
-/**
- * Represents a NeovimApis Tabpage (custom Msgpack type)
- */
-@JsonFormat(shape = JsonFormat.Shape.OBJECT)
-public final class Tabpage extends BaseCustomIdType implements Comparable<Tabpage> {
-    public Tabpage(long id) {
-        super(id);
+    private Function<T, Boolean> filterFunction;
+    private Flow.Subscription subscription;
+
+    public FilterProcessor(Function<T, Boolean> filterFunction) {
+        this.filterFunction = filterFunction;
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Tabpage buffer = (Tabpage) o;
-        return getId() == buffer.getId();
+    public void onSubscribe(Flow.Subscription subscription) {
+        this.subscription = subscription;
+        subscription.request(1);
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(getId());
+    public void onNext(T item) {
+        if (filterFunction.apply(item)) {
+            submit(item);
+        }
+        subscription.request(1);
     }
 
     @Override
-    public int compareTo(Tabpage o) {
-        return Long.compare(getId(), o.getId());
+    public void onError(Throwable throwable) {
+        throwable.printStackTrace();
+    }
+
+    @Override
+    public void onComplete() {
+        close();
     }
 }

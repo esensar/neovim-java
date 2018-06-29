@@ -22,36 +22,33 @@
  * SOFTWARE.
  */
 
-package com.ensarsarajcic.neovim.java.api.types.msgpack;
+package com.ensarsarajcic.neovim.java.notifications.ui.cmdline;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import java.util.Objects;
+@JsonFormat(shape = JsonFormat.Shape.ARRAY)
+public final class CmdlineBlockAppend implements UICmdlineEvent {
+    public static final String NAME = "cmdline_block_append";
 
-/**
- * Represents a NeovimApis Tabpage (custom Msgpack type)
- */
-@JsonFormat(shape = JsonFormat.Shape.OBJECT)
-public final class Tabpage extends BaseCustomIdType implements Comparable<Tabpage> {
-    public Tabpage(long id) {
-        super(id);
+    private String line;
+
+    public CmdlineBlockAppend(String line) {
+        this.line = line;
+    }
+
+    public String getLine() {
+        return line;
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Tabpage buffer = (Tabpage) o;
-        return getId() == buffer.getId();
+    public String getEventName() {
+        return NAME;
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(getId());
-    }
-
-    @Override
-    public int compareTo(Tabpage o) {
-        return Long.compare(getId(), o.getId());
+    public String toString() {
+        return "CmdlineBlockAppend{" +
+                "line='" + line + '\'' +
+                '}';
     }
 }

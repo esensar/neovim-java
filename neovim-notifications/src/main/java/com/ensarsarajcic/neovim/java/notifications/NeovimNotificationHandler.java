@@ -22,36 +22,30 @@
  * SOFTWARE.
  */
 
-package com.ensarsarajcic.neovim.java.api.types.msgpack;
+package com.ensarsarajcic.neovim.java.notifications;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.ensarsarajcic.neovim.java.notifications.buffer.BufferEvent;
+import com.ensarsarajcic.neovim.java.notifications.ui.NeovimRedrawEvent;
 
-import java.util.Objects;
+import java.util.concurrent.Flow;
 
-/**
- * Represents a NeovimApis Tabpage (custom Msgpack type)
- */
-@JsonFormat(shape = JsonFormat.Shape.OBJECT)
-public final class Tabpage extends BaseCustomIdType implements Comparable<Tabpage> {
-    public Tabpage(long id) {
-        super(id);
-    }
+public interface NeovimNotificationHandler {
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Tabpage buffer = (Tabpage) o;
-        return getId() == buffer.getId();
-    }
+    /**
+     * Passes down a publisher of {@link NeovimRedrawEvent} objects received
+     * {@link NeovimRedrawEvent} is a special type of notification that is received when
+     * attached to Neovim
+     * It will never complete
+     * @return {@link Flow.Publisher} passing down ui events as they come
+     */
+    Flow.Publisher<NeovimRedrawEvent> uiEvents();
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId());
-    }
-
-    @Override
-    public int compareTo(Tabpage o) {
-        return Long.compare(getId(), o.getId());
-    }
+    /**
+     * Passes down a publisher of {@link BufferEvent} objects received
+     * {@link BufferEvent} is a special type of notification that is received when
+     * attached to a buffer in Neovim
+     * It will never complete
+     * @return {@link Flow.Publisher} passing down buffer events as they come
+     */
+    Flow.Publisher<BufferEvent> bufferEvents();
 }

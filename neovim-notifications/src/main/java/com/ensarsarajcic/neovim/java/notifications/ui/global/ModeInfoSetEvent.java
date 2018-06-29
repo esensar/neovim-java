@@ -22,36 +22,45 @@
  * SOFTWARE.
  */
 
-package com.ensarsarajcic.neovim.java.api.types.msgpack;
+package com.ensarsarajcic.neovim.java.notifications.ui.global;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.Objects;
+import java.util.List;
 
-/**
- * Represents a NeovimApis Tabpage (custom Msgpack type)
- */
-@JsonFormat(shape = JsonFormat.Shape.OBJECT)
-public final class Tabpage extends BaseCustomIdType implements Comparable<Tabpage> {
-    public Tabpage(long id) {
-        super(id);
+@JsonFormat(shape = JsonFormat.Shape.ARRAY)
+public final class ModeInfoSetEvent implements UIGlobalEvent {
+    public static final String NAME = "mode_info_set";
+
+    private boolean cursorStyleEnabled;
+    private List<ModeInfo> modeInfoList;
+
+    public ModeInfoSetEvent(
+            @JsonProperty(value = "cursor_style_enabled", index = 0) boolean cursorStyleEnabled,
+            @JsonProperty(value = "mode_info", index = 1) List<ModeInfo> modeInfoList) {
+        this.cursorStyleEnabled = cursorStyleEnabled;
+        this.modeInfoList = modeInfoList;
+    }
+
+    public boolean isCursorStyleEnabled() {
+        return cursorStyleEnabled;
+    }
+
+    public List<ModeInfo> getModeInfoList() {
+        return modeInfoList;
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Tabpage buffer = (Tabpage) o;
-        return getId() == buffer.getId();
+    public String getEventName() {
+        return NAME;
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(getId());
-    }
-
-    @Override
-    public int compareTo(Tabpage o) {
-        return Long.compare(getId(), o.getId());
+    public String toString() {
+        return "ModeInfoSetEvent{" +
+                "cursorStyleEnabled=" + cursorStyleEnabled +
+                ", modeInfoList=" + modeInfoList +
+                '}';
     }
 }
