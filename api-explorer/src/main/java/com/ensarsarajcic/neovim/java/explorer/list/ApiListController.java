@@ -65,6 +65,8 @@ public final class ApiListController {
     @FXML
     public TableColumn functionColOpenInBrowser;
     @FXML
+    public TableColumn functionColTestFunc;
+    @FXML
     public TableView<NeovimFunction> functionTable;
 
     // Ui events
@@ -109,6 +111,9 @@ public final class ApiListController {
     @FXML
     public TextField fieldSearch;
 
+    private String connectedIpPort = "";
+    private boolean hasConnection = false;
+
     public void initialize() throws ExecutionException, InterruptedException {
         try {
             // Load up API
@@ -117,6 +122,8 @@ public final class ApiListController {
                 apiList = ApiDiscovery.discoverApiFromConnection(new TcpSocketRPCConnection(
                         new Socket("127.0.0.1", 6666)
                 ));
+                hasConnection = true;
+                connectedIpPort = "127.0.0.1:6666";
             } catch (Exception ex) {
                 // Fallback to new nvim instance
                 System.err.println("Could not connect to Neovim instance on 127.0.0.1:6666. Falling back to 'nvim --api-info'");
@@ -151,6 +158,35 @@ public final class ApiListController {
                                             String.format("https://neovim.io/doc/user/api.html#%s()", function.getName())
                                     );
                                 });
+                                setGraphic(btn);
+                                setText(null);
+                            }
+                        }
+                    };
+                }
+            });
+            functionColTestFunc.setCellFactory(new Callback<TableColumn, TableCell>() {
+                @Override
+                public TableCell call(TableColumn param) {
+                    return new TableCell<NeovimFunction, String>() {
+                        final Button btn = new Button("Test");
+
+                        @Override
+                        protected void updateItem(String item, boolean empty) {
+                            super.updateItem(item, empty);
+                            if (empty) {
+                                setGraphic(null);
+                                setText(null);
+                            } else {
+                                btn.setOnAction(event -> {
+                                    NeovimFunction function = getTableView().getItems().get(getIndex());
+                                    System.out.println("Testing function: " + function);
+                                });
+                                if (hasConnection) {
+                                    btn.setDisable(false);
+                                } else {
+                                    btn.setDisable(true);
+                                }
                                 setGraphic(btn);
                                 setText(null);
                             }
@@ -280,6 +316,15 @@ public final class ApiListController {
 
         stringBuilder.append("Compatible version: ");
         stringBuilder.append(neovimVersion.getApiCompatible());
+
+        stringBuilder.append(". ");
+
+        if (hasConnection) {
+            stringBuilder.append("Connected to: ");
+            stringBuilder.append(connectedIpPort);
+        } else {
+            stringBuilder.append("Not connected.");
+        }
 
         return stringBuilder.toString();
     }
