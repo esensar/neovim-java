@@ -102,7 +102,9 @@ public final class BackgroundRPCListener implements RPCListener {
     @Override
     public void listenForResponse(int id, ResponseCallback callback) {
         log.debug("Added listener for id: {}", id);
-        responseCallbacks.put(id, callback);
+        if (callback != null) {
+            responseCallbacks.put(id, callback);
+        }
     }
 
     @Override

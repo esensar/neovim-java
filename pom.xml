@@ -16,6 +16,7 @@
         <module>neovim-rx-api</module>
         <module>testing-helpers</module>
         <module>neovim-notifications</module>
+        <module>handler-annotations</module>
     </modules>
 
     <name>neovim-java (Parent)</name>
