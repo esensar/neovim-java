@@ -34,6 +34,8 @@ import javafx.beans.value.ObservableValueBase;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -44,6 +46,7 @@ import java.net.Socket;
 import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
+import java.util.function.Predicate;
 
 public final class ApiListController {
     // Functions
@@ -92,11 +95,19 @@ public final class ApiListController {
     @FXML
     public TableView<Map.Entry<String, NeovimType>> typesTable;
 
+    // UI Options
+    @FXML
+    public TableView<String> uiOptionsTable;
+    @FXML
+    public TableColumn<String, String> uiOptionsColName;
+
     // Version info
     @FXML
     public Label labelInformation;
-    public TableView<String> uiOptionsTable;
-    public TableColumn<String, String> uiOptionsColName;
+
+    // Search
+    @FXML
+    public TextField fieldSearch;
 
     public void initialize() throws ExecutionException, InterruptedException {
         try {
@@ -232,6 +243,20 @@ public final class ApiListController {
                 }
             };
             labelInformation.setText(getVersionInfo(neovimVersions.getValue()));
+
+            NeovimApiList finalApiList1 = apiList;
+            fieldSearch.setOnAction(event -> {
+                String searchValue = fieldSearch.getText();
+                neovimFunctions.removeAll(finalApiList1.getFunctions());
+                neovimFunctions.addAll(finalApiList1.getFunctions());
+                neovimUiEvents.removeAll(finalApiList1.getUiEvents());
+                neovimUiEvents.addAll(finalApiList1.getUiEvents());
+                neovimUiOptions.removeAll(finalApiList1.getUiOptions());
+                neovimUiOptions.addAll(finalApiList1.getUiOptions());
+                neovimFunctions.removeIf(neovimFunction -> !neovimFunction.getName().toUpperCase().contains(searchValue.toUpperCase()) && !searchValue.toUpperCase().contains(neovimFunction.getName().toUpperCase()));
+                neovimUiEvents.removeIf(neovimUiEvent -> !neovimUiEvent.getName().toUpperCase().contains(searchValue.toUpperCase()) && !searchValue.toUpperCase().contains(neovimUiEvent.getName().toUpperCase()));
+                neovimUiOptions.removeIf(neovimUiOption -> !neovimUiOption.toUpperCase().contains(searchValue.toUpperCase()) && !searchValue.toUpperCase().contains(neovimUiOption.toUpperCase()));
+            });
         } catch (IOException e) {
             e.printStackTrace();
         }

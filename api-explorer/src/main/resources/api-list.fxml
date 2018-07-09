@@ -5,6 +5,7 @@
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
 <!--
@@ -31,7 +32,7 @@
   ~ SOFTWARE.
   -->
 
-<AnchorPane prefHeight="400.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ensarsarajcic.neovim.java.explorer.list.ApiListController">
+<AnchorPane prefHeight="400.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ensarsarajcic.neovim.java.explorer.list.ApiListController">
    <AnchorPane prefHeight="200.0" prefWidth="1000.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="17.0">
       <children>
           <TabPane prefHeight="303.0" prefWidth="1000.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -110,6 +111,7 @@
                   </Tab>
               </tabs>
           </TabPane>
+         <TextField fx:id="fieldSearch" prefHeight="27.0" prefWidth="305.0" promptText="Search" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="3.0" />
       </children>
    </AnchorPane>
    <Label fx:id="labelInformation" text="Label" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
