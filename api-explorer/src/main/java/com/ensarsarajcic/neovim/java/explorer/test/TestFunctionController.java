@@ -24,6 +24,11 @@
 
 package com.ensarsarajcic.neovim.java.explorer.test;
 
+import com.ensarsarajcic.neovim.java.corerpc.message.RPCError;
+import com.ensarsarajcic.neovim.java.corerpc.message.RequestMessage;
+import com.ensarsarajcic.neovim.java.corerpc.message.ResponseMessage;
+import com.ensarsarajcic.neovim.java.corerpc.reactive.RPCException;
+import com.ensarsarajcic.neovim.java.explorer.api.ConnectionHolder;
 import com.ensarsarajcic.neovim.java.explorer.api.NeovimFunction;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -33,10 +38,13 @@ import javafx.scene.control.TextArea;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.CompletionException;
+import java.util.function.Function;
 
 public final class TestFunctionController {
 
@@ -50,7 +58,8 @@ public final class TestFunctionController {
 
     public void setFunctionData(NeovimFunction neovimFunction) {
         this.neovimFunction = neovimFunction;
-                List<Node> nodes = new ArrayList<>();
+        List<Node> nodes = new ArrayList<>();
+        List<Map.Entry<String, Node>> inputNodes = new ArrayList<>();
 
         nodes.add(new Label(neovimFunction.getName()));
         nodes.add(new Label("Returns: " + neovimFunction.getReturnType()));
@@ -68,6 +77,7 @@ public final class TestFunctionController {
             Node node = NodeHandler.generateNodeForType(type);
             label.setLabelFor(node);
             nodes.add(new HBox(label, node));
+            inputNodes.add(new AbstractMap.SimpleEntry<>(type, node));
         }
 
         Label resultLabel = new Label("Result: ");
@@ -76,7 +86,26 @@ public final class TestFunctionController {
         Button send = new Button();
         send.setText("SEND");
         send.setOnAction(event -> {
-            resultArea.setText("RESULT");
+            ArrayList<Object> args = new ArrayList<>();
+            for (Map.Entry<String, Node> node : inputNodes) {
+                args.add(NodeHandler.generateValueFromNodeOfType(node.getValue(), node.getKey()));
+            }
+            ConnectionHolder.getReactiveRPCStreamer().response(
+                    new RequestMessage.Builder(neovimFunction.getName())
+                            .addArguments(args)
+            ).exceptionally(throwable -> {
+                if (throwable instanceof  CompletionException) {
+                    throwable = throwable.getCause();
+                }
+                if (throwable instanceof RPCException) {
+                    return new ResponseMessage(0, ((RPCException) throwable).getRpcError(), null);
+                } else {
+                    return new ResponseMessage(
+                            0,
+                            new RPCError(-1000, "LOCAL ERROR: " + throwable.toString()),
+                            null);
+                }
+            }).thenAccept(responseMessage -> resultArea.setText(responseMessage.toString()));
         });
 
         nodes.add(resultLabel);

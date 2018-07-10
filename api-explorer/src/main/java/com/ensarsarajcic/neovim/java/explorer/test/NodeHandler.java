@@ -24,12 +24,15 @@
 
 package com.ensarsarajcic.neovim.java.explorer.test;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.HBox;
+
+import java.io.IOException;
 
 public final class NodeHandler {
 
@@ -75,11 +78,43 @@ public final class NodeHandler {
         return new HBox(trueButton, falseButton);
     }
 
+    private static Boolean getBooleanNodeValue(HBox hBox) {
+        RadioButton trueButton = (RadioButton) hBox.getChildren().get(0);
+        return trueButton.isSelected();
+    }
+
     private static Node generateIntegerNode() {
         return new NumberField();
     }
 
     public static Object generateValueFromNodeOfType(Node node, String type) {
+        switch (type) {
+            case "Boolean":
+                return getBooleanNodeValue((HBox) node);
+            case "Integer":
+                return Integer.valueOf(((NumberField) node).getText());
+            case "String":
+                return ((TextField) node).getText();
+            case "Object":
+            case "Dictionary":
+            case "Array":
+                try {
+                    return new ObjectMapper().reader().readValue(((TextField) node).getText());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return e;
+                }
+        }
+
+        if (type.startsWith("Array")) {
+            try {
+                return new ObjectMapper().reader().readValue(((TextField) node).getText());
+            } catch (IOException e) {
+                e.printStackTrace();
+                return e;
+            }
+        }
+
         return new Object();
     }
 }

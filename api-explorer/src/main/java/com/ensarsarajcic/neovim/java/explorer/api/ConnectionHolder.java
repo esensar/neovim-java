@@ -30,28 +30,40 @@ import com.ensarsarajcic.neovim.java.api.types.msgpack.NeovimJacksonModule;
 import com.ensarsarajcic.neovim.java.corerpc.client.RPCClient;
 import com.ensarsarajcic.neovim.java.corerpc.client.RPCConnection;
 import com.ensarsarajcic.neovim.java.corerpc.reactive.ReactiveRPCClient;
+import com.ensarsarajcic.neovim.java.corerpc.reactive.ReactiveRPCStreamer;
 
 public enum ConnectionHolder {
     INSTANCE;
 
     private static RPCConnection connection;
     private static NeovimApi neovimApi;
+    private static ReactiveRPCStreamer reactiveRPCStreamer;
 
     public static void setConnection(RPCConnection rpcConnection) {
         connection = rpcConnection;
+    }
+
+    public static ReactiveRPCStreamer getReactiveRPCStreamer() {
+        if (reactiveRPCStreamer == null) {
+            synchronized (ConnectionHolder.class) {
+                if (reactiveRPCStreamer == null) {
+                    RPCClient rpcClient = new RPCClient.Builder()
+                            .withObjectMapper(NeovimJacksonModule.createNeovimObjectMapper()).build();
+                    rpcClient.attach(connection);
+
+                    reactiveRPCStreamer = ReactiveRPCClient.createDefaultInstanceWithCustomStreamer(rpcClient);
+                }
+            }
+        }
+
+        return reactiveRPCStreamer;
     }
 
     public static NeovimApi getApi() {
         if (neovimApi == null) {
             synchronized (ConnectionHolder.class) {
                 if (neovimApi == null) {
-                    RPCClient rpcClient = new RPCClient.Builder()
-                            .withObjectMapper(NeovimJacksonModule.createNeovimObjectMapper()).build();
-                    rpcClient.attach(connection);
-
-                    neovimApi = new NeovimStreamApi(
-                            ReactiveRPCClient.createDefaultInstanceWithCustomStreamer(rpcClient)
-                    );
+                    neovimApi = new NeovimStreamApi(getReactiveRPCStreamer());
                 }
             }
         }

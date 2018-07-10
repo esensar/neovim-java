@@ -34,6 +34,10 @@ public class RPCException extends Exception {
         this.rpcError = rpcError;
     }
 
+    public RPCError getRpcError() {
+        return rpcError;
+    }
+
     @Override
     public String toString() {
         return "RPCException{" +
