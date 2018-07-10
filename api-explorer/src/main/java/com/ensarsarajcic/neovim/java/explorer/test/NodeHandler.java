@@ -31,6 +31,7 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.HBox;
+import javafx.scene.text.Text;
 
 import java.io.IOException;
 
@@ -49,8 +50,9 @@ public final class NodeHandler {
             case "String":
                 return new TextField();
             case "Object":
+                return new TextField("Object here (could be JSON)");
             case "Dictionary":
-                return new TextField("JSON HERE");
+                return new TextField("Dictionary here (JSON)");
             case "Array":
                 return new TextField("Array here");
             case "Window":
