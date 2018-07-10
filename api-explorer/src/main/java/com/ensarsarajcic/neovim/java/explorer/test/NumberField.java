@@ -22,26 +22,24 @@
  * SOFTWARE.
  */
 
-package com.ensarsarajcic.neovim.java.corerpc.reactive;
+package com.ensarsarajcic.neovim.java.explorer.test;
 
-import com.ensarsarajcic.neovim.java.corerpc.message.RPCError;
+import javafx.scene.control.TextField;
+import javafx.scene.input.KeyEvent;
 
-public class RPCException extends Exception {
-    private RPCError rpcError;
-
-    public RPCException(RPCError rpcError) {
-        super(rpcError.toString());
-        this.rpcError = rpcError;
+public class NumberField extends TextField {
+    public NumberField() {
+        this.addEventFilter(KeyEvent.KEY_TYPED, t -> {
+            char ar[] = t.getCharacter().toCharArray();
+            char ch = ar[t.getCharacter().toCharArray().length - 1];
+            if (!(ch >= '0' && ch <= '9')) {
+                System.out.println("The char you entered is not a number");
+                t.consume();
+            }
+        });
     }
 
-    public RPCError getRpcError() {
-        return rpcError;
-    }
-
-    @Override
-    public String toString() {
-        return "RPCException{" +
-                "rpcError=" + rpcError +
-                '}';
+    public Integer getIntValue() {
+        return Integer.valueOf(getText());
     }
 }

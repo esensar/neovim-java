@@ -22,26 +22,20 @@
  * SOFTWARE.
  */
 
-package com.ensarsarajcic.neovim.java.corerpc.reactive;
+package com.ensarsarajcic.neovim.java.explorer.test;
 
-import com.ensarsarajcic.neovim.java.corerpc.message.RPCError;
+import com.ensarsarajcic.neovim.java.api.types.msgpack.BaseCustomIdType;
 
-public class RPCException extends Exception {
-    private RPCError rpcError;
+import java.util.function.Function;
 
-    public RPCException(RPCError rpcError) {
-        super(rpcError.toString());
-        this.rpcError = rpcError;
+public final class NeovimTypeField<T extends BaseCustomIdType> extends NumberField {
+    public Function<Integer, T> creator;
+
+    public NeovimTypeField(Function<Integer, T> creator) {
+        this.creator = creator;
     }
 
-    public RPCError getRpcError() {
-        return rpcError;
-    }
-
-    @Override
-    public String toString() {
-        return "RPCException{" +
-                "rpcError=" + rpcError +
-                '}';
+    public T getValue() {
+        return creator.apply(getIntValue());
     }
 }

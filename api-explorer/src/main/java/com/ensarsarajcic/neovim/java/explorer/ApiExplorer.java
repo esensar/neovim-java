@@ -45,7 +45,7 @@ public final class ApiExplorer extends Application {
     public void start(Stage primaryStage) {
         try {
             hostServices = getHostServices();
-            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("api-list.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("connection-picker.fxml"));
             Parent root = null;
             root = loader.load();
             Scene scene = new Scene(root);

@@ -48,6 +48,7 @@
                                   <TableColumn fx:id="functionColDepSince" editable="false" prefWidth="30" text="Deprecated Since" />
                                   <TableColumn fx:id="functionColParams" editable="false" prefWidth="450" text="Parameters" />
                                   <TableColumn fx:id="functionColOpenInBrowser" editable="false" text="Open" />
+                                  <TableColumn fx:id="functionColTestFunc" editable="false" text="Test" />
                               </columns>
                           </TableView>
                       </AnchorPane>

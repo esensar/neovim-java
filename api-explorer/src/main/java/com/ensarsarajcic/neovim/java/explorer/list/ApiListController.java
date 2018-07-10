@@ -28,6 +28,7 @@ import com.ensarsarajcic.neovim.java.corerpc.client.TcpSocketRPCConnection;
 import com.ensarsarajcic.neovim.java.explorer.ApiExplorer;
 import com.ensarsarajcic.neovim.java.explorer.api.*;
 import com.ensarsarajcic.neovim.java.explorer.api.discovery.ApiDiscovery;
+import com.ensarsarajcic.neovim.java.explorer.test.TestFunctionController;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.beans.value.ObservableValueBase;
@@ -37,8 +38,12 @@ import javafx.collections.ObservableMap;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 
 import java.io.IOException;
@@ -64,6 +69,8 @@ public final class ApiListController {
     public TableColumn<NeovimFunction, String> functionColParams;
     @FXML
     public TableColumn functionColOpenInBrowser;
+    @FXML
+    public TableColumn functionColTestFunc;
     @FXML
     public TableView<NeovimFunction> functionTable;
 
@@ -109,18 +116,17 @@ public final class ApiListController {
     @FXML
     public TextField fieldSearch;
 
+    private boolean hasConnection = false;
+
     public void initialize() throws ExecutionException, InterruptedException {
         try {
             // Load up API
             NeovimApiList apiList;
-            try {
-                apiList = ApiDiscovery.discoverApiFromConnection(new TcpSocketRPCConnection(
-                        new Socket("127.0.0.1", 6666)
-                ));
-            } catch (Exception ex) {
-                // Fallback to new nvim instance
-                System.err.println("Could not connect to Neovim instance on 127.0.0.1:6666. Falling back to 'nvim --api-info'");
+            if (ConnectionHolder.getConnection() == null) {
                 apiList = ApiDiscovery.discoverApi();
+            } else {
+                apiList = ApiDiscovery.discoverApiFromInstance(ConnectionHolder.getApi());
+                hasConnection = true;
             }
             NeovimApiList finalApiList = apiList;
 
@@ -151,6 +157,48 @@ public final class ApiListController {
                                             String.format("https://neovim.io/doc/user/api.html#%s()", function.getName())
                                     );
                                 });
+                                setGraphic(btn);
+                                setText(null);
+                            }
+                        }
+                    };
+                }
+            });
+            functionColTestFunc.setCellFactory(new Callback<TableColumn, TableCell>() {
+                @Override
+                public TableCell call(TableColumn param) {
+                    return new TableCell<NeovimFunction, String>() {
+                        final Button btn = new Button("Test");
+
+                        @Override
+                        protected void updateItem(String item, boolean empty) {
+                            super.updateItem(item, empty);
+                            if (empty) {
+                                setGraphic(null);
+                                setText(null);
+                            } else {
+                                btn.setOnAction(event -> {
+                                    NeovimFunction function = getTableView().getItems().get(getIndex());
+                                    try {
+                                        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("test-function.fxml"));
+                                        Parent root = null;
+                                        root = loader.load();
+                                        Stage stage = new Stage();
+                                        Scene scene = new Scene(root);
+                                        scene.getStylesheets().add("styles.css");
+                                        stage.setTitle("Testing function " + function.getName());
+                                        stage.setScene(scene);
+                                        loader.<TestFunctionController>getController().setFunctionData(function);
+                                        stage.show();
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                });
+                                if (hasConnection) {
+                                    btn.setDisable(false);
+                                } else {
+                                    btn.setDisable(true);
+                                }
                                 setGraphic(btn);
                                 setText(null);
                             }
@@ -280,6 +328,15 @@ public final class ApiListController {
 
         stringBuilder.append("Compatible version: ");
         stringBuilder.append(neovimVersion.getApiCompatible());
+
+        stringBuilder.append(". ");
+
+        if (hasConnection) {
+            stringBuilder.append("Connected to: ");
+            stringBuilder.append(ConnectionHolder.getConnectedIpPort());
+        } else {
+            stringBuilder.append("Not connected.");
+        }
 
         return stringBuilder.toString();
     }
