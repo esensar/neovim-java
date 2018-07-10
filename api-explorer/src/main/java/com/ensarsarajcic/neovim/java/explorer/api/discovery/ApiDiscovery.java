@@ -76,6 +76,10 @@ public final class ApiDiscovery {
      */
     public static NeovimApiList discoverApiFromConnection(RPCConnection rpcConnection) throws ExecutionException, InterruptedException {
         NeovimApi neovimApi = NeovimApis.getApiForConnection(rpcConnection);
+        return discoverApiFromInstance(neovimApi);
+    }
+
+    public static NeovimApiList discoverApiFromInstance(NeovimApi neovimApi) throws ExecutionException, InterruptedException {
         ApiInfo apiInfo = neovimApi.getApiInfo().get();
         return transform(apiInfo);
     }

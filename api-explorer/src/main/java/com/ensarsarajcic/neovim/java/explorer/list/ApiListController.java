@@ -28,6 +28,7 @@ import com.ensarsarajcic.neovim.java.corerpc.client.TcpSocketRPCConnection;
 import com.ensarsarajcic.neovim.java.explorer.ApiExplorer;
 import com.ensarsarajcic.neovim.java.explorer.api.*;
 import com.ensarsarajcic.neovim.java.explorer.api.discovery.ApiDiscovery;
+import com.ensarsarajcic.neovim.java.explorer.test.TestFunctionController;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.beans.value.ObservableValueBase;
@@ -37,8 +38,12 @@ import javafx.collections.ObservableMap;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 
 import java.io.IOException;
@@ -119,9 +124,10 @@ public final class ApiListController {
             // Load up API
             NeovimApiList apiList;
             try {
-                apiList = ApiDiscovery.discoverApiFromConnection(new TcpSocketRPCConnection(
+                ConnectionHolder.setConnection(new TcpSocketRPCConnection(
                         new Socket("127.0.0.1", 6666)
                 ));
+                apiList = ApiDiscovery.discoverApiFromInstance(ConnectionHolder.getApi());
                 hasConnection = true;
                 connectedIpPort = "127.0.0.1:6666";
             } catch (Exception ex) {
@@ -180,6 +186,20 @@ public final class ApiListController {
                             } else {
                                 btn.setOnAction(event -> {
                                     NeovimFunction function = getTableView().getItems().get(getIndex());
+                                    try {
+                                        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("test-function.fxml"));
+                                        Parent root = null;
+                                        root = loader.load();
+                                        Stage stage = new Stage();
+                                        Scene scene = new Scene(root);
+                                        scene.getStylesheets().add("styles.css");
+                                        stage.setTitle("Testing function " + function.getName());
+                                        stage.setScene(scene);
+                                        loader.<TestFunctionController>getController().setFunctionData(function);
+                                        stage.show();
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
                                     System.out.println("Testing function: " + function);
                                 });
                                 if (hasConnection) {
