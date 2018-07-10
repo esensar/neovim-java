@@ -27,6 +27,8 @@ package com.ensarsarajcic.neovim.java.explorer;
 import com.ensarsarajcic.neovim.java.corerpc.client.ProcessRPCConnection;
 import com.ensarsarajcic.neovim.java.corerpc.client.TcpSocketRPCConnection;
 import com.ensarsarajcic.neovim.java.explorer.api.ConnectionHolder;
+import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -34,6 +36,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -65,7 +68,7 @@ public final class ConnectionPickerController {
             try {
                 String text = ipField.getText();
                 String ip = text.split(":")[0];
-                int port = Integer.valueOf(text.split("")[1]);
+                int port = Integer.valueOf(text.split(":")[1]);
                 ConnectionHolder.setConnection(new TcpSocketRPCConnection(new Socket(ip, port)));
                 ConnectionHolder.setConnectedIpPort(text);
                 showApiList(connectBtn);
@@ -80,13 +83,8 @@ public final class ConnectionPickerController {
             FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("api-list.fxml"));
             Parent root = null;
             root = loader.load();
-            Stage stage = new Stage();
             Scene scene = new Scene(root);
-            scene.getStylesheets().add("styles.css");
-            stage.setTitle("Api Explorer v" + getClass().getPackage().getImplementationVersion());
-            stage.setScene(scene);
-            stage.show();
-            ((Stage) button.getScene().getWindow()).close();
+            ((Stage) button.getScene().getWindow()).setScene(scene);
         } catch (IOException e) {
             e.printStackTrace();
         }
