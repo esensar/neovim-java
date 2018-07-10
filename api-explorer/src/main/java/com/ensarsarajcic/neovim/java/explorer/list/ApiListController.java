@@ -116,24 +116,17 @@ public final class ApiListController {
     @FXML
     public TextField fieldSearch;
 
-    private String connectedIpPort = "";
     private boolean hasConnection = false;
 
     public void initialize() throws ExecutionException, InterruptedException {
         try {
             // Load up API
             NeovimApiList apiList;
-            try {
-                ConnectionHolder.setConnection(new TcpSocketRPCConnection(
-                        new Socket("127.0.0.1", 6666)
-                ));
+            if (ConnectionHolder.getConnection() == null) {
+                apiList = ApiDiscovery.discoverApi();
+            } else {
                 apiList = ApiDiscovery.discoverApiFromInstance(ConnectionHolder.getApi());
                 hasConnection = true;
-                connectedIpPort = "127.0.0.1:6666";
-            } catch (Exception ex) {
-                // Fallback to new nvim instance
-                System.err.println("Could not connect to Neovim instance on 127.0.0.1:6666. Falling back to 'nvim --api-info'");
-                apiList = ApiDiscovery.discoverApi();
             }
             NeovimApiList finalApiList = apiList;
 
@@ -200,7 +193,6 @@ public final class ApiListController {
                                     } catch (IOException e) {
                                         e.printStackTrace();
                                     }
-                                    System.out.println("Testing function: " + function);
                                 });
                                 if (hasConnection) {
                                     btn.setDisable(false);
@@ -341,7 +333,7 @@ public final class ApiListController {
 
         if (hasConnection) {
             stringBuilder.append("Connected to: ");
-            stringBuilder.append(connectedIpPort);
+            stringBuilder.append(ConnectionHolder.getConnectedIpPort());
         } else {
             stringBuilder.append("Not connected.");
         }

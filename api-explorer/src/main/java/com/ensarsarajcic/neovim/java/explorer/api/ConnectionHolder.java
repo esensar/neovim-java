@@ -32,12 +32,16 @@ import com.ensarsarajcic.neovim.java.corerpc.client.RPCConnection;
 import com.ensarsarajcic.neovim.java.corerpc.reactive.ReactiveRPCClient;
 import com.ensarsarajcic.neovim.java.corerpc.reactive.ReactiveRPCStreamer;
 
-public enum ConnectionHolder {
-    INSTANCE;
+public final class ConnectionHolder {
+
+    private ConnectionHolder() {
+        throw new AssertionError("No instances");
+    }
 
     private static RPCConnection connection;
     private static NeovimApi neovimApi;
     private static ReactiveRPCStreamer reactiveRPCStreamer;
+    private static String connectedIpPort;
 
     public static void setConnection(RPCConnection rpcConnection) {
         connection = rpcConnection;
@@ -73,5 +77,13 @@ public enum ConnectionHolder {
 
     public static RPCConnection getConnection() {
         return connection;
+    }
+
+    public static String getConnectedIpPort() {
+        return connectedIpPort;
+    }
+
+    public static void setConnectedIpPort(String connectedIpPort) {
+        ConnectionHolder.connectedIpPort = connectedIpPort;
     }
 }
