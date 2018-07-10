@@ -24,6 +24,9 @@
 
 package com.ensarsarajcic.neovim.java.explorer.test;
 
+import com.ensarsarajcic.neovim.java.api.types.msgpack.Buffer;
+import com.ensarsarajcic.neovim.java.api.types.msgpack.Tabpage;
+import com.ensarsarajcic.neovim.java.api.types.msgpack.Window;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -56,11 +59,11 @@ public final class NodeHandler {
             case "Array":
                 return new TextField("Array here");
             case "Window":
-                return new Label("NOT IMPLEMENTED YET (Window)");
+                return new NeovimTypeField<>(Window::new);
             case "Tabpage":
-                return new Label("NOT IMPLEMENTED YET (Tabpage)");
+                return new NeovimTypeField<>(Tabpage::new);
             case "Buffer":
-                return new Label("NOT IMPLEMENTED YET (Buffer)");
+                return new NeovimTypeField<>(Buffer::new);
         }
 
         if (type.startsWith("Array")) {
@@ -94,7 +97,7 @@ public final class NodeHandler {
             case "Boolean":
                 return getBooleanNodeValue((HBox) node);
             case "Integer":
-                return Integer.valueOf(((NumberField) node).getText());
+                return ((NumberField) node).getIntValue();
             case "String":
                 return ((TextField) node).getText();
             case "Object":
@@ -106,6 +109,10 @@ public final class NodeHandler {
                     e.printStackTrace();
                     return e;
                 }
+            case "Buffer":
+            case "Window":
+            case "Tabpage":
+                return ((NeovimTypeField) node).getValue();
         }
 
         if (type.startsWith("Array")) {

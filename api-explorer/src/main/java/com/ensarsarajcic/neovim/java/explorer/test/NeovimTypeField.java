@@ -24,22 +24,18 @@
 
 package com.ensarsarajcic.neovim.java.explorer.test;
 
-import javafx.scene.control.TextField;
-import javafx.scene.input.KeyEvent;
+import com.ensarsarajcic.neovim.java.api.types.msgpack.BaseCustomIdType;
 
-public class NumberField extends TextField {
-    public NumberField() {
-        this.addEventFilter(KeyEvent.KEY_TYPED, t -> {
-            char ar[] = t.getCharacter().toCharArray();
-            char ch = ar[t.getCharacter().toCharArray().length - 1];
-            if (!(ch >= '0' && ch <= '9')) {
-                System.out.println("The char you entered is not a number");
-                t.consume();
-            }
-        });
+import java.util.function.Function;
+
+public final class NeovimTypeField<T extends BaseCustomIdType> extends NumberField {
+    public Function<Integer, T> creator;
+
+    public NeovimTypeField(Function<Integer, T> creator) {
+        this.creator = creator;
     }
 
-    public Integer getIntValue() {
-        return Integer.valueOf(getText());
+    public T getValue() {
+        return creator.apply(getIntValue());
     }
 }
