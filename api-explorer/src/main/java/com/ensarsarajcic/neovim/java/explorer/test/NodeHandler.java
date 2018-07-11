@@ -37,6 +37,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 public final class NodeHandler {
 
@@ -101,10 +103,22 @@ public final class NodeHandler {
             case "String":
                 return ((TextField) node).getText();
             case "Object":
-            case "Dictionary":
-            case "Array":
                 try {
                     return new ObjectMapper().reader().readValue(((TextField) node).getText());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return e;
+                }
+            case "Dictionary":
+                try {
+                    return new ObjectMapper().readerFor(Map.class).readValue(((TextField) node).getText());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return e;
+                }
+            case "Array":
+                try {
+                    return new ObjectMapper().readerFor(List.class).readValue(((TextField) node).getText());
                 } catch (IOException e) {
                     e.printStackTrace();
                     return e;
