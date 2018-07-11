@@ -85,6 +85,11 @@ public class ReactiveRPCStreamerWrapperTest {
             public OutputStream getOutgoingStream() {
                 return outputStream;
             }
+
+            @Override
+            public void close() throws IOException {
+
+            }
         };
     }
 

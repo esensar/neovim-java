@@ -70,4 +70,9 @@ public final class TcpSocketRPCConnection implements RPCConnection {
             throw new RuntimeException(e);
         }
     }
+
+    @Override
+    public void close() throws IOException {
+        socket.close();
+    }
 }

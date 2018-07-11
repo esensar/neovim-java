@@ -82,6 +82,11 @@ public class PackStreamTest {
             public OutputStream getOutgoingStream() {
                 return outputStream;
             }
+
+            @Override
+            public void close() throws IOException {
+
+            }
         };
     }
 

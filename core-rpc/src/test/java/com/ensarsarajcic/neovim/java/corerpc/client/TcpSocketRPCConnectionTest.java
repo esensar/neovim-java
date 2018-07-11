@@ -38,6 +38,7 @@ import java.net.Socket;
 
 import static org.junit.Assert.*;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
 public class TcpSocketRPCConnectionTest {
@@ -83,5 +84,11 @@ public class TcpSocketRPCConnectionTest {
 
         // When incoming stream is requested, crash the app
         tcpSocketRPCConnection.getOutgoingStream();
+    }
+
+    @Test
+    public void testClose() throws IOException {
+        tcpSocketRPCConnection.close();
+        verify(socket).close();
     }
 }
