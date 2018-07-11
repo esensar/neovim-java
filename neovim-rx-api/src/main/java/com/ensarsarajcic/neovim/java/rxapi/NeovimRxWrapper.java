@@ -24,8 +24,9 @@
 
 package com.ensarsarajcic.neovim.java.rxapi;
 
-import com.ensarsarajcic.neovim.java.api.AtomicCallBuilder;
+import com.ensarsarajcic.neovim.java.api.atomic.AtomicCallBuilder;
 import com.ensarsarajcic.neovim.java.api.NeovimApi;
+import com.ensarsarajcic.neovim.java.api.atomic.AtomicCallResponse;
 import com.ensarsarajcic.neovim.java.api.types.api.*;
 import com.ensarsarajcic.neovim.java.api.types.apiinfo.ApiInfo;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.Buffer;
@@ -49,7 +50,7 @@ public final class NeovimRxWrapper implements NeovimRxApi {
     }
 
     @Override
-    public Single<List> sendAtomic(AtomicCallBuilder atomicCallBuilder) {
+    public Single<AtomicCallResponse> sendAtomic(AtomicCallBuilder atomicCallBuilder) {
         return Single.fromFuture(neovimApi.sendAtomic(atomicCallBuilder));
     }
 

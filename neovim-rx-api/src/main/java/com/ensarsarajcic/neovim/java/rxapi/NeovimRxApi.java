@@ -24,9 +24,10 @@
 
 package com.ensarsarajcic.neovim.java.rxapi;
 
-import com.ensarsarajcic.neovim.java.api.AtomicCallBuilder;
+import com.ensarsarajcic.neovim.java.api.atomic.AtomicCallBuilder;
 import com.ensarsarajcic.neovim.java.api.NeovimApi;
 import com.ensarsarajcic.neovim.java.api.NeovimApiFunction;
+import com.ensarsarajcic.neovim.java.api.atomic.AtomicCallResponse;
 import com.ensarsarajcic.neovim.java.api.types.api.*;
 import com.ensarsarajcic.neovim.java.api.types.apiinfo.ApiInfo;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.Buffer;
@@ -40,7 +41,7 @@ import java.util.Map;
 
 public interface NeovimRxApi {
     @NeovimApiFunction(name = NeovimApi.CALL_ATOMIC, since = 1)
-    Single<List> sendAtomic(AtomicCallBuilder atomicCallBuilder);
+    Single<AtomicCallResponse> sendAtomic(AtomicCallBuilder atomicCallBuilder);
     AtomicCallBuilder prepareAtomic();
 
     @NeovimApiFunction(name = NeovimApi.GET_HIGHLIGHT_BY_ID, since = 3)

@@ -25,6 +25,7 @@
 package com.ensarsarajcic.neovim.java.rxapi;
 
 import com.ensarsarajcic.neovim.java.api.NeovimApi;
+import com.ensarsarajcic.neovim.java.api.atomic.AtomicCallResponse;
 import com.ensarsarajcic.neovim.java.api.buffer.NeovimBufferApi;
 import com.ensarsarajcic.neovim.java.api.tabpage.NeovimTabpageApi;
 import com.ensarsarajcic.neovim.java.api.types.api.*;
@@ -98,7 +99,7 @@ public class NeovimRxWrapperTest {
     public void delegatesAtomicCall() {
         var atomicCallBuilder = neovimRxWrapper.prepareAtomic();
         verify(neovimApi).prepareAtomic();
-        given(neovimApi.sendAtomic(atomicCallBuilder)).willReturn(CompletableFuture.completedFuture(Collections.emptyList()));
+        given(neovimApi.sendAtomic(atomicCallBuilder)).willReturn(CompletableFuture.completedFuture(new AtomicCallResponse(Collections.emptyList(), null)));
         neovimRxWrapper.sendAtomic(atomicCallBuilder);
         verify(neovimApi).sendAtomic(atomicCallBuilder);
     }

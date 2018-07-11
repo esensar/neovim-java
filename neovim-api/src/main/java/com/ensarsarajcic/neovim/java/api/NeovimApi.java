@@ -24,6 +24,8 @@
 
 package com.ensarsarajcic.neovim.java.api;
 
+import com.ensarsarajcic.neovim.java.api.atomic.AtomicCallBuilder;
+import com.ensarsarajcic.neovim.java.api.atomic.AtomicCallResponse;
 import com.ensarsarajcic.neovim.java.api.buffer.NeovimBufferApi;
 import com.ensarsarajcic.neovim.java.api.tabpage.NeovimTabpageApi;
 import com.ensarsarajcic.neovim.java.api.types.api.*;
@@ -101,7 +103,7 @@ public interface NeovimApi {
     // endregion
 
     @NeovimApiFunction(name = CALL_ATOMIC, since = 1)
-    CompletableFuture<List> sendAtomic(AtomicCallBuilder atomicCallBuilder);
+    CompletableFuture<AtomicCallResponse> sendAtomic(AtomicCallBuilder atomicCallBuilder);
     AtomicCallBuilder prepareAtomic();
 
     @NeovimApiFunction(name = GET_HIGHLIGHT_BY_ID, since = 3)
