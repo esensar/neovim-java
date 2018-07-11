@@ -24,6 +24,7 @@
 
 package com.ensarsarajcic.neovim.java.corerpc.client;
 
+import java.io.Closeable;
 import java.io.InputStream;
 import java.io.OutputStream;
 
@@ -31,7 +32,7 @@ import java.io.OutputStream;
  * Represents a bi-directional RPC connection
  * (it may represent any connection, due to it being very generic)
  */
-public interface RPCConnection {
+public interface RPCConnection extends Closeable, AutoCloseable {
 
     /**
      * Incoming data stream (coming from other participant)

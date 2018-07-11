@@ -24,6 +24,7 @@
 
 package com.ensarsarajcic.neovim.java.corerpc.client;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Objects;
@@ -31,14 +32,26 @@ import java.util.Objects;
 public final class ProcessRPCConnection implements RPCConnection {
 
     private Process process;
+    private boolean killProcessOnClose;
+
+    /**
+     * Creates a new {@link ProcessRPCConnection} based on a {@link Process}'s input and output streams
+     * By default does not kill process when connection is closed
+     * @param process instance of {@link Process} to connect to
+     */
+    public ProcessRPCConnection(Process process) {
+        this(process, false);
+    }
 
     /**
      * Creates a new {@link ProcessRPCConnection} based on a {@link Process}'s input and output streams
      * @param process instance of {@link Process} to connect to
+     * @param killProcessOnClose true if process should be destroyed when connection is closed
      */
-    public ProcessRPCConnection(Process process) {
+    public ProcessRPCConnection(Process process, boolean killProcessOnClose) {
         Objects.requireNonNull(process, "process is required to properly implement a RPCConnection");
         this.process = process;
+        this.killProcessOnClose = killProcessOnClose;
     }
 
     @Override
@@ -49,5 +62,12 @@ public final class ProcessRPCConnection implements RPCConnection {
     @Override
     public OutputStream getOutgoingStream() {
         return process.getOutputStream();
+    }
+
+    @Override
+    public void close() throws IOException {
+        if (killProcessOnClose) {
+            process.destroy();
+        }
     }
 }

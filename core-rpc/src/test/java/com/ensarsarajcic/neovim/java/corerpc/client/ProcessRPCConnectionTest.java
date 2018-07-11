@@ -27,15 +27,19 @@ package com.ensarsarajcic.neovim.java.corerpc.client;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ProcessRPCConnectionTest {
@@ -48,11 +52,11 @@ public class ProcessRPCConnectionTest {
     @Mock
     OutputStream outputStream;
 
-    @InjectMocks
     ProcessRPCConnection processRPCConnection;
 
     @Before
     public void setUp() throws Exception {
+        processRPCConnection = new ProcessRPCConnection(process);
         given(process.getInputStream()).willReturn(inputStream);
         given(process.getOutputStream()).willReturn(outputStream);
     }
@@ -65,5 +69,22 @@ public class ProcessRPCConnectionTest {
     @Test
     public void testOugtoingStream() {
         assertEquals(outputStream, processRPCConnection.getOutgoingStream());
+    }
+
+    @Test
+    public void testClose() throws IOException {
+        RPCConnection connection = new ProcessRPCConnection(process);
+        connection.close();
+        verify(process, never()).destroy();
+
+        RPCConnection closingConnection = new ProcessRPCConnection(process, true);
+        closingConnection.close();
+        verify(process).destroy();
+
+        Process newProcess = Mockito.mock(Process.class);
+        try(RPCConnection autoClosedConnection = new ProcessRPCConnection(newProcess, true)) {
+            autoClosedConnection.getIncomingStream();
+        }
+        verify(newProcess).destroy();
     }
 }
