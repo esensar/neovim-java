@@ -34,14 +34,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.Flow;
-import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public final class NeovimStreamNotificationHandler implements NeovimNotificationHandler {
     private static final Logger log = LoggerFactory.getLogger(NeovimStreamNotificationHandler.class);

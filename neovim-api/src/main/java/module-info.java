@@ -6,6 +6,7 @@ module neovimapi {
     exports com.ensarsarajcic.neovim.java.api.types.api;
     exports com.ensarsarajcic.neovim.java.api.types.msgpack;
     exports com.ensarsarajcic.neovim.java.api.types.apiinfo;
+    exports com.ensarsarajcic.neovim.java.api.util;
 
     requires corerpc;
     requires reactivecorerpc;
