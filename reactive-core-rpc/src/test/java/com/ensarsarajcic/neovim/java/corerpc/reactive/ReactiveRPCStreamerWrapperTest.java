@@ -110,15 +110,15 @@ public class ReactiveRPCStreamerWrapperTest {
     @Test
     public void testSendRequestCompletable() throws IOException {
         // Given a proper message id generator and response
-        RequestMessage.Builder message = new RequestMessage.Builder("test");
-        ResponseMessage preparedResponse = new ResponseMessage.Builder("test").withId(25).build();
+        var message = new RequestMessage.Builder("test");
+        var preparedResponse = new ResponseMessage.Builder("test").withId(25).build();
         doAnswer(invocationOnMock -> {
             RPCListener.ResponseCallback responseCallback = (RPCListener.ResponseCallback) invocationOnMock.getArguments()[1];
             responseCallback.responseReceived(25, preparedResponse);
             return null;
         }).when(rpcStreamer).send(eq(message), any());
 
-        CountDownLatch countDownLatch = new CountDownLatch(1);
+        var countDownLatch = new CountDownLatch(1);
 
         // When response is requested
         reactiveRPCStreamerWrapper.response(message).thenAccept(responseMessage -> {
@@ -133,7 +133,7 @@ public class ReactiveRPCStreamerWrapperTest {
         countDownLatch.countDown();
 
         // Rpc streamer should be used
-        ArgumentCaptor<RequestMessage.Builder> builderArgumentCaptor = ArgumentCaptor.forClass(RequestMessage.Builder.class);
+        var builderArgumentCaptor = ArgumentCaptor.forClass(RequestMessage.Builder.class);
         verify(rpcStreamer, timeout(100)).send(builderArgumentCaptor.capture(), any());
         assertEquals(message, builderArgumentCaptor.getValue());
     }
@@ -155,7 +155,7 @@ public class ReactiveRPCStreamerWrapperTest {
                 .subscribe(requestMessageSubscriber);
 
         // It should receive events when requests arrive
-        RequestMessage msg1 = new RequestMessage.Builder("test").build();
+        var msg1 = new RequestMessage.Builder("test").build();
         requestCallbackArgumentCaptor.getValue().requestReceived(msg1);
         verify(requestMessageSubscriber, timeout(100)).onNext(msg1);
     }
@@ -177,7 +177,7 @@ public class ReactiveRPCStreamerWrapperTest {
                 .subscribe(notificationMessageSubscriber);
 
         // It should receive events when notifications arrive
-        NotificationMessage msg1 = new NotificationMessage.Builder("test").build();
+        var msg1 = new NotificationMessage.Builder("test").build();
         notificationCallbackArgumentCaptor.getValue().notificationReceived(msg1);
         verify(notificationMessageSubscriber, timeout(100)).onNext(msg1);
     }
