@@ -86,11 +86,11 @@ public class BackgroundRPCListenerTest {
         // Given a proper executor service and object mapper
         prepareSequentialExecutorService();
         given(objectMapper.reader()).willReturn(objectReader);
-        ArrayNode requestNode = prepareRequestNode();
-        RequestMessage requestMessage = new RequestMessage.Builder("test").build();
+        var requestNode = prepareRequestNode();
+        var requestMessage = new RequestMessage.Builder("test").build();
         given(objectMapper.treeToValue(any(), eq(RequestMessage.class))).willReturn(requestMessage);
         given(objectReader.readTree(inputStream)).willReturn(requestNode, (JsonNode) null);
-        RPCListener.RequestCallback requestCallback = Mockito.mock(RPCListener.RequestCallback.class);
+        var requestCallback = Mockito.mock(RPCListener.RequestCallback.class);
 
         backgroundRPCListener.listenForRequests(requestCallback);
         backgroundRPCListener.start(inputStream);
@@ -102,7 +102,7 @@ public class BackgroundRPCListenerTest {
     public void testRequestListenerWithoutStart() throws IOException {
         // Given a proper executor service and object mapper
         prepareSequentialExecutorService();
-        RPCListener.RequestCallback requestCallback = Mockito.mock(RPCListener.RequestCallback.class);
+        var requestCallback = Mockito.mock(RPCListener.RequestCallback.class);
 
         backgroundRPCListener.listenForRequests(requestCallback);
 
@@ -114,11 +114,11 @@ public class BackgroundRPCListenerTest {
         // Given a proper executor service and object mapper
         prepareSequentialExecutorService();
         given(objectMapper.reader()).willReturn(objectReader);
-        ArrayNode responseNode = prepareResponseNode();
-        ResponseMessage responseMessage = new ResponseMessage.Builder("test").build();
+        var responseNode = prepareResponseNode();
+        var responseMessage = new ResponseMessage.Builder("test").build();
         given(objectMapper.treeToValue(any(), eq(ResponseMessage.class))).willReturn(responseMessage);
         given(objectReader.readTree(inputStream)).willReturn(responseNode, (JsonNode) null);
-        RPCListener.ResponseCallback responseCallback = Mockito.mock(RPCListener.ResponseCallback.class);
+        var responseCallback = Mockito.mock(RPCListener.ResponseCallback.class);
 
         backgroundRPCListener.listenForResponse(responseMessage.getId(), responseCallback);
         backgroundRPCListener.start(inputStream);
@@ -130,7 +130,7 @@ public class BackgroundRPCListenerTest {
     public void testResponseListenerWithoutStart() throws IOException {
         // Given a proper executor service and object mapper
         prepareSequentialExecutorService();
-        RPCListener.ResponseCallback requestCallback = Mockito.mock(RPCListener.ResponseCallback.class);
+        var requestCallback = Mockito.mock(RPCListener.ResponseCallback.class);
 
         backgroundRPCListener.listenForResponse(1, requestCallback);
 
@@ -142,11 +142,11 @@ public class BackgroundRPCListenerTest {
         // Given a proper executor service and object mapper
         prepareSequentialExecutorService();
         given(objectMapper.reader()).willReturn(objectReader);
-        ArrayNode notificationNode = prepareNotificationNode();
-        NotificationMessage notificationMessage = new NotificationMessage.Builder("test").build();
+        var notificationNode = prepareNotificationNode();
+        var notificationMessage = new NotificationMessage.Builder("test").build();
         given(objectMapper.treeToValue(any(), eq(NotificationMessage.class))).willReturn(notificationMessage);
         given(objectReader.readTree(inputStream)).willReturn(notificationNode, (JsonNode) null);
-        RPCListener.NotificationCallback notificationCallback = Mockito.mock(RPCListener.NotificationCallback.class);
+        var notificationCallback = Mockito.mock(RPCListener.NotificationCallback.class);
 
         backgroundRPCListener.listenForNotifications(notificationCallback);
         backgroundRPCListener.start(inputStream);
@@ -158,7 +158,7 @@ public class BackgroundRPCListenerTest {
     public void testNotificationListenerWithoutStart() throws IOException {
         // Given a proper executor service and object mapper
         prepareSequentialExecutorService();
-        RPCListener.NotificationCallback notificationCallback = Mockito.mock(RPCListener.NotificationCallback.class);
+        var notificationCallback = Mockito.mock(RPCListener.NotificationCallback.class);
 
         backgroundRPCListener.listenForNotifications(notificationCallback);
 
@@ -168,19 +168,19 @@ public class BackgroundRPCListenerTest {
     @Test(timeout = 2000)
     public void testStopping() throws IOException, InterruptedException {
         // Given a proper executor service and object mapper
-        MultiLatch multiLatch = new MultiLatch(10);
+        var multiLatch = new MultiLatch(10);
         executorService = Executors.newSingleThreadScheduledExecutor();
         backgroundRPCListener = new BackgroundRPCListener(executorService, objectMapper);
         given(objectMapper.reader()).willReturn(objectReader);
-        ArrayNode notificationNode = prepareNotificationNode();
-        NotificationMessage notificationMessage = new NotificationMessage.Builder("test").build();
+        var notificationNode = prepareNotificationNode();
+        var notificationMessage = new NotificationMessage.Builder("test").build();
         given(objectMapper.treeToValue(any(), eq(NotificationMessage.class))).willReturn(notificationMessage);
         given(objectReader.readTree(inputStream)).will(invocationOnMock -> {
             multiLatch.await();
             return notificationNode;
         });
 
-        RPCListener.NotificationCallback notificationCallback = Mockito.mock(RPCListener.NotificationCallback.class);
+        var notificationCallback = Mockito.mock(RPCListener.NotificationCallback.class);
         doAnswer(invocationOnMock -> {
             System.out.println(invocationOnMock.getArguments()[0]);
             return null;
@@ -226,7 +226,7 @@ public class BackgroundRPCListenerTest {
     }
 
     private ArrayNode prepareRequestNode() {
-        ArrayNode arrayNode = JsonNodeFactory.instance.arrayNode(4);
+        var arrayNode = JsonNodeFactory.instance.arrayNode(4);
         arrayNode.add(MessageType.REQUEST.asInt());
         arrayNode.add(MessageType.REQUEST.asInt());
         arrayNode.add(MessageType.REQUEST.asInt());
@@ -235,7 +235,7 @@ public class BackgroundRPCListenerTest {
     }
 
     private ArrayNode prepareResponseNode() {
-        ArrayNode arrayNode = JsonNodeFactory.instance.arrayNode(4);
+        var arrayNode = JsonNodeFactory.instance.arrayNode(4);
         arrayNode.add(MessageType.RESPONSE.asInt());
         arrayNode.add(MessageType.RESPONSE.asInt());
         arrayNode.add(MessageType.RESPONSE.asInt());
@@ -244,7 +244,7 @@ public class BackgroundRPCListenerTest {
     }
 
     private ArrayNode prepareNotificationNode() {
-        ArrayNode arrayNode = JsonNodeFactory.instance.arrayNode(3);
+        var arrayNode = JsonNodeFactory.instance.arrayNode(3);
         arrayNode.add(MessageType.NOTIFICATION.asInt());
         arrayNode.add(MessageType.NOTIFICATION.asInt());
         arrayNode.add(MessageType.NOTIFICATION.asInt());

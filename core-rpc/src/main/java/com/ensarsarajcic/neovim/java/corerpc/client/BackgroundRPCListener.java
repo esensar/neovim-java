@@ -30,7 +30,6 @@ import com.ensarsarajcic.neovim.java.corerpc.message.RequestMessage;
 import com.ensarsarajcic.neovim.java.corerpc.message.ResponseMessage;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -121,7 +120,7 @@ public final class BackgroundRPCListener implements RPCListener {
 
     // executes on background thread
     private void listenForMessages(InputStream inputStream) throws IOException {
-        ObjectReader objectReader = responseObjectMapper.reader();
+        var objectReader = responseObjectMapper.reader();
         JsonNode readNode;
         while ((readNode = objectReader.readTree(inputStream)) != null) {
             log.debug("Received message: {}", readNode);
@@ -134,22 +133,22 @@ public final class BackgroundRPCListener implements RPCListener {
                 continue;
             }
 
-            ArrayNode arrayNode = (ArrayNode) readNode;
+            var arrayNode = (ArrayNode) readNode;
 
-            MessageType messageType = MessageType.fromInt(arrayNode.get(0).asInt());
+            var messageType = MessageType.fromInt(arrayNode.get(0).asInt());
             // Pop off the type
             arrayNode.remove(0);
 
             switch (messageType) {
                 case REQUEST:
-                    RequestMessage requestMessage = responseObjectMapper.treeToValue(arrayNode, RequestMessage.class);
+                    var requestMessage = responseObjectMapper.treeToValue(arrayNode, RequestMessage.class);
                     if (requestCallback != null) {
                         log.debug("Notifying request callback with: {}", requestMessage);
                         requestCallback.requestReceived(requestMessage);
                     }
                     break;
                 case RESPONSE:
-                    ResponseMessage responseMessage = responseObjectMapper.treeToValue(arrayNode, ResponseMessage.class);
+                    var responseMessage = responseObjectMapper.treeToValue(arrayNode, ResponseMessage.class);
                     if (responseCallbacks.containsKey(responseMessage.getId())) {
                         log.debug("Notifying response callback for id({}) with: {}", responseMessage.getId(), responseMessage);
                         responseCallbacks.get(responseMessage.getId()).responseReceived(responseMessage.getId(), responseMessage);
@@ -157,7 +156,7 @@ public final class BackgroundRPCListener implements RPCListener {
                     }
                     break;
                 case NOTIFICATION:
-                    NotificationMessage notificationMessage = responseObjectMapper.treeToValue(arrayNode, NotificationMessage.class);
+                    var notificationMessage = responseObjectMapper.treeToValue(arrayNode, NotificationMessage.class);
                     if (notificationCallback != null) {
                         log.debug("Notifying notification callback with: {}", notificationMessage);
                         notificationCallback.notificationReceived(notificationMessage);
