@@ -17,6 +17,7 @@
         <module>testing-helpers</module>
         <module>neovim-notifications</module>
         <module>handler-annotations</module>
+        <module>unix-socket-connection</module>
     </modules>
 
     <name>neovim-java (Parent)</name>
@@ -61,6 +62,7 @@
         <jackson.databind.version>2.9.5</jackson.databind.version>
         <apache.commons.version>3.4</apache.commons.version>
         <slf4j.version>1.7.25</slf4j.version>
+        <jnrsocket.version>0.19</jnrsocket.version>
         <maven.compiler.source>10</maven.compiler.source>
         <maven.compiler.target>10</maven.compiler.target>
     </properties>
