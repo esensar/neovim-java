@@ -49,10 +49,10 @@ public final class ApiExplorer extends Application {
         log.info("Starting API Explorer v" + getClass().getPackage().getImplementationVersion());
         try {
             hostServices = getHostServices();
-            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("connection-picker.fxml"));
+            var loader = new FXMLLoader(getClass().getClassLoader().getResource("connection-picker.fxml"));
             Parent root = null;
             root = loader.load();
-            Scene scene = new Scene(root);
+            var scene = new Scene(root);
             scene.getStylesheets().add("styles.css");
             primaryStage.setTitle("Api Explorer v" + getClass().getPackage().getImplementationVersion());
             primaryStage.setScene(scene);
