@@ -30,11 +30,24 @@ import com.ensarsarajcic.neovim.java.corerpc.message.RequestMessage;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.ExecutorService;
 
 public final class NeovimHandlerProxy implements RPCListener.RequestCallback, RPCListener.NotificationCallback {
 
     private List<RPCListener.NotificationCallback> notificationCallbacks = new ArrayList<>();
     private List<RPCListener.RequestCallback> requestCallbacks = new ArrayList<>();
+
+    private ExecutorService executorService;
+
+    public NeovimHandlerProxy() {
+        this.executorService = new ImmediateExecutorService();
+    }
+
+    public NeovimHandlerProxy(ExecutorService executorService) {
+        Objects.requireNonNull(executorService, "executorService may not be null");
+        this.executorService = executorService;
+    }
 
     public void addNotificationCallback(RPCListener.NotificationCallback notificationCallback) {
         this.notificationCallbacks.add(notificationCallback);
@@ -54,11 +67,11 @@ public final class NeovimHandlerProxy implements RPCListener.RequestCallback, RP
 
     @Override
     public void notificationReceived(NotificationMessage notificationMessage) {
-        this.notificationCallbacks.forEach(it -> it.notificationReceived(notificationMessage));
+        this.notificationCallbacks.forEach(it -> executorService.submit(() -> it.notificationReceived(notificationMessage)));
     }
 
     @Override
     public void requestReceived(RequestMessage requestMessage) {
-        this.requestCallbacks.forEach(it -> it.requestReceived(requestMessage));
+        this.requestCallbacks.forEach(it -> executorService.submit(() -> it.requestReceived(requestMessage)));
     }
 }
