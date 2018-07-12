@@ -338,7 +338,7 @@ public class BufferStreamApiTest extends BaseStreamApiTest {
     public void getKeymapTest() throws InterruptedException, ExecutionException {
         // Happy case
         var vimKeyMaps = List.of(
-                Map.of(
+                Map.<String, Object>of(
                         "silent", 0,
                         "noremap", 0,
                         "lhs", "keys",
@@ -452,7 +452,7 @@ public class BufferStreamApiTest extends BaseStreamApiTest {
     public void getCommandsTest() throws ExecutionException, InterruptedException {
         // Happy case
         var commands = Map.of(
-                "command1", Map.of(
+                "command1", Map.<String, Object>of(
                         "name", "command1",
                         "definition", ":noh",
                         "script_id", 55,
@@ -461,7 +461,7 @@ public class BufferStreamApiTest extends BaseStreamApiTest {
                         "register", false,
                         "nargs", "+"
                 ),
-                "command2", Map.of(
+                "command2", Map.<String, Object>of(
                         "name", "command2",
                         "definition", ":ls",
                         "script_id", 55,

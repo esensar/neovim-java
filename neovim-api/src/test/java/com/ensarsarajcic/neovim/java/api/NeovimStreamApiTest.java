@@ -300,7 +300,7 @@ public class NeovimStreamApiTest extends BaseStreamApiTest {
     public void getKeymapTest() throws InterruptedException, ExecutionException {
         // Happy case
         var vimKeyMaps = List.of(
-                Map.of(
+                Map.<String, Object>of(
                         "silent", 1,
                         "noremap", 1,
                         "lhs", "keys",
@@ -874,7 +874,7 @@ public class NeovimStreamApiTest extends BaseStreamApiTest {
     @Test
     public void getModeTest() throws InterruptedException, ExecutionException {
         // Happy case
-        var modeMap = Map.of(
+        var modeMap = Map.<String, Object>of(
                 "mode", "n",
                 "blocking", false
         );
@@ -1058,7 +1058,7 @@ public class NeovimStreamApiTest extends BaseStreamApiTest {
     public void getCommandsTest() throws InterruptedException, ExecutionException {
         // Happy case
         var map = Map.of(
-                "command1", Map.of(
+                "command1", Map.<String, Object>of(
                         "name", "command1",
                         "definition", ":q!",
                         "script_id", 55,
@@ -1067,7 +1067,7 @@ public class NeovimStreamApiTest extends BaseStreamApiTest {
                         "register", false,
                         "nargs", "0"
                 ),
-                "command2", Map.of(
+                "command2", Map.<String, Object>of(
                         "name", "command2",
                         "definition", ":wq!",
                         "script_id", 55,
@@ -1162,13 +1162,13 @@ public class NeovimStreamApiTest extends BaseStreamApiTest {
     @Test
     public void getChannelInfoTest() throws InterruptedException, ExecutionException {
         // Happy case
-        var channelInfo = Map.of(
+        var channelInfo = Map.<String, Object>of(
                 "id", 1,
                 "stream", "socket",
                 "mode", "rpc",
                 "client", Map.of(
                         "name", "client_name",
-                        "version", Map.of(
+                        "version", Map.<String, Object>of(
                                 "major", 1,
                                 "minor", 2,
                                 "patch", 3,
@@ -1222,13 +1222,13 @@ public class NeovimStreamApiTest extends BaseStreamApiTest {
     public void getChannelsTest() throws InterruptedException, ExecutionException {
         // Happy case
         var channels = List.of(
-                Map.of(
+                Map.<String, Object>of(
                         "id", 1,
                         "stream", "socket",
                         "mode", "rpc",
                         "client", Map.of(
                                 "name", "client_name",
-                                "version", Map.of(
+                                "version", Map.<String, Object>of(
                                         "major", 1,
                                         "minor", 2,
                                         "patch", 3,
@@ -1239,17 +1239,17 @@ public class NeovimStreamApiTest extends BaseStreamApiTest {
                                 "attributes", Map.of()
                         )
                 ),
-                Map.of(
+                Map.<String, Object>of(
                         "id", 2,
                         "stream", "stdio",
                         "mode", "bytes"
                 ),
-                Map.of(
+                Map.<String, Object>of(
                         "id", 3,
                         "stream", "stderr",
                         "mode", "terminal"
                 ),
-                Map.of(
+                Map.<String, Object>of(
                         "id", 4,
                         "stream", "job",
                         "mode", "pty"
@@ -1331,13 +1331,13 @@ public class NeovimStreamApiTest extends BaseStreamApiTest {
     public void getUisTest() throws InterruptedException, ExecutionException {
         // Happy case
         var uis = List.of(
-                Map.of(
+                Map.<String, Object>of(
                         "height", 100,
                         "width", 200,
                         "rgb", false,
                         "chan", 1
                 ),
-                Map.of(
+                Map.<String, Object>of(
                         "height", 500,
                         "width", 500,
                         "rgb", true,

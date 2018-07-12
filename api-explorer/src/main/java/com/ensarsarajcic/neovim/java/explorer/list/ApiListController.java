@@ -130,7 +130,7 @@ public final class ApiListController {
             functionColSince.setCellValueFactory(new PropertyValueFactory<>("since"));
             functionColDepSince.setCellValueFactory(new PropertyValueFactory<>("deprecatedSince"));
             functionColParams.setCellValueFactory(new PropertyValueFactory<>("parameters"));
-            functionColOpenInBrowser.setCellFactory(new Callback<>() {
+            functionColOpenInBrowser.setCellFactory(new Callback<TableColumn, TableCell>() {
                 @Override
                 public TableCell call(TableColumn param) {
                     return new TableCell<NeovimFunction, String>() {
@@ -156,7 +156,7 @@ public final class ApiListController {
                     };
                 }
             });
-            functionColTestFunc.setCellFactory(new Callback<>() {
+            functionColTestFunc.setCellFactory(new Callback<TableColumn, TableCell>() {
                 @Override
                 public TableCell call(TableColumn param) {
                     return new TableCell<NeovimFunction, String>() {
