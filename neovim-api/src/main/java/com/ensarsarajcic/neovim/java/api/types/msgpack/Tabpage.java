@@ -41,7 +41,7 @@ public final class Tabpage extends BaseCustomIdType implements Comparable<Tabpag
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Tabpage buffer = (Tabpage) o;
+        var buffer = (Tabpage) o;
         return getId() == buffer.getId();
     }
 

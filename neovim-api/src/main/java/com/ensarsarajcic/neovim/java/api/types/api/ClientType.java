@@ -43,7 +43,7 @@ public enum ClientType {
 
     @JsonCreator
     public static ClientType fromString(String value) {
-        for (ClientType clientType : values()) {
+        for (var clientType : values()) {
             if (clientType.value.equals(value)) {
                 return clientType;
             }

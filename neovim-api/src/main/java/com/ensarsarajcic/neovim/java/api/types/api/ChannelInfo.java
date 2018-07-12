@@ -42,7 +42,7 @@ public final class ChannelInfo {
 
         @JsonCreator
         public static Stream fromString(String value) {
-            for (Stream stream : values()) {
+            for (var stream : values()) {
                 if (stream.value.equals(value)) {
                     return stream;
                 }
@@ -80,7 +80,7 @@ public final class ChannelInfo {
 
         @JsonCreator
         public static Mode fromString(String value) {
-            for (Mode mode : values()) {
+            for (var mode : values()) {
                 if (mode.value.equals(value)) {
                     return mode;
                 }

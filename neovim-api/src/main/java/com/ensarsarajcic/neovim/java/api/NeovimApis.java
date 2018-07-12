@@ -31,7 +31,7 @@ import com.ensarsarajcic.neovim.java.corerpc.reactive.ReactiveRPCStreamer;
 public final class NeovimApis {
 
     public static NeovimApi getApiForConnection(RPCConnection rpcConnection) {
-        ReactiveRPCStreamer reactiveRPCStreamer = ReactiveRPCClient.getDefaultInstance();
+        var reactiveRPCStreamer = ReactiveRPCClient.getDefaultInstance();
         reactiveRPCStreamer.attach(rpcConnection);
         return new NeovimStreamApi(reactiveRPCStreamer);
     }

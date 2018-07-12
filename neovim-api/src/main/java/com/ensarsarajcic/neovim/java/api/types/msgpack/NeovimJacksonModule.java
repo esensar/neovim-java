@@ -39,8 +39,8 @@ public final class NeovimJacksonModule {
      * Create a simple Jackson module for serializing and deserializing custom neovim msgpack types
      */
     public static SimpleModule createModule() {
-        SimpleModule simpleModule = new SimpleModule();
-        for (NeovimCustomType neovimCustomType : NeovimCustomType.values()) {
+        var simpleModule = new SimpleModule();
+        for (var neovimCustomType : NeovimCustomType.values()) {
             simpleModule.addSerializer(neovimCustomType.getType(), neovimCustomType.getSerializer());
             simpleModule.addDeserializer(neovimCustomType.getType(), neovimCustomType.getDeserializer());
         }
@@ -51,10 +51,10 @@ public final class NeovimJacksonModule {
      * Create an instance of ObjectMapper with proper support for mgspack and neovim msgpack types
      */
     public static ObjectMapper createNeovimObjectMapper() {
-        MessagePackFactory factory = new MessagePackFactory();
+        var factory = new MessagePackFactory();
         factory.disable(JsonParser.Feature.AUTO_CLOSE_SOURCE);
         factory.disable(JsonGenerator.Feature.AUTO_CLOSE_TARGET);
-        ObjectMapper objectMapper = new ObjectMapper(factory);
+        var objectMapper = new ObjectMapper(factory);
         objectMapper.registerModule(NeovimJacksonModule.createModule());
         return objectMapper;
     }
