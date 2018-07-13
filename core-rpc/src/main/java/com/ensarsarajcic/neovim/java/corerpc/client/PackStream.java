@@ -120,6 +120,7 @@ public final class PackStream implements RPCStreamer {
      */
     @Override
     public void addRequestCallback(RPCListener.RequestCallback requestCallback) {
+        log.info("Registered a new request callback: {}", requestCallback);
         if (!requestCallbacks.contains(requestCallback)) {
             this.requestCallbacks.add(requestCallback);
         }
@@ -131,6 +132,7 @@ public final class PackStream implements RPCStreamer {
      */
     @Override
     public void removeRequestCallback(RPCListener.RequestCallback requestCallback) {
+        log.info("Removed a request callback: {}", requestCallback);
         if (requestCallbacks.contains(requestCallback)) {
             this.requestCallbacks.remove(requestCallback);
         }
@@ -142,6 +144,7 @@ public final class PackStream implements RPCStreamer {
      */
     @Override
     public void addNotificationCallback(RPCListener.NotificationCallback notificationCallback) {
+        log.info("Registered a new notification callback: {}", notificationCallback);
         if (!notificationCallbacks.contains(notificationCallback)) {
             this.notificationCallbacks.add(notificationCallback);
         }
@@ -153,6 +156,7 @@ public final class PackStream implements RPCStreamer {
      */
     @Override
     public void removeNotificationCallback(RPCListener.NotificationCallback notificationCallback) {
+        log.info("Removed a notification callback: {}", notificationCallback);
         if (notificationCallbacks.contains(notificationCallback)) {
             this.notificationCallbacks.remove(notificationCallback);
         }

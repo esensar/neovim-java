@@ -24,12 +24,16 @@
 
 package com.ensarsarajcic.neovim.java.corerpc.client;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Objects;
 
 public final class ProcessRPCConnection implements RPCConnection {
+    public static final Logger log = LoggerFactory.getLogger(ProcessRPCConnection.class);
 
     private Process process;
     private boolean killProcessOnClose;
@@ -66,6 +70,7 @@ public final class ProcessRPCConnection implements RPCConnection {
 
     @Override
     public void close() throws IOException {
+        log.info("Closing process connection. Killing process = {}", killProcessOnClose);
         if (killProcessOnClose) {
             process.destroy();
         }

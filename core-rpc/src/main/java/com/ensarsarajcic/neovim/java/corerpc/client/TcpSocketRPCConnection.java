@@ -73,6 +73,7 @@ public final class TcpSocketRPCConnection implements RPCConnection {
 
     @Override
     public void close() throws IOException {
+        log.info("Closing socket: {}", socket);
         socket.close();
     }
 }
