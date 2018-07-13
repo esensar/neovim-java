@@ -76,4 +76,11 @@ public final class TcpSocketRPCConnection implements RPCConnection {
         log.info("Closing socket: {}", socket);
         socket.close();
     }
+
+    @Override
+    public String toString() {
+        return "TcpSocketRPCConnection{" +
+                "socket=" + socket +
+                '}';
+    }
 }

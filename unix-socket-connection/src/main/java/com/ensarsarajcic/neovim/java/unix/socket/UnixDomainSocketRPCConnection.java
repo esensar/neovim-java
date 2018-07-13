@@ -82,4 +82,12 @@ public final class UnixDomainSocketRPCConnection implements RPCConnection {
             unixSocketChannel.close();
         }
     }
+
+    @Override
+    public String toString() {
+        return "UnixDomainSocketRPCConnection{" +
+                "path=" + path +
+                ", unixSocketChannel=" + unixSocketChannel +
+                '}';
+    }
 }

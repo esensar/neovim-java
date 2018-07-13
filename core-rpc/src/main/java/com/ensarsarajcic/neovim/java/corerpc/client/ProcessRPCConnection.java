@@ -75,4 +75,12 @@ public final class ProcessRPCConnection implements RPCConnection {
             process.destroy();
         }
     }
+
+    @Override
+    public String toString() {
+        return "ProcessRPCConnection{" +
+                "process=" + process +
+                ", killProcessOnClose=" + killProcessOnClose +
+                '}';
+    }
 }
