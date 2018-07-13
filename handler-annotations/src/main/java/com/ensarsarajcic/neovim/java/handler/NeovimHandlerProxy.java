@@ -27,6 +27,8 @@ package com.ensarsarajcic.neovim.java.handler;
 import com.ensarsarajcic.neovim.java.corerpc.client.RPCListener;
 import com.ensarsarajcic.neovim.java.corerpc.message.NotificationMessage;
 import com.ensarsarajcic.neovim.java.corerpc.message.RequestMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +36,7 @@ import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 
 public final class NeovimHandlerProxy implements RPCListener.RequestCallback, RPCListener.NotificationCallback {
+    private static final Logger log = LoggerFactory.getLogger(NeovimHandlerProxy.class);
 
     private List<RPCListener.NotificationCallback> notificationCallbacks = new ArrayList<>();
     private List<RPCListener.RequestCallback> requestCallbacks = new ArrayList<>();
@@ -50,28 +53,34 @@ public final class NeovimHandlerProxy implements RPCListener.RequestCallback, RP
     }
 
     public void addNotificationCallback(RPCListener.NotificationCallback notificationCallback) {
+        log.info("Registered a new notification callback: {}", notificationCallback);
         this.notificationCallbacks.add(notificationCallback);
     }
 
     public void addRequestCallback(RPCListener.RequestCallback requestCallback) {
+        log.info("Registered a new request callback: {}", requestCallback);
         this.requestCallbacks.add(requestCallback);
     }
 
     public void removeNotificationCallback(RPCListener.NotificationCallback notificationCallback) {
+        log.info("Removed a notification callback: {}", notificationCallback);
         this.notificationCallbacks.remove(notificationCallback);
     }
 
     public void removeRequestCallback(RPCListener.RequestCallback requestCallback) {
+        log.info("Removed a request callback: {}", requestCallback);
         this.requestCallbacks.remove(requestCallback);
     }
 
     @Override
     public void notificationReceived(NotificationMessage notificationMessage) {
+        log.debug("Passing down a notification: {}", notificationMessage);
         this.notificationCallbacks.forEach(it -> executorService.submit(() -> it.notificationReceived(notificationMessage)));
     }
 
     @Override
     public void requestReceived(RequestMessage requestMessage) {
+        log.debug("Passing down a request: {}", requestMessage);
         this.requestCallbacks.forEach(it -> executorService.submit(() -> it.requestReceived(requestMessage)));
     }
 }

@@ -29,6 +29,8 @@ import com.ensarsarajcic.neovim.java.corerpc.client.RPCStreamer;
 import com.ensarsarajcic.neovim.java.handler.annotations.NeovimNotificationHandler;
 import com.ensarsarajcic.neovim.java.handler.annotations.NeovimRequestHandler;
 import com.ensarsarajcic.neovim.java.handler.util.ReflectionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -36,6 +38,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public final class NeovimHandlerManager {
+    private static final Logger log = LoggerFactory.getLogger(NeovimHandlerManager.class);
 
     private NeovimHandlerProxy neovimHandlerProxy;
     private Map<Object, Map.Entry<List<RPCListener.NotificationCallback>, List<RPCListener.RequestCallback>>> handlers = new HashMap<>();
@@ -45,11 +48,13 @@ public final class NeovimHandlerManager {
     }
 
     public void attachToStream(RPCStreamer rpcStreamer) {
+        log.info("Attaching handler manager to streamer ({})", rpcStreamer);
         rpcStreamer.addNotificationCallback(neovimHandlerProxy);
         rpcStreamer.addRequestCallback(neovimHandlerProxy);
     }
 
     public void registerNeovimHandler(Object handler) {
+        log.info("New neovim handler registered ({})", handler);
         if (handlers.containsKey(handler)) {
             return;
         }
@@ -69,6 +74,7 @@ public final class NeovimHandlerManager {
                             try {
                                 methodNeovimNotificationHandlerEntry.getKey().invoke(handler, notificationMessage);
                             } catch (IllegalAccessException | InvocationTargetException e) {
+                                log.error("Error ocurred while invoking handler for notification: " + notificationName, e);
                                 e.printStackTrace();
                                 throw new RuntimeException(e);
                             }
@@ -82,12 +88,13 @@ public final class NeovimHandlerManager {
 
         List<RPCListener.RequestCallback> requestCallbacks = requestHandlers.stream()
                 .map(methodNeovimRequestHandlerEntry -> {
-                    String notificationName = methodNeovimRequestHandlerEntry.getValue().value();
+                    String requestName = methodNeovimRequestHandlerEntry.getValue().value();
                     return (RPCListener.RequestCallback) requestMessage -> {
-                        if (notificationName.equals(requestMessage.getMethod())) {
+                        if (requestName.equals(requestMessage.getMethod())) {
                             try {
                                 methodNeovimRequestHandlerEntry.getKey().invoke(handler, requestMessage);
                             } catch (IllegalAccessException | InvocationTargetException e) {
+                                log.error("Error ocurred while invoking handler for request: " + requestName, e);
                                 e.printStackTrace();
                                 throw new RuntimeException(e);
                             }
@@ -101,6 +108,7 @@ public final class NeovimHandlerManager {
     }
 
     public void unregisterNeovimHandler(Object handler) {
+        log.info("Neovim handler unregistered ({})", handler);
         handlers.remove(handler);
     }
 }
