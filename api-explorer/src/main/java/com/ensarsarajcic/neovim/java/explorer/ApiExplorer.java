@@ -30,10 +30,13 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
 public final class ApiExplorer extends Application {
+    private static final Logger log = LoggerFactory.getLogger(ApiExplorer.class);
 
     public static void main(String[] args) {
         launch(args);
@@ -43,6 +46,7 @@ public final class ApiExplorer extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+        log.info("Starting API Explorer v" + getClass().getPackage().getImplementationVersion());
         try {
             hostServices = getHostServices();
             FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("connection-picker.fxml"));
