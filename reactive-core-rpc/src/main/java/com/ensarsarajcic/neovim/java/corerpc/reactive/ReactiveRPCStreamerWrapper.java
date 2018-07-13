@@ -25,11 +25,12 @@
 package com.ensarsarajcic.neovim.java.corerpc.reactive;
 
 import com.ensarsarajcic.neovim.java.corerpc.client.RPCConnection;
-import com.ensarsarajcic.neovim.java.corerpc.client.RPCListener;
 import com.ensarsarajcic.neovim.java.corerpc.client.RPCStreamer;
 import com.ensarsarajcic.neovim.java.corerpc.message.NotificationMessage;
 import com.ensarsarajcic.neovim.java.corerpc.message.RequestMessage;
 import com.ensarsarajcic.neovim.java.corerpc.message.ResponseMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.concurrent.*;
@@ -40,6 +41,7 @@ import java.util.concurrent.atomic.AtomicReference;
  * Provides reactive mappings by just wrapping regular calls in reactive streams
  */
 public final class ReactiveRPCStreamerWrapper implements ReactiveRPCStreamer {
+    private static final Logger log = LoggerFactory.getLogger(ReactiveRPCStreamerWrapper.class);
 
     private RPCStreamer rpcStreamer;
 
@@ -83,10 +85,12 @@ public final class ReactiveRPCStreamerWrapper implements ReactiveRPCStreamer {
                 // Wait for response
                 countDownLatch.await();
                 if (responseMessage.get().getError() != null) {
+                    log.info("Received an error response: {}", responseMessage);
                     throw new CompletionException(new RPCException(responseMessage.get().getError()));
                 }
                 return responseMessage.get();
             } catch (IOException | InterruptedException e) {
+                log.error("Error while sending message!", e);
                 e.printStackTrace();
                 // Pass down exception on any failure
                 throw new CompletionException(e);

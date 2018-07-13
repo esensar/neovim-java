@@ -31,6 +31,8 @@ import com.ensarsarajcic.neovim.java.notifications.buffer.BufferEvent;
 import com.ensarsarajcic.neovim.java.notifications.ui.NeovimRedrawEvent;
 import com.ensarsarajcic.neovim.java.notifications.ui.UIEvent;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -42,6 +44,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public final class NeovimStreamNotificationHandler implements NeovimNotificationHandler {
+    private static final Logger log = LoggerFactory.getLogger(NeovimStreamNotificationHandler.class);
 
     private ReactiveRPCStreamer reactiveRPCStreamer;
     private ObjectMapper objectMapper;
@@ -90,6 +93,7 @@ public final class NeovimStreamNotificationHandler implements NeovimNotification
 
     private static List<UIEvent> eventFromRawData(List data) {
         if (data.isEmpty()) {
+            log.error("Cannot create UIEvent because data is empty!");
             throw new IllegalArgumentException("Empty data!");
         }
         String name = (String) data.get(0);
@@ -99,7 +103,7 @@ public final class NeovimStreamNotificationHandler implements NeovimNotification
                     try {
                         return NotificationCreatorCollector.getUIEventCreators().get(name).apply(o);
                     } catch (NullPointerException ex) {
-                        System.err.println("MISSING NAME: " + name);
+                        log.error("Missing creator for ui event {}" + name, ex);
                         throw ex;
                     }
                 })

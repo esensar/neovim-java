@@ -31,11 +31,14 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import org.msgpack.core.MessagePack;
 import org.msgpack.jackson.dataformat.MessagePackExtensionType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.function.Function;
 
 public final class NeovimTypeDeserializer<T extends BaseCustomIdType> extends JsonDeserializer<T> {
+    private static final Logger log = LoggerFactory.getLogger(NeovimTypeDeserializer.class);
 
     private byte typeId;
     private Class<T> type;
@@ -57,6 +60,7 @@ public final class NeovimTypeDeserializer<T extends BaseCustomIdType> extends Js
         MessagePackExtensionType messagePackExtensionType = (MessagePackExtensionType) jsonParser.getEmbeddedObject();
 
         if (messagePackExtensionType.getType() != typeId) {
+            log.error("Tried to parse a bad type ({})", messagePackExtensionType.getType());
             throw new JsonParseException(jsonParser, "Bad custom type");
         }
 

@@ -27,6 +27,8 @@ package com.ensarsarajcic.neovim.java.unix.socket;
 import com.ensarsarajcic.neovim.java.corerpc.client.RPCConnection;
 import jnr.unixsocket.UnixSocketAddress;
 import jnr.unixsocket.UnixSocketChannel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -36,6 +38,7 @@ import java.nio.channels.Channels;
 import java.util.Objects;
 
 public final class UnixDomainSocketRPCConnection implements RPCConnection {
+    private static final Logger log = LoggerFactory.getLogger(UnixDomainSocketRPCConnection.class);
 
     private File path;
     private UnixSocketChannel unixSocketChannel;
@@ -52,6 +55,7 @@ public final class UnixDomainSocketRPCConnection implements RPCConnection {
                     try {
                         unixSocketChannel = UnixSocketChannel.open(new UnixSocketAddress(path));
                     } catch (IOException e) {
+                        log.error("Failed to open a unix socket channel", e);
                         e.printStackTrace();
                         throw new RuntimeException(e);
                     }
@@ -73,8 +77,17 @@ public final class UnixDomainSocketRPCConnection implements RPCConnection {
 
     @Override
     public void close() throws IOException {
+        log.info("Closing unix domain socket {}", unixSocketChannel);
         if (unixSocketChannel != null) {
             unixSocketChannel.close();
         }
+    }
+
+    @Override
+    public String toString() {
+        return "UnixDomainSocketRPCConnection{" +
+                "path=" + path +
+                ", unixSocketChannel=" + unixSocketChannel +
+                '}';
     }
 }
