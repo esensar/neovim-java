@@ -26,6 +26,7 @@ package com.ensarsarajcic.neovim.java.api;
 
 import com.ensarsarajcic.neovim.java.api.types.msgpack.BaseCustomIdType;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.NeovimJacksonModule;
+import com.ensarsarajcic.neovim.java.api.types.msgpack.NeovimTypeDeserializer;
 import com.ensarsarajcic.neovim.java.api.util.ObjectMappers;
 import com.ensarsarajcic.neovim.java.corerpc.message.RequestMessage;
 import com.ensarsarajcic.neovim.java.corerpc.message.ResponseMessage;
@@ -35,6 +36,8 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.msgpack.jackson.dataformat.MessagePackFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.List;
@@ -48,6 +51,7 @@ import java.util.concurrent.CompletionException;
  * Provides convenience methods for sending and parsing messages
  */
 public abstract class BaseStreamApi {
+    private static final Logger log = LoggerFactory.getLogger(NeovimTypeDeserializer.class);
 
     protected ReactiveRPCStreamer reactiveRPCStreamer;
     protected ObjectMapper objectMapper;
@@ -71,6 +75,7 @@ public abstract class BaseStreamApi {
                     try {
                         return objectMapper.writeValueAsBytes(o);
                     } catch (JsonProcessingException e) {
+                        log.error("Failed to convert response to bytes!", e);
                         e.printStackTrace();
                         throw new CompletionException(e);
                     }
@@ -82,6 +87,7 @@ public abstract class BaseStreamApi {
                     try {
                         return objectMapper.readerFor(type).readValue(bytes);
                     } catch (IOException e) {
+                        log.error("Failed to read bytes as " + type, e);
                         e.printStackTrace();
                         throw new CompletionException(e);
                     }
@@ -95,6 +101,7 @@ public abstract class BaseStreamApi {
                                 objectMapper.getTypeFactory().constructCollectionType(List.class, type)
                         ).readValue(bytes);
                     } catch (IOException e) {
+                        log.error("Failed to construct a list of " + type, e);
                         e.printStackTrace();
                         throw new CompletionException(e);
                     }

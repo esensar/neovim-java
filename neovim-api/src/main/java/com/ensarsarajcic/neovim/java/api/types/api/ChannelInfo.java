@@ -25,9 +25,12 @@
 package com.ensarsarajcic.neovim.java.api.types.api;
 
 import com.fasterxml.jackson.annotation.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public final class ChannelInfo {
+    private static final Logger log = LoggerFactory.getLogger(ChannelInfo.class);
 
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     public enum Stream {
@@ -44,6 +47,8 @@ public final class ChannelInfo {
                     return stream;
                 }
             }
+
+            log.error("Tried to create an invalid channel Stream ({})", value);
             throw new IllegalArgumentException(String.format("Stream (%s) does not exist.", value));
         }
 
@@ -80,6 +85,8 @@ public final class ChannelInfo {
                     return mode;
                 }
             }
+
+            log.error("Tried to create an invalid channel Mode ({})", value);
             throw new IllegalArgumentException(String.format("Mode (%s) does not exist.", value));
         }
 

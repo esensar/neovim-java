@@ -27,6 +27,8 @@ package com.ensarsarajcic.neovim.java.api.types.api;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonValue;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @JsonFormat(shape = JsonFormat.Shape.STRING)
 public enum ClientType {
@@ -34,6 +36,8 @@ public enum ClientType {
     UI("ui"),
     HOST("host"),
     PLUGIN("plugin");
+
+    private static final Logger log = LoggerFactory.getLogger(ClientType.class);
 
     private String value;
 
@@ -44,6 +48,8 @@ public enum ClientType {
                 return clientType;
             }
         }
+
+        log.error("Tried to create an invalid channel Stream ({})", value);
         throw new IllegalArgumentException(String.format("ClientType (%s) does not exist", value));
     }
 
