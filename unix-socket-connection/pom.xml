@@ -48,9 +48,9 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.github.jnr</groupId>
-            <artifactId>jnr-unixsocket</artifactId>
-            <version>${jnrsocket.version}</version>
+            <groupId>org.scala-sbt.ipcsocket</groupId>
+            <artifactId>ipcsocket</artifactId>
+            <version>${ipcsocket.version}</version>
         </dependency>
     </dependencies>
 

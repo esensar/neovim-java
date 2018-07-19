@@ -77,9 +77,9 @@ public final class BackgroundRPCListener implements RPCListener {
      */
     @Override
     public void start(InputStream inputStream) {
-        log.info("Started listening on stream");
         listener = executorService.submit(() -> {
             try {
+                log.info("Started listening on stream");
                 listenForMessages(inputStream);
             } catch (IOException e) {
                 log.error("Listening to messages failed!", e);

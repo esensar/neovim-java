@@ -25,10 +25,10 @@
 package com.ensarsarajcic.neovim.java.explorer;
 
 import com.ensarsarajcic.neovim.java.corerpc.client.ProcessRPCConnection;
+import com.ensarsarajcic.neovim.java.corerpc.client.RPCConnection;
 import com.ensarsarajcic.neovim.java.corerpc.client.TcpSocketRPCConnection;
 import com.ensarsarajcic.neovim.java.explorer.api.ConnectionHolder;
-import javafx.event.EventHandler;
-import javafx.event.EventType;
+import com.ensarsarajcic.neovim.java.unix.socket.UnixDomainSocketRPCConnection;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -36,8 +36,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.Socket;
 
@@ -50,6 +50,10 @@ public final class ConnectionPickerController {
     public Button connectBtn;
     @FXML
     public TextField ipField;
+    @FXML
+    public Button connectFileBtn;
+    @FXML
+    public TextField fileField;
 
     public void initialize() {
         exploreBtn.setOnAction(event -> showApiList(exploreBtn));
@@ -74,6 +78,18 @@ public final class ConnectionPickerController {
                 showApiList(connectBtn);
             } catch (Exception ex) {
                 ipField.setText(ex.toString());
+            }
+        });
+        connectFileBtn.setOnAction(event -> {
+            try {
+                String file = fileField.getText();
+                File path = new File(file);
+                RPCConnection rpcConnection = new UnixDomainSocketRPCConnection(path);
+                ConnectionHolder.setConnection(rpcConnection);
+                ConnectionHolder.setConnectedIpPort("File: " + path);
+                showApiList(connectFileBtn);
+            } catch (Exception ex) {
+                fileField.setText(ex.toString());
             }
         });
     }

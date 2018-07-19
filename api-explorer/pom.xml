@@ -35,6 +35,11 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
+            <artifactId>unix-socket-connection</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
             <artifactId>neovim-api</artifactId>
             <version>${project.version}</version>
         </dependency>

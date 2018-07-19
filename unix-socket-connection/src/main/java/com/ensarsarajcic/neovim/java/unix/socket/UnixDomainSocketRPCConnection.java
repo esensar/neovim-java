@@ -25,69 +25,48 @@
 package com.ensarsarajcic.neovim.java.unix.socket;
 
 import com.ensarsarajcic.neovim.java.corerpc.client.RPCConnection;
-import jnr.unixsocket.UnixSocketAddress;
-import jnr.unixsocket.UnixSocketChannel;
+import org.scalasbt.ipcsocket.UnixDomainSocket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.nio.channels.Channels;
+import java.io.*;
 import java.util.Objects;
 
 public final class UnixDomainSocketRPCConnection implements RPCConnection {
     private static final Logger log = LoggerFactory.getLogger(UnixDomainSocketRPCConnection.class);
 
-    private File path;
-    private UnixSocketChannel unixSocketChannel;
+    private UnixDomainSocket unixDomainSocket;
 
     public UnixDomainSocketRPCConnection(File path) {
         Objects.requireNonNull(path, "path is required to make connection");
-        this.path = path;
-    }
-
-    private UnixSocketChannel getChannel() {
-        if (unixSocketChannel == null) {
-            synchronized (this) {
-                if (unixSocketChannel == null) {
-                    try {
-                        unixSocketChannel = UnixSocketChannel.open(new UnixSocketAddress(path));
-                    } catch (IOException e) {
-                        log.error("Failed to open a unix socket channel", e);
-                        e.printStackTrace();
-                        throw new RuntimeException(e);
-                    }
-                }
-            }
+        try {
+            this.unixDomainSocket = new UnixDomainSocket(path.getPath());
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
         }
-        return unixSocketChannel;
     }
 
     @Override
     public InputStream getIncomingStream() {
-        return Channels.newInputStream(getChannel());
+        return unixDomainSocket.getInputStream();
     }
 
     @Override
     public OutputStream getOutgoingStream() {
-        return Channels.newOutputStream(getChannel());
+        return unixDomainSocket.getOutputStream();
     }
 
     @Override
     public void close() throws IOException {
-        log.info("Closing unix domain socket {}", unixSocketChannel);
-        if (unixSocketChannel != null) {
-            unixSocketChannel.close();
-        }
+        log.info("Closing unix domain socket {}", unixDomainSocket);
+        unixDomainSocket.close();
     }
 
     @Override
     public String toString() {
         return "UnixDomainSocketRPCConnection{" +
-                "path=" + path +
-                ", unixSocketChannel=" + unixSocketChannel +
+                "unixDomainSocket=" + unixDomainSocket +
                 '}';
     }
 }
