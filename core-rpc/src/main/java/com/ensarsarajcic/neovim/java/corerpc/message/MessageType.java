@@ -28,6 +28,8 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
  * Defines types used in RPC communication
+ *
+ * Contains int value used in RPC communication which represents the type
  */
 public enum MessageType {
     REQUEST(0),
