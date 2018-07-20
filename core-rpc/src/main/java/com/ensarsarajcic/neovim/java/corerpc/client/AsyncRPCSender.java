@@ -108,8 +108,8 @@ public final class AsyncRPCSender implements RPCSender {
      */
     @Override
     public void attach(OutputStream outputStream) {
-        log.info("Attached to output stream!");
         Objects.requireNonNull(outputStream, "outputStream may not be null");
+        log.info("Attached to output stream!");
         this.outgoingStream = outputStream;
     }
 
