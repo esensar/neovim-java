@@ -39,9 +39,9 @@ import java.util.concurrent.*;
  * Wrapper around {@link RPCStreamer}
  * This class should be used for communication.
  * It provides convenience factory methods
- *
+ * <p>
  * All calls are passed down to underlying {@link RPCStreamer}
- *
+ * <p>
  * Examples:
  * <pre>
  *     RPCStreamer defaultSharedClient = RPCClient.getDefaultAsyncInstance(); // shared singleton
@@ -177,6 +177,7 @@ public final class RPCClient implements RPCStreamer {
 
     /**
      * Calls underlying {@link RPCStreamer}
+     *
      * @param rpcConnection connection to attach to
      */
     @Override
@@ -186,6 +187,7 @@ public final class RPCClient implements RPCStreamer {
 
     /**
      * Calls underlying {@link RPCStreamer}
+     *
      * @param message message to send
      * @throws IOException when underlying {@link RPCStreamer} throws
      */
@@ -196,6 +198,7 @@ public final class RPCClient implements RPCStreamer {
 
     /**
      * Calls underlying {@link RPCStreamer}
+     *
      * @param requestMessage {@link RequestMessage.Builder} of message to send
      * @throws IOException when underlying {@link RPCStreamer} throws
      */
@@ -206,7 +209,8 @@ public final class RPCClient implements RPCStreamer {
 
     /**
      * Calls underlying {@link RPCStreamer}
-     * @param requestMessage {@link RequestMessage.Builder} of message to send
+     *
+     * @param requestMessage   {@link RequestMessage.Builder} of message to send
      * @param responseCallback {@link RPCListener.ResponseCallback} to be called when response arrives
      * @throws IOException when underlying {@link RPCStreamer} throws
      */
@@ -217,6 +221,7 @@ public final class RPCClient implements RPCStreamer {
 
     /**
      * Calls underlying {@link RPCStreamer}
+     *
      * @param requestCallback {@link RPCListener.RequestCallback} to add
      */
     @Override
@@ -226,6 +231,7 @@ public final class RPCClient implements RPCStreamer {
 
     /**
      * Calls underlying {@link RPCStreamer}
+     *
      * @param requestCallback {@link RPCListener.RequestCallback} to remove
      */
     @Override
@@ -235,6 +241,7 @@ public final class RPCClient implements RPCStreamer {
 
     /**
      * Calls underlying {@link RPCStreamer}
+     *
      * @param notificationCallback {@link RPCListener.NotificationCallback} to add
      */
     @Override
@@ -244,6 +251,7 @@ public final class RPCClient implements RPCStreamer {
 
     /**
      * Calls underlying {@link RPCStreamer}
+     *
      * @param notificationCallback {@link RPCListener.NotificationCallback} to remove
      */
     @Override

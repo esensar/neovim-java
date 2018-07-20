@@ -34,10 +34,10 @@ import java.util.Objects;
 
 /**
  * Implementation of {@link RPCConnection} providing streams of a {@link Process}
- *
+ * <p>
  * This allows a connection to another process and communication with it via RPC
  * It is a very simple implementation which can optionally kill the process once connection is closed
- *
+ * <p>
  * Example:
  * <pre>
  *     {@code
@@ -61,6 +61,7 @@ public final class ProcessRPCConnection implements RPCConnection {
     /**
      * Creates a new {@link ProcessRPCConnection} based on a {@link Process}'s input and output streams
      * By default does not kill process when connection is closed
+     *
      * @param process instance of {@link Process} to connect to
      * @throws NullPointerException if process is null
      */
@@ -70,7 +71,8 @@ public final class ProcessRPCConnection implements RPCConnection {
 
     /**
      * Creates a new {@link ProcessRPCConnection} based on a {@link Process}'s input and output streams
-     * @param process instance of {@link Process} to connect to
+     *
+     * @param process            instance of {@link Process} to connect to
      * @param killProcessOnClose true if process should be destroyed when connection is closed
      * @throws NullPointerException if process is null
      */
@@ -82,6 +84,7 @@ public final class ProcessRPCConnection implements RPCConnection {
 
     /**
      * Provides input stream of underlying process
+     *
      * @return {@link InputStream} of the underlying process
      */
     @Override
@@ -91,6 +94,7 @@ public final class ProcessRPCConnection implements RPCConnection {
 
     /**
      * Provides ouput stream of underlying process
+     *
      * @return {@link OutputStream} of the underlying process
      */
     @Override
@@ -102,6 +106,7 @@ public final class ProcessRPCConnection implements RPCConnection {
      * Closes connection and optionally kills the underlying process if {@link #killProcessOnClose} is true
      * If {@link #killProcessOnClose} is true, communication is no longer possible
      * Otherwise, communication may proceed, because it is a no-op in that case
+     *
      * @throws IOException - never
      */
     @Override

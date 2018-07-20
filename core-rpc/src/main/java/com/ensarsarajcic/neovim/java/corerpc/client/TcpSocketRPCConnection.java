@@ -35,10 +35,10 @@ import java.util.Objects;
 
 /**
  * Simple implementation of {@link RPCConnection} based on a TCP {@link Socket}
- *
+ * <p>
  * This allows connection and communication via TCP socket
  * It is a very simple implementation and it just passes down calls to underlying {@link Socket}
- *
+ * <p>
  * Example:
  * <pre>
  *     {@code
@@ -60,6 +60,7 @@ public final class TcpSocketRPCConnection implements RPCConnection {
     /**
      * Creates a new {@link TcpSocketRPCConnection} based on passed {@link Socket}
      * It uses input and output streams of given {@link Socket} to communicate
+     *
      * @param socket instance of {@link Socket} to use for communication
      * @throws NullPointerException if socket is null
      */
@@ -70,6 +71,7 @@ public final class TcpSocketRPCConnection implements RPCConnection {
 
     /**
      * Gets the {@link InputStream} of the underlying {@link Socket}
+     *
      * @return {@link InputStream} of the underlying {@link Socket}
      * @throws RuntimeException if underlying socket throws {@link IOException}
      */
@@ -85,6 +87,7 @@ public final class TcpSocketRPCConnection implements RPCConnection {
 
     /**
      * Gets the {@link OutputStream} of the underlying {@link Socket}
+     *
      * @return {@link OutputStream} of the underlying {@link Socket}
      * @throws RuntimeException if underlying socket throws {@link IOException}
      */
@@ -101,6 +104,7 @@ public final class TcpSocketRPCConnection implements RPCConnection {
     /**
      * Closes underlying {@link Socket}
      * Communication is no longer possible after this call
+     *
      * @throws IOException when underlying socket throws {@link IOException}
      */
     @Override

@@ -40,16 +40,16 @@ import java.util.concurrent.ExecutorService;
 /**
  * Implementation of {@link RPCSender} utilizing
  * {@link ExecutorService} for asynchronous work
- *
+ * <p>
  * Messages are sent using the {@link ExecutorService}, meaning order of execution
  * is not handled by this class
- *
+ * <p>
  * Messages are serialized using {@link ObjectMapper} passed in the constructor
- *
+ * <p>
  * Prior to using this class, {@link #attach(OutputStream)} must be called in order
  * to pick {@link OutputStream} to write data to
  * {@link #send(Message)} will throw an Exception otherwise
- *
+ * <p>
  * Example:
  * <pre>
  *     {@code
@@ -79,8 +79,9 @@ public final class AsyncRPCSender implements RPCSender {
     /**
      * Creates a new {@link AsyncRPCSender} with given {@link ObjectMapper} for mapping requests
      * using {@link ExecutorService} for background work
+     *
      * @param executorService service used for background work
-     * @param msgPacker {@link ObjectMapper} for mapping requests (outgoing)
+     * @param msgPacker       {@link ObjectMapper} for mapping requests (outgoing)
      * @throws NullPointerException if any parameter is null
      */
     public AsyncRPCSender(ExecutorService executorService, ObjectMapper msgPacker) {
@@ -94,6 +95,7 @@ public final class AsyncRPCSender implements RPCSender {
      * Sends messages per {@link RPCSender#send(Message)} specification
      * Order of execution is handled by {@link ExecutorService},
      * this class just submits the task of actual serializing and writing to stream
+     *
      * @throws IllegalStateException thrown if {@link #attach(OutputStream)} was not used - thrown by the submitted task
      */
     @Override
@@ -104,6 +106,7 @@ public final class AsyncRPCSender implements RPCSender {
     /**
      * Attaches to {@link OutputStream}
      * Required for using {@link #send(Message)}
+     *
      * @param outputStream {@link OutputStream} to write to
      */
     @Override

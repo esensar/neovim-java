@@ -39,21 +39,21 @@ import java.util.concurrent.atomic.AtomicReference;
 /**
  * Two-way msgpack stream that wraps reading/writing bytes and exposes
  * an interface for sending {@link Message}
- *
+ * <p>
  * It is implemented by delegating reading to {@link RPCListener} and writing to {@link RPCSender},
  * since {@link RPCSender} supports both of these functionalities. A single interface makes it easier
  * to communicate in a request/response model of communication.
- *
+ * <p>
  * Besides just passing down writing/reading, this class allows multiple {@link RPCListener.RequestCallback} and
  * multiple {@link RPCListener.NotificationCallback} by delegating to internally held callbacks
  * It also handles message id generation, meaning users of this class don't have to manually set id's for messages
  * Message id generation is handled by {@link MessageIdGenerator} which can optionally be overriden through constructor.
  * By default {@link SequentialMessageIdGenerator} is used.
- *
+ * <p>
  * Sending messages supports any kind of {@link Message}
  * and for {@link RequestMessage}, {@link RPCListener.ResponseCallback} is supported, which will be called once
  * corresponding {@link ResponseMessage} arrives (message with same id as the request sent)
- *
+ * <p>
  * Example:
  * <pre>
  *     {@code
@@ -69,7 +69,7 @@ import java.util.concurrent.atomic.AtomicReference;
  *     rpcStreamer.send(requestMessage); // Sending a request - fire and forget - no callback
  *     }
  * </pre>
- *
+ * <p>
  * Example with custom id generator:
  * <pre>
  *     {@code
@@ -97,7 +97,8 @@ public final class PackStream implements RPCStreamer {
      * Creates a new {@link PackStream} with given {@link RPCSender} for sending messages
      * and an {@link RPCListener} for listening for incoming requests, responses and notifications
      * Uses {@link SequentialMessageIdGenerator} for {@link MessageIdGenerator}
-     * @param rpcSender {@link RPCSender} for sending data
+     *
+     * @param rpcSender   {@link RPCSender} for sending data
      * @param rpcListener {@link RPCListener} for listening to incoming data
      * @throws NullPointerException if any parameter is null
      */
@@ -108,8 +109,9 @@ public final class PackStream implements RPCStreamer {
     /**
      * Creates a new {@link PackStream} with given {@link RPCSender} for sending messages
      * and an {@link RPCListener} for listening for incoming requests, responses and notifications
-     * @param rpcSender {@link RPCSender} for sending data
-     * @param rpcListener {@link RPCListener} for listening to incoming data
+     *
+     * @param rpcSender          {@link RPCSender} for sending data
+     * @param rpcListener        {@link RPCListener} for listening to incoming data
      * @param messageIdGenerator {@link MessageIdGenerator} for generating request message ids
      * @throws NullPointerException if any parameter is null
      */
@@ -125,8 +127,9 @@ public final class PackStream implements RPCStreamer {
     /**
      * Prepares for writing to outgoing stream and prepares for reading from input stream
      * Sets up listeners on the input stream, so that current and any new request/response/notification callbacks may
-     * be called -> prepares the underlying {@link RPCListener}
-     * Also prepares for writing messages -> prepares the underlying {@link RPCSender}
+     * be called - prepares the underlying {@link RPCListener}
+     * Also prepares for writing messages - prepares the underlying {@link RPCSender}
+     *
      * @throws NullPointerException if rpcConnection is null
      */
     @Override
