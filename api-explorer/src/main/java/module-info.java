@@ -1,4 +1,8 @@
 module apiexplorer {
+    exports com.ensarsarajcic.neovim.java.explorer;
+    exports com.ensarsarajcic.neovim.java.explorer.api;
+    exports com.ensarsarajcic.neovim.java.explorer.list;
+    exports com.ensarsarajcic.neovim.java.explorer.test;
     requires neovimapi;
     requires corerpc;
     requires com.fasterxml.jackson.core;
