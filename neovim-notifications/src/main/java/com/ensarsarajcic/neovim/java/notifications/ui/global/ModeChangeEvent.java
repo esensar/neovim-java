@@ -27,9 +27,6 @@ package com.ensarsarajcic.neovim.java.notifications.ui.global;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.List;
-import java.util.function.Function;
-
 @JsonFormat(shape = JsonFormat.Shape.ARRAY)
 public final class ModeChangeEvent implements UIGlobalEvent {
     public static final String NAME = "mode_change";

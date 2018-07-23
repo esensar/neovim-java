@@ -39,10 +39,10 @@ public final class ObjectMappers {
     }
 
     private static final ObjectMapper createDefaultNeovimMapper() {
-        MessagePackFactory factory = new MessagePackFactory();
+        var factory = new MessagePackFactory();
         factory.disable(JsonParser.Feature.AUTO_CLOSE_SOURCE);
         factory.disable(JsonGenerator.Feature.AUTO_CLOSE_TARGET);
-        ObjectMapper objectMapper = new ObjectMapper(factory);
+        var objectMapper = new ObjectMapper(factory);
         objectMapper.registerModule(NeovimJacksonModule.createModule());
         return objectMapper;
     }

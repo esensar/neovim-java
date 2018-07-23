@@ -121,7 +121,7 @@ public final class ManualQueueExecutorService implements ExecutorService {
     }
 
     private <T> Future<T> prepareCallable(Callable<T> task) {
-        CountDownLatch countDownLatch = new CountDownLatch(1);
+        var countDownLatch = new CountDownLatch(1);
         callables.add(new AbstractMap.SimpleEntry<>(countDownLatch, task));
         return CompletableFuture.supplyAsync(() -> {
             try {

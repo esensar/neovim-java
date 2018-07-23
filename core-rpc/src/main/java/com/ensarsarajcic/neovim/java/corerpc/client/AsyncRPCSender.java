@@ -26,14 +26,11 @@ package com.ensarsarajcic.neovim.java.corerpc.client;
 
 import com.ensarsarajcic.neovim.java.corerpc.message.Message;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 

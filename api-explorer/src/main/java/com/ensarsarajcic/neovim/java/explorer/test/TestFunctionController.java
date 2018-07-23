@@ -41,10 +41,8 @@ import javafx.scene.paint.Color;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletionException;
-import java.util.function.Function;
 
 public final class TestFunctionController {
 
@@ -58,36 +56,36 @@ public final class TestFunctionController {
 
     public void setFunctionData(NeovimFunction neovimFunction) {
         this.neovimFunction = neovimFunction;
-        List<Node> nodes = new ArrayList<>();
-        List<Map.Entry<String, Node>> inputNodes = new ArrayList<>();
+        var nodes = new ArrayList<Node>();
+        var inputNodes = new ArrayList<Map.Entry<String, Node>>();
 
         nodes.add(new Label(neovimFunction.getName()));
         nodes.add(new Label("Returns: " + neovimFunction.getReturnType()));
         if (neovimFunction.getDeprecatedSince() > 0) {
-            Label deprecatedLabel = new Label("Deprecated!");
+            var deprecatedLabel = new Label("Deprecated!");
             deprecatedLabel.setTextFill(Color.RED);
 
             nodes.add(deprecatedLabel);
         }
 
-        for (List<String> strings : neovimFunction.getParameters()) {
+        for (var strings : neovimFunction.getParameters()) {
             String type = strings.get(0);
             String name = strings.get(1);
-            Label label = new Label(name + ": ");
-            Node node = NodeHandler.generateNodeForType(type);
+            var label = new Label(name + ": ");
+            var node = NodeHandler.generateNodeForType(type);
             label.setLabelFor(node);
             nodes.add(new HBox(label, node));
             inputNodes.add(new AbstractMap.SimpleEntry<>(type, node));
         }
 
-        Label resultLabel = new Label("Result: ");
-        TextArea resultArea = new TextArea();
+        var resultLabel = new Label("Result: ");
+        var resultArea = new TextArea();
         resultArea.setEditable(false);
-        Button send = new Button();
+        var send = new Button();
         send.setText("SEND");
         send.setOnAction(event -> {
-            ArrayList<Object> args = new ArrayList<>();
-            for (Map.Entry<String, Node> node : inputNodes) {
+            var args = new ArrayList<>();
+            for (var node : inputNodes) {
                 args.add(NodeHandler.generateValueFromNodeOfType(node.getValue(), node.getKey()));
             }
             ConnectionHolder.getReactiveRPCStreamer().response(

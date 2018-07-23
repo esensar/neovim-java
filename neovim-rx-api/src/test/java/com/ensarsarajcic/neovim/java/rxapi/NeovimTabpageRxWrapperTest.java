@@ -59,7 +59,7 @@ public class NeovimTabpageRxWrapperTest {
 
     @Test
     public void delegatesGet() {
-        Tabpage tabpage = new Tabpage(1);
+        var tabpage = new Tabpage(1);
         given(neovimTabpageApi.get()).willReturn(tabpage);
         assertEquals(neovimTabpageRxWrapper.get(), tabpage);
         verify(neovimTabpageApi).get();
@@ -67,8 +67,8 @@ public class NeovimTabpageRxWrapperTest {
 
     @Test
     public void delegatesWindowOperations() {
-        NeovimWindowApi neovimWindowApi = Mockito.mock(NeovimWindowApi.class);
-        Window window = new Window(1);
+        var neovimWindowApi = Mockito.mock(NeovimWindowApi.class);
+        var window = new Window(1);
         given(neovimWindowApi.get()).willReturn(window);
         given(neovimTabpageApi.getWindows()).willReturn(CompletableFuture.completedFuture(Collections.emptyList()));
         given(neovimTabpageApi.getWindow()).willReturn(CompletableFuture.completedFuture(neovimWindowApi));
@@ -88,7 +88,7 @@ public class NeovimTabpageRxWrapperTest {
 
     @Test
     public void delegatesVarFunctions() {
-        Object result = new Object();
+        var result = new Object();
         given(neovimTabpageApi.getVar("name")).willReturn(CompletableFuture.completedFuture(result));
         given(neovimTabpageApi.setVar("name", result)).willReturn(CompletableFuture.completedFuture(null));
         given(neovimTabpageApi.deleteVar("name")).willReturn(CompletableFuture.completedFuture(null));

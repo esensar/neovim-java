@@ -40,7 +40,7 @@ public class RPCExceptionTest {
 
     @Test
     public void testStoresRPCError() {
-        RPCError error = new RPCError(1, "msg");
+        var error = new RPCError(1, "msg");
         assertThat(new RPCException(error).toString(), new BaseMatcher<>() {
             @Override
             public boolean matches(Object o) {

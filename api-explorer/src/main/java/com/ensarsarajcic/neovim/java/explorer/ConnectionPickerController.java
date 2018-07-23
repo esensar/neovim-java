@@ -59,8 +59,8 @@ public final class ConnectionPickerController {
         exploreBtn.setOnAction(event -> showApiList(exploreBtn));
         embedBtn.setOnAction(event -> {
             try {
-                ProcessBuilder pb = new ProcessBuilder("nvim", "--embed");
-                Process neovim = pb.start();
+                var pb = new ProcessBuilder("nvim", "--embed");
+                var neovim = pb.start();
                 ConnectionHolder.setConnection(new ProcessRPCConnection(neovim));
                 ConnectionHolder.setConnectedIpPort("embedded instance");
                 showApiList(embedBtn);
@@ -70,8 +70,8 @@ public final class ConnectionPickerController {
         });
         connectBtn.setOnAction(event -> {
             try {
-                String text = ipField.getText();
-                String ip = text.split(":")[0];
+                var text = ipField.getText();
+                var ip = text.split(":")[0];
                 int port = Integer.valueOf(text.split(":")[1]);
                 ConnectionHolder.setConnection(new TcpSocketRPCConnection(new Socket(ip, port)));
                 ConnectionHolder.setConnectedIpPort(text);
@@ -96,10 +96,10 @@ public final class ConnectionPickerController {
 
     private void showApiList(Button button) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("api-list.fxml"));
+            var loader = new FXMLLoader(getClass().getClassLoader().getResource("api-list.fxml"));
             Parent root = null;
             root = loader.load();
-            Scene scene = new Scene(root);
+            var scene = new Scene(root);
             ((Stage) button.getScene().getWindow()).setScene(scene);
         } catch (IOException e) {
             e.printStackTrace();

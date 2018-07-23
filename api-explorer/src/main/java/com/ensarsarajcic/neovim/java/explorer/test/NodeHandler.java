@@ -29,12 +29,10 @@ import com.ensarsarajcic.neovim.java.api.types.msgpack.Tabpage;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.Window;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.scene.Node;
-import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.HBox;
-import javafx.scene.text.Text;
 
 import java.io.IOException;
 import java.util.List;
@@ -76,17 +74,17 @@ public final class NodeHandler {
     }
 
     private static Node generateBooleanNode() {
-        ToggleGroup toggleGroup = new ToggleGroup();
-        RadioButton trueButton = new RadioButton("True");
+        var toggleGroup = new ToggleGroup();
+        var trueButton = new RadioButton("True");
         trueButton.setSelected(true);
-        RadioButton falseButton = new RadioButton("False");
+        var falseButton = new RadioButton("False");
         trueButton.setToggleGroup(toggleGroup);
         falseButton.setToggleGroup(toggleGroup);
         return new HBox(trueButton, falseButton);
     }
 
     private static Boolean getBooleanNodeValue(HBox hBox) {
-        RadioButton trueButton = (RadioButton) hBox.getChildren().get(0);
+        var trueButton = (RadioButton) hBox.getChildren().get(0);
         return trueButton.isSelected();
     }
 

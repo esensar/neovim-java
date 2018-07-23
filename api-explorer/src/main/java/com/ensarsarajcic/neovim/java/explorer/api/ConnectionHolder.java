@@ -51,7 +51,7 @@ public final class ConnectionHolder {
         if (reactiveRPCStreamer == null) {
             synchronized (ConnectionHolder.class) {
                 if (reactiveRPCStreamer == null) {
-                    RPCClient rpcClient = new RPCClient.Builder()
+                    var rpcClient = new RPCClient.Builder()
                             .withObjectMapper(NeovimJacksonModule.createNeovimObjectMapper()).build();
                     rpcClient.attach(connection);
 

@@ -57,7 +57,7 @@ public final class CommandInfo {
             } else if (value.equals("?")) {
                 return new ArgumentNumberInfo(0, 1);
             } else {
-                int count = Integer.parseInt(value);
+                var count = Integer.parseInt(value);
                 return new ArgumentNumberInfo(count, count);
             }
         }

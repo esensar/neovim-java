@@ -32,14 +32,14 @@ public class BufferTest {
 
     @Test
     public void equalsTest() {
-        Buffer bufferOne = new Buffer(1);
-        Buffer bufferTwo = new Buffer(2);
+        var bufferOne = new Buffer(1);
+        var bufferTwo = new Buffer(2);
 
         assertNotEquals(bufferOne, bufferTwo);
         assertEquals(bufferOne.equals(bufferTwo), bufferTwo.equals(bufferOne));
 
-        Buffer bufferOneAgain = new Buffer(1);
-        Buffer bufferOneSame = bufferOne;
+        var bufferOneAgain = new Buffer(1);
+        var bufferOneSame = bufferOne;
 
         assertEquals(bufferOne, bufferOneSame);
         assertEquals(bufferOne, bufferOneAgain);
@@ -48,13 +48,13 @@ public class BufferTest {
 
     @Test
     public void hashCodeTest() {
-        Buffer bufferOne = new Buffer(1);
-        Buffer bufferTwo = new Buffer(2);
+        var bufferOne = new Buffer(1);
+        var bufferTwo = new Buffer(2);
 
         assertNotEquals(bufferOne.hashCode(), bufferTwo.hashCode());
 
-        Buffer bufferOneAgain = new Buffer(1);
-        Buffer bufferOneSame = bufferOne;
+        var bufferOneAgain = new Buffer(1);
+        var bufferOneSame = bufferOne;
 
         assertEquals(bufferOne.hashCode(), bufferOneSame.hashCode());
         assertEquals(bufferOne.hashCode(), bufferOneAgain.hashCode());
@@ -62,13 +62,13 @@ public class BufferTest {
 
     @Test
     public void compareToTest() {
-        Buffer bufferOne = new Buffer(1);
-        Buffer bufferTwo = new Buffer(2);
+        var bufferOne = new Buffer(1);
+        var bufferTwo = new Buffer(2);
 
         assertTrue(bufferOne.compareTo(bufferTwo) < 0);
         assertTrue(bufferTwo.compareTo(bufferOne) > 0);
 
-        Buffer bufferOneAgain = new Buffer(1);
+        var bufferOneAgain = new Buffer(1);
 
         assertEquals(0, bufferOne.compareTo(bufferOneAgain));
         assertEquals(0, bufferOneAgain.compareTo(bufferOne));

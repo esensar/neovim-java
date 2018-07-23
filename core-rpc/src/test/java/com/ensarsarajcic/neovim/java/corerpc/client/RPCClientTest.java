@@ -59,14 +59,14 @@ public class RPCClientTest {
     @Test
     public void testDefaultFactories() {
         // Create should create new instances
-        RPCClient rpc1 = RPCClient.createDefaultAsyncInstance();
-        RPCClient rpc2 = RPCClient.createDefaultAsyncInstance();
+        var rpc1 = RPCClient.createDefaultAsyncInstance();
+        var rpc2 = RPCClient.createDefaultAsyncInstance();
 
         assertNotEquals(rpc1, rpc2);
 
         // Get should return same instances
-        RPCClient rpc3 = RPCClient.getDefaultAsyncInstance();
-        RPCClient rpc4 = RPCClient.getDefaultAsyncInstance();
+        var rpc3 = RPCClient.getDefaultAsyncInstance();
+        var rpc4 = RPCClient.getDefaultAsyncInstance();
 
         assertEquals(rpc3, rpc4);
 
@@ -74,21 +74,21 @@ public class RPCClientTest {
         assertNotEquals(rpc1, rpc3);
         assertNotEquals(rpc2, rpc3);
 
-        RPCClient rpc5 = RPCClient.createDefaultAsyncInstance();
+        var rpc5 = RPCClient.createDefaultAsyncInstance();
         assertNotEquals(rpc5, rpc4);
     }
 
     @Test
     public void testDefaultBuilder() {
         // Just build straight away
-        RPCClient rpc1 = new RPCClient.Builder().build();
+        var rpc1 = new RPCClient.Builder().build();
     }
 
     @Test
     public void testRpcStreamerBuilder() throws IOException {
         // When custom streamer is passed, it should be used
-        RPCStreamer rpc1Streamer = Mockito.mock(RPCStreamer.class);
-        RPCClient rpc1 = new RPCClient.Builder()
+        var rpc1Streamer = Mockito.mock(RPCStreamer.class);
+        var rpc1 = new RPCClient.Builder()
                 .withRPCStreamer(rpc1Streamer)
                 .build();
         validateDelegates(rpc1, rpc1Streamer);
@@ -97,9 +97,9 @@ public class RPCClientTest {
     @Test
     public void testObjectMapperBuilder() {
         // Use custom mapper / executor service
-        ObjectMapper customObjectMapper = Mockito.mock(ObjectMapper.class);
-        ExecutorService executorService = Mockito.mock(ExecutorService.class);
-        RPCClient rpc1 = new RPCClient.Builder()
+        var customObjectMapper = Mockito.mock(ObjectMapper.class);
+        var executorService = Mockito.mock(ExecutorService.class);
+        var rpc1 = new RPCClient.Builder()
                 .withObjectMapper(customObjectMapper)
                 .withExecutorService(executorService)
                 .build();
@@ -108,51 +108,51 @@ public class RPCClientTest {
     @Test
     public void testCustomRpcComponentsBuilder() {
         // Use custom mapper / executor service
-        ObjectMapper customObjectMapper = Mockito.mock(ObjectMapper.class);
-        ExecutorService executorService = Mockito.mock(ExecutorService.class);
-        RPCSender rpcSender = Mockito.mock(RPCSender.class);
-        RPCListener rpcListener = Mockito.mock(RPCListener.class);
+        var customObjectMapper = Mockito.mock(ObjectMapper.class);
+        var executorService = Mockito.mock(ExecutorService.class);
+        var rpcSender = Mockito.mock(RPCSender.class);
+        var rpcListener = Mockito.mock(RPCListener.class);
 
         // Building with just one custom component
         // RPC Sender
         // Sender can be changed later
-        RPCClient rpc1 = new RPCClient.Builder()
+        var rpc1 = new RPCClient.Builder()
                 .withRPCSender(rpcSender)
                 .withObjectMapper(customObjectMapper)
                 .withExecutorService(executorService)
                 .withRPCSender(rpcSender)
                 .build();
 
-        RPCClient rpc2 = new RPCClient.Builder()
+        var rpc2 = new RPCClient.Builder()
                 .withRPCSender(rpcSender)
                 .build();
 
         // RPC Listener
         // Listener can be changed later
-        RPCClient rpc3 = new RPCClient.Builder()
+        var rpc3 = new RPCClient.Builder()
                 .withRPCListener(rpcListener)
                 .withObjectMapper(customObjectMapper)
                 .withExecutorService(executorService)
                 .withRPCListener(rpcListener)
                 .build();
 
-        RPCClient rpc4 = new RPCClient.Builder()
+        var rpc4 = new RPCClient.Builder()
                 .withRPCListener(rpcListener)
                 .build();
 
         // With both
-        RPCClient rpc5 = new RPCClient.Builder()
+        var rpc5 = new RPCClient.Builder()
                 .withRPCListener(rpcListener)
                 .withRPCSender(rpcSender)
                 .build();
 
-        RPCClient rpc6 = new RPCClient.Builder()
+        var rpc6 = new RPCClient.Builder()
                 .withRPCSender(rpcSender)
                 .withRPCListener(rpcListener)
                 .build();
 
         // Components can be changed later
-        RPCClient rpc7 = new RPCClient.Builder()
+        var rpc7 = new RPCClient.Builder()
                 .withRPCSenderAndListener(rpcSender, rpcListener)
                 .withRPCSender(rpcSender)
                 .withRPCListener(rpcListener)
@@ -160,7 +160,7 @@ public class RPCClientTest {
     }
 
     private void validateDelegates(RPCClient rpcClient, RPCStreamer rpcStreamer) throws IOException {
-        RPCConnection rpcConnection = Mockito.mock(RPCConnection.class);
+        var rpcConnection = Mockito.mock(RPCConnection.class);
         rpcClient.attach(rpcConnection);
         verify(rpcStreamer).attach(rpcConnection);
 
@@ -168,16 +168,16 @@ public class RPCClientTest {
         rpcClient.send(message);
         verify(rpcStreamer).send(message);
 
-        RequestMessage.Builder msgBuilder = new RequestMessage.Builder("test");
+        var msgBuilder = new RequestMessage.Builder("test");
         rpcClient.send(msgBuilder);
         verify(rpcStreamer).send(msgBuilder);
 
-        RPCListener.ResponseCallback responseCallback = Mockito.mock(RPCListener.ResponseCallback.class);
+        var responseCallback = Mockito.mock(RPCListener.ResponseCallback.class);
         rpcClient.send(msgBuilder, responseCallback);
         verify(rpcStreamer).send(msgBuilder, responseCallback);
 
-        RPCListener.RequestCallback requestCallback = Mockito.mock(RPCListener.RequestCallback.class);
-        RPCListener.NotificationCallback notificationCallback = Mockito.mock(RPCListener.NotificationCallback.class);
+        var requestCallback = Mockito.mock(RPCListener.RequestCallback.class);
+        var notificationCallback = Mockito.mock(RPCListener.NotificationCallback.class);
         rpcClient.addRequestCallback(requestCallback);
         rpcClient.removeRequestCallback(requestCallback);
         rpcClient.addNotificationCallback(notificationCallback);

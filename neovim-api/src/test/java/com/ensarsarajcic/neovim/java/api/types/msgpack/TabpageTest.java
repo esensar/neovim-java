@@ -32,14 +32,14 @@ public class TabpageTest {
 
     @Test
     public void equalsTest() {
-        Tabpage tabpageOne = new Tabpage(1);
-        Tabpage tabpageTwo = new Tabpage(2);
+        var tabpageOne = new Tabpage(1);
+        var tabpageTwo = new Tabpage(2);
 
         assertNotEquals(tabpageOne, tabpageTwo);
         assertEquals(tabpageOne.equals(tabpageTwo), tabpageTwo.equals(tabpageOne));
 
-        Tabpage tabpageOneAgain = new Tabpage(1);
-        Tabpage tabpageOneSame = tabpageOne;
+        var tabpageOneAgain = new Tabpage(1);
+        var tabpageOneSame = tabpageOne;
 
         assertEquals(tabpageOne, tabpageOneSame);
         assertEquals(tabpageOne, tabpageOneAgain);
@@ -48,13 +48,13 @@ public class TabpageTest {
 
     @Test
     public void hashCodeTest() {
-        Tabpage tabpageOne = new Tabpage(1);
-        Tabpage tabpageTwo = new Tabpage(2);
+        var tabpageOne = new Tabpage(1);
+        var tabpageTwo = new Tabpage(2);
 
         assertNotEquals(tabpageOne.hashCode(), tabpageTwo.hashCode());
 
-        Tabpage tabpageOneAgain = new Tabpage(1);
-        Tabpage tabpageOneSame = tabpageOne;
+        var tabpageOneAgain = new Tabpage(1);
+        var tabpageOneSame = tabpageOne;
 
         assertEquals(tabpageOne.hashCode(), tabpageOneSame.hashCode());
         assertEquals(tabpageOne.hashCode(), tabpageOneAgain.hashCode());
@@ -62,13 +62,13 @@ public class TabpageTest {
 
     @Test
     public void compareToTest() {
-        Tabpage tabpageOne = new Tabpage(1);
-        Tabpage tabpageTwo = new Tabpage(2);
+        var tabpageOne = new Tabpage(1);
+        var tabpageTwo = new Tabpage(2);
 
         assertTrue(tabpageOne.compareTo(tabpageTwo) < 0);
         assertTrue(tabpageTwo.compareTo(tabpageOne) > 0);
 
-        Tabpage tabpageOneAgain = new Tabpage(1);
+        var tabpageOneAgain = new Tabpage(1);
 
         assertEquals(0, tabpageOne.compareTo(tabpageOneAgain));
         assertEquals(0, tabpageOneAgain.compareTo(tabpageOne));

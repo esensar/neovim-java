@@ -29,16 +29,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.mockito.stubbing.Answer;
 
 import java.io.IOException;
 import java.util.Collections;
-import java.util.List;
 import java.util.concurrent.*;
-import java.util.function.Function;
 
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.*;
@@ -129,7 +124,7 @@ public class ManualQueueExecutorServiceTest {
                 .submit(any(Callable.class));
         Runnable runnable = () -> {
         };
-        Future first = manualQueueExecutorService.submit(runnable);
+        var first = manualQueueExecutorService.submit(runnable);
         verify(executorService, never()).submit(runnable);
 
         manualQueueExecutorService.runOne();
@@ -137,9 +132,9 @@ public class ManualQueueExecutorServiceTest {
         verify(executorService).submit(any(Callable.class));
 
         manualQueueExecutorService.submit(() -> null);
-        Future second = manualQueueExecutorService.submit(() -> null);
+        var second = manualQueueExecutorService.submit(() -> null);
         manualQueueExecutorService.submit(() -> null);
-        Future third = manualQueueExecutorService.submit(() -> null);
+        var third = manualQueueExecutorService.submit(() -> null);
         verify(executorService, times(1)).submit(any(Callable.class));
 
         manualQueueExecutorService.runOne();
@@ -156,7 +151,7 @@ public class ManualQueueExecutorServiceTest {
 
         verify(executorService, times(5)).submit(any(Callable.class));
 
-        Future fourth = manualQueueExecutorService.submit(() -> {
+        var fourth = manualQueueExecutorService.submit(() -> {
         }, null);
         verify(executorService, times(5)).submit(any(Callable.class));
 
@@ -164,7 +159,7 @@ public class ManualQueueExecutorServiceTest {
         assertNull(fourth.get());
         verify(executorService, times(6)).submit(any(Callable.class));
 
-        List<Future<Object>> fifth = manualQueueExecutorService.invokeAll(Lists.newArrayList(() -> null, Object::new));
+        var fifth = manualQueueExecutorService.invokeAll(Lists.newArrayList(() -> null, Object::new));
         verify(executorService, times(6)).submit(any(Callable.class));
 
         manualQueueExecutorService.runOne();
@@ -175,7 +170,7 @@ public class ManualQueueExecutorServiceTest {
         assertNotNull(fifth.get(1).get());
         verify(executorService, times(8)).submit(any(Callable.class));
 
-        List<Future<Object>> sixth = manualQueueExecutorService.invokeAll(Lists.newArrayList(() -> null, Object::new), 100, TimeUnit.MILLISECONDS);
+        var sixth = manualQueueExecutorService.invokeAll(Lists.newArrayList(() -> null, Object::new), 100, TimeUnit.MILLISECONDS);
         verify(executorService, times(8)).submit(any(Callable.class));
 
         manualQueueExecutorService.runOne();
@@ -194,7 +189,7 @@ public class ManualQueueExecutorServiceTest {
         Runnable runnable = () -> {
             throw new RuntimeException(new IOException());
         };
-        Future first = manualQueueExecutorService.submit(runnable);
+        var first = manualQueueExecutorService.submit(runnable);
         verify(executorService, never()).submit(runnable);
         manualQueueExecutorService.runOne();
         assertNull(first.get());

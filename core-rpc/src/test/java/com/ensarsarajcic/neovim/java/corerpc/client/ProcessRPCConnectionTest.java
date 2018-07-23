@@ -73,16 +73,16 @@ public class ProcessRPCConnectionTest {
 
     @Test
     public void testClose() throws IOException {
-        RPCConnection connection = new ProcessRPCConnection(process);
+        var connection = new ProcessRPCConnection(process);
         connection.close();
         verify(process, never()).destroy();
 
-        RPCConnection closingConnection = new ProcessRPCConnection(process, true);
+        var closingConnection = new ProcessRPCConnection(process, true);
         closingConnection.close();
         verify(process).destroy();
 
-        Process newProcess = Mockito.mock(Process.class);
-        try(RPCConnection autoClosedConnection = new ProcessRPCConnection(newProcess, true)) {
+        var newProcess = Mockito.mock(Process.class);
+        try(var autoClosedConnection = new ProcessRPCConnection(newProcess, true)) {
             autoClosedConnection.getIncomingStream();
         }
         verify(newProcess).destroy();

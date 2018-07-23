@@ -57,7 +57,7 @@ public final class NeovimTypeDeserializer<T extends BaseCustomIdType> extends Js
 
     @Override
     public T deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
-        MessagePackExtensionType messagePackExtensionType = (MessagePackExtensionType) jsonParser.getEmbeddedObject();
+        var messagePackExtensionType = (MessagePackExtensionType) jsonParser.getEmbeddedObject();
 
         if (messagePackExtensionType.getType() != typeId) {
             log.error("Tried to parse a bad type ({})", messagePackExtensionType.getType());
