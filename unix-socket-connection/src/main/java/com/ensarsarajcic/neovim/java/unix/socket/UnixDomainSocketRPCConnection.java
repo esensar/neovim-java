@@ -35,11 +35,38 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Objects;
 
+/**
+ * Simple implementation of {@link RPCConnection} based on a unix domain socket
+ * <p>
+ * This allows connection and communication via unix domain socket/windows named pipe
+ * It is a very simple implementation and it just passes down calls to underlying {@link UnixDomainSocket}
+ * <p>
+ * Example:
+ * <pre>
+ *     {@code
+ *     File socket = new File("/var/nvim/random");
+ *
+ *     RPCConnection fileConnection = new UnixDomainSocketRPCConnection(socket);
+ *
+ *     // It can now be used for communication
+ *     rpcStreamer.attach(fileConnection);
+ *     rpcStreamer.sent(message); // send a message to unix domain socket located on /var/nvim/random
+ *     }
+ * </pre>
+ */
 public final class UnixDomainSocketRPCConnection implements RPCConnection {
     private static final Logger log = LoggerFactory.getLogger(UnixDomainSocketRPCConnection.class);
 
     private UnixDomainSocket unixDomainSocket;
 
+    /**
+     * Creates a new {@link UnixDomainSocketRPCConnection} connected to the file on given path
+     * It uses input/output stream provided by {@link UnixDomainSocket} created for given file
+     *
+     * @param path file to use as unix domain socket
+     * @throws NullPointerException if path is null
+     * @throws RuntimeException     if socket can't be open for given path
+     */
     public UnixDomainSocketRPCConnection(File path) {
         Objects.requireNonNull(path, "path is required to make connection");
         try {
@@ -50,16 +77,32 @@ public final class UnixDomainSocketRPCConnection implements RPCConnection {
         }
     }
 
+    /**
+     * Gets the {@link InputStream} of the underlying {@link UnixDomainSocket}
+     *
+     * @return {@link InputStream} of the underlying {@link UnixDomainSocket}
+     */
     @Override
     public InputStream getIncomingStream() {
         return unixDomainSocket.getInputStream();
     }
 
+    /**
+     * Gets the {@link OutputStream} of the underlying {@link UnixDomainSocket}
+     *
+     * @return {@link OutputStream} of the underlying {@link UnixDomainSocket}
+     */
     @Override
     public OutputStream getOutgoingStream() {
         return unixDomainSocket.getOutputStream();
     }
 
+    /**
+     * Closes underlying {@link UnixDomainSocket}
+     * Communication is no longer possible after this call
+     *
+     * @throws IOException if underlying {@link UnixDomainSocket} throws exception
+     */
     @Override
     public void close() throws IOException {
         log.info("Closing unix domain socket {}", unixDomainSocket);
