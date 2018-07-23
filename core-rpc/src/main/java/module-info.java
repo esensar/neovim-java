@@ -5,8 +5,8 @@ module corerpc {
     exports com.ensarsarajcic.neovim.java.corerpc.message;
 
     requires slf4j.api;
-    requires jackson.dataformat.msgpack;
+    requires com.fasterxml.jackson.databind;
+    requires com.fasterxml.jackson.core;
     requires jackson.annotations;
-    requires jackson.databind;
-    requires jackson.core;
+    requires jackson.dataformat.msgpack;
 }
