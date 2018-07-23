@@ -40,7 +40,7 @@ public class AtomicCallBuilderTest {
 
     @Test
     public void allMethodsReturnNullSinceUnimplemented() {
-        AtomicCallBuilder atomicCallBuilder = new AtomicCallBuilder();
+        var atomicCallBuilder = new AtomicCallBuilder();
         assertNull(atomicCallBuilder.attachUI(1, 1, UiOptions.TERMINAL));
         assertNull(atomicCallBuilder.callDictFunction(Map.of(), "", List.of()));
         assertNull(atomicCallBuilder.callFunction("", List.of()));

@@ -75,7 +75,7 @@ public class WindowStreamApiTest extends BaseStreamApiTest {
     @Test
     public void getVarTest() throws ExecutionException, InterruptedException {
         // Happy case
-        Object varVal = "value";
+        var varVal = "value";
         assertNormalBehavior(
                 () -> CompletableFuture.completedFuture(new ResponseMessage(1, null, varVal)),
                 () -> windowStreamApi.getVar("name"),
@@ -93,7 +93,7 @@ public class WindowStreamApiTest extends BaseStreamApiTest {
     @Test
     public void setVarTest() throws ExecutionException, InterruptedException {
         // Happy case
-        Object varVal = "value";
+        var varVal = "value";
         assertNormalBehavior(
                 () -> CompletableFuture.completedFuture(new ResponseMessage(1, null, null)),
                 () -> windowStreamApi.setVar("name", varVal),
@@ -101,7 +101,7 @@ public class WindowStreamApiTest extends BaseStreamApiTest {
         );
 
         // Error case
-        Object badVal = new Object();
+        var badVal = new Object();
         assertErrorBehavior(
                 () -> windowStreamApi.setVar("wrong name", badVal),
                 request -> assertMethodAndArguments(request, NeovimWindowApi.SET_VAR, window, "wrong name", badVal)
@@ -195,7 +195,7 @@ public class WindowStreamApiTest extends BaseStreamApiTest {
     @Test
     public void getCursorTest() throws ExecutionException, InterruptedException {
         // Happy case
-        List coords = List.of(100, 200);
+        var coords = List.of(100, 200);
         assertNormalBehavior(
                 () -> CompletableFuture.completedFuture(new ResponseMessage(1, null, coords)),
                 () -> windowStreamApi.getCursor(),
@@ -219,7 +219,7 @@ public class WindowStreamApiTest extends BaseStreamApiTest {
     @Test
     public void setCursorTest() throws ExecutionException, InterruptedException {
         // Happy case
-        VimCoords vimCoords = new VimCoords(500, 600);
+        var vimCoords = new VimCoords(500, 600);
         assertNormalBehavior(
                 () -> CompletableFuture.completedFuture(new ResponseMessage(1, null, null)),
                 () -> windowStreamApi.setCursor(vimCoords),
@@ -227,7 +227,7 @@ public class WindowStreamApiTest extends BaseStreamApiTest {
         );
 
         // Error case
-        VimCoords badCoords = new VimCoords(1, 2);
+        var badCoords = new VimCoords(1, 2);
         assertErrorBehavior(
                 () -> windowStreamApi.setCursor(badCoords),
                 request -> assertMethodAndArguments(request, NeovimWindowApi.SET_CURSOR, window, badCoords)

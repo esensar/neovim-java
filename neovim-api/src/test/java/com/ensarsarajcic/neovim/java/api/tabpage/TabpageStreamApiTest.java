@@ -75,7 +75,7 @@ public class TabpageStreamApiTest extends BaseStreamApiTest {
     @Test
     public void getVarTest() throws ExecutionException, InterruptedException {
         // Happy case
-        Object varVal = "value";
+        var varVal = "value";
         assertNormalBehavior(
                 () -> CompletableFuture.completedFuture(new ResponseMessage(1, null, varVal)),
                 () -> tabpageStreamApi.getVar("name"),
@@ -93,7 +93,7 @@ public class TabpageStreamApiTest extends BaseStreamApiTest {
     @Test
     public void setVarTest() throws ExecutionException, InterruptedException {
         // Happy case
-        Object varVal = "value";
+        var varVal = "value";
         assertNormalBehavior(
                 () -> CompletableFuture.completedFuture(new ResponseMessage(1, null, null)),
                 () -> tabpageStreamApi.setVar("name", varVal),
@@ -101,7 +101,7 @@ public class TabpageStreamApiTest extends BaseStreamApiTest {
         );
 
         // Error case
-        Object badVal = new Object();
+        var badVal = new Object();
         assertErrorBehavior(
                 () -> tabpageStreamApi.setVar("wrong name", badVal),
                 request -> assertMethodAndArguments(request, NeovimTabpageApi.SET_VAR, tabpage, "wrong name", badVal)
@@ -161,7 +161,7 @@ public class TabpageStreamApiTest extends BaseStreamApiTest {
     @Test
     public void getWindowsTest() throws InterruptedException, ExecutionException {
         // Happy case
-        List<MessagePackExtensionType> windows = List.of(
+        var windows = List.of(
                 new MessagePackExtensionType((byte) NeovimCustomType.WINDOW.getTypeId(), new byte[]{1}),
                 new MessagePackExtensionType((byte) NeovimCustomType.WINDOW.getTypeId(), new byte[]{2}),
                 new MessagePackExtensionType((byte) NeovimCustomType.WINDOW.getTypeId(), new byte[]{3})

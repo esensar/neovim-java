@@ -77,7 +77,7 @@ public final class RPCClient implements RPCStreamer {
     }
 
     private static ObjectMapper createDefaultObjectMapper() {
-        MessagePackFactory factory = new MessagePackFactory();
+        var factory = new MessagePackFactory();
         factory.disable(JsonParser.Feature.AUTO_CLOSE_SOURCE);
         factory.disable(JsonGenerator.Feature.AUTO_CLOSE_TARGET);
         return new ObjectMapper(factory);

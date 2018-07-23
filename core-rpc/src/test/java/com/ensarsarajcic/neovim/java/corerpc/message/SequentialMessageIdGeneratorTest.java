@@ -45,7 +45,7 @@ public class SequentialMessageIdGeneratorTest {
     public void startsFromOne() {
         // Given a fresh generator
         // Next id should generate 1
-        int firstId = sequentialMessageIdGenerator.nextId();
+        var firstId = sequentialMessageIdGenerator.nextId();
         assertEquals(1, firstId);
     }
 
@@ -61,7 +61,7 @@ public class SequentialMessageIdGeneratorTest {
     @Test
     public void worksInMultithreadedEnvironment() throws InterruptedException {
         // Given multithreaded environment
-        ExecutorService executorService = new ThreadPoolExecutor(
+        var executorService = new ThreadPoolExecutor(
                 3,
                 5,
                 10000,
@@ -69,10 +69,10 @@ public class SequentialMessageIdGeneratorTest {
                 new LinkedBlockingQueue<>()
         );
 
-        Set<Integer> integers = ConcurrentHashMap.newKeySet();
+        var integers = ConcurrentHashMap.<Integer>newKeySet();
 
         int repeatCount = 25000;
-        final CountDownLatch countDownLatch = new CountDownLatch(repeatCount);
+        final var countDownLatch = new CountDownLatch(repeatCount);
 
         // When generator is used multiple times
         for (int i = 0; i < repeatCount; i++) {

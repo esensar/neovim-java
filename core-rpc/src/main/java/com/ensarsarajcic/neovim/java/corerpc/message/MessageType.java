@@ -49,7 +49,7 @@ public enum MessageType {
      * @throws IllegalArgumentException if value is not inside bounds
      */
     public static MessageType fromInt(int value) {
-        for(MessageType messageType : values()) {
+        for(var messageType : values()) {
             if (value == messageType.value) {
                 return messageType;
             }

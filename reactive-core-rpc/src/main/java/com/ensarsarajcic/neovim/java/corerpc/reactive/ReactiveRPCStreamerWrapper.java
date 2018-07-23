@@ -145,8 +145,8 @@ public final class ReactiveRPCStreamerWrapper implements ReactiveRPCStreamer {
     private Supplier<ResponseMessage> responseSupplier(RequestMessage.Builder requestMessage) {
         return() -> {
             // Prepare for blocking until response comes
-            CountDownLatch countDownLatch = new CountDownLatch(1);
-            AtomicReference<ResponseMessage> responseMessage = new AtomicReference<>();
+            var countDownLatch = new CountDownLatch(1);
+            var responseMessage = new AtomicReference<ResponseMessage>();
             try {
                 // Send request
                 rpcStreamer.send(requestMessage, (forId, response) -> {

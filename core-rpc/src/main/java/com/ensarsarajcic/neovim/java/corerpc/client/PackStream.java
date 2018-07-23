@@ -33,8 +33,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.*;
-import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Two-way msgpack stream that wraps reading/writing bytes and exposes
@@ -167,7 +165,7 @@ public final class PackStream implements RPCStreamer {
      */
     @Override
     public void send(RequestMessage.Builder requestMessage, RPCListener.ResponseCallback responseCallback) throws IOException {
-        RequestMessage messageToSend = requestMessage.withId(messageIdGenerator.nextId()).build();
+        var messageToSend = requestMessage.withId(messageIdGenerator.nextId()).build();
         rpcListener.listenForResponse(messageToSend.getId(), responseCallback);
         send(messageToSend);
     }
@@ -222,14 +220,14 @@ public final class PackStream implements RPCStreamer {
 
     private void requestReceived(RequestMessage requestMessage) {
         log.info("Request received: {}", requestMessage);
-        for (RPCListener.RequestCallback requestCallback : requestCallbacks) {
+        for (var requestCallback : requestCallbacks) {
             requestCallback.requestReceived(requestMessage);
         }
     }
 
     private void notificationReceived(NotificationMessage notificationMessage) {
         log.info("Notification received: {}", notificationMessage);
-        for (RPCListener.NotificationCallback notificationCallback : notificationCallbacks) {
+        for (var notificationCallback : notificationCallbacks) {
             notificationCallback.notificationReceived(notificationMessage);
         }
     }

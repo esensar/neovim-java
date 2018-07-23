@@ -52,12 +52,11 @@ public final class NeovimTypeSerializer<T extends BaseCustomIdType> extends Json
 
     @Override
     public void serialize(T t, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException, JsonProcessingException {
-        MessagePackGenerator messagePackGenerator = (MessagePackGenerator) jsonGenerator;
+        var messagePackGenerator = (MessagePackGenerator) jsonGenerator;
 
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        var byteArrayOutputStream = new ByteArrayOutputStream();
         MessagePack.newDefaultPacker(byteArrayOutputStream).packLong(t.getId()).close();
-        MessagePackExtensionType messagePackExtensionType =
-                new MessagePackExtensionType(typeId, byteArrayOutputStream.toByteArray());
+        var messagePackExtensionType = new MessagePackExtensionType(typeId, byteArrayOutputStream.toByteArray());
         messagePackGenerator.writeExtensionType(messagePackExtensionType);
     }
 }

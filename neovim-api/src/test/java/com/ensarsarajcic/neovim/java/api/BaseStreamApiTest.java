@@ -69,9 +69,9 @@ public class BaseStreamApiTest {
             Consumer<RequestMessage> requestAsserter,
             Consumer<T> resultAsserter
     ) throws ExecutionException, InterruptedException {
-        ArgumentCaptor<RequestMessage.Builder> argumentCaptor = prepareArgumentCaptor(preparedResponse.get());
-        CompletableFuture<T> result = callSupplier.get();
-        RequestMessage requestMessage = argumentCaptor.getValue().build();
+        var argumentCaptor = prepareArgumentCaptor(preparedResponse.get());
+        var result = callSupplier.get();
+        var requestMessage = argumentCaptor.getValue().build();
         requestAsserter.accept(requestMessage);
         verify(reactiveRPCStreamer, atLeastOnce()).response(any());
         resultAsserter.accept(result.get());
@@ -80,10 +80,10 @@ public class BaseStreamApiTest {
     protected void assertErrorBehavior(
             Supplier<CompletableFuture<?>> completableFutureSupplier,
             Consumer<RequestMessage> requestAsserter) throws InterruptedException {
-        ArgumentCaptor<RequestMessage.Builder> errorArgumentCaptor = prepareArgumentCaptor(
+        var errorArgumentCaptor = prepareArgumentCaptor(
                 CompletableFuture.failedFuture(new RPCException(new RPCError(1, "error"))));
-        CompletableFuture errorResult = completableFutureSupplier.get();
-        RequestMessage errorResponse = errorArgumentCaptor.getValue().build();
+        var errorResult = completableFutureSupplier.get();
+        var errorResponse = errorArgumentCaptor.getValue().build();
         requestAsserter.accept(errorResponse);
         verify(reactiveRPCStreamer, atLeastOnce()).response(any());
         verifyError(errorResult);
@@ -92,7 +92,7 @@ public class BaseStreamApiTest {
     protected void assertMethodAndArguments(RequestMessage message, String method, Object... arguments) {
         assertEquals(message.getMethod(), method);
         int i = 0;
-        for (Object arg : arguments) {
+        for (var arg : arguments) {
             assertEquals(message.getArguments().get(i), arg);
             i++;
         }
@@ -110,7 +110,7 @@ public class BaseStreamApiTest {
     }
 
     protected ArgumentCaptor<RequestMessage.Builder> prepareArgumentCaptor(CompletableFuture<ResponseMessage> responseMessageCompletableFuture) {
-        ArgumentCaptor<RequestMessage.Builder> argumentCaptor = ArgumentCaptor.forClass(RequestMessage.Builder.class);
+        var argumentCaptor = ArgumentCaptor.forClass(RequestMessage.Builder.class);
         given(reactiveRPCStreamer.response(argumentCaptor.capture())).willReturn(responseMessageCompletableFuture);
         return argumentCaptor;
     }

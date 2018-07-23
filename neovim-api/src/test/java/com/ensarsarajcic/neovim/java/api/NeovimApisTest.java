@@ -43,13 +43,13 @@ public class NeovimApisTest {
 
     @Test
     public void canCreateDefaultForConnection() throws IOException {
-        RPCConnection rpcConnection = Mockito.mock(RPCConnection.class);
-        InputStream inputStream = Mockito.mock(InputStream.class);
-        OutputStream outputStream = Mockito.mock(OutputStream.class);
+        var rpcConnection = Mockito.mock(RPCConnection.class);
+        var inputStream = Mockito.mock(InputStream.class);
+        var outputStream = Mockito.mock(OutputStream.class);
         given(inputStream.read(any())).willThrow(IOException.class);
         given(rpcConnection.getIncomingStream()).willReturn(inputStream);
         given(rpcConnection.getOutgoingStream()).willReturn(outputStream);
-        NeovimApi neovimApi = NeovimApis.getApiForConnection(rpcConnection);
+        var neovimApi = NeovimApis.getApiForConnection(rpcConnection);
         // Verify attachment
         verify(inputStream).read(any());
     }

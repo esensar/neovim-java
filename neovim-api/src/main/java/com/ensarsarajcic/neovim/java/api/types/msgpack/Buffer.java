@@ -38,7 +38,7 @@ public final class Buffer extends BaseCustomIdType implements Comparable<Buffer>
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Buffer buffer = (Buffer) o;
+        var buffer = (Buffer) o;
         return getId() == buffer.getId();
     }
 
