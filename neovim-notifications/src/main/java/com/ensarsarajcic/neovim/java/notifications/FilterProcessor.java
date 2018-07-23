@@ -28,7 +28,7 @@ import java.util.concurrent.Flow;
 import java.util.concurrent.SubmissionPublisher;
 import java.util.function.Function;
 
-public final class FilterProcessor<T> extends SubmissionPublisher<T> implements Flow.Processor<T, T> {
+final class FilterProcessor<T> extends SubmissionPublisher<T> implements Flow.Processor<T, T> {
 
     private Function<T, Boolean> filterFunction;
     private Flow.Subscription subscription;

@@ -28,7 +28,7 @@ import java.util.concurrent.Flow;
 import java.util.concurrent.SubmissionPublisher;
 import java.util.function.Function;
 
-public final class MappingProcessor<T, R> extends SubmissionPublisher<R> implements Flow.Processor<T, R> {
+final class MappingProcessor<T, R> extends SubmissionPublisher<R> implements Flow.Processor<T, R> {
 
     private Function<T, R> mapFunction;
     private Flow.Subscription subscription;
