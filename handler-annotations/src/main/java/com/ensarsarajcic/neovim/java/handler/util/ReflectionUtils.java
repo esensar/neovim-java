@@ -28,26 +28,36 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.*;
 
+/**
+ * Utilities for reflection required by this library, since all handlers are called reflectively
+ */
 public final class ReflectionUtils {
 
     private ReflectionUtils() {
         throw new AssertionError("No instances");
     }
 
+    /**
+     * Runs through passed type to find methods annotated with annotation
+     * @param type type to run through
+     * @param annotation annotation to look for
+     * @param <T> type of annotation
+     * @return list of method and annotation pairs
+     */
     public static <T extends Annotation> List<Map.Entry<Method, T>> getMethodsAnnotatedWith(final Class<?> type, final Class<T> annotation) {
         final List<Map.Entry<Method, T>> methods = new ArrayList<>();
         Class<?> klass = type;
-        while (klass != Object.class) { // need to iterated thought hierarchy in order to retrieve methods from above the current instance
-            // iterate though the list of methods declared in the class represented by klass variable, and add those annotated with the specified annotation
+        // Iterate through hierarchy of passed type
+        while (klass != Object.class) {
+            // Get all methods
             final List<Method> allMethods = new ArrayList<>(Arrays.asList(klass.getDeclaredMethods()));
             for (final Method method : allMethods) {
+                // Add methods that have the annotation
                 if (method.isAnnotationPresent(annotation)) {
                     T annotInstance = method.getAnnotation(annotation);
-                    // TODO process annotInstance
                     methods.add(new AbstractMap.SimpleEntry<>(method, annotInstance));
                 }
             }
-            // move to the upper class in the hierarchy in search for more methods
             klass = klass.getSuperclass();
         }
         return methods;
