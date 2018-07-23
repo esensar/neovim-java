@@ -29,6 +29,9 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * Helper to handle multiple different single countdown latches
+ */
 public final class MultiLatch {
 
     private List<CountDownLatch> countDownLatches = new ArrayList<>();
