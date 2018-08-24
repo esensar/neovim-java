@@ -38,6 +38,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
+/**
+ * Class used internally by the library to find and provide creators for all notification types
+ * These creators are either static fields named CREATOR which generate the object from raw array,
+ * or are functions which utilize default neovim mapper to convert object
+ * <p>
+ * All of the creators are loaded upon first call and cached for further use
+ */
 final class NotificationCreatorCollector {
     private static final Logger log = LoggerFactory.getLogger(NotificationCreatorCollector.class);
 
@@ -115,6 +122,10 @@ final class NotificationCreatorCollector {
         return bufferEventCreators;
     }
 
+    /**
+     * Provides all creators of {@link UIEvent} notifications
+     * @return Map of creators where key is notification name and value is function which creates notification from raw array
+     */
     public static Map<String, Function<List, UIEvent>> getUIEventCreators() {
         if (uiEventCreators == null) {
             synchronized (NotificationCreatorCollector.class) {
@@ -126,6 +137,10 @@ final class NotificationCreatorCollector {
         return uiEventCreators;
     }
 
+    /**
+     * Provides all creators of {@link BufferEvent} notifications
+     * @return Map of creators where key is notification name and value is function which creates notification from raw array
+     */
     public static Map<String, Function<List, BufferEvent>> getBufferEventCreators() {
         if (bufferEventCreators == null) {
             synchronized (NotificationCreatorCollector.class) {

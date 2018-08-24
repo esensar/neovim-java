@@ -40,12 +40,35 @@ import java.util.Objects;
 import java.util.concurrent.Flow;
 import java.util.stream.Collectors;
 
+/**
+ * Implementation of {@link NeovimNotificationHandler} based on {@link ReactiveRPCStreamer}
+ * <p>
+ * Utilizes {@link NotificationCreatorCollector} for generating actual objects from raw data and {@link ReactiveRPCStreamer}
+ * for reading incoming notifications. Output should provide properly generated notifications of the right type
+ * which can be casted to access notification specific data.
+ * <p>
+ * Example:
+ * <pre>
+ *     {@code
+ *     NeovimNotificationHandler notificationHandler = new NeovimNotificationHandler(streamer);
+ *
+ *     notification.uiEvents().subscribe(uiEventSubscriber);
+ *     notification.bufferEvents().subscribe(bufferEventSubscriber);
+ *     }
+ * </pre>
+ */
 public final class NeovimStreamNotificationHandler implements NeovimNotificationHandler {
     private static final Logger log = LoggerFactory.getLogger(NeovimStreamNotificationHandler.class);
 
     private ReactiveRPCStreamer reactiveRPCStreamer;
     private ObjectMapper objectMapper;
 
+    /**
+     * Creates a new {@link NeovimStreamNotificationHandler} reading notifications from {@link ReactiveRPCStreamer}
+     * passed in the constructor. It may not be null.
+     * @param reactiveRPCStreamer streamer to be used to read notifications
+     * @throws NullPointerException if reactiveRPCStreamer is null
+     */
     public NeovimStreamNotificationHandler(ReactiveRPCStreamer reactiveRPCStreamer) {
         Objects.requireNonNull(reactiveRPCStreamer, "reactiveRPCStreamer is required to receive notifications");
         this.reactiveRPCStreamer = reactiveRPCStreamer;
