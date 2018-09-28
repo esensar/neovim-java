@@ -1,5 +1,7 @@
 # neovim-java
 
+[![Build Status](https://travis-ci.org/esensar/neovim-java.svg?branch=master)](https://travis-ci.org/esensar/neovim-java)
+
 Neovim Java client
 
 Consists of following modules:
