@@ -7,7 +7,7 @@ communication which just provides input and ouput streams. This module provides 
 either through **TCP socket** or throguh **process** (used for embedded neovim instance).
 
 Example of usage:
-```
+```java
     Socket socket = new Socket("127.0.0.1", 1234);
     
     RPCConnection localConnection = new TcpSocketRPCConnection(socket);
@@ -21,7 +21,7 @@ Example of usage:
 ```
 
 You can also implement `RPCListener` and `RPCSender` and use these implementations instead for `RPCClient`:
-```
+```java
     RPCStreamer customSenderListenerClient = new RPCClient.Builder()
         .withRPCListener(customRPCListener)
         .withRPCSender(customRPCSender)
@@ -29,7 +29,7 @@ You can also implement `RPCListener` and `RPCSender` and use these implementatio
 ```
 
 Or you can implement `RPCStreamer` in which case, `RPCClient` is just a basic proxy:
-```
+```java
     RPCStreamer customClient = new RPCClient.Builder()
         .withRPCStreamer(customStreamer)
         .build();
