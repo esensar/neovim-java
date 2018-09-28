@@ -34,12 +34,13 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Flow;
 
 /**
- * Interface defining rective variant of {@link com.ensarsarajcic.neovim.java.corerpc.client.RPCStreamer}
+ * Interface defining reactive variant of {@link com.ensarsarajcic.neovim.java.corerpc.client.RPCStreamer}
  */
 public interface ReactiveRPCStreamer {
     /**
      * Attaches to given {@link RPCConnection}
      * Connects callbacks to its incoming stream and prepares for writing to outgoing stream
+     *
      * @param rpcConnection connection to attach to
      */
     void attach(RPCConnection rpcConnection);
@@ -58,6 +59,7 @@ public interface ReactiveRPCStreamer {
     /**
      * Passes down a publisher of {@link RequestMessage} objects received
      * It will never complete
+     *
      * @return {@link Flow.Publisher} passing down requests as they come
      */
     Flow.Publisher<RequestMessage> requestsFlow();
@@ -65,6 +67,7 @@ public interface ReactiveRPCStreamer {
     /**
      * Passes down a publisher of {@link NotificationMessage} objects received
      * It will never complete
+     *
      * @return {@link Flow.Publisher} passing down notifications as they come
      */
     Flow.Publisher<NotificationMessage> notificationsFlow();

@@ -34,25 +34,80 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Simple class used to register and connect {@link NeovimNotificationHandler} and {@link NeovimRequestHandler}
+ * It provides methods to register/unregister any kind of object as neovim handler, but only classes with methods
+ * annotated with {@link NeovimNotificationHandler} or {@link NeovimRequestHandler} can be useful, since this will
+ * find such methods and call them once notifications/requests arrive
+ * <p>
+ * To get notifications/requests it should first be attached to a {@link RPCStreamer} using {@link #attachToStream(RPCStreamer)}
+ * Underneath, {@link NeovimHandlerProxy} is used to dispatch notifications/requests, which delegates thread management to it
+ * <p>
+ * Examples:
+ * <pre>
+ *     {@code
+ *     NeovimHandlerManager neovimHandlerManager = new NeovimHandlerManager();
+ *
+ *     neovimHandlerManager.registerNeovimHandler(uiEventHandler);
+ *     neovimHandlerManager.attachToStream(neovimStream);
+ *     }
+ * </pre>
+ */
 public final class NeovimHandlerManager {
     private static final Logger log = LoggerFactory.getLogger(NeovimHandlerManager.class);
 
     private NeovimHandlerProxy neovimHandlerProxy;
     private Map<Object, Map.Entry<List<RPCListener.NotificationCallback>, List<RPCListener.RequestCallback>>> handlers = new HashMap<>();
 
+    /**
+     * Creates a new {@link NeovimHandlerManager} with default {@link NeovimHandlerProxy} using {@link ImmediateExecutorService}
+     */
     public NeovimHandlerManager() {
-        this.neovimHandlerProxy = new NeovimHandlerProxy();
+        this(new NeovimHandlerProxy());
     }
 
+    /**
+     * Creates a new {@link NeovimHandlerManager} with given {@link NeovimHandlerProxy}
+     * @param neovimHandlerProxy proxy to use for dispatching notifications/messages
+     * @throws NullPointerException if passed {@link NeovimHandlerProxy} is null
+     */
+    public NeovimHandlerManager(NeovimHandlerProxy neovimHandlerProxy) {
+        Objects.requireNonNull(neovimHandlerProxy, "neovimHandlerProxy is required to dispatch notifications/messages");
+        this.neovimHandlerProxy = neovimHandlerProxy;
+    }
+
+    /**
+     * Attaches to given {@link RPCStreamer}
+     * {@link RPCStreamer} does not have to be attached to an actual connection at the time of this call, since this
+     * only sets up the notification/request callbacks
+     *
+     * @param rpcStreamer streamer whose notifications/requests should be analysed
+     * @throws NullPointerException if {@link RPCStreamer} is null
+     */
     public void attachToStream(RPCStreamer rpcStreamer) {
         log.info("Attaching handler manager to streamer ({})", rpcStreamer);
+        Objects.requireNonNull(rpcStreamer, "rpcStreamer may not be null");
         rpcStreamer.addNotificationCallback(neovimHandlerProxy);
         rpcStreamer.addRequestCallback(neovimHandlerProxy);
     }
 
+    /**
+     * Registers a new handler
+     * If this object is already registered, this is a no-op
+     * If this object has methods annotated with {@link NeovimNotificationHandler} or {@link NeovimRequestHandler},
+     * this method will have no effect, but it will still reflectively look for such methods
+     * <p>
+     * This works for both static and instance methods
+     * <p>
+     * Passed objects methods are prepared to be called when new notifications/requests arrive from attached {@link RPCStreamer}
+     * This may be called prior to attaching, but no notifications/requests can arrive before attaching
+     *
+     * @param handler object to search for annotated methods
+     */
     public void registerNeovimHandler(Object handler) {
         log.info("New neovim handler registered ({})", handler);
         if (handlers.containsKey(handler)) {
@@ -72,7 +127,11 @@ public final class NeovimHandlerManager {
                     return (RPCListener.NotificationCallback) notificationMessage -> {
                         if (notificationName.equals(notificationMessage.getName())) {
                             try {
-                                methodNeovimNotificationHandlerEntry.getKey().invoke(handler, notificationMessage);
+                                if (Modifier.isStatic(methodNeovimNotificationHandlerEntry.getKey().getModifiers())) {
+                                    methodNeovimNotificationHandlerEntry.getKey().invoke(null, notificationMessage);
+                                } else {
+                                    methodNeovimNotificationHandlerEntry.getKey().invoke(handler, notificationMessage);
+                                }
                             } catch (IllegalAccessException | InvocationTargetException e) {
                                 log.error("Error ocurred while invoking handler for notification: " + notificationName, e);
                                 e.printStackTrace();
@@ -107,6 +166,13 @@ public final class NeovimHandlerManager {
         handlers.get(handler).getValue().addAll(requestCallbacks);
     }
 
+    /**
+     * Unregisters passed handler
+     * If it was not registered previously, this is a no-op
+     * It will no longer receive notifications/requests after this point, unless it is registered again
+     *
+     * @param handler object to unregister
+     */
     public void unregisterNeovimHandler(Object handler) {
         log.info("Neovim handler unregistered ({})", handler);
         handlers.remove(handler);

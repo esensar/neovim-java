@@ -11,8 +11,4 @@
 
     <artifactId>testing-helpers</artifactId>
     <name>testing-helpers</name>
-
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
 </project>

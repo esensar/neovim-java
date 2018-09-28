@@ -24,6 +24,9 @@
 
 package com.ensarsarajcic.neovim.java.notifications.ui;
 
+/**
+ * Represents one part of a {@link NeovimRedrawEvent}
+ */
 public interface UIEvent {
     String getEventName();
 }

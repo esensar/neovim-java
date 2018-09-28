@@ -35,6 +35,22 @@ import java.util.Objects;
 
 /**
  * Simple implementation of {@link RPCConnection} based on a TCP {@link Socket}
+ * <p>
+ * This allows connection and communication via TCP socket
+ * It is a very simple implementation and it just passes down calls to underlying {@link Socket}
+ * <p>
+ * Example:
+ * <pre>
+ *     {@code
+ *     Socket socket = new Socket("127.0.0.1", 1234);
+ *
+ *     RPCConnection localConnection = new TcpSocketRPCConnection(socket);
+ *
+ *     // It can now be used for communication
+ *     rpcStreamer.attach(localConnection);
+ *     rpcStreamer.sent(message); // send a message to local app on port 1234
+ *     }
+ * </pre>
  */
 public final class TcpSocketRPCConnection implements RPCConnection {
     public static final Logger log = LoggerFactory.getLogger(TcpSocketRPCConnection.class);
@@ -44,13 +60,21 @@ public final class TcpSocketRPCConnection implements RPCConnection {
     /**
      * Creates a new {@link TcpSocketRPCConnection} based on passed {@link Socket}
      * It uses input and output streams of given {@link Socket} to communicate
+     *
      * @param socket instance of {@link Socket} to use for communication
+     * @throws NullPointerException if socket is null
      */
     public TcpSocketRPCConnection(Socket socket) {
         Objects.requireNonNull(socket, "socket is required to properly implement a RPCConnection");
         this.socket = socket;
     }
 
+    /**
+     * Gets the {@link InputStream} of the underlying {@link Socket}
+     *
+     * @return {@link InputStream} of the underlying {@link Socket}
+     * @throws RuntimeException if underlying socket throws {@link IOException}
+     */
     @Override
     public InputStream getIncomingStream() {
         try {
@@ -61,6 +85,12 @@ public final class TcpSocketRPCConnection implements RPCConnection {
         }
     }
 
+    /**
+     * Gets the {@link OutputStream} of the underlying {@link Socket}
+     *
+     * @return {@link OutputStream} of the underlying {@link Socket}
+     * @throws RuntimeException if underlying socket throws {@link IOException}
+     */
     @Override
     public OutputStream getOutgoingStream() {
         try {
@@ -71,6 +101,12 @@ public final class TcpSocketRPCConnection implements RPCConnection {
         }
     }
 
+    /**
+     * Closes underlying {@link Socket}
+     * Communication is no longer possible after this call
+     *
+     * @throws IOException when underlying socket throws {@link IOException}
+     */
     @Override
     public void close() throws IOException {
         log.info("Closing socket: {}", socket);

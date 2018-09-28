@@ -26,9 +26,22 @@ package com.ensarsarajcic.neovim.java.handler.annotations;
 
 import java.lang.annotation.*;
 
+/**
+ * Annotation used to mark a method as a request handler
+ * That means that this method will be called when request with name matching value of this annotation arrives
+ * <p>
+ * To actually use this, object with this method needs to be registered in {@link com.ensarsarajcic.neovim.java.handler.NeovimHandlerManager}
+ * <p>
+ * Currently, only single argument methods are supported and that argument must be of {@link com.ensarsarajcic.neovim.java.corerpc.message.RequestMessage} type
+ */
 @Inherited
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 public @interface NeovimRequestHandler {
+    /**
+     * Name of request this method will handle
+     *
+     * @return name of request
+     */
     String value();
 }

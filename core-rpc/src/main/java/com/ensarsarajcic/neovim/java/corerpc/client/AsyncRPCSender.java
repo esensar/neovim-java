@@ -35,7 +35,35 @@ import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 
 /**
- * Implementation of {@link RPCSender} utilizing {@link ExecutorService} for asynchronous work
+ * Implementation of {@link RPCSender} utilizing
+ * {@link ExecutorService} for asynchronous work
+ * <p>
+ * Messages are sent using the {@link ExecutorService}, meaning order of execution
+ * is not handled by this class
+ * <p>
+ * Messages are serialized using {@link ObjectMapper} passed in the constructor
+ * <p>
+ * Prior to using this class, {@link #attach(OutputStream)} must be called in order
+ * to pick {@link OutputStream} to write data to
+ * {@link #send(Message)} will throw an Exception otherwise
+ * <p>
+ * Example:
+ * <pre>
+ *     {@code
+ *     ExecutorService executorService = Executors.newSingleThreadExecutor();
+ *
+ *     // Factory to support msgpack
+ *     // Use other classes from the library to avoid having to manually create this
+ *     MessagePackFactory factory = new MessagePackFactory();
+ *     factory.disable(JsonParser.Feature.AUTO_CLOSE_SOURCE);
+ *     factory.disable(JsonGenerator.Feature.AUTO_CLOSE_TARGET);
+ *     ObjectMapper objectMapper = new ObjectMapper(factory);
+ *
+ *     RPCSender sender = new AsyncRPCSender(executorService, objectMapper);
+ *     sender.attach(outputStream); // an existing OutputStream
+ *     sender.send(message); // fire and forget
+ *     }
+ * </pre>
  */
 public final class AsyncRPCSender implements RPCSender {
     private static final Logger log = LoggerFactory.getLogger(AsyncRPCSender.class);
@@ -48,8 +76,10 @@ public final class AsyncRPCSender implements RPCSender {
     /**
      * Creates a new {@link AsyncRPCSender} with given {@link ObjectMapper} for mapping requests
      * using {@link ExecutorService} for background work
+     *
      * @param executorService service used for background work
-     * @param msgPacker {@link ObjectMapper} for mapping requests (outgoing)
+     * @param msgPacker       {@link ObjectMapper} for mapping requests (outgoing)
+     * @throws NullPointerException if any parameter is null
      */
     public AsyncRPCSender(ExecutorService executorService, ObjectMapper msgPacker) {
         Objects.requireNonNull(executorService, "executorService must be provided to enable background work");
@@ -60,6 +90,10 @@ public final class AsyncRPCSender implements RPCSender {
 
     /**
      * Sends messages per {@link RPCSender#send(Message)} specification
+     * Order of execution is handled by {@link ExecutorService},
+     * this class just submits the task of actual serializing and writing to stream
+     *
+     * @throws IllegalStateException thrown if {@link #attach(OutputStream)} was not used - thrown by the submitted task
      */
     @Override
     public void send(Message message) {
@@ -68,10 +102,13 @@ public final class AsyncRPCSender implements RPCSender {
 
     /**
      * Attaches to {@link OutputStream}
+     * Required for using {@link #send(Message)}
+     *
      * @param outputStream {@link OutputStream} to write to
      */
     @Override
     public void attach(OutputStream outputStream) {
+        Objects.requireNonNull(outputStream, "outputStream may not be null");
         log.info("Attached to output stream!");
         this.outgoingStream = outputStream;
     }

@@ -37,7 +37,31 @@ import java.util.concurrent.*;
 
 /**
  * Wrapper around {@link RPCStreamer}
- * This class should be used for communication. It provides convenience factory methods
+ * This class should be used for communication.
+ * It provides convenience factory methods
+ * <p>
+ * All calls are passed down to underlying {@link RPCStreamer}
+ * <p>
+ * Examples:
+ * <pre>
+ *     RPCStreamer defaultSharedClient = RPCClient.getDefaultAsyncInstance(); // shared singleton
+ *
+ *     RPCStreamer defaultClient = RPCClient.createDefaultAsyncInstance(); // new instance with same config as shared singleton
+ *
+ *     RPCStreamer customClient = new RPCClient.Builder()
+ *          .withRPCStreamer(customStreamer)
+ *          .build();
+ *
+ *     RPCStreamer customBasicsClient = new RPCClient.Builder()
+ *          .withObjectMapper(customObjectMapper)
+ *          .withExecutorService(customExecutorService)
+ *          .build();
+ *
+ *     RPCStreamer customSenderListenerClient = new RPCClient.Builder()
+ *          .withRPCListener(customRPCListener)
+ *          .withRPCSender(customRPCSender)
+ *          .build();
+ * </pre>
  */
 public final class RPCClient implements RPCStreamer {
 
@@ -151,41 +175,85 @@ public final class RPCClient implements RPCStreamer {
         return defaultSharedInstance;
     }
 
+    /**
+     * Calls underlying {@link RPCStreamer}
+     *
+     * @param rpcConnection connection to attach to
+     */
     @Override
     public void attach(RPCConnection rpcConnection) {
         rpcStreamer.attach(rpcConnection);
     }
 
+    /**
+     * Calls underlying {@link RPCStreamer}
+     *
+     * @param message message to send
+     * @throws IOException when underlying {@link RPCStreamer} throws
+     */
     @Override
     public void send(Message message) throws IOException {
         rpcStreamer.send(message);
     }
 
+    /**
+     * Calls underlying {@link RPCStreamer}
+     *
+     * @param requestMessage {@link RequestMessage.Builder} of message to send
+     * @throws IOException when underlying {@link RPCStreamer} throws
+     */
     @Override
     public void send(RequestMessage.Builder requestMessage) throws IOException {
         rpcStreamer.send(requestMessage);
     }
 
+    /**
+     * Calls underlying {@link RPCStreamer}
+     *
+     * @param requestMessage   {@link RequestMessage.Builder} of message to send
+     * @param responseCallback {@link RPCListener.ResponseCallback} to be called when response arrives
+     * @throws IOException when underlying {@link RPCStreamer} throws
+     */
     @Override
     public void send(RequestMessage.Builder requestMessage, RPCListener.ResponseCallback responseCallback) throws IOException {
         rpcStreamer.send(requestMessage, responseCallback);
     }
 
+    /**
+     * Calls underlying {@link RPCStreamer}
+     *
+     * @param requestCallback {@link RPCListener.RequestCallback} to add
+     */
     @Override
     public void addRequestCallback(RPCListener.RequestCallback requestCallback) {
         rpcStreamer.addRequestCallback(requestCallback);
     }
 
+    /**
+     * Calls underlying {@link RPCStreamer}
+     *
+     * @param requestCallback {@link RPCListener.RequestCallback} to remove
+     */
     @Override
     public void removeRequestCallback(RPCListener.RequestCallback requestCallback) {
         rpcStreamer.removeRequestCallback(requestCallback);
     }
 
+    /**
+     * Calls underlying {@link RPCStreamer}
+     *
+     * @param notificationCallback {@link RPCListener.NotificationCallback} to add
+     */
     @Override
     public void addNotificationCallback(RPCListener.NotificationCallback notificationCallback) {
         rpcStreamer.addNotificationCallback(notificationCallback);
     }
 
+    /**
+     * Calls underlying {@link RPCStreamer}
+     *
+     * @param notificationCallback {@link RPCListener.NotificationCallback} to remove
+     */
     @Override
     public void removeNotificationCallback(RPCListener.NotificationCallback notificationCallback) {
         rpcStreamer.removeNotificationCallback(notificationCallback);

@@ -37,6 +37,49 @@ import java.util.Objects;
 /**
  * Two-way msgpack stream that wraps reading/writing bytes and exposes
  * an interface for sending {@link Message}
+ * <p>
+ * It is implemented by delegating reading to {@link RPCListener} and writing to {@link RPCSender},
+ * since {@link RPCSender} supports both of these functionalities. A single interface makes it easier
+ * to communicate in a request/response model of communication.
+ * <p>
+ * Besides just passing down writing/reading, this class allows multiple {@link RPCListener.RequestCallback} and
+ * multiple {@link RPCListener.NotificationCallback} by delegating to internally held callbacks
+ * It also handles message id generation, meaning users of this class don't have to manually set id's for messages
+ * Message id generation is handled by {@link MessageIdGenerator} which can optionally be overriden through constructor.
+ * By default {@link SequentialMessageIdGenerator} is used.
+ * <p>
+ * Sending messages supports any kind of {@link Message}
+ * and for {@link RequestMessage}, {@link RPCListener.ResponseCallback} is supported, which will be called once
+ * corresponding {@link ResponseMessage} arrives (message with same id as the request sent)
+ * <p>
+ * Example:
+ * <pre>
+ *     {@code
+ *     // Existing listener and sender
+ *     RPCStreamer rpcStreamer = new PackStream(sender, listener);
+ *     // Existing connection
+ *     rpcStreamer.attach(connection);
+ *
+ *     rpcStreamer.send(message, (id, response) -> System.out.println(response)); // callback for request
+ *
+ *     rpcStreamer.send(responseMessage); // Sending a response -> no need for a callback
+ *
+ *     rpcStreamer.send(requestMessage); // Sending a request - fire and forget - no callback
+ *     }
+ * </pre>
+ * <p>
+ * Example with custom id generator:
+ * <pre>
+ *     {@code
+ *     // Create a generator
+ *     MessageIdGenerator generator = createCustomMessageIdGenerator();
+ *
+ *     // Existing listener and sender
+ *     RPCStreamer rpcStreamer = new PackStream(sender, listener, generator);
+ *
+ *     // ...
+ *     }
+ * </pre>
  */
 public final class PackStream implements RPCStreamer {
     public static final Logger log = LoggerFactory.getLogger(PackStream.class);
@@ -52,8 +95,10 @@ public final class PackStream implements RPCStreamer {
      * Creates a new {@link PackStream} with given {@link RPCSender} for sending messages
      * and an {@link RPCListener} for listening for incoming requests, responses and notifications
      * Uses {@link SequentialMessageIdGenerator} for {@link MessageIdGenerator}
-     * @param rpcSender {@link RPCSender} for sending data
+     *
+     * @param rpcSender   {@link RPCSender} for sending data
      * @param rpcListener {@link RPCListener} for listening to incoming data
+     * @throws NullPointerException if any parameter is null
      */
     public PackStream(RPCSender rpcSender, RPCListener rpcListener) {
         this(rpcSender, rpcListener, new SequentialMessageIdGenerator());
@@ -62,9 +107,11 @@ public final class PackStream implements RPCStreamer {
     /**
      * Creates a new {@link PackStream} with given {@link RPCSender} for sending messages
      * and an {@link RPCListener} for listening for incoming requests, responses and notifications
-     * @param rpcSender {@link RPCSender} for sending data
-     * @param rpcListener {@link RPCListener} for listening to incoming data
+     *
+     * @param rpcSender          {@link RPCSender} for sending data
+     * @param rpcListener        {@link RPCListener} for listening to incoming data
      * @param messageIdGenerator {@link MessageIdGenerator} for generating request message ids
+     * @throws NullPointerException if any parameter is null
      */
     public PackStream(RPCSender rpcSender, RPCListener rpcListener, MessageIdGenerator messageIdGenerator) {
         Objects.requireNonNull(rpcSender, "rpcSender must be provided for two way communication");
@@ -76,10 +123,16 @@ public final class PackStream implements RPCStreamer {
     }
 
     /**
-     * Implemented per {@link RPCStreamer#attach(RPCConnection)} specification
+     * Prepares for writing to outgoing stream and prepares for reading from input stream
+     * Sets up listeners on the input stream, so that current and any new request/response/notification callbacks may
+     * be called - prepares the underlying {@link RPCListener}
+     * Also prepares for writing messages - prepares the underlying {@link RPCSender}
+     *
+     * @throws NullPointerException if rpcConnection is null
      */
     @Override
     public void attach(RPCConnection rpcConnection) {
+        Objects.requireNonNull(rpcConnection, "rpcConnection may not be null");
         log.info("Attaching PackStream to: {}", rpcConnection);
         startListening(rpcConnection.getIncomingStream());
         rpcSender.attach(rpcConnection.getOutgoingStream());
@@ -87,6 +140,7 @@ public final class PackStream implements RPCStreamer {
 
     /**
      * Implemented per {@link RPCStreamer#send(Message)} specification
+     * Passes the message down to underlying {@link RPCSender}, without callback
      */
     @Override
     public void send(Message message) throws IOException {
@@ -96,6 +150,7 @@ public final class PackStream implements RPCStreamer {
 
     /**
      * Implemented per {@link RPCStreamer#send(RequestMessage.Builder)} specification
+     * Passes the message down to underlying {@link RPCSender}, without callback
      */
     @Override
     public void send(RequestMessage.Builder requestMessage) throws IOException {
@@ -104,6 +159,9 @@ public final class PackStream implements RPCStreamer {
 
     /**
      * Implemented per {@link RPCStreamer#send(RequestMessage.Builder, RPCListener.ResponseCallback)} specification
+     * Passes the message down to underlying {@link RPCSender}, with callback
+     * First id for the message is generated using {@link MessageIdGenerator}, callback for that id is prepared on
+     * {@link RPCListener} and then message is send using {@link RPCSender}
      */
     @Override
     public void send(RequestMessage.Builder requestMessage, RPCListener.ResponseCallback responseCallback) throws IOException {

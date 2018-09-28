@@ -33,23 +33,66 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.Objects;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Supplier;
 
 /**
  * Implementation of {@link ReactiveRPCStreamer} relying on a regular {@link RPCStreamer}
  * Provides reactive mappings by just wrapping regular calls in reactive streams
+ * <p>
+ * It is implemented by delegating all operations to a regular {@link RPCStreamer}, but doing it
+ * in a wrapped {@link CompletableFuture}
+ * If {@link Executor} is provided in the constructor, it is used for {@link CompletableFuture},
+ * otherwise default provided by {@link CompletableFuture} is used
+ * <p>
+ * Notifications and requests are exposed as {@link Flow.Publisher} and are implemented by listening
+ * to notifications and requests from the wrapped {@link RPCStreamer} and supplying them to the publishers
+ * <p>
+ * Example:
+ * <pre>
+ *     {@code
+ *     ReactiveRPCStreamer reactiveRPCStreamer = new ReactiveRPCStreamerWrapper(rpcStreamer); // existing rpc streamer, default executor
+ *
+ *     reactiveRPCStreamer.response(request).thenAccept(System.out::println); // requesting
+ *     reactiveRPCStreamer.notificationsFlow().subscribe(notificationsSubscriber); // notifications subscription
+ *
+ *     // Custom executor usage
+ *     ReactiveRPCStreamer customExecutorStreamer = new ReactiveRPCStreamerWrapper(rpcStreamer, customExecutor);
+ *     // All of the response calls on this streamer will now run CompletableFuture on the provided executor
+ *     }
+ * </pre>
  */
 public final class ReactiveRPCStreamerWrapper implements ReactiveRPCStreamer {
     private static final Logger log = LoggerFactory.getLogger(ReactiveRPCStreamerWrapper.class);
 
     private RPCStreamer rpcStreamer;
+    private Executor executor;
 
     private final SubmissionPublisher<RequestMessage> requestMessagePublisher = new SubmissionPublisher<>();
     private final SubmissionPublisher<NotificationMessage> notificationMessagePublisher = new SubmissionPublisher<>();
 
+    /**
+     * Constructs {@link ReactiveRPCStreamerWrapper} with provided {@link RPCStreamer} and default {@link Executor}
+     * @param rpcStreamer {@link RPCStreamer} to use for making calls and listening for notifications/requests
+     * @throws NullPointerException if {@link RPCStreamer} is null
+     */
     public ReactiveRPCStreamerWrapper(RPCStreamer rpcStreamer) {
+        this(rpcStreamer, null);
+    }
+
+    /**
+     * Constructs {@link ReactiveRPCStreamerWrapper} with provided {@link RPCStreamer}
+     * and with provided {@link Executor} - it is used only for requests
+     * @param rpcStreamer {@link RPCStreamer} to use for making calls and listening for notifications/requests
+     * @param executor {@link Executor} to use for creating {@link CompletableFuture} for requests
+     * @throws NullPointerException if {@link RPCStreamer} is null
+     */
+    public ReactiveRPCStreamerWrapper(RPCStreamer rpcStreamer, Executor executor) {
+        Objects.requireNonNull(rpcStreamer, "rpcStreamer may not be null");
         this.rpcStreamer = rpcStreamer;
+        this.executor = executor;
     }
 
     /**
@@ -68,10 +111,39 @@ public final class ReactiveRPCStreamerWrapper implements ReactiveRPCStreamer {
      * Implemented per {@link ReactiveRPCStreamer#response(RequestMessage.Builder)} specification
      * Uses underlying {@link RPCStreamer} to send the message and awaits a response from it,
      * creating a {@link CompletableFuture} from it
+     * <p>
+     * If {@link Executor} is provided in the constructor, {@link CompletableFuture} will use it,
+     * otherwise, default is used
      */
     @Override
     public CompletableFuture<ResponseMessage> response(RequestMessage.Builder requestMessage) {
-        return CompletableFuture.supplyAsync(() -> {
+        if (executor == null) {
+            return CompletableFuture.supplyAsync(responseSupplier(requestMessage));
+        } else {
+            return CompletableFuture.supplyAsync(responseSupplier(requestMessage), executor);
+        }
+    }
+
+    /**
+     * Implemented per {@link ReactiveRPCStreamer#requestsFlow()} specification
+     * Provides requests from underlying {@link RPCStreamer} in a {@link Flow}
+     */
+    @Override
+    public Flow.Publisher<RequestMessage> requestsFlow() {
+        return requestMessagePublisher;
+    }
+
+    /**
+     * Implemented per {@link ReactiveRPCStreamer#notificationsFlow()} specification
+     * Provides notifications from underlying {@link RPCStreamer} in a {@link Flow}
+     */
+    @Override
+    public Flow.Publisher<NotificationMessage> notificationsFlow() {
+        return notificationMessagePublisher;
+    }
+
+    private Supplier<ResponseMessage> responseSupplier(RequestMessage.Builder requestMessage) {
+        return() -> {
             // Prepare for blocking until response comes
             var countDownLatch = new CountDownLatch(1);
             var responseMessage = new AtomicReference<ResponseMessage>();
@@ -95,24 +167,6 @@ public final class ReactiveRPCStreamerWrapper implements ReactiveRPCStreamer {
                 // Pass down exception on any failure
                 throw new CompletionException(e);
             }
-        });
-    }
-
-    /**
-     * Implemented per {@link ReactiveRPCStreamer#requestsFlow()} specification
-     * Provides requests from underlying {@link RPCStreamer} in a {@link Flow}
-     */
-    @Override
-    public Flow.Publisher<RequestMessage> requestsFlow() {
-        return requestMessagePublisher;
-    }
-
-    /**
-     * Implemented per {@link ReactiveRPCStreamer#notificationsFlow()} specification
-     * Provides notifications from underlying {@link RPCStreamer} in a {@link Flow}
-     */
-    @Override
-    public Flow.Publisher<NotificationMessage> notificationsFlow() {
-        return notificationMessagePublisher;
+        };
     }
 }

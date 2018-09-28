@@ -28,7 +28,12 @@ import java.util.concurrent.Flow;
 import java.util.concurrent.SubmissionPublisher;
 import java.util.function.Function;
 
-public final class MappingProcessor<T, R> extends SubmissionPublisher<R> implements Flow.Processor<T, R> {
+/**
+ * Simple processor providing map functionality. Items are mapped using function passed in constructor
+ * @param <T> type of items coming in to the stream
+ * @param <R> type of items going out of the stream
+ */
+final class MappingProcessor<T, R> extends SubmissionPublisher<R> implements Flow.Processor<T, R> {
 
     private Function<T, R> mapFunction;
     private Flow.Subscription subscription;

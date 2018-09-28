@@ -35,7 +35,31 @@ import java.util.concurrent.Flow;
 
 /**
  * Wrapper around {@link ReactiveRPCStreamer}
- * This class should be used for communication. It provides convenience factory methods
+ * This class should be used for communication.
+ * It provides convenience factory methods
+ * <p>
+ * All calls are passed down to underlying {@link ReactiveRPCStreamer}
+ * <p>
+ * Examples:
+ * <pre>
+ *     RPCStreamer defaultSharedClient = RPCClient.getDefaultAsyncInstance(); // shared singleton
+ *
+ *     RPCStreamer defaultClient = RPCClient.createDefaultAsyncInstance(); // new instance with same config as shared singleton
+ *
+ *     RPCStreamer customClient = new RPCClient.Builder()
+ *          .withRPCStreamer(customStreamer)
+ *          .build();
+ *
+ *     RPCStreamer customBasicsClient = new RPCClient.Builder()
+ *          .withObjectMapper(customObjectMapper)
+ *          .withExecutorService(customExecutorService)
+ *          .build();
+ *
+ *     RPCStreamer customSenderListenerClient = new RPCClient.Builder()
+ *          .withRPCListener(customRPCListener)
+ *          .withRPCSender(customRPCSender)
+ *          .build();
+ * </pre>
  */
 public final class ReactiveRPCClient implements ReactiveRPCStreamer {
 
@@ -100,21 +124,42 @@ public final class ReactiveRPCClient implements ReactiveRPCStreamer {
         return defaultSharedInstance;
     }
 
+    /**
+     * Calls underlying {@link ReactiveRPCStreamer}
+     *
+     * @param rpcConnection connection to attach to
+     */
     @Override
     public void attach(RPCConnection rpcConnection) {
         reactiveRPCStreamer.attach(rpcConnection);
     }
 
+    /**
+     * Calls underlying {@link ReactiveRPCStreamer}
+     *
+     * @param requestMessage {@link RequestMessage.Builder} of message to send
+     * @return {@link CompletableFuture} with response
+     */
     @Override
     public CompletableFuture<ResponseMessage> response(RequestMessage.Builder requestMessage) {
         return reactiveRPCStreamer.response(requestMessage);
     }
 
+    /**
+     * Calls underlying {@link ReactiveRPCStreamer}
+     *
+     * @return {@link Flow.Publisher} of request messages
+     */
     @Override
     public Flow.Publisher<RequestMessage> requestsFlow() {
         return reactiveRPCStreamer.requestsFlow();
     }
 
+    /**
+     * Calls underlying {@link ReactiveRPCStreamer}
+     *
+     * @return {@link Flow.Publisher} of notifications messages
+     */
     @Override
     public Flow.Publisher<NotificationMessage> notificationsFlow() {
         return reactiveRPCStreamer.notificationsFlow();

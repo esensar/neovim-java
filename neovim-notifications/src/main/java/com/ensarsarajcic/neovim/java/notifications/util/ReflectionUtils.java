@@ -31,6 +31,9 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 
+/**
+ * Utilities used for reflective access required to cast notifications to correct types
+ */
 public final class ReflectionUtils {
 
     private ReflectionUtils() {
