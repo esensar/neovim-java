@@ -6,6 +6,6 @@ which can only be checked using *instanceof* operator currently, but provide an 
 ```java
     NeovimNotificationHandler notificationHandler = new NeovimNotificationHandler(streamer);
 
-    notification.uiEvents().subscribe(uiEventSubscriber);
-    notification.bufferEvents().subscribe(bufferEventSubscriber);
+    notificationHandler.uiEvents().subscribe(uiEventSubscriber);
+    notificationHandler.bufferEvents().subscribe(bufferEventSubscriber);
 ```
