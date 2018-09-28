@@ -14,3 +14,5 @@ Consists of following modules:
 
 Library is not yet uploaded to maven central repository, but it will be done soon. Many features are not completely tested and
 this library was mostly built to experiment with Neovim RPC API, but there should be no issues with using this library.
+
+For more information, check out README of modules you are interested in.
