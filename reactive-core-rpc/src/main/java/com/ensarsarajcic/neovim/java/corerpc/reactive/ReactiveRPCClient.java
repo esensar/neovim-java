@@ -42,23 +42,9 @@ import java.util.concurrent.Flow;
  * <p>
  * Examples:
  * <pre>
- *     RPCStreamer defaultSharedClient = RPCClient.getDefaultAsyncInstance(); // shared singleton
+ *     ReactiveRPCStreamer defaultSharedClient = ReactiveRPCClient.getDefaultInstance(); // shared singleton
  *
- *     RPCStreamer defaultClient = RPCClient.createDefaultAsyncInstance(); // new instance with same config as shared singleton
- *
- *     RPCStreamer customClient = new RPCClient.Builder()
- *          .withRPCStreamer(customStreamer)
- *          .build();
- *
- *     RPCStreamer customBasicsClient = new RPCClient.Builder()
- *          .withObjectMapper(customObjectMapper)
- *          .withExecutorService(customExecutorService)
- *          .build();
- *
- *     RPCStreamer customSenderListenerClient = new RPCClient.Builder()
- *          .withRPCListener(customRPCListener)
- *          .withRPCSender(customRPCSender)
- *          .build();
+ *     ReactiveRPCStreamer defaultClient = ReactiveRPCClient.createDefaultInstance(); // new instance with same config as shared singleton
  * </pre>
  */
 public final class ReactiveRPCClient implements ReactiveRPCStreamer {
