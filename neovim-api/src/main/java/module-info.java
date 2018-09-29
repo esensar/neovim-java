@@ -21,4 +21,7 @@ module neovimapi {
     requires jackson.annotations;
     requires msgpack.core;
     requires jackson.dataformat.msgpack;
+    requires slf4j.api;
+    requires com.fasterxml.jackson.databind;
+    requires com.fasterxml.jackson.core;
 }

@@ -14,4 +14,5 @@ module apiexplorer {
     requires javafx.fxml;
     requires javafx.controls;
     requires unixsocketconnection;
+    requires slf4j.api;
 }
