@@ -6,7 +6,7 @@
     <groupId>com.ensarsarajcic.neovim.java</groupId>
     <artifactId>parent</artifactId>
     <packaging>pom</packaging>
-    <version>0.1.1-SNAPSHOT</version>
+    <version>0.1.1</version>
 
     <modules>
         <!-- Core -->
@@ -37,7 +37,7 @@
         <url>https://github.com/esensar/neovim-java</url>
         <connection>scm:git:https://github.com/esensar/neovim-java.git</connection>
         <developerConnection>scm:git:git@github.com:esensar/neovim-java.git</developerConnection>
-        <tag>HEAD</tag>
+        <tag>parent-0.1.1</tag>
     </scm>
 
     <issueManagement>
