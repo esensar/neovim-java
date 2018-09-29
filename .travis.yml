@@ -1,3 +1,6 @@
 language: java
 jdk:
   - oraclejdk10
+
+after_success:
+  - .buildscript/deploy_snapshot.sh
