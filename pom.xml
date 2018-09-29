@@ -26,7 +26,7 @@
         <module>testing-helpers</module>
 
         <!-- Helpers -->
-        <module>api-explorer</module>
+        <!--<module>api-explorer</module>-->
     </modules>
 
     <name>neovim-java (Parent)</name>
