@@ -7,17 +7,27 @@
     <groupId>com.ensarsarajcic.neovim.java</groupId>
     <artifactId>parent</artifactId>
     <packaging>pom</packaging>
-    <version>0.0</version>
+    <version>0.1</version>
+
     <modules>
+        <!-- Core -->
         <module>core-rpc</module>
-        <module>api-explorer</module>
-        <module>neovim-api</module>
         <module>reactive-core-rpc</module>
+
+        <!-- API -->
+        <module>neovim-api</module>
         <module>neovim-rx-api</module>
-        <module>testing-helpers</module>
+
+        <!-- Extras -->
         <module>neovim-notifications</module>
         <module>handler-annotations</module>
         <module>unix-socket-connection</module>
+
+        <!-- Testing -->
+        <module>testing-helpers</module>
+
+        <!-- Helpers -->
+        <module>api-explorer</module>
     </modules>
 
     <name>neovim-java (Parent)</name>
