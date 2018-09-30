@@ -6,7 +6,7 @@
     <groupId>com.ensarsarajcic.neovim.java</groupId>
     <artifactId>parent</artifactId>
     <packaging>pom</packaging>
-    <version>0.1.10-SNAPSHOT</version>
+    <version>0.1.11-SNAPSHOT</version>
 
     <modules>
         <!-- Core -->
@@ -109,7 +109,7 @@
         <repository>
             <id>ossrh</id>
             <name>Nexus Release Repository</name>
-            <url>http://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
         </repository>
     </distributionManagement>
 
@@ -219,7 +219,6 @@
                             <executions>
                                 <execution>
                                     <id>attach-sources</id>
-                                    <phase>deploy</phase>
                                     <goals>
                                         <goal>jar-no-fork</goal>
                                     </goals>
@@ -233,7 +232,6 @@
                             <executions>
                                 <execution>
                                     <id>attach-javadocs</id>
-                                    <phase>deploy</phase>
                                     <goals>
                                         <goal>jar</goal>
                                     </goals>
@@ -247,7 +245,7 @@
                             <executions>
                                 <execution>
                                     <id>sign-artifacts</id>
-                                    <phase>deploy</phase>
+                                    <phase>verify</phase>
                                     <goals>
                                         <goal>sign</goal>
                                     </goals>
@@ -259,7 +257,7 @@
                             <version>2.8.2</version>
                             <executions>
                                 <execution>
-                                    <id>deploy</id>
+                                    <id>default-deploy</id>
                                     <phase>deploy</phase>
                                     <goals>
                                         <goal>deploy</goal>
