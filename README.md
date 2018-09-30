@@ -17,7 +17,9 @@ Consists of following modules:
 
 Many features are not completely tested and this library was mostly built to experiment with Neovim RPC API, but there should be no issues with using this library.
 
-To include this library right away and start working with Neovim, **Neovim API** is enough. Include it in your dependencies:  
+To include this library right away and start working with Neovim, **Neovim API** is enough.  
+
+Include it in your dependencies:  
 Maven(*Neovim API*):  
 ```
 <dependency>
