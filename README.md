@@ -33,7 +33,7 @@ RPCConnection neovimConnection = new ProcessRPCConnection(neovim, true); // true
 client.attach(neovimConnection);
 
 // Send feed keys call
-client.send(new RequestMessage.Builder("nvim_feedkeys").addArgument("jjjj").addArgument('').addArgument(false));
+client.send(new RequestMessage.Builder("nvim_feedkeys").addArgument("jjjj").addArgument("").addArgument(false));
 ```
 
 ## Reactive Core RPC
