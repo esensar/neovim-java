@@ -10,7 +10,7 @@ either through **TCP socket** or throguh **process** (used for embedded neovim i
 
 Include it in your dependencies:  
 Maven:  
-```
+```xml
 <dependency>
   <groupId>com.ensarsarajcic.neovim.java</groupId>
   <artifactId>core-rpc</artifactId>
@@ -18,7 +18,7 @@ Maven:
 </dependency>
 ```
 Gradle:  
-```
+```groovy
 compile 'com.ensarsarajcic.neovim.java:core-rpc:${neovimjava.version}'
 ```
 

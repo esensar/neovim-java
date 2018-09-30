@@ -12,7 +12,7 @@ All calls are made using *reactive-core-rpc* module and all calls return `Comple
 
 Include it in your dependencies:  
 Maven:  
-```
+```xml
 <dependency>
   <groupId>com.ensarsarajcic.neovim.java</groupId>
   <artifactId>neovim-api</artifactId>
@@ -20,7 +20,7 @@ Maven:
 </dependency>
 ```
 Gradle:  
-```
+```groovy
 compile 'com.ensarsarajcic.neovim.java:neovim-api:${neovimjava.version}'
 ```
 

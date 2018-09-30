@@ -21,7 +21,7 @@ To include this library right away and start working with Neovim, **Neovim API**
 
 Include it in your dependencies:  
 Maven(*Neovim API*):  
-```
+```xml
 <dependency>
   <groupId>com.ensarsarajcic.neovim.java</groupId>
   <artifactId>neovim-api</artifactId>
@@ -29,13 +29,13 @@ Maven(*Neovim API*):
 </dependency>
 ```
 Gradle(*Neovim API*):  
-```
+```groovy
 compile 'com.ensarsarajcic.neovim.java:neovim-api:${neovimjava.version}'
 ```
 
 Or if you prefer RxJava2, use **Neovim Rx API**:  
 Maven(*Neovim Rx API*):  
-```
+```xml
 <dependency>
   <groupId>com.ensarsarajcic.neovim.java</groupId>
   <artifactId>neovim-rx-api</artifactId>
@@ -43,7 +43,7 @@ Maven(*Neovim Rx API*):
 </dependency>
 ```
 Gradle(*Neovim Rx API*):  
-```
+```groovy
 compile 'com.ensarsarajcic.neovim.java:neovim-rx-api:${neovimjava.version}'
 ```
 

@@ -8,7 +8,7 @@ and `RequestMessage` respectively.
 
 Include it in your dependencies:  
 Maven:  
-```
+```xml
 <dependency>
   <groupId>com.ensarsarajcic.neovim.java</groupId>
   <artifactId>handler-annotations</artifactId>
@@ -16,7 +16,7 @@ Maven:
 </dependency>
 ```
 Gradle:  
-```
+```groovy
 compile 'com.ensarsarajcic.neovim.java:handler-annotations:${neovimjava.version}'
 ```
 

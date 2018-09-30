@@ -6,7 +6,7 @@ Neovim RX api module provides a same API as neovim API module, but using RxJava2
 
 Include it in your dependencies:  
 Maven:  
-```
+```xml
 <dependency>
   <groupId>com.ensarsarajcic.neovim.java</groupId>
   <artifactId>neovim-rx-api</artifactId>
@@ -14,7 +14,7 @@ Maven:
 </dependency>
 ```
 Gradle:  
-```
+```groovy
 compile 'com.ensarsarajcic.neovim.java:neovim-rx-api:${neovimjava.version}'
 ```
 

@@ -6,7 +6,7 @@ Unix socket connection module provides a very simple additional implementation o
 
 Include it in your dependencies:  
 Maven:  
-```
+```xml
 <dependency>
   <groupId>com.ensarsarajcic.neovim.java</groupId>
   <artifactId>unix-socket-connection</artifactId>
@@ -14,7 +14,7 @@ Maven:
 </dependency>
 ```
 Gradle:  
-```
+```groovy
 compile 'com.ensarsarajcic.neovim.java:unix-socket-connection:${neovimjava.version}'
 ```
 

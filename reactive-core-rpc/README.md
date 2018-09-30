@@ -7,7 +7,7 @@ are provided through a `Flow`, while sending messages returns a `CompletableFutu
 
 Include it in your dependencies:  
 Maven:  
-```
+```xml
 <dependency>
   <groupId>com.ensarsarajcic.neovim.java</groupId>
   <artifactId>reactive-core-rpc</artifactId>
@@ -15,7 +15,7 @@ Maven:
 </dependency>
 ```
 Gradle:  
-```
+```groovy
 compile 'com.ensarsarajcic.neovim.java:reactive-core-rpc:${neovimjava.version}'
 ```
 

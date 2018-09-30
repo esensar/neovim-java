@@ -7,7 +7,7 @@ which can only be checked using *instanceof* operator currently, but provide an 
 
 Include it in your dependencies:  
 Maven:  
-```
+```xml
 <dependency>
   <groupId>com.ensarsarajcic.neovim.java</groupId>
   <artifactId>neovim-notifications</artifactId>
@@ -15,7 +15,7 @@ Maven:
 </dependency>
 ```
 Gradle:  
-```
+```groovy
 compile 'com.ensarsarajcic.neovim.java:neovim-notifications:${neovimjava.version}'
 ```
 
