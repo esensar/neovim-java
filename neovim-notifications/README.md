@@ -5,8 +5,8 @@
 Neovim notifications module provides a way to receive notifications through Java 9 Flows. Besides that it provides models for all neovim notifications,
 which can only be checked using *instanceof* operator currently, but provide an easier way to parse data.
 
-Include it in your dependencies:
-Maven:
+Include it in your dependencies:  
+Maven:  
 ```
 <dependency>
   <groupId>com.ensarsarajcic.neovim.java</groupId>
@@ -14,7 +14,7 @@ Maven:
   <version>${neovimjava.version}</version>
 </dependency>
 ```
-Gradle:
+Gradle:  
 ```
 compile 'com.ensarsarajcic.neovim.java:neovim-notifications:${neovimjava.version}'
 ```

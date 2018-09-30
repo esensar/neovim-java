@@ -6,8 +6,8 @@ Handler annotations module provides a way to register listeners for requests and
 object with methods annotated with `NeovimNotificationHandler` or `NeovimRequestHandler`. These methods need to take only one parameter, `NotificationMessage`
 and `RequestMessage` respectively.
 
-Include it in your dependencies:
-Maven:
+Include it in your dependencies:  
+Maven:  
 ```
 <dependency>
   <groupId>com.ensarsarajcic.neovim.java</groupId>
@@ -15,7 +15,7 @@ Maven:
   <version>${neovimjava.version}</version>
 </dependency>
 ```
-Gradle:
+Gradle:  
 ```
 compile 'com.ensarsarajcic.neovim.java:handler-annotations:${neovimjava.version}'
 ```

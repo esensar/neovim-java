@@ -5,8 +5,8 @@
 Reactive core RPC module is a simple wrapper around core RPC module. It provides a reactive interface using Java 9 Flows. Requests and notifications
 are provided through a `Flow`, while sending messages returns a `CompletableFuture` which can return a response.
 
-Include it in your dependencies:
-Maven:
+Include it in your dependencies:  
+Maven:  
 ```
 <dependency>
   <groupId>com.ensarsarajcic.neovim.java</groupId>
@@ -14,7 +14,7 @@ Maven:
   <version>${neovimjava.version}</version>
 </dependency>
 ```
-Gradle:
+Gradle:  
 ```
 compile 'com.ensarsarajcic.neovim.java:reactive-core-rpc:${neovimjava.version}'
 ```

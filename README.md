@@ -17,8 +17,8 @@ Consists of following modules:
 
 Many features are not completely tested and this library was mostly built to experiment with Neovim RPC API, but there should be no issues with using this library.
 
-To include this library right away and start working with Neovim, **Neovim API** is enough. Include it in your dependencies:
-Maven(*Neovim API*):
+To include this library right away and start working with Neovim, **Neovim API** is enough. Include it in your dependencies:  
+Maven(*Neovim API*):  
 ```
 <dependency>
   <groupId>com.ensarsarajcic.neovim.java</groupId>
@@ -26,13 +26,13 @@ Maven(*Neovim API*):
   <version>${neovimjava.version}</version>
 </dependency>
 ```
-Gradle(*Neovim API*):
+Gradle(*Neovim API*):  
 ```
 compile 'com.ensarsarajcic.neovim.java:neovim-api:${neovimjava.version}'
 ```
 
-Or if you prefer RxJava2, use **Neovim Rx API**:
-Maven(*Neovim Rx API*):
+Or if you prefer RxJava2, use **Neovim Rx API**:  
+Maven(*Neovim Rx API*):  
 ```
 <dependency>
   <groupId>com.ensarsarajcic.neovim.java</groupId>
@@ -40,7 +40,7 @@ Maven(*Neovim Rx API*):
   <version>${neovimjava.version}</version>
 </dependency>
 ```
-Gradle(*Neovim Rx API*):
+Gradle(*Neovim Rx API*):  
 ```
 compile 'com.ensarsarajcic.neovim.java:neovim-rx-api:${neovimjava.version}'
 ```

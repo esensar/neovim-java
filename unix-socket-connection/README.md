@@ -4,8 +4,8 @@
 
 Unix socket connection module provides a very simple additional implementation of `RPCConnection` based on Unix domain sockets.
 
-Include it in your dependencies:
-Maven:
+Include it in your dependencies:  
+Maven:  
 ```
 <dependency>
   <groupId>com.ensarsarajcic.neovim.java</groupId>
@@ -13,7 +13,7 @@ Maven:
   <version>${neovimjava.version}</version>
 </dependency>
 ```
-Gradle:
+Gradle:  
 ```
 compile 'com.ensarsarajcic.neovim.java:unix-socket-connection:${neovimjava.version}'
 ```

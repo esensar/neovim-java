@@ -8,8 +8,8 @@ It provides *Request*, *Response* and *Notification* messages, and a way to send
 communication which just provides input and ouput streams. This module provides basic implementations of that interface allowing communication
 either through **TCP socket** or throguh **process** (used for embedded neovim instance).
 
-Include it in your dependencies:
-Maven:
+Include it in your dependencies:  
+Maven:  
 ```
 <dependency>
   <groupId>com.ensarsarajcic.neovim.java</groupId>
@@ -17,7 +17,7 @@ Maven:
   <version>${neovimjava.version}</version>
 </dependency>
 ```
-Gradle:
+Gradle:  
 ```
 compile 'com.ensarsarajcic.neovim.java:core-rpc:${neovimjava.version}'
 ```

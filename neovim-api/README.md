@@ -10,8 +10,8 @@ and provides 4 separate **APIs**: *Neovim*, *Buffer*, *Tabpage* and *Window* (th
 All calls are made using *reactive-core-rpc* module and all calls return `CompletableFuture`. If you prefer RxJava over Java 9 Flows, you can use
 *neovim-rx-api* module.
 
-Include it in your dependencies:
-Maven:
+Include it in your dependencies:  
+Maven:  
 ```
 <dependency>
   <groupId>com.ensarsarajcic.neovim.java</groupId>
@@ -19,7 +19,7 @@ Maven:
   <version>${neovimjava.version}</version>
 </dependency>
 ```
-Gradle:
+Gradle:  
 ```
 compile 'com.ensarsarajcic.neovim.java:neovim-api:${neovimjava.version}'
 ```
