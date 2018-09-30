@@ -1,10 +1,26 @@
 # core-rpc
 
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.ensarsarajcic.neovim.java/core-rpc/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.ensarsarajcic.neovim.java/core-rpc)
+
 This is the Core RPC module, the core of this library. It provides the most basic interface for communicating with Neovim.
 
 It provides *Request*, *Response* and *Notification* messages, and a way to send and receive them. It uses `RPCConnection` interface for
 communication which just provides input and ouput streams. This module provides basic implementations of that interface allowing communication
 either through **TCP socket** or throguh **process** (used for embedded neovim instance).
+
+Include it in your dependencies:
+Maven:
+```
+<dependency>
+  <groupId>com.ensarsarajcic.neovim.java</groupId>
+  <artifactId>core-rpc</artifactId>
+  <version>${neovimjava.version}</version>
+</dependency>
+```
+Gradle:
+```
+compile 'com.ensarsarajcic.neovim.java:core-rpc:${neovimjava.version}'
+```
 
 Example of usage:
 ```java
