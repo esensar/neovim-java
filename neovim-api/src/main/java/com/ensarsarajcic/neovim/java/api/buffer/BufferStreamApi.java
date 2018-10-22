@@ -200,7 +200,7 @@ public final class BufferStreamApi extends BaseStreamApi implements NeovimBuffer
     }
 
     private RequestMessage.Builder prepareMessage(String name) {
-        return new RequestMessage.Builder(name).addArgument(model);
+        return new RequestMessage.Builder(name).addArgument(model.getId());
     }
 
     @Override
