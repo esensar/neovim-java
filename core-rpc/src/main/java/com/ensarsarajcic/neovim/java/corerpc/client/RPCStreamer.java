@@ -102,4 +102,10 @@ public interface RPCStreamer {
      * @param notificationCallback {@link RPCListener.NotificationCallback} to remove
      */
     void removeNotificationCallback(RPCListener.NotificationCallback notificationCallback);
+
+    /**
+     * Stops the underlying {@link RPCListener}
+     * It is not expected for implementation to be reusable after calling this method!
+     */
+    void stop();
 }

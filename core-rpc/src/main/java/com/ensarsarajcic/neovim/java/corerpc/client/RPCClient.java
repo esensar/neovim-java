@@ -260,6 +260,15 @@ public final class RPCClient implements RPCStreamer {
     }
 
     /**
+     * Stops the underlying {@link RPCListener}
+     * It is not expected for implementation to be reusable after calling this method!
+     */
+    @Override
+    public void stop() {
+      rpcStreamer.stop();
+    }
+
+    /**
      * Builder for {@link RPCClient} to simplify configuration
      * Everything is set to default at the start and following may be changed:
      * * Underlying {@link RPCStreamer}

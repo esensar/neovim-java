@@ -51,4 +51,9 @@ public interface RPCSender {
      * @param outputStream {@link OutputStream} to write to
      */
     void attach(OutputStream outputStream);
+
+    /**
+     * Stops the sender
+     */
+    void stop();
 }
