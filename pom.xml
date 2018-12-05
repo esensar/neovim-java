@@ -6,7 +6,7 @@
     <groupId>com.ensarsarajcic.neovim.java</groupId>
     <artifactId>parent</artifactId>
     <packaging>pom</packaging>
-    <version>0.1.12-SNAPSHOT</version>
+    <version>0.1.13-SNAPSHOT</version>
 
     <modules>
         <!-- Core -->
