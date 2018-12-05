@@ -113,6 +113,14 @@ public final class AsyncRPCSender implements RPCSender {
         this.outgoingStream = outputStream;
     }
 
+    /**
+     * Stops the {@link ExecutorService}.
+     */
+    @Override
+    public void stop() {
+        this.executorService.shutdown();
+    }
+
     private void sendMessage(Message message) {
         if (this.outgoingStream == null) {
             throw new IllegalStateException("Can't find a connection to send message to. Did you forget to call attach?");

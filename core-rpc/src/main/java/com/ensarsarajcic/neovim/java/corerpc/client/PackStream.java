@@ -218,6 +218,17 @@ public final class PackStream implements RPCStreamer {
         }
     }
 
+    /**
+     * Stops the underlying {@link RPCListener}
+     * It is not expected for implementation to be reusable after calling this method!
+     */
+    @Override
+    public void stop() {
+      log.info("Stopping resources");
+      this.rpcListener.stop();
+      this.rpcSender.stop();
+    }
+
     private void requestReceived(RequestMessage requestMessage) {
         log.info("Request received: {}", requestMessage);
         for (var requestCallback : requestCallbacks) {
