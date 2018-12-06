@@ -1,6 +1,6 @@
 language: java
 jdk:
-  - openjdk10
+  - openjdk11
 
 after_success:
   - .buildscript/deploy_snapshot.sh
