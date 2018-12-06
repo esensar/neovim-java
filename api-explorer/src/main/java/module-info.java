@@ -10,9 +10,8 @@ module apiexplorer {
     requires com.fasterxml.jackson.databind;
     requires reactivecorerpc;
     requires jackson.annotations;
-    requires javafx.base;
-    requires javafx.fxml;
-    requires javafx.controls;
     requires unixsocketconnection;
     requires slf4j.api;
+    requires javafx.fxml;
+    requires javafx.controls;
 }
