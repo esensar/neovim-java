@@ -72,7 +72,7 @@
         <apache.commons.version>3.4</apache.commons.version>
         <slf4j.version>1.7.25</slf4j.version>
         <ipcsocket.version>1.0.0</ipcsocket.version>
-        <asm.version>6.2</asm.version>
+        <asm.version>7.0</asm.version>
         <java.version>11</java.version>
         <javafx.version>11</javafx.version>
         <maven.compiler.source>11</maven.compiler.source>
@@ -128,7 +128,7 @@
                 </plugin>
                 <plugin>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.7.0</version>
+                    <version>3.8.0</version>
                     <configuration>
                         <release>${java.version}</release>
                     </configuration>
@@ -230,6 +230,13 @@
                             <groupId>org.apache.maven.plugins</groupId>
                             <artifactId>maven-javadoc-plugin</artifactId>
                             <version>3.0.1</version>
+                            <dependencies>
+                                <dependency>
+                                    <groupId>org.ow2.asm</groupId>
+                                    <artifactId>asm</artifactId>
+                                    <version>${asm.version}</version> <!-- Use newer version of ASM -->
+                                </dependency>
+                            </dependencies>
                             <executions>
                                 <execution>
                                     <id>attach-javadocs</id>
