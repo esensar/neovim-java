@@ -64,7 +64,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <junit.version>4.12</junit.version>
-        <mockito.version>2.28.2</mockito.version>
+        <mockito.version>3.1.0</mockito.version>
         <assertj.version>3.13.2</assertj.version>
         <msgpack.version>0.8.18</msgpack.version>
         <rxjava2.version>2.1.14</rxjava2.version>
@@ -72,11 +72,11 @@
         <apache.commons.version>3.4</apache.commons.version>
         <slf4j.version>1.7.25</slf4j.version>
         <ipcsocket.version>1.0.0</ipcsocket.version>
-        <asm.version>7.0</asm.version>
-        <java.version>11</java.version>
-        <javafx.version>11</javafx.version>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
+        <asm.version>7.2</asm.version>
+        <java.version>13</java.version>
+        <javafx.version>13</javafx.version>
+        <maven.compiler.source>13</maven.compiler.source>
+        <maven.compiler.target>13</maven.compiler.target>
     </properties>
 
     <dependencies>
@@ -142,7 +142,7 @@
                 </plugin>
                 <plugin>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>2.21.0</version>
+                    <version>3.0.0-M2</version>
                     <dependencies>
                         <dependency>
                             <groupId>org.ow2.asm</groupId>
