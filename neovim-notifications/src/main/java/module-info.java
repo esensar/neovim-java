@@ -8,11 +8,11 @@ module neovim.notifications {
     exports com.ensarsarajcic.neovim.java.notifications.ui.tabline;
     exports com.ensarsarajcic.neovim.java.notifications.ui.wildmenu;
     exports com.ensarsarajcic.neovim.java.notifications;
-    
+
     requires neovimapi;
-    requires jackson.annotations;
     requires corerpc;
     requires reactivecorerpc;
     requires slf4j.api;
     requires com.fasterxml.jackson.databind;
+    requires com.fasterxml.jackson.annotation;
 }

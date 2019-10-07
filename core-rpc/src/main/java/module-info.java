@@ -7,6 +7,6 @@ module corerpc {
     requires slf4j.api;
     requires com.fasterxml.jackson.databind;
     requires com.fasterxml.jackson.core;
-    requires jackson.annotations;
+    requires com.fasterxml.jackson.annotation;
     requires jackson.dataformat.msgpack;
 }

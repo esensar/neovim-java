@@ -64,11 +64,11 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <junit.version>4.12</junit.version>
-        <mockito.version>2.18.3</mockito.version>
-        <assertj.version>3.9.0</assertj.version>
-        <msgpack.version>0.8.16</msgpack.version>
+        <mockito.version>2.28.2</mockito.version>
+        <assertj.version>3.13.2</assertj.version>
+        <msgpack.version>0.8.18</msgpack.version>
         <rxjava2.version>2.1.14</rxjava2.version>
-        <jackson.databind.version>2.9.5</jackson.databind.version>
+        <jackson.databind.version>2.9.10</jackson.databind.version>
         <apache.commons.version>3.4</apache.commons.version>
         <slf4j.version>1.7.25</slf4j.version>
         <ipcsocket.version>1.0.0</ipcsocket.version>
