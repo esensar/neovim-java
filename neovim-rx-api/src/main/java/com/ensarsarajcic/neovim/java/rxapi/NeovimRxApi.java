@@ -204,4 +204,10 @@ public interface NeovimRxApi {
 
     @NeovimApiFunction(name = NeovimApi.GET_PROC, since = 4)
     Single<Object> getProcess();
+
+    @NeovimApiFunction(name = NeovimApi.GET_NAMESPACES, since = 5)
+    Single<Map<String, Integer>> getNamespaces();
+
+    @NeovimApiFunction(name = NeovimApi.CREATE_NAMESPACES, since = 5)
+    Single<Integer> createNamespace(String name);
 }

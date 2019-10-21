@@ -1374,7 +1374,7 @@ public class NeovimStreamApiTest extends BaseStreamApiTest {
     public void getProcessChildrenTest() throws InterruptedException, ExecutionException {
         // Happy case
         List children = List.of(
-                1,2,3
+                1, 2, 3
         );
         assertNormalBehavior(
                 () -> CompletableFuture.completedFuture(new ResponseMessage(1, null, children)),
@@ -1415,4 +1415,41 @@ public class NeovimStreamApiTest extends BaseStreamApiTest {
         );
     }
 
+    @Test
+    public void getNamespacesTest() throws ExecutionException, InterruptedException {
+        // Happy case
+        var namespaces = Map.of(
+                "name", 1,
+                "name2", 2
+        );
+        assertNormalBehavior(
+                () -> CompletableFuture.completedFuture(new ResponseMessage(1, null, namespaces)),
+                () -> neovimStreamApi.getNamespaces(),
+                request -> assertMethodAndArguments(request, NeovimApi.GET_NAMESPACES),
+                result -> assertEquals(namespaces, result)
+        );
+
+        // Error case
+        assertErrorBehavior(
+                () -> neovimStreamApi.getNamespaces(),
+                request -> assertMethodAndArguments(request, NeovimApi.GET_NAMESPACES)
+        );
+    }
+
+    @Test
+    public void createNamespacesTest() throws ExecutionException, InterruptedException {
+        // Happy case
+        assertNormalBehavior(
+                () -> CompletableFuture.completedFuture(new ResponseMessage(1, null, 1)),
+                () -> neovimStreamApi.createNamespace("test"),
+                request -> assertMethodAndArguments(request, NeovimApi.CREATE_NAMESPACES, "test"),
+                result -> assertEquals(result, Integer.valueOf(1))
+        );
+
+        // Error case
+        assertErrorBehavior(
+                () -> neovimStreamApi.createNamespace("test"),
+                request -> assertMethodAndArguments(request, NeovimApi.CREATE_NAMESPACES, "test")
+        );
+    }
 }

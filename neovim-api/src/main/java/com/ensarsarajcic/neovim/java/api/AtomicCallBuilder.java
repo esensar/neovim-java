@@ -321,4 +321,14 @@ public final class AtomicCallBuilder implements NeovimApi {
     public CompletableFuture<Object> getProcess() {
         return null;
     }
+
+    @Override
+    public CompletableFuture<Map<String, Integer>> getNamespaces() {
+        return null;
+    }
+
+    @Override
+    public CompletableFuture<Integer> createNamespace(String name) {
+        return null;
+    }
 }

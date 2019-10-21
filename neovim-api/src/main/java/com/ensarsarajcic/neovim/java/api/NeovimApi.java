@@ -98,6 +98,8 @@ public interface NeovimApi {
     String LIST_UIS = "nvim_list_uis";
     String GET_PROC_CHILDREN = "nvim_get_proc_children";
     String GET_PROC = "nvim_get_proc";
+    String GET_NAMESPACES = "nvim_get_namespaces";
+    String CREATE_NAMESPACES = "nvim_create_namespaces";
     // endregion
 
     @NeovimApiFunction(name = CALL_ATOMIC, since = 1)
@@ -268,4 +270,10 @@ public interface NeovimApi {
 
     @NeovimApiFunction(name = GET_PROC, since = 4)
     CompletableFuture<Object> getProcess();
+
+    @NeovimApiFunction(name = GET_NAMESPACES, since = 5)
+    CompletableFuture<Map<String, Integer>> getNamespaces();
+
+    @NeovimApiFunction(name = CREATE_NAMESPACES, since = 5)
+    CompletableFuture<Integer> createNamespace(String name);
 }
