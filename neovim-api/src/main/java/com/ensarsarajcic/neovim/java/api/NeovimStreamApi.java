@@ -44,7 +44,7 @@ import java.util.stream.Collectors;
 /**
  * Full implementation of {@link NeovimApi} based on {@link ReactiveRPCStreamer}
  */
-@NeovimApiClient(name = "full_stream_api", target = 4)
+@NeovimApiClient(name = "full_stream_api", target = 5)
 public final class NeovimStreamApi extends BaseStreamApi implements NeovimApi {
 
     public NeovimStreamApi(ReactiveRPCStreamer reactiveRPCStreamer) {
@@ -425,5 +425,23 @@ public final class NeovimStreamApi extends BaseStreamApi implements NeovimApi {
     @Override
     public CompletableFuture<Object> getProcess() {
         return sendWithGenericResponse(new RequestMessage.Builder(GET_PROC));
+    }
+
+    @Override
+    public CompletableFuture<Map<String, Integer>> getNamespaces() {
+        return sendWithResponseOfMapType(
+                new RequestMessage.Builder(GET_NAMESPACES),
+                String.class,
+                Integer.class
+        );
+    }
+
+    @Override
+    public CompletableFuture<Integer> createNamespace(String name) {
+        return sendWithResponseOfType(
+                new RequestMessage.Builder(CREATE_NAMESPACES)
+                        .addArgument(name),
+                Integer.class
+        );
     }
 }

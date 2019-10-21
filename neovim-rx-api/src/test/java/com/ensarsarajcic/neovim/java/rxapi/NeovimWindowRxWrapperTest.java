@@ -81,6 +81,17 @@ public class NeovimWindowRxWrapperTest {
     }
 
     @Test
+    public void delegatesSetBuffer() {
+        var buffer = new Buffer(1);
+        given(neovimWindowApi.setBuffer(buffer)).willReturn(CompletableFuture.completedFuture(null));
+        neovimWindowRxWrapper.setBuffer(buffer)
+                .test()
+                .assertComplete()
+                .assertNoErrors();
+        verify(neovimWindowApi).setBuffer(buffer);
+    }
+
+    @Test
     public void delegatesGetTabpage() {
         var neovimTabpageApi = Mockito.mock(NeovimTabpageApi.class);
         var tabpage = new Tabpage(1);

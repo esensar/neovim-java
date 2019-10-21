@@ -601,4 +601,23 @@ public class NeovimRxWrapperTest {
                 .assertValue(result);
         verify(neovimApi).getProcess();
     }
+
+    @Test
+    public void delegatesNamespaceOperations() {
+        var result = Map.of("test", 1);
+        given(neovimApi.getNamespaces()).willReturn(CompletableFuture.completedFuture(result));
+        given(neovimApi.createNamespace("test")).willReturn(CompletableFuture.completedFuture(1));
+        neovimRxWrapper.getNamespaces()
+                .test()
+                .assertNoErrors()
+                .assertComplete()
+                .assertValue(result);
+        verify(neovimApi).getNamespaces();
+        neovimRxWrapper.createNamespace("test")
+                .test()
+                .assertNoErrors()
+                .assertComplete()
+                .assertValue(1);
+        verify(neovimApi).createNamespace("test");
+    }
 }

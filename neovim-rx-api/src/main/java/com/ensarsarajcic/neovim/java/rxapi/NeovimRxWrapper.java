@@ -339,4 +339,14 @@ public final class NeovimRxWrapper implements NeovimRxApi {
     public Single<Object> getProcess() {
         return Single.fromFuture(neovimApi.getProcess());
     }
+
+    @Override
+    public Single<Map<String, Integer>> getNamespaces() {
+        return Single.fromFuture(neovimApi.getNamespaces());
+    }
+
+    @Override
+    public Single<Integer> createNamespace(String name) {
+        return Single.fromFuture(neovimApi.createNamespace(name));
+    }
 }

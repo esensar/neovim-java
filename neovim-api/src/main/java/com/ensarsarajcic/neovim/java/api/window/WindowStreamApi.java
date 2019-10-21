@@ -43,7 +43,7 @@ import java.util.concurrent.CompletableFuture;
 /**
  * Implementation of {@link NeovimWindowApi} based on {@link ReactiveRPCStreamer}
  */
-@NeovimApiClient(name = "full_window_api", target = 4)
+@NeovimApiClient(name = "full_window_api", target = 5)
 public final class WindowStreamApi extends BaseStreamApi implements NeovimWindowApi {
 
     private Window model;
@@ -63,6 +63,11 @@ public final class WindowStreamApi extends BaseStreamApi implements NeovimWindow
     public CompletableFuture<NeovimBufferApi> getBuffer() {
         return sendWithResponseOfMsgPackType(prepareMessage(GET_BUFFER), Buffer.class)
                 .thenApply(buffer -> new BufferStreamApi(reactiveRPCStreamer, buffer));
+    }
+
+    @Override
+    public CompletableFuture<Void> setBuffer(Buffer buffer) {
+        return sendWithNoResponse(prepareMessage(SET_BUFFER).addArgument(buffer));
     }
 
     @Override

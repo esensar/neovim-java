@@ -26,6 +26,7 @@ package com.ensarsarajcic.neovim.java.rxapi;
 
 import com.ensarsarajcic.neovim.java.api.buffer.NeovimBufferApi;
 import com.ensarsarajcic.neovim.java.api.types.api.GetCommandsOptions;
+import com.ensarsarajcic.neovim.java.api.types.api.HighlightedText;
 import com.ensarsarajcic.neovim.java.api.types.api.VimCoords;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.Buffer;
 import org.junit.Test;
@@ -34,6 +35,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -87,6 +89,17 @@ public class NeovimBufferRxWrapperTest {
                 .assertComplete()
                 .assertValue(5);
         verify(neovimBufferApi).getLineCount();
+    }
+
+    @Test
+    public void delegatesGetOffset() {
+        given(neovimBufferApi.getOffset(1)).willReturn(CompletableFuture.completedFuture(5));
+        neovimBufferRxWrapper.getOffset(1)
+                .test()
+                .assertNoErrors()
+                .assertComplete()
+                .assertValue(5);
+        verify(neovimBufferApi).getOffset(1);
     }
 
     @Test
@@ -161,14 +174,21 @@ public class NeovimBufferRxWrapperTest {
     }
 
     @Test
-    public void delegatesValidity() {
+    public void delegatesStateChecks() {
         given(neovimBufferApi.isValid()).willReturn(CompletableFuture.completedFuture(true));
+        given(neovimBufferApi.isLoaded()).willReturn(CompletableFuture.completedFuture(false));
         neovimBufferRxWrapper.isValid()
                 .test()
                 .assertNoErrors()
                 .assertComplete()
                 .assertValue(true);
         verify(neovimBufferApi).isValid();
+        neovimBufferRxWrapper.isLoaded()
+                .test()
+                .assertNoErrors()
+                .assertComplete()
+                .assertValue(false);
+        verify(neovimBufferApi).isLoaded();
     }
 
     @Test
@@ -221,6 +241,24 @@ public class NeovimBufferRxWrapperTest {
                 .assertNoErrors()
                 .assertComplete();
         verify(neovimBufferApi).clearHighlight(1, 1, 3);
+    }
+
+    @Test
+    public void delegatesNamespaceOperations() {
+        List<HighlightedText> chunks = List.of(new HighlightedText("justText"));
+        given(neovimBufferApi.clearNamespace(1, 5, 10)).willReturn(CompletableFuture.completedFuture(null));
+        given(neovimBufferApi.setVirtualText(1, 5, chunks, Map.of())).willReturn(CompletableFuture.completedFuture(1));
+        neovimBufferRxWrapper.clearNamespace(1, 5, 10)
+                .test()
+                .assertNoErrors()
+                .assertComplete();
+        verify(neovimBufferApi).clearNamespace(1, 5, 10);
+        neovimBufferRxWrapper.setVirtualText(1, 5, chunks, Map.of())
+                .test()
+                .assertNoErrors()
+                .assertComplete()
+                .assertValue(1);
+        verify(neovimBufferApi).setVirtualText(1, 5, chunks, Map.of());
     }
 
     @Test

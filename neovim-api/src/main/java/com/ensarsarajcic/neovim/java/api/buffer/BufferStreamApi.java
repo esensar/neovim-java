@@ -28,6 +28,7 @@ import com.ensarsarajcic.neovim.java.api.BaseStreamApi;
 import com.ensarsarajcic.neovim.java.api.NeovimApiClient;
 import com.ensarsarajcic.neovim.java.api.types.api.CommandInfo;
 import com.ensarsarajcic.neovim.java.api.types.api.GetCommandsOptions;
+import com.ensarsarajcic.neovim.java.api.types.api.HighlightedText;
 import com.ensarsarajcic.neovim.java.api.types.api.VimCoords;
 import com.ensarsarajcic.neovim.java.api.types.api.VimKeyMap;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.Buffer;
@@ -42,7 +43,7 @@ import java.util.concurrent.CompletableFuture;
 /**
  * Implementation of {@link NeovimBufferApi} based on {@link ReactiveRPCStreamer}
  */
-@NeovimApiClient(name = "full_buffer_api", target = 4)
+@NeovimApiClient(name = "full_buffer_api", target = 5)
 public final class BufferStreamApi extends BaseStreamApi implements NeovimBufferApi {
 
     private Buffer model;
@@ -89,6 +90,15 @@ public final class BufferStreamApi extends BaseStreamApi implements NeovimBuffer
     }
 
     @Override
+    public CompletableFuture<Integer> getOffset(int index) {
+        return sendWithResponseOfType(
+                prepareMessage(GET_OFFSET)
+                        .addArgument(index),
+                Integer.class
+        );
+    }
+
+    @Override
     public CompletableFuture<Object> getVar(String name) {
         return sendWithGenericResponse(
                 prepareMessage(GET_VAR).addArgument(name)
@@ -131,6 +141,11 @@ public final class BufferStreamApi extends BaseStreamApi implements NeovimBuffer
     }
 
     @Override
+    public CompletableFuture<Boolean> isLoaded() {
+        return sendWithResponseOfType(prepareMessage(IS_LOADED), Boolean.class);
+    }
+
+    @Override
     public CompletableFuture<Boolean> isValid() {
         return sendWithResponseOfType(prepareMessage(IS_VALID), Boolean.class);
     }
@@ -170,6 +185,28 @@ public final class BufferStreamApi extends BaseStreamApi implements NeovimBuffer
                         .addArgument(srcId)
                         .addArgument(lineStart)
                         .addArgument(lineEnd)
+        );
+    }
+
+    @Override
+    public CompletableFuture<Void> clearNamespace(int namespaceId, int lineStart, int lineEnd) {
+        return sendWithNoResponse(
+                prepareMessage(CLEAR_NAMESPACE)
+                        .addArgument(namespaceId)
+                        .addArgument(lineStart)
+                        .addArgument(lineEnd)
+        );
+    }
+
+    @Override
+    public CompletableFuture<Integer> setVirtualText(int namespaceId, int line, List<HighlightedText> chunks, Map optionalParams) {
+        return sendWithResponseOfType(
+                prepareMessage(SET_VIRTUAL_TEXT)
+                        .addArgument(namespaceId)
+                        .addArgument(line)
+                        .addArgument(chunks)
+                        .addArgument(optionalParams),
+                Integer.class
         );
     }
 
