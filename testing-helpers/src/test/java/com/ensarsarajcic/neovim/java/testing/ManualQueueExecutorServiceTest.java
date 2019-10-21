@@ -131,54 +131,55 @@ public class ManualQueueExecutorServiceTest {
         first.get();
         verify(executorService).submit(any(Callable.class));
 
-        manualQueueExecutorService.submit(() -> null);
         var second = manualQueueExecutorService.submit(() -> null);
-        manualQueueExecutorService.submit(() -> null);
         var third = manualQueueExecutorService.submit(() -> null);
+        var fourth = manualQueueExecutorService.submit(() -> null);
+        var fifth = manualQueueExecutorService.submit(() -> null);
         verify(executorService, times(1)).submit(any(Callable.class));
 
         manualQueueExecutorService.runOne();
         manualQueueExecutorService.runOne();
 
         assertNull(second.get());
+        assertNull(third.get());
 
         verify(executorService, times(3)).submit(any(Callable.class));
 
         manualQueueExecutorService.runOne();
         manualQueueExecutorService.runOne();
 
-        assertNull(third.get());
-
-        verify(executorService, times(5)).submit(any(Callable.class));
-
-        var fourth = manualQueueExecutorService.submit(() -> {
-        }, null);
-        verify(executorService, times(5)).submit(any(Callable.class));
-
-        manualQueueExecutorService.runOne();
         assertNull(fourth.get());
+        assertNull(fifth.get());
+
+        verify(executorService, times(5)).submit(any(Callable.class));
+
+        var sixth = manualQueueExecutorService.submit(() -> {}, null);
+        verify(executorService, times(5)).submit(any(Callable.class));
+
+        manualQueueExecutorService.runOne();
+        assertNull(sixth.get());
         verify(executorService, times(6)).submit(any(Callable.class));
 
-        var fifth = manualQueueExecutorService.invokeAll(Lists.newArrayList(() -> null, Object::new));
+        var seventh = manualQueueExecutorService.invokeAll(Lists.newArrayList(() -> null, Object::new));
         verify(executorService, times(6)).submit(any(Callable.class));
 
         manualQueueExecutorService.runOne();
-        assertNull(fifth.get(0).get());
+        assertNull(seventh.get(0).get());
         verify(executorService, times(7)).submit(any(Callable.class));
 
         manualQueueExecutorService.runOne();
-        assertNotNull(fifth.get(1).get());
+        assertNotNull(seventh.get(1).get());
         verify(executorService, times(8)).submit(any(Callable.class));
 
-        var sixth = manualQueueExecutorService.invokeAll(Lists.newArrayList(() -> null, Object::new), 100, TimeUnit.MILLISECONDS);
+        var eighth = manualQueueExecutorService.invokeAll(Lists.newArrayList(() -> null, Object::new), 100, TimeUnit.MILLISECONDS);
         verify(executorService, times(8)).submit(any(Callable.class));
 
         manualQueueExecutorService.runOne();
-        assertNull(sixth.get(0).get());
+        assertNull(eighth.get(0).get());
         verify(executorService, times(9)).submit(any(Callable.class));
 
         manualQueueExecutorService.runOne();
-        assertNotNull(sixth.get(1).get());
+        assertNotNull(eighth.get(1).get());
         verify(executorService, times(10)).submit(any(Callable.class));
     }
 
