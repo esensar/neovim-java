@@ -27,6 +27,7 @@ package com.ensarsarajcic.neovim.java.api.buffer;
 import com.ensarsarajcic.neovim.java.api.NeovimApiFunction;
 import com.ensarsarajcic.neovim.java.api.types.api.CommandInfo;
 import com.ensarsarajcic.neovim.java.api.types.api.GetCommandsOptions;
+import com.ensarsarajcic.neovim.java.api.types.api.HighlightedText;
 import com.ensarsarajcic.neovim.java.api.types.api.VimCoords;
 import com.ensarsarajcic.neovim.java.api.types.api.VimKeyMap;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.Buffer;
@@ -44,6 +45,7 @@ public interface NeovimBufferApi {
     String GET_LINE_COUNT = "nvim_buf_line_count";
     String GET_LINES = "nvim_buf_get_lines";
     String SET_LINES = "nvim_buf_set_lines";
+    String GET_OFFSET = "nvim_buf_get_offset";
     String GET_VAR = "nvim_buf_get_var";
     String DEL_VAR = "nvim_buf_del_var";
     String SET_VAR = "nvim_buf_set_var";
@@ -52,12 +54,15 @@ public interface NeovimBufferApi {
     String GET_NUMBER = "nvim_buf_get_number";
     String GET_NAME = "nvim_buf_get_name";
     String SET_NAME = "nvim_buf_set_name";
+    String IS_LOADED = "nvim_buf_is_loaded";
     String IS_VALID = "nvim_buf_is_valid";
     String GET_MARK = "nvim_buf_get_mark";
     String GET_CHANGEDTICK = "nvim_buf_get_changedtick";
     String GET_KEYMAP = "nvim_buf_get_keymap";
     String ADD_HIGHLIGHT = "nvim_buf_add_highlight";
     String CLEAR_HIGHLIGHT = "nvim_buf_clear_highlight";
+    String CLEAR_NAMESPACE = "nvim_buf_clear_namespace";
+    String SET_VIRTUAL_TEXT = "nvim_buf_set_virtual_text";
     String ATTACH_BUFFER = "nvim_buf_attach";
     String DETACH_BUFFER = "nvim_buf_detach";
     String GET_COMMANDS = "nvim_buf_get_commands";
@@ -73,6 +78,9 @@ public interface NeovimBufferApi {
 
     @NeovimApiFunction(name = SET_LINES, since = 1)
     CompletableFuture<Void> setLines(int start, int end, boolean strictIndexing, List<String> replacement);
+
+    @NeovimApiFunction(name = GET_OFFSET, since = 5)
+    CompletableFuture<Integer> getOffset(int index);
 
     @NeovimApiFunction(name = GET_VAR, since = 1)
     CompletableFuture<Object> getVar(String name);
@@ -99,6 +107,9 @@ public interface NeovimBufferApi {
     @NeovimApiFunction(name = SET_NAME, since = 1)
     CompletableFuture<Void> setName(String name);
 
+    @NeovimApiFunction(name = IS_LOADED, since = 5)
+    CompletableFuture<Boolean> isLoaded();
+
     @NeovimApiFunction(name = IS_VALID, since = 1)
     CompletableFuture<Boolean> isValid();
 
@@ -116,6 +127,12 @@ public interface NeovimBufferApi {
 
     @NeovimApiFunction(name = CLEAR_HIGHLIGHT, since = 1)
     CompletableFuture<Void> clearHighlight(int srcId, int lineStart, int lineEnd);
+
+    @NeovimApiFunction(name = CLEAR_NAMESPACE, since = 5)
+    CompletableFuture<Void> clearNamespace(int namespaceId, int lineStart, int lineEnd);
+
+    @NeovimApiFunction(name = SET_VIRTUAL_TEXT, since = 5)
+    CompletableFuture<Integer> setVirtualText(int namespaceId, int line, List<HighlightedText> chunks, Map optionalParams);
 
     @NeovimApiFunction(name = ATTACH_BUFFER, since = 4)
     CompletableFuture<Boolean> attach(boolean loadFullBufferOnStart, Map opts);

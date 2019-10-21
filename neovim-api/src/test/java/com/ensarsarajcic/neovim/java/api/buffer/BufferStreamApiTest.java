@@ -27,6 +27,7 @@ package com.ensarsarajcic.neovim.java.api.buffer;
 import com.ensarsarajcic.neovim.java.api.BaseStreamApiTest;
 import com.ensarsarajcic.neovim.java.api.types.api.CommandInfo;
 import com.ensarsarajcic.neovim.java.api.types.api.GetCommandsOptions;
+import com.ensarsarajcic.neovim.java.api.types.api.HighlightedText;
 import com.ensarsarajcic.neovim.java.api.types.api.VimKeyMap;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.Buffer;
 import com.ensarsarajcic.neovim.java.corerpc.message.ResponseMessage;
@@ -131,6 +132,23 @@ public class BufferStreamApiTest extends BaseStreamApiTest {
         assertErrorBehavior(
                 () -> bufferStreamApi.setLines(7, 4, false, badLines),
                 request -> assertMethodAndArguments(request, NeovimBufferApi.SET_LINES, buffer, 7, 4, false, badLines)
+        );
+    }
+
+    @Test
+    public void getOffsetTest() throws ExecutionException, InterruptedException {
+        // Happy case
+        assertNormalBehavior(
+                () -> CompletableFuture.completedFuture(new ResponseMessage(1, null, 10)),
+                () -> bufferStreamApi.getOffset(1),
+                request -> assertMethodAndArguments(request, NeovimBufferApi.GET_OFFSET, buffer, 1),
+                result -> assertEquals(result, Integer.valueOf(10))
+        );
+
+        // Error case
+        assertErrorBehavior(
+                () -> bufferStreamApi.getOffset(2),
+                request -> assertMethodAndArguments(request, NeovimBufferApi.GET_OFFSET, buffer, 2)
         );
     }
 
@@ -273,6 +291,23 @@ public class BufferStreamApiTest extends BaseStreamApiTest {
     }
 
     @Test
+    public void isLoadedTest() throws ExecutionException, InterruptedException {
+        // Happy case
+        assertNormalBehavior(
+                () -> CompletableFuture.completedFuture(new ResponseMessage(1, null, false)),
+                () -> bufferStreamApi.isLoaded(),
+                request -> assertMethodAndArguments(request, NeovimBufferApi.IS_LOADED, buffer),
+                Assert::assertFalse
+        );
+
+        // Error case
+        assertErrorBehavior(
+                () -> bufferStreamApi.isLoaded(),
+                request -> assertMethodAndArguments(request, NeovimBufferApi.IS_LOADED, buffer)
+        );
+    }
+
+    @Test
     public void isValidTest() throws ExecutionException, InterruptedException {
         // Happy case
         assertNormalBehavior(
@@ -405,6 +440,40 @@ public class BufferStreamApiTest extends BaseStreamApiTest {
         assertErrorBehavior(
                 () -> bufferStreamApi.clearHighlight(7, 3, 1),
                 request -> assertMethodAndArguments(request, NeovimBufferApi.CLEAR_HIGHLIGHT, buffer, 7, 3, 1)
+        );
+    }
+
+    @Test
+    public void clearNamespaceTest() throws ExecutionException, InterruptedException {
+        // Happy case
+        assertNormalBehavior(
+                () -> CompletableFuture.completedFuture(new ResponseMessage(1, null, null)),
+                () -> bufferStreamApi.clearNamespace(1, 5, 7),
+                request -> assertMethodAndArguments(request, NeovimBufferApi.CLEAR_NAMESPACE, buffer, 1, 5, 7)
+        );
+
+        // Error case
+        assertErrorBehavior(
+                () -> bufferStreamApi.clearNamespace(7, 3, 1),
+                request -> assertMethodAndArguments(request, NeovimBufferApi.CLEAR_NAMESPACE, buffer, 7, 3, 1)
+        );
+    }
+
+    @Test
+    public void setVirtualTextTest() throws ExecutionException, InterruptedException {
+        // Happy case
+        List<HighlightedText> highlightedTextList = List.of(new HighlightedText("noHl"), new HighlightedText("hightlighted", "hl"));
+        assertNormalBehavior(
+                () -> CompletableFuture.completedFuture(new ResponseMessage(1, null, 1)),
+                () -> bufferStreamApi.setVirtualText(1, 5, highlightedTextList, Map.of()),
+                request -> assertMethodAndArguments(request, NeovimBufferApi.SET_VIRTUAL_TEXT, buffer, 1, 5, highlightedTextList, Map.of()),
+                response -> assertEquals(response, Integer.valueOf(1))
+        );
+
+        // Error case
+        assertErrorBehavior(
+                () -> bufferStreamApi.setVirtualText(7, 3, highlightedTextList, Map.of()),
+                request -> assertMethodAndArguments(request, NeovimBufferApi.SET_VIRTUAL_TEXT, buffer, 7, 3, highlightedTextList, Map.of())
         );
     }
 
