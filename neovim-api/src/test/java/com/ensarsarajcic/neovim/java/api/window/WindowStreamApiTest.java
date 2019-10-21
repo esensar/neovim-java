@@ -26,6 +26,7 @@ package com.ensarsarajcic.neovim.java.api.window;
 
 import com.ensarsarajcic.neovim.java.api.BaseStreamApiTest;
 import com.ensarsarajcic.neovim.java.api.types.api.VimCoords;
+import com.ensarsarajcic.neovim.java.api.types.msgpack.Buffer;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.NeovimCustomType;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.Window;
 import com.ensarsarajcic.neovim.java.corerpc.message.ResponseMessage;
@@ -176,19 +177,36 @@ public class WindowStreamApiTest extends BaseStreamApiTest {
     }
 
     @Test
+    public void setBufferTest() throws InterruptedException, ExecutionException {
+        // Happy case
+        var buffer = new Buffer(1);
+        assertNormalBehavior(
+                () -> CompletableFuture.completedFuture(new ResponseMessage(1, null, null)),
+                () -> windowStreamApi.setBuffer(buffer),
+                request -> assertMethodAndArguments(request, NeovimWindowApi.SET_BUFFER, window, buffer)
+        );
+
+        // Error case
+        assertErrorBehavior(
+                () -> windowStreamApi.setBuffer(buffer),
+                request -> assertMethodAndArguments(request, NeovimWindowApi.SET_BUFFER, window, buffer)
+        );
+    }
+
+    @Test
     public void getTabpageTest() throws InterruptedException, ExecutionException {
         // Happy case
         assertNormalBehavior(
                 () -> CompletableFuture.completedFuture(new ResponseMessage(1, null, new MessagePackExtensionType((byte) NeovimCustomType.TABPAGE.getTypeId(), new byte[]{4}))),
                 () -> windowStreamApi.getTabpage(),
-                request -> assertMethodAndArguments(request, NeovimWindowApi.GET_TABPAGE),
+                request -> assertMethodAndArguments(request, NeovimWindowApi.GET_TABPAGE, window),
                 result -> assertEquals(4, result.get().getId())
         );
 
         // Error case
         assertErrorBehavior(
                 () -> windowStreamApi.getTabpage(),
-                request -> assertMethodAndArguments(request, NeovimWindowApi.GET_TABPAGE)
+                request -> assertMethodAndArguments(request, NeovimWindowApi.GET_TABPAGE, window)
         );
     }
 

@@ -28,6 +28,7 @@ import com.ensarsarajcic.neovim.java.api.NeovimApiFunction;
 import com.ensarsarajcic.neovim.java.api.buffer.NeovimBufferApi;
 import com.ensarsarajcic.neovim.java.api.tabpage.NeovimTabpageApi;
 import com.ensarsarajcic.neovim.java.api.types.api.VimCoords;
+import com.ensarsarajcic.neovim.java.api.types.msgpack.Buffer;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.Window;
 
 import java.util.concurrent.CompletableFuture;
@@ -38,6 +39,7 @@ import java.util.concurrent.CompletableFuture;
 public interface NeovimWindowApi {
     // region Supported functions names
     String GET_BUFFER = "nvim_win_get_buf";
+    String SET_BUFFER = "nvim_win_set_buf";
     String GET_CURSOR = "nvim_win_get_cursor";
     String SET_CURSOR = "nvim_win_set_cursor";
     String GET_HEIGHT = "nvim_win_get_height";
@@ -58,6 +60,9 @@ public interface NeovimWindowApi {
 
     @NeovimApiFunction(name = GET_BUFFER, since = 1)
     CompletableFuture<NeovimBufferApi> getBuffer();
+
+    @NeovimApiFunction(name = SET_BUFFER, since = 5)
+    CompletableFuture<Void> setBuffer(Buffer buffer);
 
     @NeovimApiFunction(name = GET_CURSOR, since = 1)
     CompletableFuture<VimCoords> getCursor();

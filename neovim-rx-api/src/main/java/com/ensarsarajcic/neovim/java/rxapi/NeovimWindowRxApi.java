@@ -26,6 +26,7 @@ package com.ensarsarajcic.neovim.java.rxapi;
 
 import com.ensarsarajcic.neovim.java.api.NeovimApiFunction;
 import com.ensarsarajcic.neovim.java.api.types.api.VimCoords;
+import com.ensarsarajcic.neovim.java.api.types.msgpack.Buffer;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.Window;
 import com.ensarsarajcic.neovim.java.api.window.NeovimWindowApi;
 import io.reactivex.Completable;
@@ -37,6 +38,9 @@ public interface NeovimWindowRxApi {
 
     @NeovimApiFunction(name = NeovimWindowApi.GET_BUFFER, since = 1)
     Single<NeovimBufferRxApi> getBuffer();
+
+    @NeovimApiFunction(name = NeovimWindowApi.SET_BUFFER, since = 5)
+    Completable setBuffer(Buffer buffer);
 
     @NeovimApiFunction(name = NeovimWindowApi.GET_CURSOR, since = 1)
     Single<VimCoords> getCursor();
