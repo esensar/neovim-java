@@ -22,24 +22,24 @@
  * SOFTWARE.
  */
 
-package com.ensarsarajcic.neovim.java.notifications.ui.grid;
+package com.ensarsarajcic.neovim.java.notifications.ui.grid.linegrid;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonFormat(shape = JsonFormat.Shape.ARRAY)
-public final class HighlightSetEvent implements UIGridEvent {
-    public static final String NAME = "highlight_set";
+public final class GridClearEvent implements UILineGridEvent {
+    public static final String NAME = "grid_clear";
 
-    private HighlightAttributes attributes;
+    private int grid;
 
-    public HighlightSetEvent(
-            @JsonProperty(value = "attributes", index = 0) HighlightAttributes attributes) {
-        this.attributes = attributes;
+    public GridClearEvent(
+            @JsonProperty(value = "grid", index = 0) int grid) {
+        this.grid = grid;
     }
 
-    public HighlightAttributes getAttributes() {
-        return attributes;
+    public int getGrid() {
+        return grid;
     }
 
     @Override
@@ -49,8 +49,8 @@ public final class HighlightSetEvent implements UIGridEvent {
 
     @Override
     public String toString() {
-        return "HighlightSetEvent{" +
-                "attributes=" + attributes +
+        return "GridClearEvent{" +
+                "grid=" + grid +
                 '}';
     }
 }

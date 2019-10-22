@@ -22,35 +22,43 @@
  * SOFTWARE.
  */
 
-package com.ensarsarajcic.neovim.java.notifications.ui.grid;
+package com.ensarsarajcic.neovim.java.notifications.ui.grid.linegrid;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-@JsonFormat(shape = JsonFormat.Shape.ARRAY)
-public final class HighlightSetEvent implements UIGridEvent {
-    public static final String NAME = "highlight_set";
+public final class CellData {
 
-    private HighlightAttributes attributes;
+    private String text;
+    private int highlightId;
+    private int repeat;
 
-    public HighlightSetEvent(
-            @JsonProperty(value = "attributes", index = 0) HighlightAttributes attributes) {
-        this.attributes = attributes;
+    public CellData(
+            @JsonProperty(value = "text", index = 0, required = true) String text,
+            @JsonProperty(value = "hl_id", index = 1, required = false) int highlightId,
+            @JsonProperty(value = "repeat", index = 2, required = false) int repeat) {
+        this.text = text;
+        this.highlightId = highlightId;
+        this.repeat = repeat;
     }
 
-    public HighlightAttributes getAttributes() {
-        return attributes;
+    public String getText() {
+        return text;
     }
 
-    @Override
-    public String getEventName() {
-        return NAME;
+    public int getHighlightId() {
+        return highlightId;
+    }
+
+    public int getRepeat() {
+        return repeat;
     }
 
     @Override
     public String toString() {
-        return "HighlightSetEvent{" +
-                "attributes=" + attributes +
+        return "CellData{" +
+                "text='" + text + '\'' +
+                ", highlightId=" + highlightId +
+                ", repeat=" + repeat +
                 '}';
     }
 }
