@@ -22,35 +22,9 @@
  * SOFTWARE.
  */
 
-package com.ensarsarajcic.neovim.java.notifications.ui.grid;
+package com.ensarsarajcic.neovim.java.notifications.ui.grid.linegrid;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.ensarsarajcic.neovim.java.notifications.ui.UIEvent;
 
-@JsonFormat(shape = JsonFormat.Shape.ARRAY)
-public final class HighlightSetEvent implements UIGridEvent {
-    public static final String NAME = "highlight_set";
-
-    private HighlightAttributes attributes;
-
-    public HighlightSetEvent(
-            @JsonProperty(value = "attributes", index = 0) HighlightAttributes attributes) {
-        this.attributes = attributes;
-    }
-
-    public HighlightAttributes getAttributes() {
-        return attributes;
-    }
-
-    @Override
-    public String getEventName() {
-        return NAME;
-    }
-
-    @Override
-    public String toString() {
-        return "HighlightSetEvent{" +
-                "attributes=" + attributes +
-                '}';
-    }
+public interface UILineGridEvent extends UIEvent {
 }

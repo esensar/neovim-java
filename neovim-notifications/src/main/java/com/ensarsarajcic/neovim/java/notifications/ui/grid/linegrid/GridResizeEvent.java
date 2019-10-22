@@ -22,24 +22,38 @@
  * SOFTWARE.
  */
 
-package com.ensarsarajcic.neovim.java.notifications.ui.grid;
+package com.ensarsarajcic.neovim.java.notifications.ui.grid.linegrid;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonFormat(shape = JsonFormat.Shape.ARRAY)
-public final class HighlightSetEvent implements UIGridEvent {
-    public static final String NAME = "highlight_set";
+public final class GridResizeEvent implements UILineGridEvent {
+    public static final String NAME = "grid_resize";
 
-    private HighlightAttributes attributes;
+    private int grid;
+    private int width;
+    private int height;
 
-    public HighlightSetEvent(
-            @JsonProperty(value = "attributes", index = 0) HighlightAttributes attributes) {
-        this.attributes = attributes;
+    public GridResizeEvent(
+            @JsonProperty(value = "grid", index = 0) int grid,
+            @JsonProperty(value = "width", index = 1) int width,
+            @JsonProperty(value = "height", index = 2) int height) {
+        this.grid = grid;
+        this.width = width;
+        this.height = height;
     }
 
-    public HighlightAttributes getAttributes() {
-        return attributes;
+    public int getGrid() {
+        return grid;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
     }
 
     @Override
@@ -49,8 +63,10 @@ public final class HighlightSetEvent implements UIGridEvent {
 
     @Override
     public String toString() {
-        return "HighlightSetEvent{" +
-                "attributes=" + attributes +
+        return "GridResizeEvent{" +
+                "grid=" + grid +
+                ", width=" + width +
+                ", height=" + height +
                 '}';
     }
 }

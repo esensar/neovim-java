@@ -32,7 +32,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 public final class ModeInfo {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING)
-    private enum CursorShape {
+    public enum CursorShape {
         BLOCK("block"),
         HORIZONTAL("horizontal"),
         VERTICAL("vertical");

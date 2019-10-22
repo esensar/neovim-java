@@ -22,24 +22,47 @@
  * SOFTWARE.
  */
 
-package com.ensarsarajcic.neovim.java.notifications.ui.grid;
+package com.ensarsarajcic.neovim.java.notifications.ui.grid.linegrid;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.List;
+
 @JsonFormat(shape = JsonFormat.Shape.ARRAY)
-public final class HighlightSetEvent implements UIGridEvent {
-    public static final String NAME = "highlight_set";
+public final class GridLineEvent implements UILineGridEvent {
+    public static final String NAME = "grid_line";
 
-    private HighlightAttributes attributes;
+    private int grid;
+    private int row;
+    private int colStart;
+    private List<CellData> data;
 
-    public HighlightSetEvent(
-            @JsonProperty(value = "attributes", index = 0) HighlightAttributes attributes) {
-        this.attributes = attributes;
+    public GridLineEvent(
+            @JsonProperty(value = "grid", index = 0) int grid,
+            @JsonProperty(value = "row", index = 1) int row,
+            @JsonProperty(value = "col_start", index = 2) int colStart,
+            @JsonProperty(value = "data", index = 3) List<CellData> data) {
+        this.grid = grid;
+        this.row = row;
+        this.colStart = colStart;
+        this.data = data;
     }
 
-    public HighlightAttributes getAttributes() {
-        return attributes;
+    public int getGrid() {
+        return grid;
+    }
+
+    public int getRow() {
+        return row;
+    }
+
+    public int getColStart() {
+        return colStart;
+    }
+
+    public List<CellData> getData() {
+        return data;
     }
 
     @Override
@@ -49,8 +72,11 @@ public final class HighlightSetEvent implements UIGridEvent {
 
     @Override
     public String toString() {
-        return "HighlightSetEvent{" +
-                "attributes=" + attributes +
+        return "GridLineEvent{" +
+                "grid=" + grid +
+                ", row=" + row +
+                ", colStart=" + colStart +
+                ", data=" + data +
                 '}';
     }
 }
