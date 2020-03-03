@@ -73,10 +73,8 @@
         <slf4j.version>1.7.25</slf4j.version>
         <ipcsocket.version>1.0.0</ipcsocket.version>
         <asm.version>7.2</asm.version>
-        <java.version>13</java.version>
-        <javafx.version>13</javafx.version>
-        <maven.compiler.source>13</maven.compiler.source>
-        <maven.compiler.target>13</maven.compiler.target>
+        <java.version>11</java.version>
+        <javafx.version>11</javafx.version>
     </properties>
 
     <dependencies>
