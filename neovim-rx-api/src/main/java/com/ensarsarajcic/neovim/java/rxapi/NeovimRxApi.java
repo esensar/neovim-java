@@ -77,7 +77,7 @@ public interface NeovimRxApi {
     Single<Object> eval(String expression);
 
     @NeovimApiFunction(name = NeovimApi.CALL_FUNCTION, since = 1)
-    Single<Object> callFunction(String name, List<String> args);
+    Single<Object> callFunction(String name, List<Object> args);
 
     @NeovimApiFunction(name = NeovimApi.FEEDKEYS, since = 1)
     Completable feedKeys(String keys, String mode, Boolean escape);

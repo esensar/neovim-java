@@ -134,7 +134,7 @@ public final class NeovimStreamApi extends BaseStreamApi implements NeovimApi {
     }
 
     @Override
-    public CompletableFuture<Object> callFunction(String name, List<String> args) {
+    public CompletableFuture<Object> callFunction(String name, List<Object> args) {
         return sendWithGenericResponse(new RequestMessage.Builder(CALL_FUNCTION).addArgument(name).addArgument(args));
     }
 

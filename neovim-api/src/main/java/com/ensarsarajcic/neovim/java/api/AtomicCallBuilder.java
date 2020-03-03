@@ -108,7 +108,7 @@ public final class AtomicCallBuilder implements NeovimApi {
     }
 
     @Override
-    public CompletableFuture<Object> callFunction(String name, List<String> args) {
+    public CompletableFuture<Object> callFunction(String name, List<Object> args) {
         return null;
     }
 

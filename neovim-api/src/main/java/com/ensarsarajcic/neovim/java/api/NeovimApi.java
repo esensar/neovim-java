@@ -140,7 +140,7 @@ public interface NeovimApi {
     CompletableFuture<Object> eval(String expression);
 
     @NeovimApiFunction(name = CALL_FUNCTION, since = 1)
-    CompletableFuture<Object> callFunction(String name, List<String> args);
+    CompletableFuture<Object> callFunction(String name, List<Object> args);
 
     @NeovimApiFunction(name = FEEDKEYS, since = 1)
     CompletableFuture<Void> feedKeys(String keys, String mode, boolean escape);
