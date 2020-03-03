@@ -247,7 +247,7 @@ public class NeovimStreamApiTest extends BaseStreamApiTest {
     public void callFunctionTest() throws InterruptedException, ExecutionException {
         // Happy case
         var expectedResult = "function result";
-        var args = List.of("arg1", "arg2");
+        List<Object> args = List.of("arg1", "arg2");
         assertNormalBehavior(
                 () -> CompletableFuture.completedFuture(new ResponseMessage(1, null, expectedResult)),
                 () -> neovimStreamApi.callFunction("the function", args),
@@ -256,7 +256,7 @@ public class NeovimStreamApiTest extends BaseStreamApiTest {
         );
 
         // Error case
-        var badArgs = List.of("ont bad arg");
+        List<Object> badArgs = List.of("ont bad arg");
         assertErrorBehavior(
                 () -> neovimStreamApi.callFunction("bad function", badArgs),
                 request -> assertMethodAndArguments(request, NeovimApi.CALL_FUNCTION, "bad function", badArgs)

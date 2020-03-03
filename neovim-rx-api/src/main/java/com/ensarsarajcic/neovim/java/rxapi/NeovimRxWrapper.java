@@ -114,7 +114,7 @@ public final class NeovimRxWrapper implements NeovimRxApi {
     }
 
     @Override
-    public Single<Object> callFunction(String name, List<String> args) {
+    public Single<Object> callFunction(String name, List<Object> args) {
         return Single.fromFuture(neovimApi.callFunction(name, args));
     }
 

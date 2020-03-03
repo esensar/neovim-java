@@ -186,7 +186,7 @@ public class NeovimRxWrapperTest {
     @Test
     public void delegatesCallFunction() {
         var result = new Object();
-        List<String> args = Collections.emptyList();
+        List<Object> args = Collections.emptyList();
         given(neovimApi.callFunction("func", args)).willReturn(CompletableFuture.completedFuture(result));
         neovimRxWrapper.callFunction("func", args)
                 .test()
