@@ -75,9 +75,198 @@ compile 'com.ensarsarajcic.neovim.java:core-rpc:${neovimjava.version}'
 ```
 
 ## Reactive Core RPC
+Reactive core RPC module is a simple wrapper around core RPC module. It provides a reactive interface using Java 9 Flows. Requests and notifications
+are provided through a `Flow`, while sending messages returns a `CompletableFuture` which can return a response.
+
+Include it in your dependencies:  
+Maven:  
+```xml
+<dependency>
+  <groupId>com.ensarsarajcic.neovim.java</groupId>
+  <artifactId>reactive-core-rpc</artifactId>
+  <version>${neovimjava.version}</version>
+</dependency>
+```
+Gradle:  
+```groovy
+compile 'com.ensarsarajcic.neovim.java:reactive-core-rpc:${neovimjava.version}'
+```
+
+It handles the same `RPCConnection` interface as core RPC module and creation is very similar:
+```java
+    Socket socket = new Socket("127.0.0.1", 1234);
+    
+    RPCConnection localConnection = new TcpSocketRPCConnection(socket);
+    ReactiveRPCStreamer rpcStreamer = ReactiveRPCClient.getDefaultInstance(); // shared singleton
+    
+    rpcStreamer.attach(localConnection);
+    Message request = new RequestMessage.Builder("nvim_get_current_line");
+    rpcStreamer.response(request).thenAccept(System.out::println); // requesting
+    
+    rpcStreamer.notificationsFlow().subscribe(notificationsSubscriber); // notifications subscription
+```
+
+RxJava wrapper is not provided, since it is very easy to wrap this Java 9 Flow implementation into an RxJava implementation.
+
 ## Unix Socket Connection
+Unix socket connection module provides a very simple additional implementation of `RPCConnection` based on Unix domain sockets.
+
+Include it in your dependencies:  
+Maven:  
+```xml
+<dependency>
+  <groupId>com.ensarsarajcic.neovim.java</groupId>
+  <artifactId>unix-socket-connection</artifactId>
+  <version>${neovimjava.version}</version>
+</dependency>
+```
+Gradle:  
+```groovy
+compile 'com.ensarsarajcic.neovim.java:unix-socket-connection:${neovimjava.version}'
+```
+
+Example usage:
+```java
+    File socket = new File("/var/nvim/random");
+
+    RPCConnection fileConnection = new UnixDomainSocketRPCConnection(socket);
+
+    // It can now be used for communication
+    rpcStreamer.attach(fileConnection);
+    rpcStreamer.sent(message); // send a message to unix domain socket located on /var/nvim/random
+```
+
 ## Neovim API
+This is the main high level interface for this library. It provides all of the Neovim RPC API functions in an easy to use way. It holds all types as models
+and provides 4 separate **APIs**: *Neovim*, *Buffer*, *Tabpage* and *Window* (the way they were meant to be used in OOP languages).
+
+> This does not proivide atomic calls yet.
+
+All calls are made using *reactive-core-rpc* module and all calls return `CompletableFuture`. If you prefer RxJava over Java 9 Flows, you can use
+*neovim-rx-api* module.
+
+Include it in your dependencies:  
+Maven:  
+```xml
+<dependency>
+  <groupId>com.ensarsarajcic.neovim.java</groupId>
+  <artifactId>neovim-api</artifactId>
+  <version>${neovimjava.version}</version>
+</dependency>
+```
+Gradle:  
+```groovy
+compile 'com.ensarsarajcic.neovim.java:neovim-api:${neovimjava.version}'
+```
+
+Example usage:
+```java
+    Socket socket = new Socket("127.0.0.1", 1234);
+    
+    RPCConnection localConnection = new TcpSocketRPCConnection(socket);
+    NeovimApi api = NeovimApis.getApiForConnection(localConnection);
+    
+    api.getCurrentLine().thenAccept(System.out::println);
+    
+    NeovimApi another = new NeovimStreamApi(ReactiveRPCClient.getDefaultInstance());
+```
+
 ## Neovim RX API
+Neovim RX api module provides a same API as neovim API module, but using RxJava2.
+
+Include it in your dependencies:  
+Maven:  
+```xml
+<dependency>
+  <groupId>com.ensarsarajcic.neovim.java</groupId>
+  <artifactId>neovim-rx-api</artifactId>
+  <version>${neovimjava.version}</version>
+</dependency>
+```
+Gradle:  
+```groovy
+compile 'com.ensarsarajcic.neovim.java:neovim-rx-api:${neovimjava.version}'
+```
+
+Example:
+```java
+    Socket socket = new Socket("127.0.0.1", 1234);
+    
+    RPCConnection localConnection = new TcpSocketRPCConnection(socket);
+    NeovimApi api = NeovimApis.getApiForConnection(localConnection); // Create regular API
+    NeovimRxApi rxApi = new NeovimRxWrapper(api); // And then wrap it in RxJava2 interface
+    
+    api.getCurrentLine().thenAccept(System.out::println);
+    rxApi.getCurrentLine().subscribe(System.out::println);
+```
+
 ## Handler annotations
+Handler annotations module provides a way to register listeners for requests and notifications using annotations and different handlers. There needs to be an
+object with methods annotated with `NeovimNotificationHandler` or `NeovimRequestHandler`. These methods need to take only one parameter, `NotificationMessage`
+and `RequestMessage` respectively.
+
+Include it in your dependencies:  
+Maven:  
+```xml
+<dependency>
+  <groupId>com.ensarsarajcic.neovim.java</groupId>
+  <artifactId>handler-annotations</artifactId>
+  <version>${neovimjava.version}</version>
+</dependency>
+```
+Gradle:  
+```groovy
+compile 'com.ensarsarajcic.neovim.java:handler-annotations:${neovimjava.version}'
+```
+
+Example usage:
+```java
+    class AHandlerClass {
+    
+        @NeovimNotificationHandler("redraw")
+        public void handleRedraw(NotificationMessage message) {
+            System.out.println("Received a message: " + message);
+        }
+    }
+    
+    NeovimHandlerManager neovimHandlerManager = new NeovimHandlerManager();
+
+    neovimHandlerManager.registerNeovimHandler(new AHandlerClass());
+    neovimHandlerManager.attachToStream(neovimStream);
+```
+
+By default, all notifications and requests will be blocking. If you need a different behaviour, you can use a different constructor for `NeovimHandlerManager`.
+```java
+    NeovimHandlerManager customHandlerManager = new NeovimHandlerManager(new NeovimHandlerProxy(customExecutorService));
+```
+
 ## Neovim notifications
+Neovim notifications module provides a way to receive notifications through Java 9 Flows. Besides that it provides models for all neovim notifications,
+which can only be checked using *instanceof* operator currently, but provide an easier way to parse data.
+
+Include it in your dependencies:  
+Maven:  
+```xml
+<dependency>
+  <groupId>com.ensarsarajcic.neovim.java</groupId>
+  <artifactId>neovim-notifications</artifactId>
+  <version>${neovimjava.version}</version>
+</dependency>
+```
+Gradle:  
+```groovy
+compile 'com.ensarsarajcic.neovim.java:neovim-notifications:${neovimjava.version}'
+```
+
+Example usage:
+```java
+    NeovimNotificationHandler notificationHandler = new NeovimNotificationHandler(streamer);
+
+    notificationHandler.uiEvents().subscribe(uiEventSubscriber);
+    notificationHandler.bufferEvents().subscribe(bufferEventSubscriber);
+```
+
 ## API Explorer
+Simple JavaFX application loading Neovim API information using `nvim --api-info`. Displays all loaded information in tables for simple overview.
+
+It can also be used as an example of usage of library.

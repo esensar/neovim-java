@@ -1,1 +1,7 @@
 theme: jekyll-theme-midnight
+title: neovim-java
+description: Neovim Java client
+google_analytics: UA-105321464-1
+keywords: 'neovim, java, library, rpc, msgpack, msgpackrpc, rxjava2'
+plugins:
+  - jekyll-sitemap
