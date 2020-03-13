@@ -62,8 +62,8 @@ public interface NeovimApi {
     String FEEDKEYS = "nvim_feedkeys";
     String INPUT = "nvim_input";
     String GET_KEYMAP = "nvim_get_keymap";
-    String SET_KEYMAP = "nvim_get_keymap";
-    String DEL_KEYMAP = "nvim_get_keymap";
+    String SET_KEYMAP = "nvim_set_keymap";
+    String DEL_KEYMAP = "nvim_del_keymap";
     String SET_UI_OPTION = "nvim_ui_set_option";
     String SET_VAR = "nvim_set_var";
     String GET_VAR = "nvim_get_var";

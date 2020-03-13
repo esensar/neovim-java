@@ -59,6 +59,8 @@ public interface NeovimBufferApi {
     String GET_MARK = "nvim_buf_get_mark";
     String GET_CHANGEDTICK = "nvim_buf_get_changedtick";
     String GET_KEYMAP = "nvim_buf_get_keymap";
+    String SET_KEYMAP = "nvim_buf_set_keymap";
+    String DEL_KEYMAP = "nvim_buf_del_keymap";
     String ADD_HIGHLIGHT = "nvim_buf_add_highlight";
     String CLEAR_HIGHLIGHT = "nvim_buf_clear_highlight";
     String CLEAR_NAMESPACE = "nvim_buf_clear_namespace";
@@ -121,6 +123,12 @@ public interface NeovimBufferApi {
 
     @NeovimApiFunction(name = GET_KEYMAP, since = 3)
     CompletableFuture<List<VimKeyMap>> getKeymap(String mode);
+
+    @NeovimApiFunction(name = SET_KEYMAP, since = 6)
+    CompletableFuture<Void> setKeymap(String mode, String lhs, String rhs, Map<String, Boolean> options);
+
+    @NeovimApiFunction(name = DEL_KEYMAP, since = 6)
+    CompletableFuture<Void> deleteKeymap(String mode, String lhs);
 
     @NeovimApiFunction(name = ADD_HIGHLIGHT, since = 1)
     CompletableFuture<Integer> addHighlight(int srcId, String hlGroup, int line, int colStart, int colEnd);
