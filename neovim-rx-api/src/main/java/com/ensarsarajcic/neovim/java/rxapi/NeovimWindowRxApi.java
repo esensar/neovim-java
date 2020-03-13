@@ -32,6 +32,8 @@ import com.ensarsarajcic.neovim.java.api.window.NeovimWindowApi;
 import io.reactivex.Completable;
 import io.reactivex.Single;
 
+import java.util.Map;
+
 public interface NeovimWindowRxApi {
 
     Window get();
@@ -75,6 +77,12 @@ public interface NeovimWindowRxApi {
     @NeovimApiFunction(name = NeovimWindowApi.SET_OPTION, since = 1)
     Completable setOption(String name, Object value);
 
+    @NeovimApiFunction(name = NeovimWindowApi.GET_CONFIG, since = 6)
+    Single<Map<String, Object>> getConfig();
+
+    @NeovimApiFunction(name = NeovimWindowApi.SET_CONFIG, since = 6)
+    Completable setConfig(Map<String, Object> config);
+
     @NeovimApiFunction(name = NeovimWindowApi.GET_TABPAGE, since = 1)
     Single<NeovimTabpageRxApi> getTabpage();
 
@@ -83,4 +91,7 @@ public interface NeovimWindowRxApi {
 
     @NeovimApiFunction(name = NeovimWindowApi.IS_VALID, since = 1)
     Single<Boolean> isValid();
+
+    @NeovimApiFunction(name = NeovimWindowApi.CLOSE, since = 6)
+    Completable close(boolean force);
 }

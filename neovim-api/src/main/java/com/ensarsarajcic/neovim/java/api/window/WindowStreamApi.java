@@ -37,13 +37,14 @@ import com.ensarsarajcic.neovim.java.api.types.msgpack.Window;
 import com.ensarsarajcic.neovim.java.corerpc.message.RequestMessage;
 import com.ensarsarajcic.neovim.java.corerpc.reactive.ReactiveRPCStreamer;
 
+import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 /**
  * Implementation of {@link NeovimWindowApi} based on {@link ReactiveRPCStreamer}
  */
-@NeovimApiClient(name = "full_window_api", target = 5)
+@NeovimApiClient(name = "full_window_api", target = 6)
 public final class WindowStreamApi extends BaseStreamApi implements NeovimWindowApi {
 
     private Window model;
@@ -126,6 +127,20 @@ public final class WindowStreamApi extends BaseStreamApi implements NeovimWindow
     }
 
     @Override
+    public CompletableFuture<Map<String, Object>> getConfig() {
+        return sendWithResponseOfMapType(
+                prepareMessage(GET_CONFIG),
+                String.class,
+                Object.class
+        );
+    }
+
+    @Override
+    public CompletableFuture<Void> setConfig(Map<String, Object> config) {
+        return sendWithNoResponse(prepareMessage(SET_CONFIG).addArgument(config));
+    }
+
+    @Override
     public CompletableFuture<NeovimTabpageApi> getTabpage() {
         return sendWithResponseOfMsgPackType(prepareMessage(GET_TABPAGE), Tabpage.class)
                 .thenApply(tabpage -> new TabpageStreamApi(reactiveRPCStreamer, tabpage));
@@ -139,6 +154,11 @@ public final class WindowStreamApi extends BaseStreamApi implements NeovimWindow
     @Override
     public CompletableFuture<Boolean> isValid() {
         return sendWithResponseOfType(prepareMessage(IS_VALID), Boolean.class);
+    }
+
+    @Override
+    public CompletableFuture<Void> close(boolean force) {
+        return sendWithNoResponse(prepareMessage(CLOSE).addArgument(force));
     }
 
     private RequestMessage.Builder prepareMessage(String name) {
