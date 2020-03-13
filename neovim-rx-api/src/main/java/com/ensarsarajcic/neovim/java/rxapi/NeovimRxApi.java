@@ -58,6 +58,15 @@ public interface NeovimRxApi {
     @NeovimApiFunction(name = NeovimApi.RESIZE_UI, since = 1)
     Completable resizeUI(int width, int height);
 
+    @NeovimApiFunction(name = NeovimApi.RESIZE_UI_GRID, since = 6)
+    Completable resizeUIGrid(int width, int height);
+
+    @NeovimApiFunction(name = NeovimApi.SET_POPUPMENU_HEIGHT, since = 6)
+    Completable setPopupmenuHeight(int height);
+
+    @NeovimApiFunction(name = NeovimApi.INPUT_MOUSE, since = 6)
+    Completable inputMouse(Mouse.Button button, Mouse.Action action, String modifier, int grid, int row, int col);
+
     @NeovimApiFunction(name = NeovimApi.EXECUTE_LUA, since = 3)
     Single<Object> executeLua(String luaCode, List<String> args);
 
@@ -88,6 +97,12 @@ public interface NeovimRxApi {
     @NeovimApiFunction(name = NeovimApi.GET_KEYMAP, since = 3)
     Single<List<VimKeyMap>> getKeymap(String mode);
 
+    @NeovimApiFunction(name = NeovimApi.SET_KEYMAP, since = 6)
+    Completable setKeymap(String mode, String lhs, String rhs, Map<String, Boolean> options);
+
+    @NeovimApiFunction(name = NeovimApi.DEL_KEYMAP, since = 6)
+    Completable deleteKeymap(String mode, String lhs);
+
     @NeovimApiFunction(name = NeovimApi.SET_UI_OPTION, since = 1)
     Completable setUiOption(String name, Object value);
 
@@ -102,6 +117,9 @@ public interface NeovimRxApi {
 
     @NeovimApiFunction(name = NeovimApi.GET_VIM_VARIABLE, since = 1)
     Single<Object> getVimVariable(String name);
+
+    @NeovimApiFunction(name = NeovimApi.SET_VIM_VARIABLE, since = 6)
+    Completable setVimVariable(String name, Object value);
 
     @NeovimApiFunction(name = NeovimApi.SET_OPTION, since = 1)
     Completable setOption(String name, Object value);
@@ -145,6 +163,9 @@ public interface NeovimRxApi {
     @NeovimApiFunction(name = NeovimApi.LIST_BUFS, since = 1)
     Single<List<NeovimBufferRxApi>> getBuffers();
 
+    @NeovimApiFunction(name = NeovimApi.CREATE_BUF, since = 6)
+    Single<NeovimBufferRxApi> createBuffer(boolean listed, boolean scratch);
+
     @NeovimApiFunction(name = NeovimApi.GET_CURRENT_BUF, since = 1)
     Single<NeovimBufferRxApi> getCurrentBuffer();
 
@@ -153,6 +174,9 @@ public interface NeovimRxApi {
 
     @NeovimApiFunction(name = NeovimApi.LIST_WINS, since = 1)
     Single<List<NeovimWindowRxApi>> getWindows();
+
+    @NeovimApiFunction(name = NeovimApi.OPEN_WIN, since = 6)
+    Single<NeovimWindowRxApi> openWindow(Buffer buffer, boolean enter, Map<String, Object> config);
 
     @NeovimApiFunction(name = NeovimApi.GET_CURRENT_WIN, since = 1)
     Single<NeovimWindowRxApi> getCurrentWindow();
@@ -210,4 +234,19 @@ public interface NeovimRxApi {
 
     @NeovimApiFunction(name = NeovimApi.CREATE_NAMESPACES, since = 5)
     Single<Integer> createNamespace(String name);
+
+    @NeovimApiFunction(name = NeovimApi.PASTE, since = 6)
+    Single<Boolean> paste(String data, boolean crlf, int phase);
+
+    @NeovimApiFunction(name = NeovimApi.PUT, since = 6)
+    Completable put(List<String> lines, String type, boolean after, boolean follow);
+
+    @NeovimApiFunction(name = NeovimApi.GET_CONTEXT, since = 6)
+    Single<Map<String, Object>> getContext(Map<String, Object> options);
+
+    @NeovimApiFunction(name = NeovimApi.LOAD_CONTEXT, since = 6)
+    Completable loadContext(Map<String, Object> contextMap);
+
+    @NeovimApiFunction(name = NeovimApi.SELECT_POPUPMENU_ITEM, since = 6)
+    Completable selectPopupmenuItem(int item, boolean insert, boolean finish, Map<String, Object> options);
 }

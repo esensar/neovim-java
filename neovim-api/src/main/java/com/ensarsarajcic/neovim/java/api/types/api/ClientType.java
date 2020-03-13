@@ -49,7 +49,7 @@ public enum ClientType {
             }
         }
 
-        log.error("Tried to create an invalid channel Stream ({})", value);
+        log.error("Tried to create an invalid client type ({})", value);
         throw new IllegalArgumentException(String.format("ClientType (%s) does not exist", value));
     }
 
