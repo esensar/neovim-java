@@ -93,6 +93,12 @@ public interface NeovimBufferRxApi {
     @NeovimApiFunction(name = NeovimBufferApi.GET_KEYMAP, since = 3)
     Single<List<VimKeyMap>> getKeymap(String mode);
 
+    @NeovimApiFunction(name = NeovimBufferApi.SET_KEYMAP, since = 6)
+    Completable setKeymap(String mode, String lhs, String rhs, Map<String, Boolean> options);
+
+    @NeovimApiFunction(name = NeovimBufferApi.DEL_KEYMAP, since = 6)
+    Completable deleteKeymap(String mode, String lhs);
+
     @NeovimApiFunction(name = NeovimBufferApi.ADD_HIGHLIGHT, since = 1)
     Single<Integer> addHighlight(int srcId, String hlGroup, int line, int colStart, int colEnd);
 

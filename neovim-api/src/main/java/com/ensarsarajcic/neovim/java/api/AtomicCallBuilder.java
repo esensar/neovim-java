@@ -331,4 +331,69 @@ public final class AtomicCallBuilder implements NeovimApi {
     public CompletableFuture<Integer> createNamespace(String name) {
         return null;
     }
+
+    @Override
+    public CompletableFuture<Void> resizeUIGrid(int width, int height) {
+        return null;
+    }
+
+    @Override
+    public CompletableFuture<Void> setPopupmenuHeight(int height) {
+        return null;
+    }
+
+    @Override
+    public CompletableFuture<Void> inputMouse(Mouse.Button button, Mouse.Action action, String modifier, int grid, int row, int col) {
+        return null;
+    }
+
+    @Override
+    public CompletableFuture<Void> setKeymap(String mode, String lhs, String rhs, Map<String, Boolean> options) {
+        return null;
+    }
+
+    @Override
+    public CompletableFuture<Void> deleteKeymap(String mode, String lhs) {
+        return null;
+    }
+
+    @Override
+    public CompletableFuture<Void> setVimVariable(String name, Object value) {
+        return null;
+    }
+
+    @Override
+    public CompletableFuture<NeovimBufferApi> createBuffer(boolean listed, boolean scratch) {
+        return null;
+    }
+
+    @Override
+    public CompletableFuture<NeovimWindowApi> openWindow(Buffer buffer, boolean enter, Map<String, Object> config) {
+        return null;
+    }
+
+    @Override
+    public CompletableFuture<Boolean> paste(String data, boolean crlf, int phase) {
+        return null;
+    }
+
+    @Override
+    public CompletableFuture<Void> put(List<String> lines, String type, boolean after, boolean follow) {
+        return null;
+    }
+
+    @Override
+    public CompletableFuture<Map<String, Object>> getContext(Map<String, Object> options) {
+        return null;
+    }
+
+    @Override
+    public CompletableFuture<Void> loadContext(Map<String, Object> contextMap) {
+        return null;
+    }
+
+    @Override
+    public CompletableFuture<Void> selectPopupmenuItem(int item, boolean insert, boolean finish, Map<String, Object> options) {
+        return null;
+    }
 }

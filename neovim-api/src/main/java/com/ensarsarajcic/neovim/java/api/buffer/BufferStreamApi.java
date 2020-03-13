@@ -43,7 +43,7 @@ import java.util.concurrent.CompletableFuture;
 /**
  * Implementation of {@link NeovimBufferApi} based on {@link ReactiveRPCStreamer}
  */
-@NeovimApiClient(name = "full_buffer_api", target = 5)
+@NeovimApiClient(name = "full_buffer_api", target = 6)
 public final class BufferStreamApi extends BaseStreamApi implements NeovimBufferApi {
 
     private Buffer model;
@@ -163,6 +163,22 @@ public final class BufferStreamApi extends BaseStreamApi implements NeovimBuffer
     @Override
     public CompletableFuture<List<VimKeyMap>> getKeymap(String mode) {
         return sendWithResponseOfListType(prepareMessage(GET_KEYMAP).addArgument(mode), VimKeyMap.class);
+    }
+
+    @Override
+    public CompletableFuture<Void> setKeymap(String mode, String lhs, String rhs, Map<String, Boolean> options) {
+        return sendWithNoResponse(prepareMessage(SET_KEYMAP)
+                .addArgument(mode)
+                .addArgument(lhs)
+                .addArgument(rhs)
+                .addArgument(options));
+    }
+
+    @Override
+    public CompletableFuture<Void> deleteKeymap(String mode, String lhs) {
+        return sendWithNoResponse(prepareMessage(DEL_KEYMAP)
+                .addArgument(mode)
+                .addArgument(lhs));
     }
 
     @Override

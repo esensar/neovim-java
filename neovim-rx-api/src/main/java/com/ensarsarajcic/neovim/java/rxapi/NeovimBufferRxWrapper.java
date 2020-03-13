@@ -138,6 +138,16 @@ public final class NeovimBufferRxWrapper implements NeovimBufferRxApi {
     }
 
     @Override
+    public Completable setKeymap(String mode, String lhs, String rhs, Map<String, Boolean> options) {
+        return Completable.fromFuture(neovimBufferApi.setKeymap(mode, lhs, rhs, options));
+    }
+
+    @Override
+    public Completable deleteKeymap(String mode, String lhs) {
+        return Completable.fromFuture(neovimBufferApi.deleteKeymap(mode, lhs));
+    }
+
+    @Override
     public Single<Integer> addHighlight(int srcId, String hlGroup, int line, int colStart, int colEnd) {
         return Single.fromFuture(neovimBufferApi.addHighlight(srcId, hlGroup, line, colStart, colEnd));
     }

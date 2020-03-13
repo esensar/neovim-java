@@ -31,6 +31,7 @@ import com.ensarsarajcic.neovim.java.api.window.NeovimWindowApi;
 import io.reactivex.Completable;
 import io.reactivex.Single;
 
+import java.util.Map;
 import java.util.Objects;
 
 public final class NeovimWindowRxWrapper implements NeovimWindowRxApi {
@@ -114,6 +115,16 @@ public final class NeovimWindowRxWrapper implements NeovimWindowRxApi {
     }
 
     @Override
+    public Single<Map<String, Object>> getConfig() {
+        return Single.fromFuture(neovimWindowApi.getConfig());
+    }
+
+    @Override
+    public Completable setConfig(Map<String, Object> config) {
+        return Completable.fromFuture(neovimWindowApi.setConfig(config));
+    }
+
+    @Override
     public Single<NeovimTabpageRxApi> getTabpage() {
         return Single.fromFuture(neovimWindowApi.getTabpage())
                 .map(NeovimTabpageRxWrapper::new);
@@ -127,5 +138,10 @@ public final class NeovimWindowRxWrapper implements NeovimWindowRxApi {
     @Override
     public Single<Boolean> isValid() {
         return Single.fromFuture(neovimWindowApi.isValid());
+    }
+
+    @Override
+    public Completable close(boolean force) {
+        return Completable.fromFuture(neovimWindowApi.close(force));
     }
 }
