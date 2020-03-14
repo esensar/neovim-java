@@ -37,7 +37,7 @@ import java.util.concurrent.Flow;
 /**
  * Interface defining reactive variant of {@link RpcStreamer}
  */
-public interface ReactiveRPCStreamer {
+public interface ReactiveRpcStreamer {
     /**
      * Attaches to given {@link RpcConnection}
      * Connects callbacks to its incoming stream and prepares for writing to outgoing stream

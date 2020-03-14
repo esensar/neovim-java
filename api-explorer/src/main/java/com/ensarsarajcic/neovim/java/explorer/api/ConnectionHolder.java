@@ -29,8 +29,8 @@ import com.ensarsarajcic.neovim.java.api.NeovimStreamApi;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.NeovimJacksonModule;
 import com.ensarsarajcic.neovim.java.corerpc.client.RpcClient;
 import com.ensarsarajcic.neovim.java.corerpc.client.RpcConnection;
-import com.ensarsarajcic.neovim.java.corerpc.reactive.ReactiveRPCClient;
-import com.ensarsarajcic.neovim.java.corerpc.reactive.ReactiveRPCStreamer;
+import com.ensarsarajcic.neovim.java.corerpc.reactive.ReactiveRpcClient;
+import com.ensarsarajcic.neovim.java.corerpc.reactive.ReactiveRpcStreamer;
 
 public final class ConnectionHolder {
 
@@ -40,14 +40,14 @@ public final class ConnectionHolder {
 
     private static RpcConnection connection;
     private static NeovimApi neovimApi;
-    private static ReactiveRPCStreamer reactiveRPCStreamer;
+    private static ReactiveRpcStreamer reactiveRPCStreamer;
     private static String connectedIpPort;
 
     public static void setConnection(RpcConnection rpcConnection) {
         connection = rpcConnection;
     }
 
-    public static ReactiveRPCStreamer getReactiveRPCStreamer() {
+    public static ReactiveRpcStreamer getReactiveRPCStreamer() {
         if (reactiveRPCStreamer == null) {
             synchronized (ConnectionHolder.class) {
                 if (reactiveRPCStreamer == null) {
@@ -55,7 +55,7 @@ public final class ConnectionHolder {
                             .withObjectMapper(NeovimJacksonModule.createNeovimObjectMapper()).build();
                     rpcClient.attach(connection);
 
-                    reactiveRPCStreamer = ReactiveRPCClient.createDefaultInstanceWithCustomStreamer(rpcClient);
+                    reactiveRPCStreamer = ReactiveRpcClient.createDefaultInstanceWithCustomStreamer(rpcClient);
                 }
             }
         }

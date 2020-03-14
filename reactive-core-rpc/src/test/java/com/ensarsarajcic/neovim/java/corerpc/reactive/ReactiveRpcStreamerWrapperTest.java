@@ -60,7 +60,7 @@ public class ReactiveRpcStreamerWrapperTest {
     RpcStreamer rpcStreamer;
 
     @InjectMocks
-    ReactiveRPCStreamerWrapper reactiveRPCStreamerWrapper;
+    ReactiveRpcStreamerWrapper reactiveRPCStreamerWrapper;
 
     @Mock
     InputStream inputStream;

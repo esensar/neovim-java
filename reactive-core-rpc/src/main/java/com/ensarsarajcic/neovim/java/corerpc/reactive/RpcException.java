@@ -31,14 +31,14 @@ import com.ensarsarajcic.neovim.java.corerpc.message.RpcError;
  * <p>
  * It should be thrown when {@link RpcError} is received in communication
  */
-public class RPCException extends Exception {
+public class RpcException extends Exception {
     private RpcError rpcError;
 
     /**
-     * Creates a new {@link RPCException} with given {@link RpcError}
+     * Creates a new {@link RpcException} with given {@link RpcError}
      * @param rpcError error representing this exception
      */
-    public RPCException(RpcError rpcError) {
+    public RpcException(RpcError rpcError) {
         super(rpcError.toString());
         this.rpcError = rpcError;
     }

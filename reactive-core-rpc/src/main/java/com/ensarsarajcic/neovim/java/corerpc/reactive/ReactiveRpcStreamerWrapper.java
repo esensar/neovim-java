@@ -39,7 +39,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
 
 /**
- * Implementation of {@link ReactiveRPCStreamer} relying on a regular {@link RpcStreamer}
+ * Implementation of {@link ReactiveRpcStreamer} relying on a regular {@link RpcStreamer}
  * Provides reactive mappings by just wrapping regular calls in reactive streams
  * <p>
  * It is implemented by delegating all operations to a regular {@link RpcStreamer}, but doing it
@@ -64,8 +64,8 @@ import java.util.function.Supplier;
  *     }
  * </pre>
  */
-public final class ReactiveRPCStreamerWrapper implements ReactiveRPCStreamer {
-    private static final Logger log = LoggerFactory.getLogger(ReactiveRPCStreamerWrapper.class);
+public final class ReactiveRpcStreamerWrapper implements ReactiveRpcStreamer {
+    private static final Logger log = LoggerFactory.getLogger(ReactiveRpcStreamerWrapper.class);
 
     private RpcStreamer rpcStreamer;
     private Executor executor;
@@ -74,29 +74,29 @@ public final class ReactiveRPCStreamerWrapper implements ReactiveRPCStreamer {
     private final SubmissionPublisher<NotificationMessage> notificationMessagePublisher = new SubmissionPublisher<>();
 
     /**
-     * Constructs {@link ReactiveRPCStreamerWrapper} with provided {@link RpcStreamer} and default {@link Executor}
+     * Constructs {@link ReactiveRpcStreamerWrapper} with provided {@link RpcStreamer} and default {@link Executor}
      * @param rpcStreamer {@link RpcStreamer} to use for making calls and listening for notifications/requests
      * @throws NullPointerException if {@link RpcStreamer} is null
      */
-    public ReactiveRPCStreamerWrapper(RpcStreamer rpcStreamer) {
+    public ReactiveRpcStreamerWrapper(RpcStreamer rpcStreamer) {
         this(rpcStreamer, null);
     }
 
     /**
-     * Constructs {@link ReactiveRPCStreamerWrapper} with provided {@link RpcStreamer}
+     * Constructs {@link ReactiveRpcStreamerWrapper} with provided {@link RpcStreamer}
      * and with provided {@link Executor} - it is used only for requests
      * @param rpcStreamer {@link RpcStreamer} to use for making calls and listening for notifications/requests
      * @param executor {@link Executor} to use for creating {@link CompletableFuture} for requests
      * @throws NullPointerException if {@link RpcStreamer} is null
      */
-    public ReactiveRPCStreamerWrapper(RpcStreamer rpcStreamer, Executor executor) {
+    public ReactiveRpcStreamerWrapper(RpcStreamer rpcStreamer, Executor executor) {
         Objects.requireNonNull(rpcStreamer, "rpcStreamer may not be null");
         this.rpcStreamer = rpcStreamer;
         this.executor = executor;
     }
 
     /**
-     * Implemented per {@link ReactiveRPCStreamer#attach(RpcConnection)} specification
+     * Implemented per {@link ReactiveRpcStreamer#attach(RpcConnection)} specification
      * Attaches underlying {@link RpcStreamer} and also attaches own callbacks for requests and notifications
      * to be able to provide them as {@link Flow} (for {@link #requestsFlow()} and {@link #notificationsFlow()}
      */
@@ -108,7 +108,7 @@ public final class ReactiveRPCStreamerWrapper implements ReactiveRPCStreamer {
     }
 
     /**
-     * Implemented per {@link ReactiveRPCStreamer#response(RequestMessage.Builder)} specification
+     * Implemented per {@link ReactiveRpcStreamer#response(RequestMessage.Builder)} specification
      * Uses underlying {@link RpcStreamer} to send the message and awaits a response from it,
      * creating a {@link CompletableFuture} from it
      * <p>
@@ -125,7 +125,7 @@ public final class ReactiveRPCStreamerWrapper implements ReactiveRPCStreamer {
     }
 
     /**
-     * Implemented per {@link ReactiveRPCStreamer#requestsFlow()} specification
+     * Implemented per {@link ReactiveRpcStreamer#requestsFlow()} specification
      * Provides requests from underlying {@link RpcStreamer} in a {@link Flow}
      */
     @Override
@@ -134,7 +134,7 @@ public final class ReactiveRPCStreamerWrapper implements ReactiveRPCStreamer {
     }
 
     /**
-     * Implemented per {@link ReactiveRPCStreamer#notificationsFlow()} specification
+     * Implemented per {@link ReactiveRpcStreamer#notificationsFlow()} specification
      * Provides notifications from underlying {@link RpcStreamer} in a {@link Flow}
      */
     @Override
@@ -158,7 +158,7 @@ public final class ReactiveRPCStreamerWrapper implements ReactiveRPCStreamer {
                 countDownLatch.await();
                 if (responseMessage.get().getError() != null) {
                     log.info("Received an error response: {}", responseMessage);
-                    throw new CompletionException(new RPCException(responseMessage.get().getError()));
+                    throw new CompletionException(new RpcException(responseMessage.get().getError()));
                 }
                 return responseMessage.get();
             } catch (IOException | InterruptedException e) {

@@ -31,17 +31,17 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class RPCExceptionTest {
+public class RpcExceptionTest {
 
     @Test
     public void testConstructorAndToStringNotCrashing() {
-        new RPCException(new RpcError(1, "message")).toString();
+        new RpcException(new RpcError(1, "message")).toString();
     }
 
     @Test
     public void testStoresRPCError() {
         var error = new RpcError(1, "msg");
-        assertThat(new RPCException(error).toString(), new BaseMatcher<>() {
+        assertThat(new RpcException(error).toString(), new BaseMatcher<>() {
             @Override
             public boolean matches(Object o) {
                 return o.toString().contains("msg");

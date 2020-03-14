@@ -43,10 +43,10 @@ import static org.mockito.Mockito.verify;
 public class ReactiveRPCClientTest {
 
     @Mock
-    ReactiveRPCStreamer rpcStreamer;
+    ReactiveRpcStreamer rpcStreamer;
 
     @InjectMocks
-    ReactiveRPCClient rpcClient;
+    ReactiveRpcClient rpcClient;
 
     @Test
     public void delegatesToUnderlyingRpcStreamer() throws IOException {
@@ -58,14 +58,14 @@ public class ReactiveRPCClientTest {
     @Test
     public void testDefaultFactories() {
         // Create should create new instances
-        var rpc1 = ReactiveRPCClient.createDefaultInstance();
-        var rpc2 = ReactiveRPCClient.createDefaultInstance();
+        var rpc1 = ReactiveRpcClient.createDefaultInstance();
+        var rpc2 = ReactiveRpcClient.createDefaultInstance();
 
         assertNotEquals(rpc1, rpc2);
 
         // Get should return same instances
-        var rpc3 = ReactiveRPCClient.getDefaultInstance();
-        var rpc4 = ReactiveRPCClient.getDefaultInstance();
+        var rpc3 = ReactiveRpcClient.getDefaultInstance();
+        var rpc4 = ReactiveRpcClient.getDefaultInstance();
 
         assertEquals(rpc3, rpc4);
 
@@ -73,32 +73,32 @@ public class ReactiveRPCClientTest {
         assertNotEquals(rpc1, rpc3);
         assertNotEquals(rpc2, rpc3);
 
-        var rpc5 = ReactiveRPCClient.createDefaultInstance();
+        var rpc5 = ReactiveRpcClient.createDefaultInstance();
         assertNotEquals(rpc5, rpc4);
     }
 
     @Test
     public void testCustomFactories() throws IOException {
         // Create with custom reactive streamer should delegate to custom streamer
-        var reactiveRPCStreamer = Mockito.mock(ReactiveRPCStreamer.class);
-        var rpc1 = ReactiveRPCClient.createInstanceWithCustomReactiveStreamer(reactiveRPCStreamer);
+        var reactiveRPCStreamer = Mockito.mock(ReactiveRpcStreamer.class);
+        var rpc1 = ReactiveRpcClient.createInstanceWithCustomReactiveStreamer(reactiveRPCStreamer);
         validateDelegates(rpc1, reactiveRPCStreamer);
         // And should not duplicate instances
-        var rpc2 = ReactiveRPCClient.createInstanceWithCustomReactiveStreamer(reactiveRPCStreamer);
+        var rpc2 = ReactiveRpcClient.createInstanceWithCustomReactiveStreamer(reactiveRPCStreamer);
 
         assertNotEquals(rpc1, rpc2);
 
         // Create with custom streamer should use wrapper and delegate down to the streamer
         var rpcStreamer = Mockito.mock(RpcStreamer.class);
-        var rpc3 = ReactiveRPCClient.createDefaultInstanceWithCustomStreamer(rpcStreamer);
+        var rpc3 = ReactiveRpcClient.createDefaultInstanceWithCustomStreamer(rpcStreamer);
 
         // And should not duplicate
-        var rpc4 = ReactiveRPCClient.createDefaultInstanceWithCustomStreamer(rpcStreamer);
+        var rpc4 = ReactiveRpcClient.createDefaultInstanceWithCustomStreamer(rpcStreamer);
 
         assertNotEquals(rpc3, rpc4);
     }
 
-    private void validateDelegates(ReactiveRPCClient rpcClient, ReactiveRPCStreamer rpcStreamer) throws IOException {
+    private void validateDelegates(ReactiveRpcClient rpcClient, ReactiveRpcStreamer rpcStreamer) throws IOException {
         var rpcConnection = Mockito.mock(RpcConnection.class);
         rpcClient.attach(rpcConnection);
         verify(rpcStreamer).attach(rpcConnection);

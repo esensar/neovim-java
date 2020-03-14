@@ -25,17 +25,13 @@
 package com.ensarsarajcic.neovim.java.api;
 
 import com.ensarsarajcic.neovim.java.api.types.msgpack.BaseCustomIdType;
-import com.ensarsarajcic.neovim.java.api.types.msgpack.NeovimJacksonModule;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.NeovimTypeDeserializer;
 import com.ensarsarajcic.neovim.java.api.util.ObjectMappers;
 import com.ensarsarajcic.neovim.java.corerpc.message.RequestMessage;
 import com.ensarsarajcic.neovim.java.corerpc.message.ResponseMessage;
-import com.ensarsarajcic.neovim.java.corerpc.reactive.ReactiveRPCStreamer;
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonParser;
+import com.ensarsarajcic.neovim.java.corerpc.reactive.ReactiveRpcStreamer;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.msgpack.jackson.dataformat.MessagePackFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,10 +49,10 @@ import java.util.concurrent.CompletionException;
 public abstract class BaseStreamApi {
     private static final Logger log = LoggerFactory.getLogger(NeovimTypeDeserializer.class);
 
-    protected ReactiveRPCStreamer reactiveRPCStreamer;
+    protected ReactiveRpcStreamer reactiveRPCStreamer;
     protected ObjectMapper objectMapper;
 
-    public BaseStreamApi(ReactiveRPCStreamer reactiveRPCStreamer) {
+    public BaseStreamApi(ReactiveRpcStreamer reactiveRPCStreamer) {
         Objects.requireNonNull(reactiveRPCStreamer, "reactiveRpcStreamer is required for stream API");
         this.reactiveRPCStreamer = reactiveRPCStreamer;
         this.objectMapper = ObjectMappers.defaultNeovimMapper();

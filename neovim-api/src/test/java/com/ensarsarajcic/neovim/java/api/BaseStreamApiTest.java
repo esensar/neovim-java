@@ -27,8 +27,8 @@ package com.ensarsarajcic.neovim.java.api;
 import com.ensarsarajcic.neovim.java.corerpc.message.RpcError;
 import com.ensarsarajcic.neovim.java.corerpc.message.RequestMessage;
 import com.ensarsarajcic.neovim.java.corerpc.message.ResponseMessage;
-import com.ensarsarajcic.neovim.java.corerpc.reactive.RPCException;
-import com.ensarsarajcic.neovim.java.corerpc.reactive.ReactiveRPCStreamer;
+import com.ensarsarajcic.neovim.java.corerpc.reactive.RpcException;
+import com.ensarsarajcic.neovim.java.corerpc.reactive.ReactiveRpcStreamer;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.runner.RunWith;
@@ -53,7 +53,7 @@ import static org.mockito.Mockito.verify;
 public class BaseStreamApiTest {
 
     @Mock
-    protected ReactiveRPCStreamer reactiveRPCStreamer;
+    protected ReactiveRpcStreamer reactiveRPCStreamer;
 
     protected void assertNormalBehavior(
             Supplier<CompletableFuture<ResponseMessage>> preparedResponse,
@@ -81,7 +81,7 @@ public class BaseStreamApiTest {
             Supplier<CompletableFuture<?>> completableFutureSupplier,
             Consumer<RequestMessage> requestAsserter) throws InterruptedException {
         var errorArgumentCaptor = prepareArgumentCaptor(
-                CompletableFuture.failedFuture(new RPCException(new RpcError(1, "error"))));
+                CompletableFuture.failedFuture(new RpcException(new RpcError(1, "error"))));
         var errorResult = completableFutureSupplier.get();
         var errorResponse = errorArgumentCaptor.getValue().build();
         requestAsserter.accept(errorResponse);
@@ -103,7 +103,7 @@ public class BaseStreamApiTest {
             completableFuture.get();
             fail("Should have thrown an error");
         } catch (ExecutionException ex) {
-            if (!(ex.getCause() instanceof RPCException)) {
+            if (!(ex.getCause() instanceof RpcException)) {
                 fail("Should have been an RCP Exception");
             }
         }

@@ -34,11 +34,11 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Flow;
 
 /**
- * Wrapper around {@link ReactiveRPCStreamer}
+ * Wrapper around {@link ReactiveRpcStreamer}
  * This class should be used for communication.
  * It provides convenience factory methods
  * <p>
- * All calls are passed down to underlying {@link ReactiveRPCStreamer}
+ * All calls are passed down to underlying {@link ReactiveRpcStreamer}
  * <p>
  * Examples:
  * <pre>
@@ -47,60 +47,60 @@ import java.util.concurrent.Flow;
  *     ReactiveRPCStreamer defaultClient = ReactiveRPCClient.createDefaultInstance(); // new instance with same config as shared singleton
  * </pre>
  */
-public final class ReactiveRPCClient implements ReactiveRPCStreamer {
+public final class ReactiveRpcClient implements ReactiveRpcStreamer {
 
-    private static ReactiveRPCClient defaultSharedInstance;
+    private static ReactiveRpcClient defaultSharedInstance;
 
-    private ReactiveRPCStreamer reactiveRPCStreamer;
+    private ReactiveRpcStreamer reactiveRPCStreamer;
 
-    private ReactiveRPCClient(ReactiveRPCStreamer reactiveRPCStreamer) {
+    private ReactiveRpcClient(ReactiveRpcStreamer reactiveRPCStreamer) {
         Objects.requireNonNull(reactiveRPCStreamer, "reactiveRPCStreamer is required for all operations");
         this.reactiveRPCStreamer = reactiveRPCStreamer;
     }
 
     /**
-     * Creates a default instance of {@link ReactiveRPCClient}
+     * Creates a default instance of {@link ReactiveRpcClient}
      *
-     * @return <b>New instance</b> of {@link ReactiveRPCClient}
+     * @return <b>New instance</b> of {@link ReactiveRpcClient}
      */
-    public static ReactiveRPCClient createDefaultInstance() {
-        return new ReactiveRPCClient(createDefaultReactiveRPCStreamer());
+    public static ReactiveRpcClient createDefaultInstance() {
+        return new ReactiveRpcClient(createDefaultReactiveRPCStreamer());
     }
 
     /**
-     * Creates a new instance of {@link ReactiveRPCClient} based on custom {@link ReactiveRPCStreamer}
+     * Creates a new instance of {@link ReactiveRpcClient} based on custom {@link ReactiveRpcStreamer}
      *
-     * @return <b>New instance</b> of {@link ReactiveRPCClient}
+     * @return <b>New instance</b> of {@link ReactiveRpcClient}
      */
-    public static ReactiveRPCClient createInstanceWithCustomReactiveStreamer(ReactiveRPCStreamer reactiveRPCStreamer) {
-        return new ReactiveRPCClient(reactiveRPCStreamer);
+    public static ReactiveRpcClient createInstanceWithCustomReactiveStreamer(ReactiveRpcStreamer reactiveRPCStreamer) {
+        return new ReactiveRpcClient(reactiveRPCStreamer);
     }
 
     /**
-     * Creates a new instance of {@link ReactiveRPCClient} based on {@link ReactiveRPCStreamerWrapper} with custom {@link RpcStreamer}
+     * Creates a new instance of {@link ReactiveRpcClient} based on {@link ReactiveRpcStreamerWrapper} with custom {@link RpcStreamer}
      *
-     * @return <b>New instance</b> of {@link ReactiveRPCClient}
+     * @return <b>New instance</b> of {@link ReactiveRpcClient}
      */
-    public static ReactiveRPCClient createDefaultInstanceWithCustomStreamer(RpcStreamer rpcStreamer) {
-        return new ReactiveRPCClient(createDefaultReactiveRPCStreamer(rpcStreamer));
+    public static ReactiveRpcClient createDefaultInstanceWithCustomStreamer(RpcStreamer rpcStreamer) {
+        return new ReactiveRpcClient(createDefaultReactiveRPCStreamer(rpcStreamer));
     }
 
-    private static ReactiveRPCStreamer createDefaultReactiveRPCStreamer(RpcStreamer rpcStreamer) {
-        return new ReactiveRPCStreamerWrapper(rpcStreamer);
+    private static ReactiveRpcStreamer createDefaultReactiveRPCStreamer(RpcStreamer rpcStreamer) {
+        return new ReactiveRpcStreamerWrapper(rpcStreamer);
     }
 
-    private static ReactiveRPCStreamer createDefaultReactiveRPCStreamer() {
-        return new ReactiveRPCStreamerWrapper(RpcClient.createDefaultAsyncInstance());
+    private static ReactiveRpcStreamer createDefaultReactiveRPCStreamer() {
+        return new ReactiveRpcStreamerWrapper(RpcClient.createDefaultAsyncInstance());
     }
 
     /**
-     * Takes a default instance (shared - singleton) of {@link ReactiveRPCClient}
+     * Takes a default instance (shared - singleton) of {@link ReactiveRpcClient}
      *
-     * @return <b>Default shared instance</b> of {@link ReactiveRPCClient}
+     * @return <b>Default shared instance</b> of {@link ReactiveRpcClient}
      */
-    public static ReactiveRPCClient getDefaultInstance() {
+    public static ReactiveRpcClient getDefaultInstance() {
         if (defaultSharedInstance == null) {
-            synchronized (ReactiveRPCClient.class) {
+            synchronized (ReactiveRpcClient.class) {
                 if (defaultSharedInstance == null) {
                     defaultSharedInstance = createDefaultInstance();
                 }
@@ -111,7 +111,7 @@ public final class ReactiveRPCClient implements ReactiveRPCStreamer {
     }
 
     /**
-     * Calls underlying {@link ReactiveRPCStreamer}
+     * Calls underlying {@link ReactiveRpcStreamer}
      *
      * @param rpcConnection connection to attach to
      */
@@ -121,7 +121,7 @@ public final class ReactiveRPCClient implements ReactiveRPCStreamer {
     }
 
     /**
-     * Calls underlying {@link ReactiveRPCStreamer}
+     * Calls underlying {@link ReactiveRpcStreamer}
      *
      * @param requestMessage {@link RequestMessage.Builder} of message to send
      * @return {@link CompletableFuture} with response
@@ -132,7 +132,7 @@ public final class ReactiveRPCClient implements ReactiveRPCStreamer {
     }
 
     /**
-     * Calls underlying {@link ReactiveRPCStreamer}
+     * Calls underlying {@link ReactiveRpcStreamer}
      *
      * @return {@link Flow.Publisher} of request messages
      */
@@ -142,7 +142,7 @@ public final class ReactiveRPCClient implements ReactiveRPCStreamer {
     }
 
     /**
-     * Calls underlying {@link ReactiveRPCStreamer}
+     * Calls underlying {@link ReactiveRpcStreamer}
      *
      * @return {@link Flow.Publisher} of notifications messages
      */
