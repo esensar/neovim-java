@@ -24,7 +24,7 @@
 
 package com.ensarsarajcic.neovim.java.explorer.test;
 
-import com.ensarsarajcic.neovim.java.corerpc.message.RPCError;
+import com.ensarsarajcic.neovim.java.corerpc.message.RpcError;
 import com.ensarsarajcic.neovim.java.corerpc.message.RequestMessage;
 import com.ensarsarajcic.neovim.java.corerpc.message.ResponseMessage;
 import com.ensarsarajcic.neovim.java.corerpc.reactive.RPCException;
@@ -100,7 +100,7 @@ public final class TestFunctionController {
                 } else {
                     return new ResponseMessage(
                             0,
-                            new RPCError(-1000, "LOCAL ERROR: " + throwable.toString()),
+                            new RpcError(-1000, "LOCAL ERROR: " + throwable.toString()),
                             null);
                 }
             }).thenAccept(responseMessage -> resultArea.setText(responseMessage.toString()));

@@ -77,20 +77,20 @@ public final class ReactiveRPCClient implements ReactiveRPCStreamer {
     }
 
     /**
-     * Creates a new instance of {@link ReactiveRPCClient} based on {@link ReactiveRPCStreamerWrapper} with custom {@link RPCStreamer}
+     * Creates a new instance of {@link ReactiveRPCClient} based on {@link ReactiveRPCStreamerWrapper} with custom {@link RpcStreamer}
      *
      * @return <b>New instance</b> of {@link ReactiveRPCClient}
      */
-    public static ReactiveRPCClient createDefaultInstanceWithCustomStreamer(RPCStreamer rpcStreamer) {
+    public static ReactiveRPCClient createDefaultInstanceWithCustomStreamer(RpcStreamer rpcStreamer) {
         return new ReactiveRPCClient(createDefaultReactiveRPCStreamer(rpcStreamer));
     }
 
-    private static ReactiveRPCStreamer createDefaultReactiveRPCStreamer(RPCStreamer rpcStreamer) {
+    private static ReactiveRPCStreamer createDefaultReactiveRPCStreamer(RpcStreamer rpcStreamer) {
         return new ReactiveRPCStreamerWrapper(rpcStreamer);
     }
 
     private static ReactiveRPCStreamer createDefaultReactiveRPCStreamer() {
-        return new ReactiveRPCStreamerWrapper(RPCClient.createDefaultAsyncInstance());
+        return new ReactiveRPCStreamerWrapper(RpcClient.createDefaultAsyncInstance());
     }
 
     /**
@@ -116,7 +116,7 @@ public final class ReactiveRPCClient implements ReactiveRPCStreamer {
      * @param rpcConnection connection to attach to
      */
     @Override
-    public void attach(RPCConnection rpcConnection) {
+    public void attach(RpcConnection rpcConnection) {
         reactiveRPCStreamer.attach(rpcConnection);
     }
 

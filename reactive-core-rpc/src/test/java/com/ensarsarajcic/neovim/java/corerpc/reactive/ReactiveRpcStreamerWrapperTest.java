@@ -24,9 +24,9 @@
 
 package com.ensarsarajcic.neovim.java.corerpc.reactive;
 
-import com.ensarsarajcic.neovim.java.corerpc.client.RPCConnection;
-import com.ensarsarajcic.neovim.java.corerpc.client.RPCListener;
-import com.ensarsarajcic.neovim.java.corerpc.client.RPCStreamer;
+import com.ensarsarajcic.neovim.java.corerpc.client.RpcConnection;
+import com.ensarsarajcic.neovim.java.corerpc.client.RpcListener;
+import com.ensarsarajcic.neovim.java.corerpc.client.RpcStreamer;
 import com.ensarsarajcic.neovim.java.corerpc.message.NotificationMessage;
 import com.ensarsarajcic.neovim.java.corerpc.message.RequestMessage;
 import com.ensarsarajcic.neovim.java.corerpc.message.ResponseMessage;
@@ -55,9 +55,9 @@ import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
-public class ReactiveRPCStreamerWrapperTest {
+public class ReactiveRpcStreamerWrapperTest {
     @Mock
-    RPCStreamer rpcStreamer;
+    RpcStreamer rpcStreamer;
 
     @InjectMocks
     ReactiveRPCStreamerWrapper reactiveRPCStreamerWrapper;
@@ -68,14 +68,14 @@ public class ReactiveRPCStreamerWrapperTest {
     @Mock
     OutputStream outputStream;
 
-    private ArgumentCaptor<RPCListener.RequestCallback> requestCallbackArgumentCaptor = ArgumentCaptor.forClass(RPCListener.RequestCallback.class);
-    private ArgumentCaptor<RPCListener.NotificationCallback> notificationCallbackArgumentCaptor = ArgumentCaptor.forClass(RPCListener.NotificationCallback.class);
+    private ArgumentCaptor<RpcListener.RequestCallback> requestCallbackArgumentCaptor = ArgumentCaptor.forClass(RpcListener.RequestCallback.class);
+    private ArgumentCaptor<RpcListener.NotificationCallback> notificationCallbackArgumentCaptor = ArgumentCaptor.forClass(RpcListener.NotificationCallback.class);
 
-    private RPCConnection connection;
+    private RpcConnection connection;
 
     @Before
     public void setUp() throws Exception {
-        connection = new RPCConnection() {
+        connection = new RpcConnection() {
             @Override
             public InputStream getIncomingStream() {
                 return inputStream;
@@ -100,7 +100,7 @@ public class ReactiveRPCStreamerWrapperTest {
         verifyAndAttachCallbacks();
 
         doAnswer(invocationOnMock -> {
-            ((RPCListener.ResponseCallback) invocationOnMock.getArguments()[1]).responseReceived(1, new ResponseMessage.Builder("test").build());
+            ((RpcListener.ResponseCallback) invocationOnMock.getArguments()[1]).responseReceived(1, new ResponseMessage.Builder("test").build());
             return null;
         }).when(rpcStreamer).send(any(), any());
         reactiveRPCStreamerWrapper.response(new RequestMessage.Builder("test")).get();
@@ -113,7 +113,7 @@ public class ReactiveRPCStreamerWrapperTest {
         var message = new RequestMessage.Builder("test");
         var preparedResponse = new ResponseMessage.Builder("test").withId(25).build();
         doAnswer(invocationOnMock -> {
-            RPCListener.ResponseCallback responseCallback = (RPCListener.ResponseCallback) invocationOnMock.getArguments()[1];
+            RpcListener.ResponseCallback responseCallback = (RpcListener.ResponseCallback) invocationOnMock.getArguments()[1];
             responseCallback.responseReceived(25, preparedResponse);
             return null;
         }).when(rpcStreamer).send(eq(message), any());
@@ -183,8 +183,8 @@ public class ReactiveRPCStreamerWrapperTest {
     }
 
     private void verifyAndAttachCallbacks() {
-        requestCallbackArgumentCaptor = ArgumentCaptor.forClass(RPCListener.RequestCallback.class);
-        notificationCallbackArgumentCaptor = ArgumentCaptor.forClass(RPCListener.NotificationCallback.class);
+        requestCallbackArgumentCaptor = ArgumentCaptor.forClass(RpcListener.RequestCallback.class);
+        notificationCallbackArgumentCaptor = ArgumentCaptor.forClass(RpcListener.NotificationCallback.class);
         verify(rpcStreamer).addRequestCallback(requestCallbackArgumentCaptor.capture());
         verify(rpcStreamer).addNotificationCallback(notificationCallbackArgumentCaptor.capture());
     }

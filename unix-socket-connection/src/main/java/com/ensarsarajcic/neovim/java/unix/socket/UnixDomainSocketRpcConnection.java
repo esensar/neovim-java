@@ -24,7 +24,7 @@
 
 package com.ensarsarajcic.neovim.java.unix.socket;
 
-import com.ensarsarajcic.neovim.java.corerpc.client.RPCConnection;
+import com.ensarsarajcic.neovim.java.corerpc.client.RpcConnection;
 import org.scalasbt.ipcsocket.UnixDomainSocket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,7 +36,7 @@ import java.io.OutputStream;
 import java.util.Objects;
 
 /**
- * Simple implementation of {@link RPCConnection} based on a unix domain socket
+ * Simple implementation of {@link RpcConnection} based on a unix domain socket
  * <p>
  * This allows connection and communication via unix domain socket/windows named pipe
  * It is a very simple implementation and it just passes down calls to underlying {@link UnixDomainSocket}
@@ -54,20 +54,20 @@ import java.util.Objects;
  *     }
  * </pre>
  */
-public final class UnixDomainSocketRPCConnection implements RPCConnection {
-    private static final Logger log = LoggerFactory.getLogger(UnixDomainSocketRPCConnection.class);
+public final class UnixDomainSocketRpcConnection implements RpcConnection {
+    private static final Logger log = LoggerFactory.getLogger(UnixDomainSocketRpcConnection.class);
 
     private UnixDomainSocket unixDomainSocket;
 
     /**
-     * Creates a new {@link UnixDomainSocketRPCConnection} connected to the file on given path
+     * Creates a new {@link UnixDomainSocketRpcConnection} connected to the file on given path
      * It uses input/output stream provided by {@link UnixDomainSocket} created for given file
      *
      * @param path file to use as unix domain socket
      * @throws NullPointerException if path is null
      * @throws RuntimeException     if socket can't be open for given path
      */
-    public UnixDomainSocketRPCConnection(File path) {
+    public UnixDomainSocketRpcConnection(File path) {
         Objects.requireNonNull(path, "path is required to make connection");
         try {
             this.unixDomainSocket = new UnixDomainSocket(path.getPath());

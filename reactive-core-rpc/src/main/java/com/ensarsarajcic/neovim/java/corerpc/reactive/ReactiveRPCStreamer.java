@@ -24,8 +24,9 @@
 
 package com.ensarsarajcic.neovim.java.corerpc.reactive;
 
-import com.ensarsarajcic.neovim.java.corerpc.client.RPCConnection;
-import com.ensarsarajcic.neovim.java.corerpc.client.RPCListener;
+import com.ensarsarajcic.neovim.java.corerpc.client.RpcConnection;
+import com.ensarsarajcic.neovim.java.corerpc.client.RpcListener;
+import com.ensarsarajcic.neovim.java.corerpc.client.RpcStreamer;
 import com.ensarsarajcic.neovim.java.corerpc.message.NotificationMessage;
 import com.ensarsarajcic.neovim.java.corerpc.message.RequestMessage;
 import com.ensarsarajcic.neovim.java.corerpc.message.ResponseMessage;
@@ -34,25 +35,25 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Flow;
 
 /**
- * Interface defining reactive variant of {@link com.ensarsarajcic.neovim.java.corerpc.client.RPCStreamer}
+ * Interface defining reactive variant of {@link RpcStreamer}
  */
 public interface ReactiveRPCStreamer {
     /**
-     * Attaches to given {@link RPCConnection}
+     * Attaches to given {@link RpcConnection}
      * Connects callbacks to its incoming stream and prepares for writing to outgoing stream
      *
      * @param rpcConnection connection to attach to
      */
-    void attach(RPCConnection rpcConnection);
+    void attach(RpcConnection rpcConnection);
 
     /**
      * Reactive variant of
-     * {@link com.ensarsarajcic.neovim.java.corerpc.client.RPCStreamer#send(RequestMessage.Builder)}
+     * {@link RpcStreamer#send(RequestMessage.Builder)}
      * which uses {@link CompletableFuture} instead of
-     * {@link com.ensarsarajcic.neovim.java.corerpc.client.RPCListener.ResponseCallback}
+     * {@link RpcListener.ResponseCallback}
      *
      * @param requestMessage {@link RequestMessage.Builder} of message to send
-     * @see com.ensarsarajcic.neovim.java.corerpc.client.RPCStreamer#send(RequestMessage.Builder, RPCListener.ResponseCallback)
+     * @see RpcStreamer#send(RequestMessage.Builder, RpcListener.ResponseCallback)
      */
     CompletableFuture<ResponseMessage> response(RequestMessage.Builder requestMessage);
 

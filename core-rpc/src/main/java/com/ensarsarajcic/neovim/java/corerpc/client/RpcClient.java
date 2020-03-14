@@ -36,11 +36,11 @@ import java.util.Objects;
 import java.util.concurrent.*;
 
 /**
- * Wrapper around {@link RPCStreamer}
+ * Wrapper around {@link RpcStreamer}
  * This class should be used for communication.
  * It provides convenience factory methods
  * <p>
- * All calls are passed down to underlying {@link RPCStreamer}
+ * All calls are passed down to underlying {@link RpcStreamer}
  * <p>
  * Examples:
  * <pre>
@@ -63,15 +63,15 @@ import java.util.concurrent.*;
  *          .build();
  * </pre>
  */
-public final class RPCClient implements RPCStreamer {
+public final class RpcClient implements RpcStreamer {
 
     private static ObjectMapper defaultObjectMapper;
     private static ExecutorService defaultExecutorService;
-    private static RPCClient defaultSharedInstance;
+    private static RpcClient defaultSharedInstance;
 
-    private RPCStreamer rpcStreamer;
+    private RpcStreamer rpcStreamer;
 
-    private RPCClient(RPCStreamer rpcStreamer) {
+    private RpcClient(RpcStreamer rpcStreamer) {
         Objects.requireNonNull(rpcStreamer, "rpcStreamer is required for all operations");
         this.rpcStreamer = rpcStreamer;
     }
@@ -85,7 +85,7 @@ public final class RPCClient implements RPCStreamer {
 
     private static ObjectMapper getDefaultObjectMapper() {
         if (defaultObjectMapper == null) {
-            synchronized (RPCClient.class) {
+            synchronized (RpcClient.class) {
                 if (defaultObjectMapper == null) {
                     defaultObjectMapper = createDefaultObjectMapper();
                 }
@@ -107,7 +107,7 @@ public final class RPCClient implements RPCStreamer {
 
     private static ExecutorService getDefaultExecutorService() {
         if (defaultExecutorService == null) {
-            synchronized (RPCClient.class) {
+            synchronized (RpcClient.class) {
                 if (defaultExecutorService == null) {
                     defaultExecutorService = createDefaultExecutorService();
                 }
@@ -117,55 +117,55 @@ public final class RPCClient implements RPCStreamer {
         return defaultExecutorService;
     }
 
-    private static RPCSender createAsyncRPCSender(ExecutorService executorService, ObjectMapper objectMapper) {
-        return new AsyncRPCSender(executorService, objectMapper);
+    private static RpcSender createAsyncRPCSender(ExecutorService executorService, ObjectMapper objectMapper) {
+        return new AsyncRpcSender(executorService, objectMapper);
     }
 
-    private static RPCSender createDefaultAsyncRPCSender() {
+    private static RpcSender createDefaultAsyncRPCSender() {
         return createAsyncRPCSender(getDefaultExecutorService(), getDefaultObjectMapper());
     }
 
-    private static RPCListener createAsyncRPCListener(ExecutorService executorService, ObjectMapper objectMapper) {
-        return new BackgroundRPCListener(executorService, objectMapper);
+    private static RpcListener createAsyncRPCListener(ExecutorService executorService, ObjectMapper objectMapper) {
+        return new BackgroundRpcListener(executorService, objectMapper);
     }
 
-    private static RPCListener createDefaultAsyncRPCListener() {
+    private static RpcListener createDefaultAsyncRPCListener() {
         return createAsyncRPCListener(getDefaultExecutorService(), getDefaultObjectMapper());
     }
 
-    private static RPCStreamer createDefaultAsyncRPCStreamer() {
+    private static RpcStreamer createDefaultAsyncRPCStreamer() {
         return createRPCStreamer(createDefaultAsyncRPCSender(), createDefaultAsyncRPCListener());
     }
 
-    private static RPCStreamer createDefaultAsyncRPCStreamer(ExecutorService executorService, ObjectMapper objectMapper) {
+    private static RpcStreamer createDefaultAsyncRPCStreamer(ExecutorService executorService, ObjectMapper objectMapper) {
         return createRPCStreamer(createAsyncRPCSender(executorService, objectMapper),
                 createAsyncRPCListener(executorService, objectMapper));
     }
 
-    private static RPCStreamer createRPCStreamer(RPCSender rpcSender, RPCListener rpcListener) {
+    private static RpcStreamer createRPCStreamer(RpcSender rpcSender, RpcListener rpcListener) {
         return new PackStream(rpcSender, rpcListener);
     }
 
     /**
-     * Creates a default instance of {@link RPCClient} based on:
+     * Creates a default instance of {@link RpcClient} based on:
      * * {@link PackStream} for two-way communication
-     * * {@link AsyncRPCSender} for sending data
-     * * {@link BackgroundRPCListener} for receiving data
+     * * {@link AsyncRpcSender} for sending data
+     * * {@link BackgroundRpcListener} for receiving data
      *
-     * @return <b>New instance</b> of {@link RPCClient}
+     * @return <b>New instance</b> of {@link RpcClient}
      */
-    public static RPCClient createDefaultAsyncInstance() {
-        return new RPCClient(createDefaultAsyncRPCStreamer());
+    public static RpcClient createDefaultAsyncInstance() {
+        return new RpcClient(createDefaultAsyncRPCStreamer());
     }
 
     /**
-     * Takes a default instance (shared - singleton) of {@link RPCClient}
+     * Takes a default instance (shared - singleton) of {@link RpcClient}
      *
-     * @return <b>Default shared instance</b> of {@link RPCClient}
+     * @return <b>Default shared instance</b> of {@link RpcClient}
      */
-    public static RPCClient getDefaultAsyncInstance() {
+    public static RpcClient getDefaultAsyncInstance() {
         if (defaultSharedInstance == null) {
-            synchronized (RPCClient.class) {
+            synchronized (RpcClient.class) {
                 if (defaultSharedInstance == null) {
                     defaultSharedInstance = createDefaultAsyncInstance();
                 }
@@ -176,20 +176,20 @@ public final class RPCClient implements RPCStreamer {
     }
 
     /**
-     * Calls underlying {@link RPCStreamer}
+     * Calls underlying {@link RpcStreamer}
      *
      * @param rpcConnection connection to attach to
      */
     @Override
-    public void attach(RPCConnection rpcConnection) {
+    public void attach(RpcConnection rpcConnection) {
         rpcStreamer.attach(rpcConnection);
     }
 
     /**
-     * Calls underlying {@link RPCStreamer}
+     * Calls underlying {@link RpcStreamer}
      *
      * @param message message to send
-     * @throws IOException when underlying {@link RPCStreamer} throws
+     * @throws IOException when underlying {@link RpcStreamer} throws
      */
     @Override
     public void send(Message message) throws IOException {
@@ -197,10 +197,10 @@ public final class RPCClient implements RPCStreamer {
     }
 
     /**
-     * Calls underlying {@link RPCStreamer}
+     * Calls underlying {@link RpcStreamer}
      *
      * @param requestMessage {@link RequestMessage.Builder} of message to send
-     * @throws IOException when underlying {@link RPCStreamer} throws
+     * @throws IOException when underlying {@link RpcStreamer} throws
      */
     @Override
     public void send(RequestMessage.Builder requestMessage) throws IOException {
@@ -208,59 +208,59 @@ public final class RPCClient implements RPCStreamer {
     }
 
     /**
-     * Calls underlying {@link RPCStreamer}
+     * Calls underlying {@link RpcStreamer}
      *
      * @param requestMessage   {@link RequestMessage.Builder} of message to send
-     * @param responseCallback {@link RPCListener.ResponseCallback} to be called when response arrives
-     * @throws IOException when underlying {@link RPCStreamer} throws
+     * @param responseCallback {@link RpcListener.ResponseCallback} to be called when response arrives
+     * @throws IOException when underlying {@link RpcStreamer} throws
      */
     @Override
-    public void send(RequestMessage.Builder requestMessage, RPCListener.ResponseCallback responseCallback) throws IOException {
+    public void send(RequestMessage.Builder requestMessage, RpcListener.ResponseCallback responseCallback) throws IOException {
         rpcStreamer.send(requestMessage, responseCallback);
     }
 
     /**
-     * Calls underlying {@link RPCStreamer}
+     * Calls underlying {@link RpcStreamer}
      *
-     * @param requestCallback {@link RPCListener.RequestCallback} to add
+     * @param requestCallback {@link RpcListener.RequestCallback} to add
      */
     @Override
-    public void addRequestCallback(RPCListener.RequestCallback requestCallback) {
+    public void addRequestCallback(RpcListener.RequestCallback requestCallback) {
         rpcStreamer.addRequestCallback(requestCallback);
     }
 
     /**
-     * Calls underlying {@link RPCStreamer}
+     * Calls underlying {@link RpcStreamer}
      *
-     * @param requestCallback {@link RPCListener.RequestCallback} to remove
+     * @param requestCallback {@link RpcListener.RequestCallback} to remove
      */
     @Override
-    public void removeRequestCallback(RPCListener.RequestCallback requestCallback) {
+    public void removeRequestCallback(RpcListener.RequestCallback requestCallback) {
         rpcStreamer.removeRequestCallback(requestCallback);
     }
 
     /**
-     * Calls underlying {@link RPCStreamer}
+     * Calls underlying {@link RpcStreamer}
      *
-     * @param notificationCallback {@link RPCListener.NotificationCallback} to add
+     * @param notificationCallback {@link RpcListener.NotificationCallback} to add
      */
     @Override
-    public void addNotificationCallback(RPCListener.NotificationCallback notificationCallback) {
+    public void addNotificationCallback(RpcListener.NotificationCallback notificationCallback) {
         rpcStreamer.addNotificationCallback(notificationCallback);
     }
 
     /**
-     * Calls underlying {@link RPCStreamer}
+     * Calls underlying {@link RpcStreamer}
      *
-     * @param notificationCallback {@link RPCListener.NotificationCallback} to remove
+     * @param notificationCallback {@link RpcListener.NotificationCallback} to remove
      */
     @Override
-    public void removeNotificationCallback(RPCListener.NotificationCallback notificationCallback) {
+    public void removeNotificationCallback(RpcListener.NotificationCallback notificationCallback) {
         rpcStreamer.removeNotificationCallback(notificationCallback);
     }
 
     /**
-     * Stops the underlying {@link RPCListener}
+     * Stops the underlying {@link RpcListener}
      * It is not expected for implementation to be reusable after calling this method!
      */
     @Override
@@ -269,11 +269,11 @@ public final class RPCClient implements RPCStreamer {
     }
 
     /**
-     * Builder for {@link RPCClient} to simplify configuration
+     * Builder for {@link RpcClient} to simplify configuration
      * Everything is set to default at the start and following may be changed:
-     * * Underlying {@link RPCStreamer}
-     * * If default {@link RPCStreamer} is used, {@link RPCSender} and {@link RPCListener} may be changed
-     * * If default {@link RPCSender} or {@link RPCListener} are used, {@link ObjectMapper} and {@link ExecutorService}
+     * * Underlying {@link RpcStreamer}
+     * * If default {@link RpcStreamer} is used, {@link RpcSender} and {@link RpcListener} may be changed
+     * * If default {@link RpcSender} or {@link RpcListener} are used, {@link ObjectMapper} and {@link ExecutorService}
      * can be changed
      */
     public static class Builder {
@@ -281,84 +281,84 @@ public final class RPCClient implements RPCStreamer {
         private ExecutorService executorService = getDefaultExecutorService();
 
         /**
-         * Creates a default {@link RPCClient} builder
+         * Creates a default {@link RpcClient} builder
          * If build is called right after this, default instance will be <b>created</b>
          */
         public Builder() {
         }
 
         /**
-         * Changes default {@link RPCStreamer} with the one given
-         * After this change is made, dependencies of the default {@link RPCStreamer} can not be changed
+         * Changes default {@link RpcStreamer} with the one given
+         * After this change is made, dependencies of the default {@link RpcStreamer} can not be changed
          *
-         * @param rpcStreamer {@link RPCStreamer} instance to use
+         * @param rpcStreamer {@link RpcStreamer} instance to use
          * @return instance of a different, more limited builder
          */
-        public CustomRPCStreamerBuilder withRPCStreamer(RPCStreamer rpcStreamer) {
+        public CustomRPCStreamerBuilder withRPCStreamer(RpcStreamer rpcStreamer) {
             Objects.requireNonNull(rpcStreamer, "rpcStreamer may not be null");
             return new CustomRPCStreamerBuilder(rpcStreamer);
         }
 
         /**
-         * Builder used when {@link RPCStreamer} is changed
+         * Builder used when {@link RpcStreamer} is changed
          */
         public static class CustomRPCStreamerBuilder {
-            private final RPCStreamer rpcStreamer;
+            private final RpcStreamer rpcStreamer;
 
-            private CustomRPCStreamerBuilder(RPCStreamer rpcStreamer) {
+            private CustomRPCStreamerBuilder(RpcStreamer rpcStreamer) {
                 this.rpcStreamer = rpcStreamer;
             }
 
             /**
-             * Creates a new {@link RPCClient} instance with given {@link RPCStreamer}
+             * Creates a new {@link RpcClient} instance with given {@link RpcStreamer}
              */
-            public RPCClient build() {
-                return new RPCClient(rpcStreamer);
+            public RpcClient build() {
+                return new RpcClient(rpcStreamer);
             }
         }
 
         /**
-         * Changes default {@link RPCSender} with the one given
-         * After this change, default {@link RPCStreamer} is used and its dependencies may be changed
+         * Changes default {@link RpcSender} with the one given
+         * After this change, default {@link RpcStreamer} is used and its dependencies may be changed
          *
-         * @param rpcSender {@link RPCSender} instance to use
+         * @param rpcSender {@link RpcSender} instance to use
          * @return instance of a different, more limited builder
          */
-        public CustomRPCSenderBuilder withRPCSender(RPCSender rpcSender) {
+        public CustomRPCSenderBuilder withRPCSender(RpcSender rpcSender) {
             return new CustomRPCSenderBuilder(rpcSender, executorService, objectMapper);
         }
 
         /**
-         * Changes default {@link RPCListener} with the one given
-         * After this change, default {@link RPCStreamer} is used and its dependencies may be changed
+         * Changes default {@link RpcListener} with the one given
+         * After this change, default {@link RpcStreamer} is used and its dependencies may be changed
          *
-         * @param rpcListener {@link RPCListener} instance to use
+         * @param rpcListener {@link RpcListener} instance to use
          * @return instance of a different, more limited builder
          */
-        public CustomRPCListenerBuilder withRPCListener(RPCListener rpcListener) {
+        public CustomRPCListenerBuilder withRPCListener(RpcListener rpcListener) {
             return new CustomRPCListenerBuilder(rpcListener, executorService, objectMapper);
         }
 
         /**
-         * Changes default {@link RPCListener} and {@link RPCSender} with the ones given
-         * After this change, default {@link RPCStreamer} is used and its dependencies may be changed
+         * Changes default {@link RpcListener} and {@link RpcSender} with the ones given
+         * After this change, default {@link RpcStreamer} is used and its dependencies may be changed
          *
-         * @param rpcSender   {@link RPCSender} instance to use
-         * @param rpcListener {@link RPCListener} instance to use
+         * @param rpcSender   {@link RpcSender} instance to use
+         * @param rpcListener {@link RpcListener} instance to use
          * @return instance of a different, more limited builder
          */
-        public DefaultRPCStreamerFullBuilder withRPCSenderAndListener(RPCSender rpcSender, RPCListener rpcListener) {
+        public DefaultRPCStreamerFullBuilder withRPCSenderAndListener(RpcSender rpcSender, RpcListener rpcListener) {
             return new DefaultRPCStreamerFullBuilder(rpcSender, rpcListener);
         }
 
         /**
-         * Builder used when both {@link RPCSender} and {@link RPCListener} are changed
+         * Builder used when both {@link RpcSender} and {@link RpcListener} are changed
          */
         public static class DefaultRPCStreamerFullBuilder {
-            private RPCSender rpcSender;
-            private RPCListener rpcListener;
+            private RpcSender rpcSender;
+            private RpcListener rpcListener;
 
-            private DefaultRPCStreamerFullBuilder(RPCSender rpcSender, RPCListener rpcListener) {
+            private DefaultRPCStreamerFullBuilder(RpcSender rpcSender, RpcListener rpcListener) {
                 Objects.requireNonNull(rpcSender, "rpcSender may not be null");
                 Objects.requireNonNull(rpcListener, "rpcListener may not be null");
                 this.rpcSender = rpcSender;
@@ -366,73 +366,73 @@ public final class RPCClient implements RPCStreamer {
             }
 
             /**
-             * Changes default {@link RPCSender} with the one given
+             * Changes default {@link RpcSender} with the one given
              *
-             * @param rpcSender {@link RPCSender} instance to use
+             * @param rpcSender {@link RpcSender} instance to use
              */
-            public DefaultRPCStreamerFullBuilder withRPCSender(RPCSender rpcSender) {
+            public DefaultRPCStreamerFullBuilder withRPCSender(RpcSender rpcSender) {
                 Objects.requireNonNull(rpcSender, "rpcSender may not be null");
                 this.rpcSender = rpcSender;
                 return this;
             }
 
             /**
-             * Changes default {@link RPCListener} with the one given
+             * Changes default {@link RpcListener} with the one given
              *
-             * @param rpcListener {@link RPCListener} instance to use
+             * @param rpcListener {@link RpcListener} instance to use
              */
-            public DefaultRPCStreamerFullBuilder withRPCListener(RPCListener rpcListener) {
+            public DefaultRPCStreamerFullBuilder withRPCListener(RpcListener rpcListener) {
                 Objects.requireNonNull(rpcListener, "rpcListener may not be null");
                 this.rpcListener = rpcListener;
                 return this;
             }
 
             /**
-             * Creates a new {@link RPCClient} instance with default {@link RPCStreamer} and given sender and listener
+             * Creates a new {@link RpcClient} instance with default {@link RpcStreamer} and given sender and listener
              */
-            public RPCClient build() {
-                return new RPCClient(createRPCStreamer(rpcSender, rpcListener));
+            public RpcClient build() {
+                return new RpcClient(createRPCStreamer(rpcSender, rpcListener));
             }
         }
 
         /**
-         * Builder used when {@link RPCSender} is changed
+         * Builder used when {@link RpcSender} is changed
          */
         public static class CustomRPCSenderBuilder {
-            private RPCSender rpcSender;
+            private RpcSender rpcSender;
             private ExecutorService executorService;
             private ObjectMapper objectMapper;
 
-            private CustomRPCSenderBuilder(RPCSender rpcSender, ExecutorService executorService, ObjectMapper objectMapper) {
+            private CustomRPCSenderBuilder(RpcSender rpcSender, ExecutorService executorService, ObjectMapper objectMapper) {
                 this.rpcSender = rpcSender;
                 this.executorService = executorService;
                 this.objectMapper = objectMapper;
             }
 
             /**
-             * Changes default {@link RPCListener} with instance given
-             * After this change, default {@link RPCListener} and its dependencies are discarded
+             * Changes default {@link RpcListener} with instance given
+             * After this change, default {@link RpcListener} and its dependencies are discarded
              *
-             * @param rpcListener {@link RPCListener} instance to use
+             * @param rpcListener {@link RpcListener} instance to use
              * @return an instance of a different, more limited builder
              */
-            public DefaultRPCStreamerFullBuilder withRPCListener(RPCListener rpcListener) {
+            public DefaultRPCStreamerFullBuilder withRPCListener(RpcListener rpcListener) {
                 return new DefaultRPCStreamerFullBuilder(rpcSender, rpcListener);
             }
 
             /**
-             * Changes {@link RPCSender} with instance given
+             * Changes {@link RpcSender} with instance given
              *
-             * @param rpcSender {@link RPCSender} instance to use
+             * @param rpcSender {@link RpcSender} instance to use
              */
-            public CustomRPCSenderBuilder withRPCSender(RPCSender rpcSender) {
+            public CustomRPCSenderBuilder withRPCSender(RpcSender rpcSender) {
                 Objects.requireNonNull(rpcSender, "rpcSender may not be null");
                 this.rpcSender = rpcSender;
                 return this;
             }
 
             /**
-             * Changes {@link ObjectMapper} used by default {@link RPCListener} with instance given
+             * Changes {@link ObjectMapper} used by default {@link RpcListener} with instance given
              *
              * @param objectMapper {@link ObjectMapper} instance to use
              */
@@ -443,7 +443,7 @@ public final class RPCClient implements RPCStreamer {
             }
 
             /**
-             * Changes {@link ExecutorService} used by default {@link RPCListener} with instance given
+             * Changes {@link ExecutorService} used by default {@link RpcListener} with instance given
              *
              * @param executorService {@link ExecutorService} instance to use
              */
@@ -454,52 +454,52 @@ public final class RPCClient implements RPCStreamer {
             }
 
             /**
-             * Creates a new {@link RPCClient} instance with default {@link RPCStreamer}, default {@link RPCListener}
-             * with given {@link ObjectMapper} and {@link ExecutorService}, together with custom {@link RPCSender}
+             * Creates a new {@link RpcClient} instance with default {@link RpcStreamer}, default {@link RpcListener}
+             * with given {@link ObjectMapper} and {@link ExecutorService}, together with custom {@link RpcSender}
              */
-            public RPCClient build() {
-                return new RPCClient(createRPCStreamer(rpcSender, createAsyncRPCListener(executorService, objectMapper)));
+            public RpcClient build() {
+                return new RpcClient(createRPCStreamer(rpcSender, createAsyncRPCListener(executorService, objectMapper)));
             }
         }
 
         /**
-         * Builder used when {@link RPCListener} is changed
+         * Builder used when {@link RpcListener} is changed
          */
         public static class CustomRPCListenerBuilder {
-            private RPCListener rpcListener;
+            private RpcListener rpcListener;
             private ExecutorService executorService;
             private ObjectMapper objectMapper;
 
-            private CustomRPCListenerBuilder(RPCListener rpcListener, ExecutorService executorService, ObjectMapper objectMapper) {
+            private CustomRPCListenerBuilder(RpcListener rpcListener, ExecutorService executorService, ObjectMapper objectMapper) {
                 this.rpcListener = rpcListener;
                 this.executorService = executorService;
                 this.objectMapper = objectMapper;
             }
 
             /**
-             * Changes default {@link RPCSender} with instance given
-             * After this change, default {@link RPCSender} and its dependencies are discarded
+             * Changes default {@link RpcSender} with instance given
+             * After this change, default {@link RpcSender} and its dependencies are discarded
              *
-             * @param rpcSender {@link RPCSender} instance to use
+             * @param rpcSender {@link RpcSender} instance to use
              * @return an instance of a different, more limited builder
              */
-            public DefaultRPCStreamerFullBuilder withRPCSender(RPCSender rpcSender) {
+            public DefaultRPCStreamerFullBuilder withRPCSender(RpcSender rpcSender) {
                 return new DefaultRPCStreamerFullBuilder(rpcSender, rpcListener);
             }
 
             /**
-             * Changes {@link RPCListener} with instance given
+             * Changes {@link RpcListener} with instance given
              *
-             * @param rpcListener {@link RPCListener} instance to use
+             * @param rpcListener {@link RpcListener} instance to use
              */
-            public CustomRPCListenerBuilder withRPCListener(RPCListener rpcListener) {
+            public CustomRPCListenerBuilder withRPCListener(RpcListener rpcListener) {
                 Objects.requireNonNull(rpcListener, "rpcSender may not be null");
                 this.rpcListener = rpcListener;
                 return this;
             }
 
             /**
-             * Changes {@link ObjectMapper} used by default {@link RPCSender} with instance given
+             * Changes {@link ObjectMapper} used by default {@link RpcSender} with instance given
              *
              * @param objectMapper {@link ObjectMapper} instance to use
              */
@@ -510,7 +510,7 @@ public final class RPCClient implements RPCStreamer {
             }
 
             /**
-             * Changes {@link ExecutorService} used by default {@link RPCSender} with instance given
+             * Changes {@link ExecutorService} used by default {@link RpcSender} with instance given
              *
              * @param executorService {@link ExecutorService} instance to use
              */
@@ -521,16 +521,16 @@ public final class RPCClient implements RPCStreamer {
             }
 
             /**
-             * Creates a new {@link RPCClient} instance with default {@link RPCStreamer}, default {@link RPCSender}
-             * with given {@link ObjectMapper} and {@link ExecutorService}, together with custom {@link RPCListener}
+             * Creates a new {@link RpcClient} instance with default {@link RpcStreamer}, default {@link RpcSender}
+             * with given {@link ObjectMapper} and {@link ExecutorService}, together with custom {@link RpcListener}
              */
-            public RPCClient build() {
-                return new RPCClient(createRPCStreamer(createAsyncRPCSender(executorService, objectMapper), rpcListener));
+            public RpcClient build() {
+                return new RpcClient(createRPCStreamer(createAsyncRPCSender(executorService, objectMapper), rpcListener));
             }
         }
 
         /**
-         * Changes {@link ObjectMapper} used by default {@link RPCListener} with instance given
+         * Changes {@link ObjectMapper} used by default {@link RpcListener} with instance given
          *
          * @param objectMapper {@link ObjectMapper} instance to use
          */
@@ -541,7 +541,7 @@ public final class RPCClient implements RPCStreamer {
         }
 
         /**
-         * Changes {@link ExecutorService} used by default {@link RPCListener} with instance given
+         * Changes {@link ExecutorService} used by default {@link RpcListener} with instance given
          *
          * @param executorService {@link ExecutorService} instance to use
          */
@@ -552,11 +552,11 @@ public final class RPCClient implements RPCStreamer {
         }
 
         /**
-         * Creates a new {@link RPCClient} instance with default {@link RPCStreamer}, {@link RPCSender} and {@link RPCListener}
+         * Creates a new {@link RpcClient} instance with default {@link RpcStreamer}, {@link RpcSender} and {@link RpcListener}
          * with custom dependencies for those ({@link ExecutorService} and {@link ObjectMapper})
          */
-        public RPCClient build() {
-            return new RPCClient(createDefaultAsyncRPCStreamer(executorService, objectMapper));
+        public RpcClient build() {
+            return new RpcClient(createDefaultAsyncRPCStreamer(executorService, objectMapper));
         }
     }
 }

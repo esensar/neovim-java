@@ -43,7 +43,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
 /**
- * Implementation of {@link RPCListener}
+ * Implementation of {@link RpcListener}
  * utilizing {@link ExecutorService} for background work
  * <p>
  * Messages are read using {@link ExecutorService}
@@ -52,17 +52,17 @@ import java.util.concurrent.Future;
  * <p>
  * Messages are deserialized using {@link ObjectMapper} passed in the constructor
  * <p>
- * This class supports 3 types of callbacks required by {@link RPCListener}:
- * - {@link RPCListener.RequestCallback}
- * - {@link RPCListener.ResponseCallback} with a specific id to respond to
- * - {@link RPCListener.NotificationCallback}
+ * This class supports 3 types of callbacks required by {@link RpcListener}:
+ * - {@link RpcListener.RequestCallback}
+ * - {@link RpcListener.ResponseCallback} with a specific id to respond to
+ * - {@link RpcListener.NotificationCallback}
  * <p>
- * Every {@link RPCListener.RequestCallback} is notified when request comes
+ * Every {@link RpcListener.RequestCallback} is notified when request comes
  * Request callback is run on the same thread as the one used for reading, meaning long running callbacks will
  * block reading. For longer tasks async request callback should be implemented.
  * <p>
- * Same holds true for {@link RPCListener.NotificationCallback} and {@link RPCListener.RequestCallback}, with the
- * exception that {@link RPCListener.RequestCallback} will only be called for messages with matching id
+ * Same holds true for {@link RpcListener.NotificationCallback} and {@link RpcListener.RequestCallback}, with the
+ * exception that {@link RpcListener.RequestCallback} will only be called for messages with matching id
  * <p>
  * Example:
  * <pre>
@@ -92,8 +92,8 @@ import java.util.concurrent.Future;
  *      }
  *  </pre>
  */
-public final class BackgroundRPCListener implements RPCListener {
-    public static final Logger log = LoggerFactory.getLogger(BackgroundRPCListener.class);
+public final class BackgroundRpcListener implements RpcListener {
+    public static final Logger log = LoggerFactory.getLogger(BackgroundRpcListener.class);
 
     private final ExecutorService executorService;
     private final ObjectMapper responseObjectMapper;
@@ -105,14 +105,14 @@ public final class BackgroundRPCListener implements RPCListener {
     private Future listener;
 
     /**
-     * Creates a new {@link BackgroundRPCListener} using {@link ExecutorService} for background work
+     * Creates a new {@link BackgroundRpcListener} using {@link ExecutorService} for background work
      * and given {@link ObjectMapper} for mapping responses
      *
      * @param executorService      service used for background work
      * @param responseObjectMapper mapper used for mapping responses
      * @throws NullPointerException if any parameter is null
      */
-    public BackgroundRPCListener(ExecutorService executorService, ObjectMapper responseObjectMapper) {
+    public BackgroundRpcListener(ExecutorService executorService, ObjectMapper responseObjectMapper) {
         Objects.requireNonNull(executorService, "executorService must be provided to enable background work");
         Objects.requireNonNull(responseObjectMapper, "responseObjectMapper must be provided to deserialize");
         this.executorService = executorService;
@@ -166,12 +166,12 @@ public final class BackgroundRPCListener implements RPCListener {
     }
 
     /**
-     * Prepares a {@link RPCListener.ResponseCallback}
+     * Prepares a {@link RpcListener.ResponseCallback}
      * Once a response with message id equal to the id passed to this method comes,
-     * the {@link RPCListener.ResponseCallback} will be notified. It will then be removed, meaning it will not
+     * the {@link RpcListener.ResponseCallback} will be notified. It will then be removed, meaning it will not
      * be called multiple times.
      * <p>
-     * Only single {@link RPCListener.ResponseCallback} is supported per message id. If multiple callbacks are
+     * Only single {@link RpcListener.ResponseCallback} is supported per message id. If multiple callbacks are
      * required, consider delegating to them through a single callback.
      *
      * @param id       ID of the response to listen to (it should match request id)
@@ -186,10 +186,10 @@ public final class BackgroundRPCListener implements RPCListener {
     }
 
     /**
-     * Prepares a {@link RPCListener.NotificationCallback}
+     * Prepares a {@link RpcListener.NotificationCallback}
      * It will be notified for any notification that comes through to this listener
      * <p>
-     * Since {@link RPCListener.NotificationCallback} will be notified whenever any notification comes,
+     * Since {@link RpcListener.NotificationCallback} will be notified whenever any notification comes,
      * on the same thread that is used for listening, these callbacks should not do heavy work.
      * If heavy work is required, it should be run on a different thread (that is not handled by this class).
      *
@@ -204,13 +204,13 @@ public final class BackgroundRPCListener implements RPCListener {
     }
 
     /**
-     * Prepares a {@link RPCListener.RequestCallback}
+     * Prepares a {@link RpcListener.RequestCallback}
      * It will be notified for any request that comes through to this listener
      * <p>
      * Neovim requires that requests are handled immediately, but this class does not offer such functionality.
      * Other classes should be used to send a message.
      * <p>
-     * Since {@link RPCListener.RequestCallback} will be notified whenever any request comes,
+     * Since {@link RpcListener.RequestCallback} will be notified whenever any request comes,
      * on the same thread that is used for listening, these callbacks should not do heavy work.
      * If heavy work is required, it should be run on a different thread (that is not handled by this class).
      *

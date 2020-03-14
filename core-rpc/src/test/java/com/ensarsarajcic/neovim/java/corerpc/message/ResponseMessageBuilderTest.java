@@ -33,7 +33,7 @@ public class ResponseMessageBuilderTest {
     @Test
     public void testFullConstructor() {
         // Given a result, error and id
-        var rpcError = new RPCError(0, "message");
+        var rpcError = new RpcError(0, "message");
         var result = new Object();
         var builder = new ResponseMessage.Builder(1, rpcError, result);
 
@@ -61,7 +61,7 @@ public class ResponseMessageBuilderTest {
     @Test
     public void testNewInstanceEveryTime() {
         // Given a result, error and id
-        var rpcError = new RPCError(0, "message");
+        var rpcError = new RpcError(0, "message");
         var result = new Object();
         var builder = new ResponseMessage.Builder(1, rpcError, result);
 
@@ -96,7 +96,7 @@ public class ResponseMessageBuilderTest {
     @Test
     public void testErrorConstructor() {
         // Given an error
-        var rpcError = new RPCError(0, "");
+        var rpcError = new RpcError(0, "");
         var builder = new ResponseMessage.Builder(rpcError);
 
         // When build is called
@@ -138,7 +138,7 @@ public class ResponseMessageBuilderTest {
 
         assertNull(builder.build().getError());
 
-        var newError = new RPCError(0, "");
+        var newError = new RpcError(0, "");
 
         // When withError is called, new error is used
         builder.withError(newError);

@@ -24,7 +24,7 @@
 
 package com.ensarsarajcic.neovim.java.api;
 
-import com.ensarsarajcic.neovim.java.corerpc.message.RPCError;
+import com.ensarsarajcic.neovim.java.corerpc.message.RpcError;
 import com.ensarsarajcic.neovim.java.corerpc.message.RequestMessage;
 import com.ensarsarajcic.neovim.java.corerpc.message.ResponseMessage;
 import com.ensarsarajcic.neovim.java.corerpc.reactive.RPCException;
@@ -81,7 +81,7 @@ public class BaseStreamApiTest {
             Supplier<CompletableFuture<?>> completableFutureSupplier,
             Consumer<RequestMessage> requestAsserter) throws InterruptedException {
         var errorArgumentCaptor = prepareArgumentCaptor(
-                CompletableFuture.failedFuture(new RPCException(new RPCError(1, "error"))));
+                CompletableFuture.failedFuture(new RPCException(new RpcError(1, "error"))));
         var errorResult = completableFutureSupplier.get();
         var errorResponse = errorArgumentCaptor.getValue().build();
         requestAsserter.accept(errorResponse);

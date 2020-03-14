@@ -24,11 +24,11 @@
 
 package com.ensarsarajcic.neovim.java.explorer;
 
-import com.ensarsarajcic.neovim.java.corerpc.client.ProcessRPCConnection;
-import com.ensarsarajcic.neovim.java.corerpc.client.RPCConnection;
-import com.ensarsarajcic.neovim.java.corerpc.client.TcpSocketRPCConnection;
+import com.ensarsarajcic.neovim.java.corerpc.client.ProcessRpcConnection;
+import com.ensarsarajcic.neovim.java.corerpc.client.RpcConnection;
+import com.ensarsarajcic.neovim.java.corerpc.client.TcpSocketRpcConnection;
 import com.ensarsarajcic.neovim.java.explorer.api.ConnectionHolder;
-import com.ensarsarajcic.neovim.java.unix.socket.UnixDomainSocketRPCConnection;
+import com.ensarsarajcic.neovim.java.unix.socket.UnixDomainSocketRpcConnection;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -61,7 +61,7 @@ public final class ConnectionPickerController {
             try {
                 var pb = new ProcessBuilder("nvim", "--embed");
                 var neovim = pb.start();
-                ConnectionHolder.setConnection(new ProcessRPCConnection(neovim));
+                ConnectionHolder.setConnection(new ProcessRpcConnection(neovim));
                 ConnectionHolder.setConnectedIpPort("embedded instance");
                 showApiList(embedBtn);
             } catch (IOException e) {
@@ -73,7 +73,7 @@ public final class ConnectionPickerController {
                 var text = ipField.getText();
                 var ip = text.split(":")[0];
                 int port = Integer.valueOf(text.split(":")[1]);
-                ConnectionHolder.setConnection(new TcpSocketRPCConnection(new Socket(ip, port)));
+                ConnectionHolder.setConnection(new TcpSocketRpcConnection(new Socket(ip, port)));
                 ConnectionHolder.setConnectedIpPort(text);
                 showApiList(connectBtn);
             } catch (Exception ex) {
@@ -84,7 +84,7 @@ public final class ConnectionPickerController {
             try {
                 String file = fileField.getText();
                 File path = new File(file);
-                RPCConnection rpcConnection = new UnixDomainSocketRPCConnection(path);
+                RpcConnection rpcConnection = new UnixDomainSocketRpcConnection(path);
                 ConnectionHolder.setConnection(rpcConnection);
                 ConnectionHolder.setConnectedIpPort("File: " + path);
                 showApiList(connectFileBtn);

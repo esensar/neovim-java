@@ -24,8 +24,8 @@
 
 package com.ensarsarajcic.neovim.java.corerpc.reactive;
 
-import com.ensarsarajcic.neovim.java.corerpc.client.RPCConnection;
-import com.ensarsarajcic.neovim.java.corerpc.client.RPCStreamer;
+import com.ensarsarajcic.neovim.java.corerpc.client.RpcConnection;
+import com.ensarsarajcic.neovim.java.corerpc.client.RpcStreamer;
 import com.ensarsarajcic.neovim.java.corerpc.message.NotificationMessage;
 import com.ensarsarajcic.neovim.java.corerpc.message.RequestMessage;
 import com.ensarsarajcic.neovim.java.corerpc.message.ResponseMessage;
@@ -39,16 +39,16 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
 
 /**
- * Implementation of {@link ReactiveRPCStreamer} relying on a regular {@link RPCStreamer}
+ * Implementation of {@link ReactiveRPCStreamer} relying on a regular {@link RpcStreamer}
  * Provides reactive mappings by just wrapping regular calls in reactive streams
  * <p>
- * It is implemented by delegating all operations to a regular {@link RPCStreamer}, but doing it
+ * It is implemented by delegating all operations to a regular {@link RpcStreamer}, but doing it
  * in a wrapped {@link CompletableFuture}
  * If {@link Executor} is provided in the constructor, it is used for {@link CompletableFuture},
  * otherwise default provided by {@link CompletableFuture} is used
  * <p>
  * Notifications and requests are exposed as {@link Flow.Publisher} and are implemented by listening
- * to notifications and requests from the wrapped {@link RPCStreamer} and supplying them to the publishers
+ * to notifications and requests from the wrapped {@link RpcStreamer} and supplying them to the publishers
  * <p>
  * Example:
  * <pre>
@@ -67,41 +67,41 @@ import java.util.function.Supplier;
 public final class ReactiveRPCStreamerWrapper implements ReactiveRPCStreamer {
     private static final Logger log = LoggerFactory.getLogger(ReactiveRPCStreamerWrapper.class);
 
-    private RPCStreamer rpcStreamer;
+    private RpcStreamer rpcStreamer;
     private Executor executor;
 
     private final SubmissionPublisher<RequestMessage> requestMessagePublisher = new SubmissionPublisher<>();
     private final SubmissionPublisher<NotificationMessage> notificationMessagePublisher = new SubmissionPublisher<>();
 
     /**
-     * Constructs {@link ReactiveRPCStreamerWrapper} with provided {@link RPCStreamer} and default {@link Executor}
-     * @param rpcStreamer {@link RPCStreamer} to use for making calls and listening for notifications/requests
-     * @throws NullPointerException if {@link RPCStreamer} is null
+     * Constructs {@link ReactiveRPCStreamerWrapper} with provided {@link RpcStreamer} and default {@link Executor}
+     * @param rpcStreamer {@link RpcStreamer} to use for making calls and listening for notifications/requests
+     * @throws NullPointerException if {@link RpcStreamer} is null
      */
-    public ReactiveRPCStreamerWrapper(RPCStreamer rpcStreamer) {
+    public ReactiveRPCStreamerWrapper(RpcStreamer rpcStreamer) {
         this(rpcStreamer, null);
     }
 
     /**
-     * Constructs {@link ReactiveRPCStreamerWrapper} with provided {@link RPCStreamer}
+     * Constructs {@link ReactiveRPCStreamerWrapper} with provided {@link RpcStreamer}
      * and with provided {@link Executor} - it is used only for requests
-     * @param rpcStreamer {@link RPCStreamer} to use for making calls and listening for notifications/requests
+     * @param rpcStreamer {@link RpcStreamer} to use for making calls and listening for notifications/requests
      * @param executor {@link Executor} to use for creating {@link CompletableFuture} for requests
-     * @throws NullPointerException if {@link RPCStreamer} is null
+     * @throws NullPointerException if {@link RpcStreamer} is null
      */
-    public ReactiveRPCStreamerWrapper(RPCStreamer rpcStreamer, Executor executor) {
+    public ReactiveRPCStreamerWrapper(RpcStreamer rpcStreamer, Executor executor) {
         Objects.requireNonNull(rpcStreamer, "rpcStreamer may not be null");
         this.rpcStreamer = rpcStreamer;
         this.executor = executor;
     }
 
     /**
-     * Implemented per {@link ReactiveRPCStreamer#attach(RPCConnection)} specification
-     * Attaches underlying {@link RPCStreamer} and also attaches own callbacks for requests and notifications
+     * Implemented per {@link ReactiveRPCStreamer#attach(RpcConnection)} specification
+     * Attaches underlying {@link RpcStreamer} and also attaches own callbacks for requests and notifications
      * to be able to provide them as {@link Flow} (for {@link #requestsFlow()} and {@link #notificationsFlow()}
      */
     @Override
-    public void attach(RPCConnection rpcConnection) {
+    public void attach(RpcConnection rpcConnection) {
         rpcStreamer.attach(rpcConnection);
         rpcStreamer.addRequestCallback(requestMessagePublisher::submit);
         rpcStreamer.addNotificationCallback(notificationMessagePublisher::submit);
@@ -109,7 +109,7 @@ public final class ReactiveRPCStreamerWrapper implements ReactiveRPCStreamer {
 
     /**
      * Implemented per {@link ReactiveRPCStreamer#response(RequestMessage.Builder)} specification
-     * Uses underlying {@link RPCStreamer} to send the message and awaits a response from it,
+     * Uses underlying {@link RpcStreamer} to send the message and awaits a response from it,
      * creating a {@link CompletableFuture} from it
      * <p>
      * If {@link Executor} is provided in the constructor, {@link CompletableFuture} will use it,
@@ -126,7 +126,7 @@ public final class ReactiveRPCStreamerWrapper implements ReactiveRPCStreamer {
 
     /**
      * Implemented per {@link ReactiveRPCStreamer#requestsFlow()} specification
-     * Provides requests from underlying {@link RPCStreamer} in a {@link Flow}
+     * Provides requests from underlying {@link RpcStreamer} in a {@link Flow}
      */
     @Override
     public Flow.Publisher<RequestMessage> requestsFlow() {
@@ -135,7 +135,7 @@ public final class ReactiveRPCStreamerWrapper implements ReactiveRPCStreamer {
 
     /**
      * Implemented per {@link ReactiveRPCStreamer#notificationsFlow()} specification
-     * Provides notifications from underlying {@link RPCStreamer} in a {@link Flow}
+     * Provides notifications from underlying {@link RpcStreamer} in a {@link Flow}
      */
     @Override
     public Flow.Publisher<NotificationMessage> notificationsFlow() {

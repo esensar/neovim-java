@@ -33,7 +33,7 @@ import java.io.OutputStream;
 import java.util.Objects;
 
 /**
- * Implementation of {@link RPCConnection} providing streams of a {@link Process}
+ * Implementation of {@link RpcConnection} providing streams of a {@link Process}
  * <p>
  * This allows a connection to another process and communication with it via RPC
  * It is a very simple implementation which can optionally kill the process once connection is closed
@@ -52,31 +52,31 @@ import java.util.Objects;
  *     }
  * </pre>
  */
-public final class ProcessRPCConnection implements RPCConnection {
-    public static final Logger log = LoggerFactory.getLogger(ProcessRPCConnection.class);
+public final class ProcessRpcConnection implements RpcConnection {
+    public static final Logger log = LoggerFactory.getLogger(ProcessRpcConnection.class);
 
     private Process process;
     private boolean killProcessOnClose;
 
     /**
-     * Creates a new {@link ProcessRPCConnection} based on a {@link Process}'s input and output streams
+     * Creates a new {@link ProcessRpcConnection} based on a {@link Process}'s input and output streams
      * By default does not kill process when connection is closed
      *
      * @param process instance of {@link Process} to connect to
      * @throws NullPointerException if process is null
      */
-    public ProcessRPCConnection(Process process) {
+    public ProcessRpcConnection(Process process) {
         this(process, false);
     }
 
     /**
-     * Creates a new {@link ProcessRPCConnection} based on a {@link Process}'s input and output streams
+     * Creates a new {@link ProcessRpcConnection} based on a {@link Process}'s input and output streams
      *
      * @param process            instance of {@link Process} to connect to
      * @param killProcessOnClose true if process should be destroyed when connection is closed
      * @throws NullPointerException if process is null
      */
-    public ProcessRPCConnection(Process process, boolean killProcessOnClose) {
+    public ProcessRpcConnection(Process process, boolean killProcessOnClose) {
         Objects.requireNonNull(process, "process is required to properly implement a RPCConnection");
         this.process = process;
         this.killProcessOnClose = killProcessOnClose;

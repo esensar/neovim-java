@@ -34,7 +34,7 @@ import java.net.Socket;
 import java.util.Objects;
 
 /**
- * Simple implementation of {@link RPCConnection} based on a TCP {@link Socket}
+ * Simple implementation of {@link RpcConnection} based on a TCP {@link Socket}
  * <p>
  * This allows connection and communication via TCP socket
  * It is a very simple implementation and it just passes down calls to underlying {@link Socket}
@@ -52,19 +52,19 @@ import java.util.Objects;
  *     }
  * </pre>
  */
-public final class TcpSocketRPCConnection implements RPCConnection {
-    public static final Logger log = LoggerFactory.getLogger(TcpSocketRPCConnection.class);
+public final class TcpSocketRpcConnection implements RpcConnection {
+    public static final Logger log = LoggerFactory.getLogger(TcpSocketRpcConnection.class);
 
     private Socket socket;
 
     /**
-     * Creates a new {@link TcpSocketRPCConnection} based on passed {@link Socket}
+     * Creates a new {@link TcpSocketRpcConnection} based on passed {@link Socket}
      * It uses input and output streams of given {@link Socket} to communicate
      *
      * @param socket instance of {@link Socket} to use for communication
      * @throws NullPointerException if socket is null
      */
-    public TcpSocketRPCConnection(Socket socket) {
+    public TcpSocketRpcConnection(Socket socket) {
         Objects.requireNonNull(socket, "socket is required to properly implement a RPCConnection");
         this.socket = socket;
     }

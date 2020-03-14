@@ -24,36 +24,25 @@
 
 package com.ensarsarajcic.neovim.java.corerpc.client;
 
-import com.ensarsarajcic.neovim.java.corerpc.message.Message;
-
-import java.io.IOException;
+import java.io.Closeable;
+import java.io.InputStream;
 import java.io.OutputStream;
 
 /**
- * Represents a RPC communication sender (writer)
- * It should provide interface for sending messages
- * Message sending should occur on a separate thread
+ * Represents a bi-directional RPC connection
+ * (it may represent any connection, due to it being very generic)
  */
-public interface RPCSender {
-    /**
-     * Sends a message to attached {@link OutputStream}
-     * Implementations need to implement it according to interface (requiring attachment prior to communication)
-     *
-     * @param message message to send
-     * @throws IllegalStateException if current instance is not attached to a {@link OutputStream}
-     * @throws IOException if issues arise in communication or serialization
-     */
-    void send(Message message) throws IOException;
+public interface RpcConnection extends Closeable, AutoCloseable {
 
     /**
-     * Attaches this {@link RPCSender} to a {@link OutputStream}
-     * That {@link OutputStream} can (and should) then be used to communicate (for sending data)
-     * @param outputStream {@link OutputStream} to write to
+     * Incoming data stream (coming from other participant)
+     * @return {@link InputStream} with incoming data
      */
-    void attach(OutputStream outputStream);
+    InputStream getIncomingStream();
 
     /**
-     * Stops the sender
+     * Outgoing data stream (going to other participant)
+     * @return {@link OutputStream} for outgoing data
      */
-    void stop();
+    OutputStream getOutgoingStream();
 }

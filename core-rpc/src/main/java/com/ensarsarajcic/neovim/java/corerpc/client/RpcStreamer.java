@@ -33,19 +33,19 @@ import java.io.IOException;
  * Interface defining a two way RPC communication stream
  * Implementations of this should be used for communication since it covers both input and output
  */
-public interface RPCStreamer {
+public interface RpcStreamer {
     /**
-     * Attaches to given {@link RPCConnection}
+     * Attaches to given {@link RpcConnection}
      * Connects callbacks to its incoming stream and prepares for writing to outgoing stream
      * @param rpcConnection connection to attach to
      */
-    void attach(RPCConnection rpcConnection);
+    void attach(RpcConnection rpcConnection);
 
     /**
-     * Sends a message to attached {@link RPCConnection}
+     * Sends a message to attached {@link RpcConnection}
      *
      * @param message message to send
-     * @throws IllegalStateException if current instance is not attached to a {@link RPCConnection}
+     * @throws IllegalStateException if current instance is not attached to a {@link RpcConnection}
      * @throws IOException if issues arise in communication or serialization
      */
     void send(Message message) throws IOException;
@@ -54,57 +54,57 @@ public interface RPCStreamer {
      * Specific version of {@link #send(Message)} method for requests
      * It takes a builder instead of a message, to ensure ID is added before sending
      * @param requestMessage {@link RequestMessage.Builder} of message to send
-     * @throws IllegalStateException if current instance is not attached to a {@link RPCConnection}
+     * @throws IllegalStateException if current instance is not attached to a {@link RpcConnection}
      * @throws IOException if issues arise in communication or serialization
      */
     void send(RequestMessage.Builder requestMessage) throws IOException;
 
     /**
      * Specific version of {@link #send(Message)} method which can also
-     * optionally take a {@link RPCListener.ResponseCallback} to be notified when response comes back
+     * optionally take a {@link RpcListener.ResponseCallback} to be notified when response comes back
      * It takes a builder instead of a message, to ensure ID is added before sending
      * @param requestMessage {@link RequestMessage.Builder} of message to send
-     * @param responseCallback {@link RPCListener.ResponseCallback} to be called when response arrives
-     * @throws IllegalStateException if current instance is not attached to a {@link RPCConnection}
+     * @param responseCallback {@link RpcListener.ResponseCallback} to be called when response arrives
+     * @throws IllegalStateException if current instance is not attached to a {@link RpcConnection}
      * @throws IOException if issues arise in communication or serialization
      */
-    void send(RequestMessage.Builder requestMessage, RPCListener.ResponseCallback responseCallback) throws IOException;
+    void send(RequestMessage.Builder requestMessage, RpcListener.ResponseCallback responseCallback) throws IOException;
 
     /**
-     * Adds a new {@link RPCListener.RequestCallback}, if it is not already added
-     * It will stay attached and receive all requests until {@link #removeRequestCallback(RPCListener.RequestCallback)}
+     * Adds a new {@link RpcListener.RequestCallback}, if it is not already added
+     * It will stay attached and receive all requests until {@link #removeRequestCallback(RpcListener.RequestCallback)}
      * is called with exact same callback
-     * @param requestCallback {@link RPCListener.RequestCallback} to add
+     * @param requestCallback {@link RpcListener.RequestCallback} to add
      */
-    void addRequestCallback(RPCListener.RequestCallback requestCallback);
+    void addRequestCallback(RpcListener.RequestCallback requestCallback);
 
     /**
-     * Removes a {@link RPCListener.RequestCallback}, if it was added before
+     * Removes a {@link RpcListener.RequestCallback}, if it was added before
      * It does so by a reference, meaning it has to be exact same callback that was added before
-     * using {@link #addRequestCallback(RPCListener.RequestCallback)}
-     * @param requestCallback {@link RPCListener.RequestCallback} to remove
+     * using {@link #addRequestCallback(RpcListener.RequestCallback)}
+     * @param requestCallback {@link RpcListener.RequestCallback} to remove
      */
-    void removeRequestCallback(RPCListener.RequestCallback requestCallback);
+    void removeRequestCallback(RpcListener.RequestCallback requestCallback);
 
     /**
-     * Adds a new {@link RPCListener.NotificationCallback}, if it is not already added
+     * Adds a new {@link RpcListener.NotificationCallback}, if it is not already added
      * It will stay attached and receive all notifications
-     * until {@link #removeNotificationCallback(RPCListener.NotificationCallback)}
+     * until {@link #removeNotificationCallback(RpcListener.NotificationCallback)}
      * is called with exact same callback
-     * @param notificationCallback {@link RPCListener.NotificationCallback} to add
+     * @param notificationCallback {@link RpcListener.NotificationCallback} to add
      */
-    void addNotificationCallback(RPCListener.NotificationCallback notificationCallback);
+    void addNotificationCallback(RpcListener.NotificationCallback notificationCallback);
 
     /**
-     * Removes a {@link RPCListener.NotificationCallback}, if it was added before
+     * Removes a {@link RpcListener.NotificationCallback}, if it was added before
      * It does so by a reference, meaning it has to be exact same callback that was added before
-     * using {@link #addNotificationCallback(RPCListener.NotificationCallback)}
-     * @param notificationCallback {@link RPCListener.NotificationCallback} to remove
+     * using {@link #addNotificationCallback(RpcListener.NotificationCallback)}
+     * @param notificationCallback {@link RpcListener.NotificationCallback} to remove
      */
-    void removeNotificationCallback(RPCListener.NotificationCallback notificationCallback);
+    void removeNotificationCallback(RpcListener.NotificationCallback notificationCallback);
 
     /**
-     * Stops the underlying {@link RPCListener}
+     * Stops the underlying {@link RpcListener}
      * It is not expected for implementation to be reusable after calling this method!
      */
     void stop();

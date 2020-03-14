@@ -22,46 +22,38 @@
  * SOFTWARE.
  */
 
-package com.ensarsarajcic.neovim.java.corerpc.message;
+package com.ensarsarajcic.neovim.java.corerpc.client;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.ensarsarajcic.neovim.java.corerpc.message.Message;
+
+import java.io.IOException;
+import java.io.OutputStream;
 
 /**
- * Class defining an error used in RPC communication
- * It is not an error in the communication itself, rather an error that is sent
- * by applications communicating to indicate an error (bad request, bad payload, etc.)
+ * Represents a RPC communication sender (writer)
+ * It should provide interface for sending messages
+ * Message sending should occur on a separate thread
  */
-@JsonFormat(shape = JsonFormat.Shape.ARRAY)
-@JsonPropertyOrder({"id", "message"})
-public final class RPCError {
+public interface RpcSender {
+    /**
+     * Sends a message to attached {@link OutputStream}
+     * Implementations need to implement it according to interface (requiring attachment prior to communication)
+     *
+     * @param message message to send
+     * @throws IllegalStateException if current instance is not attached to a {@link OutputStream}
+     * @throws IOException if issues arise in communication or serialization
+     */
+    void send(Message message) throws IOException;
 
-    private final int id;
-    private final String message;
+    /**
+     * Attaches this {@link RpcSender} to a {@link OutputStream}
+     * That {@link OutputStream} can (and should) then be used to communicate (for sending data)
+     * @param outputStream {@link OutputStream} to write to
+     */
+    void attach(OutputStream outputStream);
 
-    public RPCError(
-            @JsonProperty("id")
-            int id,
-            @JsonProperty("message")
-            String message) {
-        this.id = id;
-        this.message = message;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    @Override
-    public String toString() {
-        return "RPCError{" +
-                "id=" + id +
-                ", message='" + message + '\'' +
-                '}';
-    }
+    /**
+     * Stops the sender
+     */
+    void stop();
 }

@@ -22,27 +22,46 @@
  * SOFTWARE.
  */
 
-package com.ensarsarajcic.neovim.java.corerpc.client;
+package com.ensarsarajcic.neovim.java.corerpc.message;
 
-import java.io.Closeable;
-import java.io.InputStream;
-import java.io.OutputStream;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 /**
- * Represents a bi-directional RPC connection
- * (it may represent any connection, due to it being very generic)
+ * Class defining an error used in RPC communication
+ * It is not an error in the communication itself, rather an error that is sent
+ * by applications communicating to indicate an error (bad request, bad payload, etc.)
  */
-public interface RPCConnection extends Closeable, AutoCloseable {
+@JsonFormat(shape = JsonFormat.Shape.ARRAY)
+@JsonPropertyOrder({"id", "message"})
+public final class RpcError {
 
-    /**
-     * Incoming data stream (coming from other participant)
-     * @return {@link InputStream} with incoming data
-     */
-    InputStream getIncomingStream();
+    private final int id;
+    private final String message;
 
-    /**
-     * Outgoing data stream (going to other participant)
-     * @return {@link OutputStream} for outgoing data
-     */
-    OutputStream getOutgoingStream();
+    public RpcError(
+            @JsonProperty("id")
+            int id,
+            @JsonProperty("message")
+            String message) {
+        this.id = id;
+        this.message = message;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    @Override
+    public String toString() {
+        return "RPCError{" +
+                "id=" + id +
+                ", message='" + message + '\'' +
+                '}';
+    }
 }

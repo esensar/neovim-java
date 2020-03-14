@@ -24,8 +24,8 @@
 
 package com.ensarsarajcic.neovim.java.corerpc.reactive;
 
-import com.ensarsarajcic.neovim.java.corerpc.client.RPCConnection;
-import com.ensarsarajcic.neovim.java.corerpc.client.RPCStreamer;
+import com.ensarsarajcic.neovim.java.corerpc.client.RpcConnection;
+import com.ensarsarajcic.neovim.java.corerpc.client.RpcStreamer;
 import com.ensarsarajcic.neovim.java.corerpc.message.RequestMessage;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -89,7 +89,7 @@ public class ReactiveRPCClientTest {
         assertNotEquals(rpc1, rpc2);
 
         // Create with custom streamer should use wrapper and delegate down to the streamer
-        var rpcStreamer = Mockito.mock(RPCStreamer.class);
+        var rpcStreamer = Mockito.mock(RpcStreamer.class);
         var rpc3 = ReactiveRPCClient.createDefaultInstanceWithCustomStreamer(rpcStreamer);
 
         // And should not duplicate
@@ -99,7 +99,7 @@ public class ReactiveRPCClientTest {
     }
 
     private void validateDelegates(ReactiveRPCClient rpcClient, ReactiveRPCStreamer rpcStreamer) throws IOException {
-        var rpcConnection = Mockito.mock(RPCConnection.class);
+        var rpcConnection = Mockito.mock(RpcConnection.class);
         rpcClient.attach(rpcConnection);
         verify(rpcStreamer).attach(rpcConnection);
 

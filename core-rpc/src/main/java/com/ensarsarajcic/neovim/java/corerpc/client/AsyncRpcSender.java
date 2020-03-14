@@ -35,7 +35,7 @@ import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 
 /**
- * Implementation of {@link RPCSender} utilizing
+ * Implementation of {@link RpcSender} utilizing
  * {@link ExecutorService} for asynchronous work
  * <p>
  * Messages are sent using the {@link ExecutorService}, meaning order of execution
@@ -65,8 +65,8 @@ import java.util.concurrent.ExecutorService;
  *     }
  * </pre>
  */
-public final class AsyncRPCSender implements RPCSender {
-    private static final Logger log = LoggerFactory.getLogger(AsyncRPCSender.class);
+public final class AsyncRpcSender implements RpcSender {
+    private static final Logger log = LoggerFactory.getLogger(AsyncRpcSender.class);
 
     private final ExecutorService executorService;
     private final ObjectMapper msgPacker;
@@ -74,14 +74,14 @@ public final class AsyncRPCSender implements RPCSender {
     private OutputStream outgoingStream;
 
     /**
-     * Creates a new {@link AsyncRPCSender} with given {@link ObjectMapper} for mapping requests
+     * Creates a new {@link AsyncRpcSender} with given {@link ObjectMapper} for mapping requests
      * using {@link ExecutorService} for background work
      *
      * @param executorService service used for background work
      * @param msgPacker       {@link ObjectMapper} for mapping requests (outgoing)
      * @throws NullPointerException if any parameter is null
      */
-    public AsyncRPCSender(ExecutorService executorService, ObjectMapper msgPacker) {
+    public AsyncRpcSender(ExecutorService executorService, ObjectMapper msgPacker) {
         Objects.requireNonNull(executorService, "executorService must be provided to enable background work");
         Objects.requireNonNull(msgPacker, "msgPacker must be provided for serialization of messages");
         this.executorService = executorService;
@@ -89,7 +89,7 @@ public final class AsyncRPCSender implements RPCSender {
     }
 
     /**
-     * Sends messages per {@link RPCSender#send(Message)} specification
+     * Sends messages per {@link RpcSender#send(Message)} specification
      * Order of execution is handled by {@link ExecutorService},
      * this class just submits the task of actual serializing and writing to stream
      *

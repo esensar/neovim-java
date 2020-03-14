@@ -24,30 +24,30 @@
 
 package com.ensarsarajcic.neovim.java.corerpc.reactive;
 
-import com.ensarsarajcic.neovim.java.corerpc.message.RPCError;
+import com.ensarsarajcic.neovim.java.corerpc.message.RpcError;
 
 /**
- * Exception wrapping {@link RPCError}
+ * Exception wrapping {@link RpcError}
  * <p>
- * It should be thrown when {@link RPCError} is received in communication
+ * It should be thrown when {@link RpcError} is received in communication
  */
 public class RPCException extends Exception {
-    private RPCError rpcError;
+    private RpcError rpcError;
 
     /**
-     * Creates a new {@link RPCException} with given {@link RPCError}
+     * Creates a new {@link RPCException} with given {@link RpcError}
      * @param rpcError error representing this exception
      */
-    public RPCException(RPCError rpcError) {
+    public RPCException(RpcError rpcError) {
         super(rpcError.toString());
         this.rpcError = rpcError;
     }
 
     /**
-     * Returns the cause - {@link RPCError}
-     * @return {@link RPCError} that caused the exception
+     * Returns the cause - {@link RpcError}
+     * @return {@link RpcError} that caused the exception
      */
-    public RPCError getRpcError() {
+    public RpcError getRpcError() {
         return rpcError;
     }
 

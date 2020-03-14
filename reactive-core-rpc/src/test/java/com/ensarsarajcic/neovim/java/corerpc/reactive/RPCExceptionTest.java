@@ -24,7 +24,7 @@
 
 package com.ensarsarajcic.neovim.java.corerpc.reactive;
 
-import com.ensarsarajcic.neovim.java.corerpc.message.RPCError;
+import com.ensarsarajcic.neovim.java.corerpc.message.RpcError;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 import org.junit.Test;
@@ -35,12 +35,12 @@ public class RPCExceptionTest {
 
     @Test
     public void testConstructorAndToStringNotCrashing() {
-        new RPCException(new RPCError(1, "message")).toString();
+        new RPCException(new RpcError(1, "message")).toString();
     }
 
     @Test
     public void testStoresRPCError() {
-        var error = new RPCError(1, "msg");
+        var error = new RpcError(1, "msg");
         assertThat(new RPCException(error).toString(), new BaseMatcher<>() {
             @Override
             public boolean matches(Object o) {
