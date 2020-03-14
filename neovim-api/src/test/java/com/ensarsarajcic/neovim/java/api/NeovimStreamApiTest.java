@@ -114,13 +114,13 @@ public class NeovimStreamApiTest extends BaseStreamApiTest {
         var opts = UiOptions.FULL_UI;
         assertNormalBehavior(
                 () -> CompletableFuture.completedFuture(new ResponseMessage(1, null, null)),
-                () -> neovimStreamApi.attachUI(500, 500, opts),
+                () -> neovimStreamApi.attachUi(500, 500, opts),
                 request -> assertMethodAndArguments(request, NeovimApi.ATTACH_UI, 500, 500, opts)
         );
 
         // Error case
         assertErrorBehavior(
-                () -> neovimStreamApi.detachUI(),
+                () -> neovimStreamApi.detachUi(),
                 request -> assertMethodAndArguments(request, NeovimApi.DETACH_UI)
         );
     }
@@ -130,13 +130,13 @@ public class NeovimStreamApiTest extends BaseStreamApiTest {
         // Happy case
         assertNormalBehavior(
                 () -> CompletableFuture.completedFuture(new ResponseMessage(1, null, null)),
-                () -> neovimStreamApi.resizeUI(500, 500),
+                () -> neovimStreamApi.resizeUi(500, 500),
                 request -> assertMethodAndArguments(request, NeovimApi.RESIZE_UI, 500, 500)
         );
 
         // Error case
         assertErrorBehavior(
-                () -> neovimStreamApi.resizeUI(150, 450),
+                () -> neovimStreamApi.resizeUi(150, 450),
                 request -> assertMethodAndArguments(request, NeovimApi.RESIZE_UI, 150, 450)
         );
     }

@@ -49,7 +49,7 @@ public final class ChannelInfo {
             }
 
             log.error("Tried to create an invalid channel Stream ({})", value);
-            throw new IllegalArgumentException(String.format("Stream (%s) does not exist.", value));
+            throw new IllegalArgumentException(String.format("ChannelInfo.Stream (%s) does not exist.", value));
         }
 
         Stream(String value) {
@@ -87,7 +87,7 @@ public final class ChannelInfo {
             }
 
             log.error("Tried to create an invalid channel Mode ({})", value);
-            throw new IllegalArgumentException(String.format("Mode (%s) does not exist.", value));
+            throw new IllegalArgumentException(String.format("ChannelInfo.Mode (%s) does not exist.", value));
         }
 
         Mode(String value) {

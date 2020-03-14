@@ -63,17 +63,17 @@ public final class AtomicCallBuilder implements NeovimApi {
     }
 
     @Override
-    public CompletableFuture<Void> attachUI(int width, int height, UiOptions options) {
+    public CompletableFuture<Void> attachUi(int width, int height, UiOptions options) {
         return null;
     }
 
     @Override
-    public CompletableFuture<Void> detachUI() {
+    public CompletableFuture<Void> detachUi() {
         return null;
     }
 
     @Override
-    public CompletableFuture<Void> resizeUI(int width, int height) {
+    public CompletableFuture<Void> resizeUi(int width, int height) {
         return null;
     }
 
@@ -333,7 +333,7 @@ public final class AtomicCallBuilder implements NeovimApi {
     }
 
     @Override
-    public CompletableFuture<Void> resizeUIGrid(int width, int height) {
+    public CompletableFuture<Void> resizeUiGrid(int width, int height) {
         return null;
     }
 

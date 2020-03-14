@@ -81,7 +81,7 @@ public final class NeovimStreamApi extends BaseStreamApi implements NeovimApi {
     }
 
     @Override
-    public CompletableFuture<Void> attachUI(int width, int height, UiOptions options) {
+    public CompletableFuture<Void> attachUi(int width, int height, UiOptions options) {
         return sendWithNoResponse(
                 new RequestMessage.Builder(ATTACH_UI)
                         .addArgument(width)
@@ -90,19 +90,19 @@ public final class NeovimStreamApi extends BaseStreamApi implements NeovimApi {
     }
 
     @Override
-    public CompletableFuture<Void> detachUI() {
+    public CompletableFuture<Void> detachUi() {
         return sendWithNoResponse(new RequestMessage.Builder(DETACH_UI));
     }
 
     @Override
-    public CompletableFuture<Void> resizeUI(int width, int height) {
+    public CompletableFuture<Void> resizeUi(int width, int height) {
         return sendWithNoResponse(new RequestMessage.Builder(RESIZE_UI)
                 .addArgument(width)
                 .addArgument(height));
     }
 
     @Override
-    public CompletableFuture<Void> resizeUIGrid(int width, int height) {
+    public CompletableFuture<Void> resizeUiGrid(int width, int height) {
         return sendWithNoResponse(new RequestMessage.Builder(RESIZE_UI_GRID)
                 .addArgument(width)
                 .addArgument(height));

@@ -126,16 +126,16 @@ public interface NeovimApi {
     CompletableFuture<Map> getHighlightByName(String name, boolean rgb);
 
     @NeovimApiFunction(name = ATTACH_UI, since = 1)
-    CompletableFuture<Void> attachUI(int width, int height, UiOptions options);
+    CompletableFuture<Void> attachUi(int width, int height, UiOptions options);
 
     @NeovimApiFunction(name = DETACH_UI, since = 1)
-    CompletableFuture<Void> detachUI();
+    CompletableFuture<Void> detachUi();
 
     @NeovimApiFunction(name = RESIZE_UI, since = 1)
-    CompletableFuture<Void> resizeUI(int width, int height);
+    CompletableFuture<Void> resizeUi(int width, int height);
 
     @NeovimApiFunction(name = RESIZE_UI_GRID, since = 6)
-    CompletableFuture<Void> resizeUIGrid(int width, int height);
+    CompletableFuture<Void> resizeUiGrid(int width, int height);
 
     @NeovimApiFunction(name = SET_POPUPMENU_HEIGHT, since = 6)
     CompletableFuture<Void> setPopupmenuHeight(int height);

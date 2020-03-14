@@ -70,22 +70,22 @@ public final class NeovimRxWrapper implements NeovimRxApi {
 
     @Override
     public Completable attachUI(int width, int height, UiOptions options) {
-        return Completable.fromFuture(neovimApi.attachUI(width, height, options));
+        return Completable.fromFuture(neovimApi.attachUi(width, height, options));
     }
 
     @Override
     public Completable detachUI() {
-        return Completable.fromFuture(neovimApi.detachUI());
+        return Completable.fromFuture(neovimApi.detachUi());
     }
 
     @Override
     public Completable resizeUI(int width, int height) {
-        return Completable.fromFuture(neovimApi.resizeUI(width, height));
+        return Completable.fromFuture(neovimApi.resizeUi(width, height));
     }
 
     @Override
     public Completable resizeUIGrid(int width, int height) {
-        return Completable.fromFuture(neovimApi.resizeUIGrid(width, height));
+        return Completable.fromFuture(neovimApi.resizeUiGrid(width, height));
     }
 
     @Override

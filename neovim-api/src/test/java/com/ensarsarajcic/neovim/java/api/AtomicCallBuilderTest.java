@@ -41,13 +41,13 @@ public class AtomicCallBuilderTest {
     @Test
     public void allMethodsReturnNullSinceUnimplemented() {
         var atomicCallBuilder = new AtomicCallBuilder();
-        assertNull(atomicCallBuilder.attachUI(1, 1, UiOptions.TERMINAL));
+        assertNull(atomicCallBuilder.attachUi(1, 1, UiOptions.TERMINAL));
         assertNull(atomicCallBuilder.callDictFunction(Map.of(), "", List.of()));
         assertNull(atomicCallBuilder.callFunction("", List.of()));
         assertNull(atomicCallBuilder.commandOutput(""));
         assertNull(atomicCallBuilder.deleteCurrentLine());
         assertNull(atomicCallBuilder.deleteVariable(""));
-        assertNull(atomicCallBuilder.detachUI());
+        assertNull(atomicCallBuilder.detachUi());
         assertNull(atomicCallBuilder.eval(""));
         assertNull(atomicCallBuilder.executeCommand(""));
         assertNull(atomicCallBuilder.executeLua("", List.of()));
@@ -87,7 +87,7 @@ public class AtomicCallBuilderTest {
         assertNull(atomicCallBuilder.setCurrentWindow(null));
         assertNull(atomicCallBuilder.setCurrentTabpage(null));
         assertNull(atomicCallBuilder.replaceTermcodes(null, false, false, false));
-        assertNull(atomicCallBuilder.resizeUI(1, 1));
+        assertNull(atomicCallBuilder.resizeUi(1, 1));
         assertNull(atomicCallBuilder.stringWidth(""));
         assertNull(atomicCallBuilder.subscribeToEvent(""));
         assertNull(atomicCallBuilder.unsubscribeFromEvent(""));

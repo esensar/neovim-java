@@ -41,7 +41,6 @@ import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -66,32 +65,32 @@ public class NeovimRxWrapperTest {
     @Test
     public void delegatesAttachUi() {
         var options = UiOptions.TERMINAL;
-        given(neovimApi.attachUI(1, 1, options)).willReturn(CompletableFuture.completedFuture(null));
+        given(neovimApi.attachUi(1, 1, options)).willReturn(CompletableFuture.completedFuture(null));
         neovimRxWrapper.attachUI(1, 1, options)
                 .test()
                 .assertComplete()
                 .assertNoErrors();
-        verify(neovimApi).attachUI(1, 1, options);
+        verify(neovimApi).attachUi(1, 1, options);
     }
 
     @Test
     public void delegatesDetachUI() {
-        given(neovimApi.detachUI()).willReturn(CompletableFuture.completedFuture(null));
+        given(neovimApi.detachUi()).willReturn(CompletableFuture.completedFuture(null));
         neovimRxWrapper.detachUI()
                 .test()
                 .assertComplete()
                 .assertNoErrors();
-        verify(neovimApi).detachUI();
+        verify(neovimApi).detachUi();
     }
 
     @Test
     public void delegatesResizeUI() {
-        given(neovimApi.resizeUI(1, 1)).willReturn(CompletableFuture.completedFuture(null));
+        given(neovimApi.resizeUi(1, 1)).willReturn(CompletableFuture.completedFuture(null));
         neovimRxWrapper.resizeUI(1, 1)
                 .test()
                 .assertComplete()
                 .assertNoErrors();
-        verify(neovimApi).resizeUI(1, 1);
+        verify(neovimApi).resizeUi(1, 1);
     }
 
     @Test
