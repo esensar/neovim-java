@@ -66,7 +66,7 @@ public class NeovimRxWrapperTest {
     public void delegatesAttachUi() {
         var options = UiOptions.TERMINAL;
         given(neovimApi.attachUi(1, 1, options)).willReturn(CompletableFuture.completedFuture(null));
-        neovimRxWrapper.attachUI(1, 1, options)
+        neovimRxWrapper.attachUi(1, 1, options)
                 .test()
                 .assertComplete()
                 .assertNoErrors();
@@ -76,7 +76,7 @@ public class NeovimRxWrapperTest {
     @Test
     public void delegatesDetachUI() {
         given(neovimApi.detachUi()).willReturn(CompletableFuture.completedFuture(null));
-        neovimRxWrapper.detachUI()
+        neovimRxWrapper.detachUi()
                 .test()
                 .assertComplete()
                 .assertNoErrors();
@@ -86,7 +86,7 @@ public class NeovimRxWrapperTest {
     @Test
     public void delegatesResizeUI() {
         given(neovimApi.resizeUi(1, 1)).willReturn(CompletableFuture.completedFuture(null));
-        neovimRxWrapper.resizeUI(1, 1)
+        neovimRxWrapper.resizeUi(1, 1)
                 .test()
                 .assertComplete()
                 .assertNoErrors();
