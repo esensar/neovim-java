@@ -22,9 +22,11 @@
  * SOFTWARE.
  */
 
-package com.ensarsarajcic.neovim.java.notifications.ui.grid.linegrid;
+package com.ensarsarajcic.neovim.java.notifications.ui;
 
-import com.ensarsarajcic.neovim.java.notifications.ui.UIEvent;
-
-public interface UILineGridEvent extends UIEvent {
+/**
+ * Represents one part of a {@link NeovimRedrawEvent}
+ */
+public interface UiEvent {
+    String getEventName();
 }

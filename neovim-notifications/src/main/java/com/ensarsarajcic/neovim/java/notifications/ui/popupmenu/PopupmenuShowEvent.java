@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 @JsonFormat(shape = JsonFormat.Shape.ARRAY)
-public final class PopupmenuShowEvent implements UIPopupmenuEvent {
+public final class PopupmenuShowEvent implements UiPopupmenuEvent {
     public static final String NAME = "popupmenu_show";
 
     @JsonFormat(shape = JsonFormat.Shape.ARRAY)

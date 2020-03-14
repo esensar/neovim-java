@@ -34,7 +34,7 @@ import java.io.OutputStream;
  * It should provide interface for sending messages
  * Message sending should occur on a separate thread
  */
-public interface RPCSender {
+public interface RpcSender {
     /**
      * Sends a message to attached {@link OutputStream}
      * Implementations need to implement it according to interface (requiring attachment prior to communication)
@@ -46,7 +46,7 @@ public interface RPCSender {
     void send(Message message) throws IOException;
 
     /**
-     * Attaches this {@link RPCSender} to a {@link OutputStream}
+     * Attaches this {@link RpcSender} to a {@link OutputStream}
      * That {@link OutputStream} can (and should) then be used to communicate (for sending data)
      * @param outputStream {@link OutputStream} to write to
      */

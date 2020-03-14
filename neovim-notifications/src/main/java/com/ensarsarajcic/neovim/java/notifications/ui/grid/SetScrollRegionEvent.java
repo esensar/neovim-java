@@ -28,7 +28,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonFormat(shape = JsonFormat.Shape.ARRAY)
-public final class SetScrollRegionEvent implements UIGridEvent {
+public final class SetScrollRegionEvent implements UiGridEvent {
     public static final String NAME = "set_scroll_region";
 
     private int top;

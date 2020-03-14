@@ -25,16 +25,16 @@
 package com.ensarsarajcic.neovim.java.api;
 
 import com.ensarsarajcic.neovim.java.api.types.msgpack.NeovimJacksonModule;
-import com.ensarsarajcic.neovim.java.corerpc.client.RPCClient;
-import com.ensarsarajcic.neovim.java.corerpc.client.RPCConnection;
-import com.ensarsarajcic.neovim.java.corerpc.reactive.ReactiveRPCClient;
+import com.ensarsarajcic.neovim.java.corerpc.client.RpcClient;
+import com.ensarsarajcic.neovim.java.corerpc.client.RpcConnection;
+import com.ensarsarajcic.neovim.java.corerpc.reactive.ReactiveRpcClient;
 
 public final class NeovimApis {
 
-    public static NeovimApi getApiForConnection(RPCConnection rpcConnection) {
-        var rpcClient = new RPCClient.Builder()
+    public static NeovimApi getApiForConnection(RpcConnection rpcConnection) {
+        var rpcClient = new RpcClient.Builder()
                 .withObjectMapper(NeovimJacksonModule.createNeovimObjectMapper()).build();
-        var reactiveRPCStreamer = ReactiveRPCClient.createDefaultInstanceWithCustomStreamer(rpcClient);
+        var reactiveRPCStreamer = ReactiveRpcClient.createDefaultInstanceWithCustomStreamer(rpcClient);
         reactiveRPCStreamer.attach(rpcConnection);
         return new NeovimStreamApi(reactiveRPCStreamer);
     }

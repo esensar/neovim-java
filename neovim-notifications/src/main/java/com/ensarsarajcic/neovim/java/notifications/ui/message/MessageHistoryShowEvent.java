@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 @JsonFormat(shape = JsonFormat.Shape.ARRAY)
-public final class MessageHistoryShowEvent implements UIMessageEvent {
+public final class MessageHistoryShowEvent implements UiMessageEvent {
     public static final String NAME = "msg_history_show";
 
     private List<MessageHistoryEntry> entries;

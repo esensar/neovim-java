@@ -27,68 +27,63 @@ package com.ensarsarajcic.neovim.java.corerpc.client;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.Socket;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
-public class TcpSocketRPCConnectionTest {
+public class ProcessRpcConnectionTest {
 
     @Mock
-    Socket socket;
+    Process process;
 
     @Mock
     InputStream inputStream;
     @Mock
     OutputStream outputStream;
 
-    @InjectMocks
-    TcpSocketRPCConnection tcpSocketRPCConnection;
+    ProcessRpcConnection processRPCConnection;
 
     @Before
     public void setUp() throws Exception {
-        given(socket.getInputStream()).willReturn(inputStream);
-        given(socket.getOutputStream()).willReturn(outputStream);
+        processRPCConnection = new ProcessRpcConnection(process);
+        given(process.getInputStream()).willReturn(inputStream);
+        given(process.getOutputStream()).willReturn(outputStream);
     }
 
     @Test
     public void testIncomingStream() {
-        assertEquals(inputStream, tcpSocketRPCConnection.getIncomingStream());
+        assertEquals(inputStream, processRPCConnection.getIncomingStream());
     }
 
     @Test
     public void testOugtoingStream() {
-        assertEquals(outputStream, tcpSocketRPCConnection.getOutgoingStream());
-    }
-
-    @Test(expected = RuntimeException.class)
-    public void testExceptionInOpeningIncomingStream() throws IOException {
-        given(socket.getInputStream()).willThrow(new IOException());
-
-        // When incoming stream is requested, crash the app
-        tcpSocketRPCConnection.getIncomingStream();
-    }
-
-    @Test(expected = RuntimeException.class)
-    public void testExceptionInOpeningOutgoingStream() throws IOException {
-        given(socket.getOutputStream()).willThrow(new IOException());
-
-        // When incoming stream is requested, crash the app
-        tcpSocketRPCConnection.getOutgoingStream();
+        assertEquals(outputStream, processRPCConnection.getOutgoingStream());
     }
 
     @Test
     public void testClose() throws IOException {
-        tcpSocketRPCConnection.close();
-        verify(socket).close();
+        var connection = new ProcessRpcConnection(process);
+        connection.close();
+        verify(process, never()).destroy();
+
+        var closingConnection = new ProcessRpcConnection(process, true);
+        closingConnection.close();
+        verify(process).destroy();
+
+        var newProcess = Mockito.mock(Process.class);
+        try(var autoClosedConnection = new ProcessRpcConnection(newProcess, true)) {
+            autoClosedConnection.getIncomingStream();
+        }
+        verify(newProcess).destroy();
     }
 }

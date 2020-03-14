@@ -28,7 +28,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonFormat(shape = JsonFormat.Shape.ARRAY)
-public final class PopupmenuSelectEvent implements UIPopupmenuEvent {
+public final class PopupmenuSelectEvent implements UiPopupmenuEvent {
     public static final String NAME = "popupmenu_select";
 
     private int selected;

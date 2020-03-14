@@ -35,21 +35,21 @@ import com.ensarsarajcic.neovim.java.api.types.msgpack.Buffer;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.Tabpage;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.Window;
 import com.ensarsarajcic.neovim.java.corerpc.message.RequestMessage;
-import com.ensarsarajcic.neovim.java.corerpc.reactive.ReactiveRPCStreamer;
+import com.ensarsarajcic.neovim.java.corerpc.reactive.ReactiveRpcStreamer;
 
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 /**
- * Implementation of {@link NeovimWindowApi} based on {@link ReactiveRPCStreamer}
+ * Implementation of {@link NeovimWindowApi} based on {@link ReactiveRpcStreamer}
  */
 @NeovimApiClient(name = "full_window_api", target = 6)
 public final class WindowStreamApi extends BaseStreamApi implements NeovimWindowApi {
 
     private Window model;
 
-    public WindowStreamApi(ReactiveRPCStreamer reactiveRPCStreamer, Window model) {
+    public WindowStreamApi(ReactiveRpcStreamer reactiveRPCStreamer, Window model) {
         super(reactiveRPCStreamer);
         Objects.requireNonNull(model, "window model is required to work with it");
         this.model = model;

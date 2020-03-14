@@ -29,7 +29,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonFormat(shape = JsonFormat.Shape.ARRAY)
-public final class WinExternalPositionEvent implements UIMultigridEvent {
+public final class WinExternalPositionEvent implements UiMultigridEvent {
     public static final String NAME = "win_external_pos";
 
     private int grid;

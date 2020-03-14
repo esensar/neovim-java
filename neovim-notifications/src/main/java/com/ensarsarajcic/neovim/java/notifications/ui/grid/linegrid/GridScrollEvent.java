@@ -28,7 +28,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonFormat(shape = JsonFormat.Shape.ARRAY)
-public final class GridScrollEvent implements UILineGridEvent {
+public final class GridScrollEvent implements UiLineGridEvent {
     public static final String NAME = "grid_scroll";
 
     private int grid;

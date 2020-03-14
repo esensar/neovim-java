@@ -33,7 +33,7 @@ import com.ensarsarajcic.neovim.java.api.types.api.VimCoords;
 import com.ensarsarajcic.neovim.java.api.types.api.VimKeyMap;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.Buffer;
 import com.ensarsarajcic.neovim.java.corerpc.message.RequestMessage;
-import com.ensarsarajcic.neovim.java.corerpc.reactive.ReactiveRPCStreamer;
+import com.ensarsarajcic.neovim.java.corerpc.reactive.ReactiveRpcStreamer;
 
 import java.util.List;
 import java.util.Map;
@@ -41,14 +41,14 @@ import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 /**
- * Implementation of {@link NeovimBufferApi} based on {@link ReactiveRPCStreamer}
+ * Implementation of {@link NeovimBufferApi} based on {@link ReactiveRpcStreamer}
  */
 @NeovimApiClient(name = "full_buffer_api", target = 6)
 public final class BufferStreamApi extends BaseStreamApi implements NeovimBufferApi {
 
     private Buffer model;
 
-    public BufferStreamApi(ReactiveRPCStreamer reactiveRPCStreamer,
+    public BufferStreamApi(ReactiveRpcStreamer reactiveRPCStreamer,
                            Buffer model) {
         super(reactiveRPCStreamer);
         Objects.requireNonNull(model, "buffer model is required to work with it");

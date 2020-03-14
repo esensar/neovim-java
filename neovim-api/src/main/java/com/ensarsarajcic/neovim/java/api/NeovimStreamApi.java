@@ -34,7 +34,7 @@ import com.ensarsarajcic.neovim.java.api.types.apiinfo.ApiInfo;
 import com.ensarsarajcic.neovim.java.api.window.NeovimWindowApi;
 import com.ensarsarajcic.neovim.java.api.window.WindowStreamApi;
 import com.ensarsarajcic.neovim.java.corerpc.message.RequestMessage;
-import com.ensarsarajcic.neovim.java.corerpc.reactive.ReactiveRPCStreamer;
+import com.ensarsarajcic.neovim.java.corerpc.reactive.ReactiveRpcStreamer;
 
 import java.util.List;
 import java.util.Map;
@@ -42,12 +42,12 @@ import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 /**
- * Full implementation of {@link NeovimApi} based on {@link ReactiveRPCStreamer}
+ * Full implementation of {@link NeovimApi} based on {@link ReactiveRpcStreamer}
  */
 @NeovimApiClient(name = "full_stream_api", target = 6)
 public final class NeovimStreamApi extends BaseStreamApi implements NeovimApi {
 
-    public NeovimStreamApi(ReactiveRPCStreamer reactiveRPCStreamer) {
+    public NeovimStreamApi(ReactiveRpcStreamer reactiveRPCStreamer) {
         super(reactiveRPCStreamer);
     }
 
@@ -81,7 +81,7 @@ public final class NeovimStreamApi extends BaseStreamApi implements NeovimApi {
     }
 
     @Override
-    public CompletableFuture<Void> attachUI(int width, int height, UiOptions options) {
+    public CompletableFuture<Void> attachUi(int width, int height, UiOptions options) {
         return sendWithNoResponse(
                 new RequestMessage.Builder(ATTACH_UI)
                         .addArgument(width)
@@ -90,19 +90,19 @@ public final class NeovimStreamApi extends BaseStreamApi implements NeovimApi {
     }
 
     @Override
-    public CompletableFuture<Void> detachUI() {
+    public CompletableFuture<Void> detachUi() {
         return sendWithNoResponse(new RequestMessage.Builder(DETACH_UI));
     }
 
     @Override
-    public CompletableFuture<Void> resizeUI(int width, int height) {
+    public CompletableFuture<Void> resizeUi(int width, int height) {
         return sendWithNoResponse(new RequestMessage.Builder(RESIZE_UI)
                 .addArgument(width)
                 .addArgument(height));
     }
 
     @Override
-    public CompletableFuture<Void> resizeUIGrid(int width, int height) {
+    public CompletableFuture<Void> resizeUiGrid(int width, int height) {
         return sendWithNoResponse(new RequestMessage.Builder(RESIZE_UI_GRID)
                 .addArgument(width)
                 .addArgument(height));

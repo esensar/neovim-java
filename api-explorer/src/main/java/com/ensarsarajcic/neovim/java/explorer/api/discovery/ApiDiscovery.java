@@ -27,7 +27,7 @@ package com.ensarsarajcic.neovim.java.explorer.api.discovery;
 import com.ensarsarajcic.neovim.java.api.NeovimApi;
 import com.ensarsarajcic.neovim.java.api.NeovimApis;
 import com.ensarsarajcic.neovim.java.api.types.apiinfo.*;
-import com.ensarsarajcic.neovim.java.corerpc.client.RPCConnection;
+import com.ensarsarajcic.neovim.java.corerpc.client.RpcConnection;
 import com.ensarsarajcic.neovim.java.explorer.api.*;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
@@ -70,10 +70,10 @@ public final class ApiDiscovery {
     }
 
     /**
-     * Loads API Info from running Neovim instance, represented with {@link RPCConnection}
+     * Loads API Info from running Neovim instance, represented with {@link RpcConnection}
      * @param rpcConnection connection to Neovim instance
      */
-    public static NeovimApiList discoverApiFromConnection(RPCConnection rpcConnection) throws ExecutionException, InterruptedException {
+    public static NeovimApiList discoverApiFromConnection(RpcConnection rpcConnection) throws ExecutionException, InterruptedException {
         var neovimApi = NeovimApis.getApiForConnection(rpcConnection);
         return discoverApiFromInstance(neovimApi);
     }

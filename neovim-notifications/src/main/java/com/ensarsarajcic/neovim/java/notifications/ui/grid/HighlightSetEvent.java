@@ -28,7 +28,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonFormat(shape = JsonFormat.Shape.ARRAY)
-public final class HighlightSetEvent implements UIGridEvent {
+public final class HighlightSetEvent implements UiGridEvent {
     public static final String NAME = "highlight_set";
 
     private HighlightAttributes attributes;

@@ -42,7 +42,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
-public class AsyncRPCSenderTest {
+public class AsyncRpcSenderTest {
 
     @Mock
     ExecutorService executorService;
@@ -57,7 +57,7 @@ public class AsyncRPCSenderTest {
     OutputStream outputStream;
 
     @InjectMocks
-    AsyncRPCSender asyncRPCSender;
+    AsyncRpcSender asyncRPCSender;
 
     @Test(expected = IllegalStateException.class)
     public void cantSendWithoutAttaching() {
@@ -114,13 +114,13 @@ public class AsyncRPCSenderTest {
     @Test(expected = NullPointerException.class)
     public void noNullExecutorService() {
         // when null executor service is passed to constructor, it throws exception
-        new AsyncRPCSender(null, objectMapper);
+        new AsyncRpcSender(null, objectMapper);
     }
 
     @Test(expected = NullPointerException.class)
     public void noNullObjectMapper() {
         // when null object mapper is passed to constructor, it throws exception
-        new AsyncRPCSender(executorService, null);
+        new AsyncRpcSender(executorService, null);
     }
 
     private void prepareSequentialExecutorService() {

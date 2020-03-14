@@ -24,14 +24,13 @@
 
 package com.ensarsarajcic.neovim.java.notifications.ui.message;
 
-import com.ensarsarajcic.neovim.java.notifications.ui.multigrid.UIMultigridEvent;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
 @JsonFormat(shape = JsonFormat.Shape.ARRAY)
-public final class MessageShowEvent implements UIMessageEvent {
+public final class MessageShowEvent implements UiMessageEvent {
     public static final String NAME = "msg_show";
 
     private String kind;

@@ -28,7 +28,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonFormat(shape = JsonFormat.Shape.ARRAY)
-public final class CursorGotoEvent implements UIGridEvent {
+public final class CursorGotoEvent implements UiGridEvent {
     public static final String NAME = "cursor_goto";
 
     private int row;

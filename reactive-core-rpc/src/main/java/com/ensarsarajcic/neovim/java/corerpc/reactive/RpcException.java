@@ -22,9 +22,39 @@
  * SOFTWARE.
  */
 
-package com.ensarsarajcic.neovim.java.notifications.ui.global;
+package com.ensarsarajcic.neovim.java.corerpc.reactive;
 
-import com.ensarsarajcic.neovim.java.notifications.ui.UIEvent;
+import com.ensarsarajcic.neovim.java.corerpc.message.RpcError;
 
-public interface UIGlobalEvent extends UIEvent {
+/**
+ * Exception wrapping {@link RpcError}
+ * <p>
+ * It should be thrown when {@link RpcError} is received in communication
+ */
+public class RpcException extends Exception {
+    private RpcError rpcError;
+
+    /**
+     * Creates a new {@link RpcException} with given {@link RpcError}
+     * @param rpcError error representing this exception
+     */
+    public RpcException(RpcError rpcError) {
+        super(rpcError.toString());
+        this.rpcError = rpcError;
+    }
+
+    /**
+     * Returns the cause - {@link RpcError}
+     * @return {@link RpcError} that caused the exception
+     */
+    public RpcError getRpcError() {
+        return rpcError;
+    }
+
+    @Override
+    public String toString() {
+        return "RPCException{" +
+                "rpcError=" + rpcError +
+                '}';
+    }
 }

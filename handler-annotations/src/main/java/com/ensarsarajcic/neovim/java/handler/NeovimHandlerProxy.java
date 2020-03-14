@@ -24,7 +24,7 @@
 
 package com.ensarsarajcic.neovim.java.handler;
 
-import com.ensarsarajcic.neovim.java.corerpc.client.RPCListener;
+import com.ensarsarajcic.neovim.java.corerpc.client.RpcListener;
 import com.ensarsarajcic.neovim.java.corerpc.message.NotificationMessage;
 import com.ensarsarajcic.neovim.java.corerpc.message.RequestMessage;
 import org.slf4j.Logger;
@@ -36,8 +36,8 @@ import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 
 /**
- * Class acting as both a container of {@link com.ensarsarajcic.neovim.java.corerpc.client.RPCListener.RequestCallback}
- * and {@link com.ensarsarajcic.neovim.java.corerpc.client.RPCListener.NotificationCallback} and as a listener
+ * Class acting as both a container of {@link RpcListener.RequestCallback}
+ * and {@link RpcListener.NotificationCallback} and as a listener
  * <p>
  * It passes all notifications/requests to contained listeners through a {@link ExecutorService}
  * By default {@link ImmediateExecutorService} is used
@@ -56,11 +56,11 @@ import java.util.concurrent.ExecutorService;
  *     }
  * </pre>
  */
-public final class NeovimHandlerProxy implements RPCListener.RequestCallback, RPCListener.NotificationCallback {
+public final class NeovimHandlerProxy implements RpcListener.RequestCallback, RpcListener.NotificationCallback {
     private static final Logger log = LoggerFactory.getLogger(NeovimHandlerProxy.class);
 
-    private List<RPCListener.NotificationCallback> notificationCallbacks = new ArrayList<>();
-    private List<RPCListener.RequestCallback> requestCallbacks = new ArrayList<>();
+    private List<RpcListener.NotificationCallback> notificationCallbacks = new ArrayList<>();
+    private List<RpcListener.RequestCallback> requestCallbacks = new ArrayList<>();
 
     private ExecutorService executorService;
 
@@ -73,22 +73,22 @@ public final class NeovimHandlerProxy implements RPCListener.RequestCallback, RP
         this.executorService = executorService;
     }
 
-    public void addNotificationCallback(RPCListener.NotificationCallback notificationCallback) {
+    public void addNotificationCallback(RpcListener.NotificationCallback notificationCallback) {
         log.info("Registered a new notification callback: {}", notificationCallback);
         this.notificationCallbacks.add(notificationCallback);
     }
 
-    public void addRequestCallback(RPCListener.RequestCallback requestCallback) {
+    public void addRequestCallback(RpcListener.RequestCallback requestCallback) {
         log.info("Registered a new request callback: {}", requestCallback);
         this.requestCallbacks.add(requestCallback);
     }
 
-    public void removeNotificationCallback(RPCListener.NotificationCallback notificationCallback) {
+    public void removeNotificationCallback(RpcListener.NotificationCallback notificationCallback) {
         log.info("Removed a notification callback: {}", notificationCallback);
         this.notificationCallbacks.remove(notificationCallback);
     }
 
-    public void removeRequestCallback(RPCListener.RequestCallback requestCallback) {
+    public void removeRequestCallback(RpcListener.RequestCallback requestCallback) {
         log.info("Removed a request callback: {}", requestCallback);
         this.requestCallbacks.remove(requestCallback);
     }

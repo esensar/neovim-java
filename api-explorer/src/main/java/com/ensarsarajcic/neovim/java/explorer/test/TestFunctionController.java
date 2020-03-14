@@ -24,10 +24,10 @@
 
 package com.ensarsarajcic.neovim.java.explorer.test;
 
-import com.ensarsarajcic.neovim.java.corerpc.message.RPCError;
+import com.ensarsarajcic.neovim.java.corerpc.message.RpcError;
 import com.ensarsarajcic.neovim.java.corerpc.message.RequestMessage;
 import com.ensarsarajcic.neovim.java.corerpc.message.ResponseMessage;
-import com.ensarsarajcic.neovim.java.corerpc.reactive.RPCException;
+import com.ensarsarajcic.neovim.java.corerpc.reactive.RpcException;
 import com.ensarsarajcic.neovim.java.explorer.api.ConnectionHolder;
 import com.ensarsarajcic.neovim.java.explorer.api.NeovimFunction;
 import javafx.fxml.FXML;
@@ -95,12 +95,12 @@ public final class TestFunctionController {
                 if (throwable instanceof  CompletionException) {
                     throwable = throwable.getCause();
                 }
-                if (throwable instanceof RPCException) {
-                    return new ResponseMessage(0, ((RPCException) throwable).getRpcError(), null);
+                if (throwable instanceof RpcException) {
+                    return new ResponseMessage(0, ((RpcException) throwable).getRpcError(), null);
                 } else {
                     return new ResponseMessage(
                             0,
-                            new RPCError(-1000, "LOCAL ERROR: " + throwable.toString()),
+                            new RpcError(-1000, "LOCAL ERROR: " + throwable.toString()),
                             null);
                 }
             }).thenAccept(responseMessage -> resultArea.setText(responseMessage.toString()));

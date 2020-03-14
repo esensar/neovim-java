@@ -31,7 +31,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 @JsonFormat(shape = JsonFormat.Shape.ARRAY)
-public final class HighlightAttributeDefineEvent implements UILineGridEvent {
+public final class HighlightAttributeDefineEvent implements UiLineGridEvent {
     public static final String NAME = "hl_attr_define";
 
     private int id;

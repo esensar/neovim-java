@@ -22,9 +22,9 @@
  * SOFTWARE.
  */
 
-package com.ensarsarajcic.neovim.java.notifications.ui.tabline;
+package com.ensarsarajcic.neovim.java.notifications.ui.wildmenu;
 
-import com.ensarsarajcic.neovim.java.notifications.ui.UIEvent;
+import com.ensarsarajcic.neovim.java.notifications.ui.UiEvent;
 
-public interface UITablineEvent extends UIEvent {
+public interface UiWildmenuEvent extends UiEvent {
 }

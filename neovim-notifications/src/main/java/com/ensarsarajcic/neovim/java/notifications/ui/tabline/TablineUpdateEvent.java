@@ -26,7 +26,7 @@ package com.ensarsarajcic.neovim.java.notifications.ui.tabline;
 
 import com.ensarsarajcic.neovim.java.api.types.msgpack.Tabpage;
 import com.ensarsarajcic.neovim.java.api.util.ObjectMappers;
-import com.ensarsarajcic.neovim.java.notifications.ui.UIEvent;
+import com.ensarsarajcic.neovim.java.notifications.ui.UiEvent;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -35,10 +35,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
-public final class TablineUpdateEvent implements UITablineEvent {
+public final class TablineUpdateEvent implements UiTablineEvent {
     public static final String NAME = "tabline_update";
 
-    public static final Function<List, UIEvent> CREATOR = list -> {
+    public static final Function<List, UiEvent> CREATOR = list -> {
         try {
             ObjectMapper objectMapper = ObjectMappers.defaultNeovimMapper();
 

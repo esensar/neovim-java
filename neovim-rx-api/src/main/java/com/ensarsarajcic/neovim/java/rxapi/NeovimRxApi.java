@@ -50,16 +50,16 @@ public interface NeovimRxApi {
     Single<Map> getHighlightByName(String name, boolean rgb);
 
     @NeovimApiFunction(name = NeovimApi.ATTACH_UI, since = 1)
-    Completable attachUI(int width, int height, UiOptions options);
+    Completable attachUi(int width, int height, UiOptions options);
 
     @NeovimApiFunction(name = NeovimApi.DETACH_UI, since = 1)
-    Completable detachUI();
+    Completable detachUi();
 
     @NeovimApiFunction(name = NeovimApi.RESIZE_UI, since = 1)
-    Completable resizeUI(int width, int height);
+    Completable resizeUi(int width, int height);
 
     @NeovimApiFunction(name = NeovimApi.RESIZE_UI_GRID, since = 6)
-    Completable resizeUIGrid(int width, int height);
+    Completable resizeUiGrid(int width, int height);
 
     @NeovimApiFunction(name = NeovimApi.SET_POPUPMENU_HEIGHT, since = 6)
     Completable setPopupmenuHeight(int height);

@@ -35,7 +35,7 @@ import java.io.InputStream;
  * It should attach to communication streams and notify when certain notifications and responses occur
  * It should all be run on a separate thread to prevent blocking
  */
-public interface RPCListener {
+public interface RpcListener {
 
     /**
      * Callback for {@link ResponseMessage} object

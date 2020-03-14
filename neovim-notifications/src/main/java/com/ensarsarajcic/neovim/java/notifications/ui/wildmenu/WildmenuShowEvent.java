@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 @JsonFormat(shape = JsonFormat.Shape.ARRAY)
-public final class WildmenuShowEvent implements UIWildmenuEvent {
+public final class WildmenuShowEvent implements UiWildmenuEvent {
     public static final String NAME = "wildmenu_show";
 
     private List<String> items;

@@ -27,7 +27,7 @@ package com.ensarsarajcic.neovim.java.notifications.ui.cmdline;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 @JsonFormat(shape = JsonFormat.Shape.ARRAY)
-public final class CmdlineBlockAppend implements UICmdlineEvent {
+public final class CmdlineBlockAppend implements UiCmdlineEvent {
     public static final String NAME = "cmdline_block_append";
 
     private String line;

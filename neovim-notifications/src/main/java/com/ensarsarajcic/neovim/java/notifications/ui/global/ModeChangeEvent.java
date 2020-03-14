@@ -28,7 +28,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonFormat(shape = JsonFormat.Shape.ARRAY)
-public final class ModeChangeEvent implements UIGlobalEvent {
+public final class ModeChangeEvent implements UiGlobalEvent {
     public static final String NAME = "mode_change";
 
     private String mode;

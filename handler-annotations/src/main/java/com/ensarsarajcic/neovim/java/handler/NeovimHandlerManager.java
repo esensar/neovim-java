@@ -24,8 +24,8 @@
 
 package com.ensarsarajcic.neovim.java.handler;
 
-import com.ensarsarajcic.neovim.java.corerpc.client.RPCListener;
-import com.ensarsarajcic.neovim.java.corerpc.client.RPCStreamer;
+import com.ensarsarajcic.neovim.java.corerpc.client.RpcListener;
+import com.ensarsarajcic.neovim.java.corerpc.client.RpcStreamer;
 import com.ensarsarajcic.neovim.java.handler.annotations.NeovimNotificationHandler;
 import com.ensarsarajcic.neovim.java.handler.annotations.NeovimRequestHandler;
 import com.ensarsarajcic.neovim.java.handler.util.ReflectionUtils;
@@ -44,7 +44,7 @@ import java.util.stream.Collectors;
  * annotated with {@link NeovimNotificationHandler} or {@link NeovimRequestHandler} can be useful, since this will
  * find such methods and call them once notifications/requests arrive
  * <p>
- * To get notifications/requests it should first be attached to a {@link RPCStreamer} using {@link #attachToStream(RPCStreamer)}
+ * To get notifications/requests it should first be attached to a {@link RpcStreamer} using {@link #attachToStream(RpcStreamer)}
  * Underneath, {@link NeovimHandlerProxy} is used to dispatch notifications/requests, which delegates thread management to it
  * <p>
  * Examples:
@@ -61,7 +61,7 @@ public final class NeovimHandlerManager {
     private static final Logger log = LoggerFactory.getLogger(NeovimHandlerManager.class);
 
     private NeovimHandlerProxy neovimHandlerProxy;
-    private Map<Object, Map.Entry<List<RPCListener.NotificationCallback>, List<RPCListener.RequestCallback>>> handlers = new HashMap<>();
+    private Map<Object, Map.Entry<List<RpcListener.NotificationCallback>, List<RpcListener.RequestCallback>>> handlers = new HashMap<>();
 
     /**
      * Creates a new {@link NeovimHandlerManager} with default {@link NeovimHandlerProxy} using {@link ImmediateExecutorService}
@@ -81,14 +81,14 @@ public final class NeovimHandlerManager {
     }
 
     /**
-     * Attaches to given {@link RPCStreamer}
-     * {@link RPCStreamer} does not have to be attached to an actual connection at the time of this call, since this
+     * Attaches to given {@link RpcStreamer}
+     * {@link RpcStreamer} does not have to be attached to an actual connection at the time of this call, since this
      * only sets up the notification/request callbacks
      *
      * @param rpcStreamer streamer whose notifications/requests should be analysed
-     * @throws NullPointerException if {@link RPCStreamer} is null
+     * @throws NullPointerException if {@link RpcStreamer} is null
      */
-    public void attachToStream(RPCStreamer rpcStreamer) {
+    public void attachToStream(RpcStreamer rpcStreamer) {
         log.info("Attaching handler manager to streamer ({})", rpcStreamer);
         Objects.requireNonNull(rpcStreamer, "rpcStreamer may not be null");
         rpcStreamer.addNotificationCallback(neovimHandlerProxy);
@@ -103,7 +103,7 @@ public final class NeovimHandlerManager {
      * <p>
      * This works for both static and instance methods
      * <p>
-     * Passed objects methods are prepared to be called when new notifications/requests arrive from attached {@link RPCStreamer}
+     * Passed objects methods are prepared to be called when new notifications/requests arrive from attached {@link RpcStreamer}
      * This may be called prior to attaching, but no notifications/requests can arrive before attaching
      *
      * @param handler object to search for annotated methods
@@ -121,10 +121,10 @@ public final class NeovimHandlerManager {
 
         handlers.put(handler, new AbstractMap.SimpleEntry<>(new ArrayList<>(), new ArrayList<>()));
 
-        List<RPCListener.NotificationCallback> notificationCallbacks = notificationHandlers.stream()
+        List<RpcListener.NotificationCallback> notificationCallbacks = notificationHandlers.stream()
                 .map(methodNeovimNotificationHandlerEntry -> {
                     String notificationName = methodNeovimNotificationHandlerEntry.getValue().value();
-                    return (RPCListener.NotificationCallback) notificationMessage -> {
+                    return (RpcListener.NotificationCallback) notificationMessage -> {
                         if (notificationName.equals(notificationMessage.getName())) {
                             try {
                                 if (Modifier.isStatic(methodNeovimNotificationHandlerEntry.getKey().getModifiers())) {
@@ -145,10 +145,10 @@ public final class NeovimHandlerManager {
         notificationCallbacks.forEach(neovimHandlerProxy::addNotificationCallback);
         handlers.get(handler).getKey().addAll(notificationCallbacks);
 
-        List<RPCListener.RequestCallback> requestCallbacks = requestHandlers.stream()
+        List<RpcListener.RequestCallback> requestCallbacks = requestHandlers.stream()
                 .map(methodNeovimRequestHandlerEntry -> {
                     String requestName = methodNeovimRequestHandlerEntry.getValue().value();
-                    return (RPCListener.RequestCallback) requestMessage -> {
+                    return (RpcListener.RequestCallback) requestMessage -> {
                         if (requestName.equals(requestMessage.getMethod())) {
                             try {
                                 methodNeovimRequestHandlerEntry.getKey().invoke(handler, requestMessage);

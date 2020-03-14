@@ -22,9 +22,35 @@
  * SOFTWARE.
  */
 
-package com.ensarsarajcic.neovim.java.notifications.ui.popupmenu;
+package com.ensarsarajcic.neovim.java.corerpc.reactive;
 
-import com.ensarsarajcic.neovim.java.notifications.ui.UIEvent;
+import com.ensarsarajcic.neovim.java.corerpc.message.RpcError;
+import org.hamcrest.BaseMatcher;
+import org.hamcrest.Description;
+import org.junit.Test;
 
-public interface UIPopupmenuEvent extends UIEvent {
+import static org.junit.Assert.*;
+
+public class RpcExceptionTest {
+
+    @Test
+    public void testConstructorAndToStringNotCrashing() {
+        new RpcException(new RpcError(1, "message")).toString();
+    }
+
+    @Test
+    public void testStoresRPCError() {
+        var error = new RpcError(1, "msg");
+        assertThat(new RpcException(error).toString(), new BaseMatcher<>() {
+            @Override
+            public boolean matches(Object o) {
+                return o.toString().contains("msg");
+            }
+
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("Contains rpcerror");
+            }
+        });
+    }
 }

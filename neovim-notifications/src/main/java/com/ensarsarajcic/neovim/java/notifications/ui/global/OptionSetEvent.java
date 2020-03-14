@@ -28,7 +28,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonFormat(shape = JsonFormat.Shape.ARRAY)
-public final class OptionSetEvent implements UIGlobalEvent {
+public final class OptionSetEvent implements UiGlobalEvent {
     public static final String NAME = "option_set";
 
     public enum Option {

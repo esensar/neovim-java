@@ -28,7 +28,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonFormat(shape = JsonFormat.Shape.ARRAY)
-public final class SetIconEvent implements UIGlobalEvent {
+public final class SetIconEvent implements UiGlobalEvent {
     public static final String NAME = "set_icon";
 
     private String icon;

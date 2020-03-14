@@ -27,7 +27,7 @@ package com.ensarsarajcic.neovim.java.notifications.ui.global;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 @JsonFormat(shape = JsonFormat.Shape.ARRAY)
-public final class UpdateMenuEvent implements UIGlobalEvent {
+public final class UpdateMenuEvent implements UiGlobalEvent {
     public static final String NAME = "update_menu";
 
     @Override

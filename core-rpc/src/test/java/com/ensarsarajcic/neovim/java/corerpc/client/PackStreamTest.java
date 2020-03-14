@@ -47,10 +47,10 @@ import static org.mockito.Mockito.*;
 public class PackStreamTest {
 
     @Mock
-    RPCListener rpcListener;
+    RpcListener rpcListener;
 
     @Mock
-    RPCSender rpcSender;
+    RpcSender rpcSender;
 
     @Mock
     MessageIdGenerator messageIdGenerator;
@@ -64,15 +64,15 @@ public class PackStreamTest {
     @Mock
     OutputStream outputStream;
 
-    private RPCConnection connection;
+    private RpcConnection connection;
 
-    private ArgumentCaptor<RPCListener.RequestCallback> packStreamRequestCallback;
-    private ArgumentCaptor<RPCListener.NotificationCallback> packStreamNotificationCallback;
+    private ArgumentCaptor<RpcListener.RequestCallback> packStreamRequestCallback;
+    private ArgumentCaptor<RpcListener.NotificationCallback> packStreamNotificationCallback;
 
     @Before
     public void setUp() throws Exception {
         prepareListeners();
-        connection = new RPCConnection() {
+        connection = new RpcConnection() {
             @Override
             public InputStream getIncomingStream() {
                 return inputStream;
@@ -135,7 +135,7 @@ public class PackStreamTest {
         // Given a proper message id generator
         given(messageIdGenerator.nextId()).willReturn(25);
         // And callback
-        var responseCallback = Mockito.mock(RPCListener.ResponseCallback.class);
+        var responseCallback = Mockito.mock(RpcListener.ResponseCallback.class);
         // When send is called
         var message = new RequestMessage.Builder("test");
         packStream.send(message, responseCallback);
@@ -159,7 +159,7 @@ public class PackStreamTest {
         packStream.attach(connection);
 
         // When request callback is added
-        var firstCallback = Mockito.mock(RPCListener.RequestCallback.class);
+        var firstCallback = Mockito.mock(RpcListener.RequestCallback.class);
         packStream.addRequestCallback(firstCallback);
 
         // It should receive requests
@@ -168,7 +168,7 @@ public class PackStreamTest {
         verify(firstCallback).requestReceived(msg1);
 
         // Multiple callbacks should be supported too
-        var secondCallback = Mockito.mock(RPCListener.RequestCallback.class);
+        var secondCallback = Mockito.mock(RpcListener.RequestCallback.class);
         packStream.addRequestCallback(secondCallback);
 
         // Both should receive messages
@@ -202,7 +202,7 @@ public class PackStreamTest {
         packStream.attach(connection);
 
         // When notification callback is added
-        var firstCallback = Mockito.mock(RPCListener.NotificationCallback.class);
+        var firstCallback = Mockito.mock(RpcListener.NotificationCallback.class);
         packStream.addNotificationCallback(firstCallback);
 
         // It should receive requests
@@ -211,7 +211,7 @@ public class PackStreamTest {
         verify(firstCallback).notificationReceived(msg1);
 
         // Multiple callbacks should be supported too
-        var secondCallback = Mockito.mock(RPCListener.NotificationCallback.class);
+        var secondCallback = Mockito.mock(RpcListener.NotificationCallback.class);
         packStream.addNotificationCallback(secondCallback);
 
         // Both should receive messages
@@ -272,10 +272,10 @@ public class PackStreamTest {
     }
 
     private void prepareListeners() {
-        packStreamNotificationCallback = ArgumentCaptor.forClass(RPCListener.NotificationCallback.class);
+        packStreamNotificationCallback = ArgumentCaptor.forClass(RpcListener.NotificationCallback.class);
         doNothing().when(rpcListener).listenForNotifications(packStreamNotificationCallback.capture());
 
-        packStreamRequestCallback = ArgumentCaptor.forClass(RPCListener.RequestCallback.class);
+        packStreamRequestCallback = ArgumentCaptor.forClass(RpcListener.RequestCallback.class);
         doNothing().when(rpcListener).listenForRequests(packStreamRequestCallback.capture());
     }
 }

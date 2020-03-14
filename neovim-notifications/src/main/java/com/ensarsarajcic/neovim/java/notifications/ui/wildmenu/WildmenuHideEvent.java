@@ -27,7 +27,7 @@ package com.ensarsarajcic.neovim.java.notifications.ui.wildmenu;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 @JsonFormat(shape = JsonFormat.Shape.ARRAY)
-public final class WildmenuHideEvent implements UIWildmenuEvent {
+public final class WildmenuHideEvent implements UiWildmenuEvent {
     public static final String NAME = "wildmenu_hide";
 
     @Override

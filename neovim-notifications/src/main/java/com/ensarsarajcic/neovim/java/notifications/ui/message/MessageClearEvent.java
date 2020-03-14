@@ -25,12 +25,9 @@
 package com.ensarsarajcic.neovim.java.notifications.ui.message;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-import java.util.List;
 
 @JsonFormat(shape = JsonFormat.Shape.ARRAY)
-public final class MessageClearEvent implements UIMessageEvent {
+public final class MessageClearEvent implements UiMessageEvent {
     public static final String NAME = "msg_clear";
 
     public MessageClearEvent() { }
