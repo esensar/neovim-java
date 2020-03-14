@@ -49,8 +49,8 @@ public final class WindowStreamApi extends BaseStreamApi implements NeovimWindow
 
     private Window model;
 
-    public WindowStreamApi(ReactiveRpcStreamer reactiveRPCStreamer, Window model) {
-        super(reactiveRPCStreamer);
+    public WindowStreamApi(ReactiveRpcStreamer reactiveRpcStreamer, Window model) {
+        super(reactiveRpcStreamer);
         Objects.requireNonNull(model, "window model is required to work with it");
         this.model = model;
     }
@@ -63,7 +63,7 @@ public final class WindowStreamApi extends BaseStreamApi implements NeovimWindow
     @Override
     public CompletableFuture<NeovimBufferApi> getBuffer() {
         return sendWithResponseOfMsgPackType(prepareMessage(GET_BUFFER), Buffer.class)
-                .thenApply(buffer -> new BufferStreamApi(reactiveRPCStreamer, buffer));
+                .thenApply(buffer -> new BufferStreamApi(reactiveRpcStreamer, buffer));
     }
 
     @Override
@@ -143,7 +143,7 @@ public final class WindowStreamApi extends BaseStreamApi implements NeovimWindow
     @Override
     public CompletableFuture<NeovimTabpageApi> getTabpage() {
         return sendWithResponseOfMsgPackType(prepareMessage(GET_TABPAGE), Tabpage.class)
-                .thenApply(tabpage -> new TabpageStreamApi(reactiveRPCStreamer, tabpage));
+                .thenApply(tabpage -> new TabpageStreamApi(reactiveRpcStreamer, tabpage));
     }
 
     @Override

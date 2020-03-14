@@ -52,14 +52,14 @@ public class TabpageStreamApiTest extends BaseStreamApiTest {
     public void setUp() throws Exception {
         tabpage = new Tabpage(1);
         tabpageStreamApi = new TabpageStreamApi(
-                reactiveRPCStreamer,
+                reactiveRpcStreamer,
                 tabpage
         );
     }
 
     @Test(expected = NullPointerException.class)
     public void cantConstructWithNullModel() {
-        new TabpageStreamApi(reactiveRPCStreamer, null);
+        new TabpageStreamApi(reactiveRpcStreamer, null);
     }
 
     @Test(expected = NullPointerException.class)

@@ -59,7 +59,7 @@ public final class RpcError {
 
     @Override
     public String toString() {
-        return "RPCError{" +
+        return "RpcError{" +
                 "id=" + id +
                 ", message='" + message + '\'' +
                 '}';

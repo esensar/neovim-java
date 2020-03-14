@@ -37,7 +37,7 @@ import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
  * Format is defined as:
  *  * type as Integer
  *  * id as Integer
- *  * error as RPCError
+ *  * error as RpcError
  *  * result
  */
 @JsonFormat(shape = JsonFormat.Shape.ARRAY)

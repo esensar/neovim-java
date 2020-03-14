@@ -4,7 +4,7 @@
 
 This is the Core RPC module, the core of this library. It provides the most basic interface for communicating with Neovim.
 
-It provides *Request*, *Response* and *Notification* messages, and a way to send and receive them. It uses `RPCConnection` interface for
+It provides *Request*, *Response* and *Notification* messages, and a way to send and receive them. It uses `RpcConnection` interface for
 communication which just provides input and ouput streams. This module provides basic implementations of that interface allowing communication
 either through **TCP socket** or throguh **process** (used for embedded neovim instance).
 
@@ -26,8 +26,8 @@ Example of usage:
 ```java
     Socket socket = new Socket("127.0.0.1", 1234);
     
-    RPCConnection localConnection = new TcpSocketRPCConnection(socket);
-    RPCStreamer rpcStreamer = RPCClient.getDefaultAsyncInstance(); // shared singleton
+    RpcConnection localConnection = new TcpSocketRpcConnection(socket);
+    RpcStreamer rpcStreamer = RpcClient.getDefaultAsyncInstance(); // shared singleton
     
     rpcStreamer.attach(localConnection);
     Message request = new RequestMessage.Builder("nvim_get_current_line");
@@ -36,17 +36,17 @@ Example of usage:
     rpcStreamer.send(request); // Sending a request - fire and forget - no callback
 ```
 
-You can also implement `RPCListener` and `RPCSender` and use these implementations instead for `RPCClient`:
+You can also implement `RpcListener` and `RpcSender` and use these implementations instead for `RpcClient`:
 ```java
-    RPCStreamer customSenderListenerClient = new RPCClient.Builder()
-        .withRPCListener(customRPCListener)
-        .withRPCSender(customRPCSender)
+    RpcStreamer customSenderListenerClient = new RpcClient.Builder()
+        .withRpcListener(customRpcListener)
+        .withRpcSender(customRpcSender)
         .build();
 ```
 
-Or you can implement `RPCStreamer` in which case, `RPCClient` is just a basic proxy:
+Or you can implement `RpcStreamer` in which case, `RpcClient` is just a basic proxy:
 ```java
-    RPCStreamer customClient = new RPCClient.Builder()
-        .withRPCStreamer(customStreamer)
+    RpcStreamer customClient = new RpcClient.Builder()
+        .withRpcStreamer(customStreamer)
         .build();
 ```

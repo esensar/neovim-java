@@ -19,12 +19,12 @@ Gradle:
 compile 'com.ensarsarajcic.neovim.java:reactive-core-rpc:${neovimjava.version}'
 ```
 
-It handles the same `RPCConnection` interface as core RPC module and creation is very similar:
+It handles the same `RpcConnection` interface as core Rpc module and creation is very similar:
 ```java
     Socket socket = new Socket("127.0.0.1", 1234);
     
-    RPCConnection localConnection = new TcpSocketRPCConnection(socket);
-    ReactiveRPCStreamer rpcStreamer = ReactiveRPCClient.getDefaultInstance(); // shared singleton
+    RpcConnection localConnection = new TcpSocketRpcConnection(socket);
+    ReactiveRpcStreamer rpcStreamer = ReactiveRpcClient.getDefaultInstance(); // shared singleton
     
     rpcStreamer.attach(localConnection);
     Message request = new RequestMessage.Builder("nvim_get_current_line");

@@ -2,7 +2,7 @@
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.ensarsarajcic.neovim.java/unix-socket-connection/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.ensarsarajcic.neovim.java/unix-socket-connection)
 
-Unix socket connection module provides a very simple additional implementation of `RPCConnection` based on Unix domain sockets.
+Unix socket connection module provides a very simple additional implementation of `RpcConnection` based on Unix domain sockets.
 
 Include it in your dependencies:  
 Maven:  
@@ -22,7 +22,7 @@ Example usage:
 ```java
     File socket = new File("/var/nvim/random");
 
-    RPCConnection fileConnection = new UnixDomainSocketRPCConnection(socket);
+    RpcConnection fileConnection = new UnixDomainSocketRpcConnection(socket);
 
     // It can now be used for communication
     rpcStreamer.attach(fileConnection);

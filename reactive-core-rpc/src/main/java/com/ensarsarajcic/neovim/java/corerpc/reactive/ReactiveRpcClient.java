@@ -42,20 +42,20 @@ import java.util.concurrent.Flow;
  * <p>
  * Examples:
  * <pre>
- *     ReactiveRPCStreamer defaultSharedClient = ReactiveRPCClient.getDefaultInstance(); // shared singleton
+ *     ReactiveRpcStreamer defaultSharedClient = ReactiveRpcClient.getDefaultInstance(); // shared singleton
  *
- *     ReactiveRPCStreamer defaultClient = ReactiveRPCClient.createDefaultInstance(); // new instance with same config as shared singleton
+ *     ReactiveRpcStreamer defaultClient = ReactiveRpcClient.createDefaultInstance(); // new instance with same config as shared singleton
  * </pre>
  */
 public final class ReactiveRpcClient implements ReactiveRpcStreamer {
 
     private static ReactiveRpcClient defaultSharedInstance;
 
-    private ReactiveRpcStreamer reactiveRPCStreamer;
+    private ReactiveRpcStreamer reactiveRpcStreamer;
 
-    private ReactiveRpcClient(ReactiveRpcStreamer reactiveRPCStreamer) {
-        Objects.requireNonNull(reactiveRPCStreamer, "reactiveRPCStreamer is required for all operations");
-        this.reactiveRPCStreamer = reactiveRPCStreamer;
+    private ReactiveRpcClient(ReactiveRpcStreamer reactiveRpcStreamer) {
+        Objects.requireNonNull(reactiveRpcStreamer, "reactiveRpcStreamer is required for all operations");
+        this.reactiveRpcStreamer = reactiveRpcStreamer;
     }
 
     /**
@@ -64,7 +64,7 @@ public final class ReactiveRpcClient implements ReactiveRpcStreamer {
      * @return <b>New instance</b> of {@link ReactiveRpcClient}
      */
     public static ReactiveRpcClient createDefaultInstance() {
-        return new ReactiveRpcClient(createDefaultReactiveRPCStreamer());
+        return new ReactiveRpcClient(createDefaultReactiveRpcStreamer());
     }
 
     /**
@@ -72,8 +72,8 @@ public final class ReactiveRpcClient implements ReactiveRpcStreamer {
      *
      * @return <b>New instance</b> of {@link ReactiveRpcClient}
      */
-    public static ReactiveRpcClient createInstanceWithCustomReactiveStreamer(ReactiveRpcStreamer reactiveRPCStreamer) {
-        return new ReactiveRpcClient(reactiveRPCStreamer);
+    public static ReactiveRpcClient createInstanceWithCustomReactiveStreamer(ReactiveRpcStreamer reactiveRpcStreamer) {
+        return new ReactiveRpcClient(reactiveRpcStreamer);
     }
 
     /**
@@ -82,14 +82,14 @@ public final class ReactiveRpcClient implements ReactiveRpcStreamer {
      * @return <b>New instance</b> of {@link ReactiveRpcClient}
      */
     public static ReactiveRpcClient createDefaultInstanceWithCustomStreamer(RpcStreamer rpcStreamer) {
-        return new ReactiveRpcClient(createDefaultReactiveRPCStreamer(rpcStreamer));
+        return new ReactiveRpcClient(createDefaultReactiveRpcStreamer(rpcStreamer));
     }
 
-    private static ReactiveRpcStreamer createDefaultReactiveRPCStreamer(RpcStreamer rpcStreamer) {
+    private static ReactiveRpcStreamer createDefaultReactiveRpcStreamer(RpcStreamer rpcStreamer) {
         return new ReactiveRpcStreamerWrapper(rpcStreamer);
     }
 
-    private static ReactiveRpcStreamer createDefaultReactiveRPCStreamer() {
+    private static ReactiveRpcStreamer createDefaultReactiveRpcStreamer() {
         return new ReactiveRpcStreamerWrapper(RpcClient.createDefaultAsyncInstance());
     }
 
@@ -117,7 +117,7 @@ public final class ReactiveRpcClient implements ReactiveRpcStreamer {
      */
     @Override
     public void attach(RpcConnection rpcConnection) {
-        reactiveRPCStreamer.attach(rpcConnection);
+        reactiveRpcStreamer.attach(rpcConnection);
     }
 
     /**
@@ -128,7 +128,7 @@ public final class ReactiveRpcClient implements ReactiveRpcStreamer {
      */
     @Override
     public CompletableFuture<ResponseMessage> response(RequestMessage.Builder requestMessage) {
-        return reactiveRPCStreamer.response(requestMessage);
+        return reactiveRpcStreamer.response(requestMessage);
     }
 
     /**
@@ -138,7 +138,7 @@ public final class ReactiveRpcClient implements ReactiveRpcStreamer {
      */
     @Override
     public Flow.Publisher<RequestMessage> requestsFlow() {
-        return reactiveRPCStreamer.requestsFlow();
+        return reactiveRpcStreamer.requestsFlow();
     }
 
     /**
@@ -148,6 +148,6 @@ public final class ReactiveRpcClient implements ReactiveRpcStreamer {
      */
     @Override
     public Flow.Publisher<NotificationMessage> notificationsFlow() {
-        return reactiveRPCStreamer.notificationsFlow();
+        return reactiveRpcStreamer.notificationsFlow();
     }
 }

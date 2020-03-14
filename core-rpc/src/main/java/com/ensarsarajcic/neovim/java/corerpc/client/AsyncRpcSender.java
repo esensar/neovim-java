@@ -59,7 +59,7 @@ import java.util.concurrent.ExecutorService;
  *     factory.disable(JsonGenerator.Feature.AUTO_CLOSE_TARGET);
  *     ObjectMapper objectMapper = new ObjectMapper(factory);
  *
- *     RPCSender sender = new AsyncRPCSender(executorService, objectMapper);
+ *     RpcSender sender = new AsyncRpcSender(executorService, objectMapper);
  *     sender.attach(outputStream); // an existing OutputStream
  *     sender.send(message); // fire and forget
  *     }

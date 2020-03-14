@@ -53,14 +53,14 @@ public class WindowStreamApiTest extends BaseStreamApiTest {
     public void setUp() throws Exception {
         window = new Window(1);
         windowStreamApi = new WindowStreamApi(
-                reactiveRPCStreamer,
+                reactiveRpcStreamer,
                 window
         );
     }
 
     @Test(expected = NullPointerException.class)
     public void cantConstructWithNullModel() {
-        new WindowStreamApi(reactiveRPCStreamer, null);
+        new WindowStreamApi(reactiveRpcStreamer, null);
     }
 
     @Test(expected = NullPointerException.class)

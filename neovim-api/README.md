@@ -28,10 +28,10 @@ Example usage:
 ```java
     Socket socket = new Socket("127.0.0.1", 1234);
     
-    RPCConnection localConnection = new TcpSocketRPCConnection(socket);
+    RpcConnection localConnection = new TcpSocketRpcConnection(socket);
     NeovimApi api = NeovimApis.getApiForConnection(localConnection);
     
     api.getCurrentLine().thenAccept(System.out::println);
     
-    NeovimApi another = new NeovimStreamApi(ReactiveRPCClient.getDefaultInstance());
+    NeovimApi another = new NeovimStreamApi(ReactiveRpcClient.getDefaultInstance());
 ```

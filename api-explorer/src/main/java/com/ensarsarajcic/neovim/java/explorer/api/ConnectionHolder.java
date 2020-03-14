@@ -40,34 +40,34 @@ public final class ConnectionHolder {
 
     private static RpcConnection connection;
     private static NeovimApi neovimApi;
-    private static ReactiveRpcStreamer reactiveRPCStreamer;
+    private static ReactiveRpcStreamer reactiveRpcStreamer;
     private static String connectedIpPort;
 
     public static void setConnection(RpcConnection rpcConnection) {
         connection = rpcConnection;
     }
 
-    public static ReactiveRpcStreamer getReactiveRPCStreamer() {
-        if (reactiveRPCStreamer == null) {
+    public static ReactiveRpcStreamer getReactiveRpcStreamer() {
+        if (reactiveRpcStreamer == null) {
             synchronized (ConnectionHolder.class) {
-                if (reactiveRPCStreamer == null) {
+                if (reactiveRpcStreamer == null) {
                     var rpcClient = new RpcClient.Builder()
                             .withObjectMapper(NeovimJacksonModule.createNeovimObjectMapper()).build();
                     rpcClient.attach(connection);
 
-                    reactiveRPCStreamer = ReactiveRpcClient.createDefaultInstanceWithCustomStreamer(rpcClient);
+                    reactiveRpcStreamer = ReactiveRpcClient.createDefaultInstanceWithCustomStreamer(rpcClient);
                 }
             }
         }
 
-        return reactiveRPCStreamer;
+        return reactiveRpcStreamer;
     }
 
     public static NeovimApi getApi() {
         if (neovimApi == null) {
             synchronized (ConnectionHolder.class) {
                 if (neovimApi == null) {
-                    neovimApi = new NeovimStreamApi(getReactiveRPCStreamer());
+                    neovimApi = new NeovimStreamApi(getReactiveRpcStreamer());
                 }
             }
         }

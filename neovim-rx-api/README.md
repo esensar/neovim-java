@@ -22,7 +22,7 @@ Example:
 ```java
     Socket socket = new Socket("127.0.0.1", 1234);
     
-    RPCConnection localConnection = new TcpSocketRPCConnection(socket);
+    RpcConnection localConnection = new TcpSocketRpcConnection(socket);
     NeovimApi api = NeovimApis.getApiForConnection(localConnection); // Create regular API
     NeovimRxApi rxApi = new NeovimRxWrapper(api); // And then wrap it in RxJava2 interface
     

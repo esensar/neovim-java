@@ -40,7 +40,7 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
-public class ReactiveRPCClientTest {
+public class ReactiveRpcClientTest {
 
     @Mock
     ReactiveRpcStreamer rpcStreamer;
@@ -80,11 +80,11 @@ public class ReactiveRPCClientTest {
     @Test
     public void testCustomFactories() throws IOException {
         // Create with custom reactive streamer should delegate to custom streamer
-        var reactiveRPCStreamer = Mockito.mock(ReactiveRpcStreamer.class);
-        var rpc1 = ReactiveRpcClient.createInstanceWithCustomReactiveStreamer(reactiveRPCStreamer);
-        validateDelegates(rpc1, reactiveRPCStreamer);
+        var reactiveRpcStreamer = Mockito.mock(ReactiveRpcStreamer.class);
+        var rpc1 = ReactiveRpcClient.createInstanceWithCustomReactiveStreamer(reactiveRpcStreamer);
+        validateDelegates(rpc1, reactiveRpcStreamer);
         // And should not duplicate instances
-        var rpc2 = ReactiveRpcClient.createInstanceWithCustomReactiveStreamer(reactiveRPCStreamer);
+        var rpc2 = ReactiveRpcClient.createInstanceWithCustomReactiveStreamer(reactiveRpcStreamer);
 
         assertNotEquals(rpc1, rpc2);
 

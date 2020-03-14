@@ -53,13 +53,13 @@ import java.util.function.Supplier;
  * Example:
  * <pre>
  *     {@code
- *     ReactiveRPCStreamer reactiveRPCStreamer = new ReactiveRPCStreamerWrapper(rpcStreamer); // existing rpc streamer, default executor
+ *     ReactiveRpcStreamer reactiveRpcStreamer = new ReactiveRpcStreamerWrapper(rpcStreamer); // existing rpc streamer, default executor
  *
- *     reactiveRPCStreamer.response(request).thenAccept(System.out::println); // requesting
- *     reactiveRPCStreamer.notificationsFlow().subscribe(notificationsSubscriber); // notifications subscription
+ *     reactiveRpcStreamer.response(request).thenAccept(System.out::println); // requesting
+ *     reactiveRpcStreamer.notificationsFlow().subscribe(notificationsSubscriber); // notifications subscription
  *
  *     // Custom executor usage
- *     ReactiveRPCStreamer customExecutorStreamer = new ReactiveRPCStreamerWrapper(rpcStreamer, customExecutor);
+ *     ReactiveRpcStreamer customExecutorStreamer = new ReactiveRpcStreamerWrapper(rpcStreamer, customExecutor);
  *     // All of the response calls on this streamer will now run CompletableFuture on the provided executor
  *     }
  * </pre>

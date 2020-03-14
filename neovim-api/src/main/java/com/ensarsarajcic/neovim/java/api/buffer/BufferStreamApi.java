@@ -48,9 +48,9 @@ public final class BufferStreamApi extends BaseStreamApi implements NeovimBuffer
 
     private Buffer model;
 
-    public BufferStreamApi(ReactiveRpcStreamer reactiveRPCStreamer,
+    public BufferStreamApi(ReactiveRpcStreamer reactiveRpcStreamer,
                            Buffer model) {
-        super(reactiveRPCStreamer);
+        super(reactiveRpcStreamer);
         Objects.requireNonNull(model, "buffer model is required to work with it");
         this.model = model;
     }

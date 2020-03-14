@@ -88,7 +88,7 @@ public final class TestFunctionController {
             for (var node : inputNodes) {
                 args.add(NodeHandler.generateValueFromNodeOfType(node.getValue(), node.getKey()));
             }
-            ConnectionHolder.getReactiveRPCStreamer().response(
+            ConnectionHolder.getReactiveRpcStreamer().response(
                     new RequestMessage.Builder(neovimFunction.getName())
                             .addArguments(args)
             ).exceptionally(throwable -> {

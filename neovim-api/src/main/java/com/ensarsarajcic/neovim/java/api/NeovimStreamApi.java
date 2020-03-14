@@ -47,8 +47,8 @@ import java.util.stream.Collectors;
 @NeovimApiClient(name = "full_stream_api", target = 6)
 public final class NeovimStreamApi extends BaseStreamApi implements NeovimApi {
 
-    public NeovimStreamApi(ReactiveRpcStreamer reactiveRPCStreamer) {
-        super(reactiveRPCStreamer);
+    public NeovimStreamApi(ReactiveRpcStreamer reactiveRpcStreamer) {
+        super(reactiveRpcStreamer);
     }
 
     @Override
@@ -327,7 +327,7 @@ public final class NeovimStreamApi extends BaseStreamApi implements NeovimApi {
     public CompletableFuture<List<NeovimBufferApi>> getBuffers() {
         return sendWithResponseOfListOfMsgPackType(new RequestMessage.Builder(LIST_BUFS), Buffer.class)
                 .thenApply(buffers -> buffers.stream()
-                        .map(buffer -> new BufferStreamApi(reactiveRPCStreamer, buffer)).collect(Collectors.toList()));
+                        .map(buffer -> new BufferStreamApi(reactiveRpcStreamer, buffer)).collect(Collectors.toList()));
     }
 
     @Override
@@ -337,13 +337,13 @@ public final class NeovimStreamApi extends BaseStreamApi implements NeovimApi {
                         .addArgument(listed)
                         .addArgument(scratch),
                 Buffer.class)
-                .thenApply(buffer -> new BufferStreamApi(reactiveRPCStreamer, buffer));
+                .thenApply(buffer -> new BufferStreamApi(reactiveRpcStreamer, buffer));
     }
 
     @Override
     public CompletableFuture<NeovimBufferApi> getCurrentBuffer() {
         return sendWithResponseOfMsgPackType(new RequestMessage.Builder(GET_CURRENT_BUF), Buffer.class)
-                .thenApply(buffer -> new BufferStreamApi(reactiveRPCStreamer, buffer));
+                .thenApply(buffer -> new BufferStreamApi(reactiveRpcStreamer, buffer));
     }
 
     @Override
@@ -365,7 +365,7 @@ public final class NeovimStreamApi extends BaseStreamApi implements NeovimApi {
     public CompletableFuture<List<NeovimWindowApi>> getWindows() {
         return sendWithResponseOfListOfMsgPackType(new RequestMessage.Builder(LIST_WINS), Window.class)
                 .thenApply(windows -> windows.stream()
-                        .map(window -> new WindowStreamApi(reactiveRPCStreamer, window)).collect(Collectors.toList()));
+                        .map(window -> new WindowStreamApi(reactiveRpcStreamer, window)).collect(Collectors.toList()));
     }
 
     @Override
@@ -375,26 +375,26 @@ public final class NeovimStreamApi extends BaseStreamApi implements NeovimApi {
                         .addArgument(enter)
                         .addArgument(config),
                 Window.class)
-                .thenApply(window -> new WindowStreamApi(reactiveRPCStreamer, window));
+                .thenApply(window -> new WindowStreamApi(reactiveRpcStreamer, window));
     }
 
     @Override
     public CompletableFuture<NeovimWindowApi> getCurrentWindow() {
         return sendWithResponseOfMsgPackType(new RequestMessage.Builder(GET_CURRENT_WIN), Window.class)
-                .thenApply(window -> new WindowStreamApi(reactiveRPCStreamer, window));
+                .thenApply(window -> new WindowStreamApi(reactiveRpcStreamer, window));
     }
 
     @Override
     public CompletableFuture<List<NeovimTabpageApi>> getTabpages() {
         return sendWithResponseOfListOfMsgPackType(new RequestMessage.Builder(LIST_TABPAGES), Tabpage.class)
                 .thenApply(tabpages -> tabpages.stream()
-                        .map(tabpage -> new TabpageStreamApi(reactiveRPCStreamer, tabpage)).collect(Collectors.toList()));
+                        .map(tabpage -> new TabpageStreamApi(reactiveRpcStreamer, tabpage)).collect(Collectors.toList()));
     }
 
     @Override
     public CompletableFuture<NeovimTabpageApi> getCurrentTabpage() {
         return sendWithResponseOfMsgPackType(new RequestMessage.Builder(GET_CURRENT_TABPAGE), Tabpage.class)
-                .thenApply(tabpage -> new TabpageStreamApi(reactiveRPCStreamer, tabpage));
+                .thenApply(tabpage -> new TabpageStreamApi(reactiveRpcStreamer, tabpage));
     }
 
     @Override

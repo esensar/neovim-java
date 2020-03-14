@@ -57,7 +57,7 @@ public class AsyncRpcSenderTest {
     OutputStream outputStream;
 
     @InjectMocks
-    AsyncRpcSender asyncRPCSender;
+    AsyncRpcSender asyncRpcSender;
 
     @Test(expected = IllegalStateException.class)
     public void cantSendWithoutAttaching() {
@@ -65,25 +65,25 @@ public class AsyncRpcSenderTest {
         prepareSequentialExecutorService();
         // when send is called
         // exception is thrown
-        asyncRPCSender.send(() -> MessageType.REQUEST);
+        asyncRpcSender.send(() -> MessageType.REQUEST);
     }
 
     @Test
     public void testAttach() {
         // when attaching app should not crash
-        asyncRPCSender.attach(outputStream);
+        asyncRpcSender.attach(outputStream);
     }
 
     @Test
     public void testSend() throws IOException {
         // given an attached stream and proper executor service
-        asyncRPCSender.attach(outputStream);
+        asyncRpcSender.attach(outputStream);
         prepareSequentialExecutorService();
         Message message = () -> MessageType.REQUEST;
         given(objectMapper.writer()).willReturn(objectWriter);
         doNothing().when(objectWriter).writeValue(outputStream, message);
         // when send is called
-        asyncRPCSender.send(message);
+        asyncRpcSender.send(message);
 
         // message is passed down to stream
         // writer was requested
@@ -95,14 +95,14 @@ public class AsyncRpcSenderTest {
     @Test(expected = RuntimeException.class)
     public void testSendError() throws IOException {
         // and a failing write
-        asyncRPCSender.attach(outputStream);
+        asyncRpcSender.attach(outputStream);
         prepareSequentialExecutorService();
         Message message = () -> MessageType.REQUEST;
         given(objectMapper.writer()).willReturn(objectWriter);
         // given an attached stream and proper executor service
         doThrow(new IOException()).when(objectWriter).writeValue(outputStream, message);
         // when send fails
-        asyncRPCSender.send(message);
+        asyncRpcSender.send(message);
 
         // message is passed down to stream
         // writer was requested

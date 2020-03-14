@@ -35,7 +35,7 @@ import java.util.Objects;
 /**
  * Implementation of {@link RpcConnection} providing streams of a {@link Process}
  * <p>
- * This allows a connection to another process and communication with it via RPC
+ * This allows a connection to another process and communication with it via Rpc
  * It is a very simple implementation which can optionally kill the process once connection is closed
  * <p>
  * Example:
@@ -44,7 +44,7 @@ import java.util.Objects;
  *     ProcessBuilder pb = new ProcessBuilder("nvim", "--embed");
  *     Process neovim = pb.start();
  *
- *     RPCConnection neovimConnection = new ProcessRPCConnection(neovim, true); // true to kill neovim once connection is closed
+ *     RpcConnection neovimConnection = new ProcessRpcConnection(neovim, true); // true to kill neovim once connection is closed
  *
  *     // This can now be used for communication
  *     rpcStreamer.attach(neovimConnection);
@@ -77,7 +77,7 @@ public final class ProcessRpcConnection implements RpcConnection {
      * @throws NullPointerException if process is null
      */
     public ProcessRpcConnection(Process process, boolean killProcessOnClose) {
-        Objects.requireNonNull(process, "process is required to properly implement a RPCConnection");
+        Objects.requireNonNull(process, "process is required to properly implement a RpcConnection");
         this.process = process;
         this.killProcessOnClose = killProcessOnClose;
     }
@@ -119,7 +119,7 @@ public final class ProcessRpcConnection implements RpcConnection {
 
     @Override
     public String toString() {
-        return "ProcessRPCConnection{" +
+        return "ProcessRpcConnection{" +
                 "process=" + process +
                 ", killProcessOnClose=" + killProcessOnClose +
                 '}';
