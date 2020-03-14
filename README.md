@@ -48,3 +48,8 @@ compile 'com.ensarsarajcic.neovim.java:neovim-rx-api:${neovimjava.version}'
 ```
 
 For more information, check out README of modules you are interested in.
+
+## Remote plugin support
+This repository contains a small remote plugin example in `rplugin-example`. To run this example run `mvn package` and run Neovim with provided vimrc by calling `nvim -u rplugin-example/vimrc` from project root.
+
+It should be possible to then call the `:NeovimJavaIncrementCount` command which communicated with java plugin.
