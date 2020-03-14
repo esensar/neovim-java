@@ -56,7 +56,7 @@ import java.util.Objects;
  * <pre>
  *     {@code
  *     // Existing listener and sender
- *     RPCStreamer rpcStreamer = new PackStream(sender, listener);
+ *     RpcStreamer rpcStreamer = new PackStream(sender, listener);
  *     // Existing connection
  *     rpcStreamer.attach(connection);
  *
@@ -75,7 +75,7 @@ import java.util.Objects;
  *     MessageIdGenerator generator = createCustomMessageIdGenerator();
  *
  *     // Existing listener and sender
- *     RPCStreamer rpcStreamer = new PackStream(sender, listener, generator);
+ *     RpcStreamer rpcStreamer = new PackStream(sender, listener, generator);
  *
  *     // ...
  *     }

@@ -44,22 +44,22 @@ import java.util.concurrent.*;
  * <p>
  * Examples:
  * <pre>
- *     RPCStreamer defaultSharedClient = RPCClient.getDefaultAsyncInstance(); // shared singleton
+ *     RpcStreamer defaultSharedClient = RpcClient.getDefaultAsyncInstance(); // shared singleton
  *
- *     RPCStreamer defaultClient = RPCClient.createDefaultAsyncInstance(); // new instance with same config as shared singleton
+ *     RpcStreamer defaultClient = RpcClient.createDefaultAsyncInstance(); // new instance with same config as shared singleton
  *
- *     RPCStreamer customClient = new RPCClient.Builder()
- *          .withRPCStreamer(customStreamer)
+ *     RpcStreamer customClient = new RpcClient.Builder()
+ *          .withRpcStreamer(customStreamer)
  *          .build();
  *
- *     RPCStreamer customBasicsClient = new RPCClient.Builder()
+ *     RpcStreamer customBasicsClient = new RpcClient.Builder()
  *          .withObjectMapper(customObjectMapper)
  *          .withExecutorService(customExecutorService)
  *          .build();
  *
- *     RPCStreamer customSenderListenerClient = new RPCClient.Builder()
- *          .withRPCListener(customRPCListener)
- *          .withRPCSender(customRPCSender)
+ *     RpcStreamer customSenderListenerClient = new RpcClient.Builder()
+ *          .withRpcListener(customRpcListener)
+ *          .withRpcSender(customRpcSender)
  *          .build();
  * </pre>
  */
@@ -117,32 +117,32 @@ public final class RpcClient implements RpcStreamer {
         return defaultExecutorService;
     }
 
-    private static RpcSender createAsyncRPCSender(ExecutorService executorService, ObjectMapper objectMapper) {
+    private static RpcSender createAsyncRpcSender(ExecutorService executorService, ObjectMapper objectMapper) {
         return new AsyncRpcSender(executorService, objectMapper);
     }
 
-    private static RpcSender createDefaultAsyncRPCSender() {
-        return createAsyncRPCSender(getDefaultExecutorService(), getDefaultObjectMapper());
+    private static RpcSender createDefaultAsyncRpcSender() {
+        return createAsyncRpcSender(getDefaultExecutorService(), getDefaultObjectMapper());
     }
 
-    private static RpcListener createAsyncRPCListener(ExecutorService executorService, ObjectMapper objectMapper) {
+    private static RpcListener createAsyncRpcListener(ExecutorService executorService, ObjectMapper objectMapper) {
         return new BackgroundRpcListener(executorService, objectMapper);
     }
 
-    private static RpcListener createDefaultAsyncRPCListener() {
-        return createAsyncRPCListener(getDefaultExecutorService(), getDefaultObjectMapper());
+    private static RpcListener createDefaultAsyncRpcListener() {
+        return createAsyncRpcListener(getDefaultExecutorService(), getDefaultObjectMapper());
     }
 
-    private static RpcStreamer createDefaultAsyncRPCStreamer() {
-        return createRPCStreamer(createDefaultAsyncRPCSender(), createDefaultAsyncRPCListener());
+    private static RpcStreamer createDefaultAsyncRpcStreamer() {
+        return createRpcStreamer(createDefaultAsyncRpcSender(), createDefaultAsyncRpcListener());
     }
 
-    private static RpcStreamer createDefaultAsyncRPCStreamer(ExecutorService executorService, ObjectMapper objectMapper) {
-        return createRPCStreamer(createAsyncRPCSender(executorService, objectMapper),
-                createAsyncRPCListener(executorService, objectMapper));
+    private static RpcStreamer createDefaultAsyncRpcStreamer(ExecutorService executorService, ObjectMapper objectMapper) {
+        return createRpcStreamer(createAsyncRpcSender(executorService, objectMapper),
+                createAsyncRpcListener(executorService, objectMapper));
     }
 
-    private static RpcStreamer createRPCStreamer(RpcSender rpcSender, RpcListener rpcListener) {
+    private static RpcStreamer createRpcStreamer(RpcSender rpcSender, RpcListener rpcListener) {
         return new PackStream(rpcSender, rpcListener);
     }
 
@@ -155,7 +155,7 @@ public final class RpcClient implements RpcStreamer {
      * @return <b>New instance</b> of {@link RpcClient}
      */
     public static RpcClient createDefaultAsyncInstance() {
-        return new RpcClient(createDefaultAsyncRPCStreamer());
+        return new RpcClient(createDefaultAsyncRpcStreamer());
     }
 
     /**
@@ -294,18 +294,18 @@ public final class RpcClient implements RpcStreamer {
          * @param rpcStreamer {@link RpcStreamer} instance to use
          * @return instance of a different, more limited builder
          */
-        public CustomRPCStreamerBuilder withRPCStreamer(RpcStreamer rpcStreamer) {
+        public CustomRpcStreamerBuilder withRpcStreamer(RpcStreamer rpcStreamer) {
             Objects.requireNonNull(rpcStreamer, "rpcStreamer may not be null");
-            return new CustomRPCStreamerBuilder(rpcStreamer);
+            return new CustomRpcStreamerBuilder(rpcStreamer);
         }
 
         /**
          * Builder used when {@link RpcStreamer} is changed
          */
-        public static class CustomRPCStreamerBuilder {
+        public static class CustomRpcStreamerBuilder {
             private final RpcStreamer rpcStreamer;
 
-            private CustomRPCStreamerBuilder(RpcStreamer rpcStreamer) {
+            private CustomRpcStreamerBuilder(RpcStreamer rpcStreamer) {
                 this.rpcStreamer = rpcStreamer;
             }
 
@@ -324,8 +324,8 @@ public final class RpcClient implements RpcStreamer {
          * @param rpcSender {@link RpcSender} instance to use
          * @return instance of a different, more limited builder
          */
-        public CustomRPCSenderBuilder withRPCSender(RpcSender rpcSender) {
-            return new CustomRPCSenderBuilder(rpcSender, executorService, objectMapper);
+        public CustomRpcSenderBuilder withRpcSender(RpcSender rpcSender) {
+            return new CustomRpcSenderBuilder(rpcSender, executorService, objectMapper);
         }
 
         /**
@@ -335,8 +335,8 @@ public final class RpcClient implements RpcStreamer {
          * @param rpcListener {@link RpcListener} instance to use
          * @return instance of a different, more limited builder
          */
-        public CustomRPCListenerBuilder withRPCListener(RpcListener rpcListener) {
-            return new CustomRPCListenerBuilder(rpcListener, executorService, objectMapper);
+        public CustomRpcListenerBuilder withRpcListener(RpcListener rpcListener) {
+            return new CustomRpcListenerBuilder(rpcListener, executorService, objectMapper);
         }
 
         /**
@@ -347,18 +347,18 @@ public final class RpcClient implements RpcStreamer {
          * @param rpcListener {@link RpcListener} instance to use
          * @return instance of a different, more limited builder
          */
-        public DefaultRPCStreamerFullBuilder withRPCSenderAndListener(RpcSender rpcSender, RpcListener rpcListener) {
-            return new DefaultRPCStreamerFullBuilder(rpcSender, rpcListener);
+        public DefaultRpcStreamerFullBuilder withRpcSenderAndListener(RpcSender rpcSender, RpcListener rpcListener) {
+            return new DefaultRpcStreamerFullBuilder(rpcSender, rpcListener);
         }
 
         /**
          * Builder used when both {@link RpcSender} and {@link RpcListener} are changed
          */
-        public static class DefaultRPCStreamerFullBuilder {
+        public static class DefaultRpcStreamerFullBuilder {
             private RpcSender rpcSender;
             private RpcListener rpcListener;
 
-            private DefaultRPCStreamerFullBuilder(RpcSender rpcSender, RpcListener rpcListener) {
+            private DefaultRpcStreamerFullBuilder(RpcSender rpcSender, RpcListener rpcListener) {
                 Objects.requireNonNull(rpcSender, "rpcSender may not be null");
                 Objects.requireNonNull(rpcListener, "rpcListener may not be null");
                 this.rpcSender = rpcSender;
@@ -370,7 +370,7 @@ public final class RpcClient implements RpcStreamer {
              *
              * @param rpcSender {@link RpcSender} instance to use
              */
-            public DefaultRPCStreamerFullBuilder withRPCSender(RpcSender rpcSender) {
+            public DefaultRpcStreamerFullBuilder withRpcSender(RpcSender rpcSender) {
                 Objects.requireNonNull(rpcSender, "rpcSender may not be null");
                 this.rpcSender = rpcSender;
                 return this;
@@ -381,7 +381,7 @@ public final class RpcClient implements RpcStreamer {
              *
              * @param rpcListener {@link RpcListener} instance to use
              */
-            public DefaultRPCStreamerFullBuilder withRPCListener(RpcListener rpcListener) {
+            public DefaultRpcStreamerFullBuilder withRpcListener(RpcListener rpcListener) {
                 Objects.requireNonNull(rpcListener, "rpcListener may not be null");
                 this.rpcListener = rpcListener;
                 return this;
@@ -391,19 +391,19 @@ public final class RpcClient implements RpcStreamer {
              * Creates a new {@link RpcClient} instance with default {@link RpcStreamer} and given sender and listener
              */
             public RpcClient build() {
-                return new RpcClient(createRPCStreamer(rpcSender, rpcListener));
+                return new RpcClient(createRpcStreamer(rpcSender, rpcListener));
             }
         }
 
         /**
          * Builder used when {@link RpcSender} is changed
          */
-        public static class CustomRPCSenderBuilder {
+        public static class CustomRpcSenderBuilder {
             private RpcSender rpcSender;
             private ExecutorService executorService;
             private ObjectMapper objectMapper;
 
-            private CustomRPCSenderBuilder(RpcSender rpcSender, ExecutorService executorService, ObjectMapper objectMapper) {
+            private CustomRpcSenderBuilder(RpcSender rpcSender, ExecutorService executorService, ObjectMapper objectMapper) {
                 this.rpcSender = rpcSender;
                 this.executorService = executorService;
                 this.objectMapper = objectMapper;
@@ -416,8 +416,8 @@ public final class RpcClient implements RpcStreamer {
              * @param rpcListener {@link RpcListener} instance to use
              * @return an instance of a different, more limited builder
              */
-            public DefaultRPCStreamerFullBuilder withRPCListener(RpcListener rpcListener) {
-                return new DefaultRPCStreamerFullBuilder(rpcSender, rpcListener);
+            public DefaultRpcStreamerFullBuilder withRpcListener(RpcListener rpcListener) {
+                return new DefaultRpcStreamerFullBuilder(rpcSender, rpcListener);
             }
 
             /**
@@ -425,7 +425,7 @@ public final class RpcClient implements RpcStreamer {
              *
              * @param rpcSender {@link RpcSender} instance to use
              */
-            public CustomRPCSenderBuilder withRPCSender(RpcSender rpcSender) {
+            public CustomRpcSenderBuilder withRpcSender(RpcSender rpcSender) {
                 Objects.requireNonNull(rpcSender, "rpcSender may not be null");
                 this.rpcSender = rpcSender;
                 return this;
@@ -436,7 +436,7 @@ public final class RpcClient implements RpcStreamer {
              *
              * @param objectMapper {@link ObjectMapper} instance to use
              */
-            public CustomRPCSenderBuilder withObjectMapper(ObjectMapper objectMapper) {
+            public CustomRpcSenderBuilder withObjectMapper(ObjectMapper objectMapper) {
                 Objects.requireNonNull(objectMapper, "objectMapper may not be null");
                 this.objectMapper = objectMapper;
                 return this;
@@ -447,7 +447,7 @@ public final class RpcClient implements RpcStreamer {
              *
              * @param executorService {@link ExecutorService} instance to use
              */
-            public CustomRPCSenderBuilder withExecutorService(ExecutorService executorService) {
+            public CustomRpcSenderBuilder withExecutorService(ExecutorService executorService) {
                 Objects.requireNonNull(executorService, "executorService may not be null");
                 this.executorService = executorService;
                 return this;
@@ -458,19 +458,19 @@ public final class RpcClient implements RpcStreamer {
              * with given {@link ObjectMapper} and {@link ExecutorService}, together with custom {@link RpcSender}
              */
             public RpcClient build() {
-                return new RpcClient(createRPCStreamer(rpcSender, createAsyncRPCListener(executorService, objectMapper)));
+                return new RpcClient(createRpcStreamer(rpcSender, createAsyncRpcListener(executorService, objectMapper)));
             }
         }
 
         /**
          * Builder used when {@link RpcListener} is changed
          */
-        public static class CustomRPCListenerBuilder {
+        public static class CustomRpcListenerBuilder {
             private RpcListener rpcListener;
             private ExecutorService executorService;
             private ObjectMapper objectMapper;
 
-            private CustomRPCListenerBuilder(RpcListener rpcListener, ExecutorService executorService, ObjectMapper objectMapper) {
+            private CustomRpcListenerBuilder(RpcListener rpcListener, ExecutorService executorService, ObjectMapper objectMapper) {
                 this.rpcListener = rpcListener;
                 this.executorService = executorService;
                 this.objectMapper = objectMapper;
@@ -483,8 +483,8 @@ public final class RpcClient implements RpcStreamer {
              * @param rpcSender {@link RpcSender} instance to use
              * @return an instance of a different, more limited builder
              */
-            public DefaultRPCStreamerFullBuilder withRPCSender(RpcSender rpcSender) {
-                return new DefaultRPCStreamerFullBuilder(rpcSender, rpcListener);
+            public DefaultRpcStreamerFullBuilder withRpcSender(RpcSender rpcSender) {
+                return new DefaultRpcStreamerFullBuilder(rpcSender, rpcListener);
             }
 
             /**
@@ -492,7 +492,7 @@ public final class RpcClient implements RpcStreamer {
              *
              * @param rpcListener {@link RpcListener} instance to use
              */
-            public CustomRPCListenerBuilder withRPCListener(RpcListener rpcListener) {
+            public CustomRpcListenerBuilder withRpcListener(RpcListener rpcListener) {
                 Objects.requireNonNull(rpcListener, "rpcSender may not be null");
                 this.rpcListener = rpcListener;
                 return this;
@@ -503,7 +503,7 @@ public final class RpcClient implements RpcStreamer {
              *
              * @param objectMapper {@link ObjectMapper} instance to use
              */
-            public CustomRPCListenerBuilder withObjectMapper(ObjectMapper objectMapper) {
+            public CustomRpcListenerBuilder withObjectMapper(ObjectMapper objectMapper) {
                 Objects.requireNonNull(objectMapper, "objectMapper may not be null");
                 this.objectMapper = objectMapper;
                 return this;
@@ -514,7 +514,7 @@ public final class RpcClient implements RpcStreamer {
              *
              * @param executorService {@link ExecutorService} instance to use
              */
-            public CustomRPCListenerBuilder withExecutorService(ExecutorService executorService) {
+            public CustomRpcListenerBuilder withExecutorService(ExecutorService executorService) {
                 Objects.requireNonNull(executorService, "executorService may not be null");
                 this.executorService = executorService;
                 return this;
@@ -525,7 +525,7 @@ public final class RpcClient implements RpcStreamer {
              * with given {@link ObjectMapper} and {@link ExecutorService}, together with custom {@link RpcListener}
              */
             public RpcClient build() {
-                return new RpcClient(createRPCStreamer(createAsyncRPCSender(executorService, objectMapper), rpcListener));
+                return new RpcClient(createRpcStreamer(createAsyncRpcSender(executorService, objectMapper), rpcListener));
             }
         }
 
@@ -556,7 +556,7 @@ public final class RpcClient implements RpcStreamer {
          * with custom dependencies for those ({@link ExecutorService} and {@link ObjectMapper})
          */
         public RpcClient build() {
-            return new RpcClient(createDefaultAsyncRPCStreamer(executorService, objectMapper));
+            return new RpcClient(createDefaultAsyncRpcStreamer(executorService, objectMapper));
         }
     }
 }

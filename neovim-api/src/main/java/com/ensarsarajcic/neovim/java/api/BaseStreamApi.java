@@ -49,23 +49,23 @@ import java.util.concurrent.CompletionException;
 public abstract class BaseStreamApi {
     private static final Logger log = LoggerFactory.getLogger(NeovimTypeDeserializer.class);
 
-    protected ReactiveRpcStreamer reactiveRPCStreamer;
+    protected ReactiveRpcStreamer reactiveRpcStreamer;
     protected ObjectMapper objectMapper;
 
-    public BaseStreamApi(ReactiveRpcStreamer reactiveRPCStreamer) {
-        Objects.requireNonNull(reactiveRPCStreamer, "reactiveRpcStreamer is required for stream API");
-        this.reactiveRPCStreamer = reactiveRPCStreamer;
+    public BaseStreamApi(ReactiveRpcStreamer reactiveRpcStreamer) {
+        Objects.requireNonNull(reactiveRpcStreamer, "reactiveRpcStreamer is required for stream API");
+        this.reactiveRpcStreamer = reactiveRpcStreamer;
         this.objectMapper = ObjectMappers.defaultNeovimMapper();
     }
 
     protected <T> CompletableFuture<T> sendWithResponseOfType(RequestMessage.Builder request, Class<T> type) {
-        return reactiveRPCStreamer.response(request)
+        return reactiveRpcStreamer.response(request)
                 .thenApply(ResponseMessage::getResult)
                 .thenApply(o -> objectMapper.convertValue(o, type));
     }
 
     protected CompletableFuture<byte[]> sendWithBytesResponse(RequestMessage.Builder request) {
-        return reactiveRPCStreamer.response(request)
+        return reactiveRpcStreamer.response(request)
                 .thenApply(ResponseMessage::getResult)
                 .thenApply(o -> {
                     try {
@@ -129,6 +129,6 @@ public abstract class BaseStreamApi {
     }
 
     protected CompletableFuture<Void> sendWithNoResponse(RequestMessage.Builder request) {
-        return reactiveRPCStreamer.response(request).thenApply(responseMessage -> null);
+        return reactiveRpcStreamer.response(request).thenApply(responseMessage -> null);
     }
 }

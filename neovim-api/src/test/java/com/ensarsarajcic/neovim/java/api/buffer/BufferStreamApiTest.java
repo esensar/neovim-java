@@ -54,14 +54,14 @@ public class BufferStreamApiTest extends BaseStreamApiTest {
     public void setUp() throws Exception {
         buffer = new Buffer(1);
         bufferStreamApi = new BufferStreamApi(
-                reactiveRPCStreamer,
+                reactiveRpcStreamer,
                 buffer
         );
     }
 
     @Test(expected = NullPointerException.class)
     public void cantConstructWithNullModel() {
-        new BufferStreamApi(reactiveRPCStreamer, null);
+        new BufferStreamApi(reactiveRpcStreamer, null);
     }
 
     @Test(expected = NullPointerException.class)

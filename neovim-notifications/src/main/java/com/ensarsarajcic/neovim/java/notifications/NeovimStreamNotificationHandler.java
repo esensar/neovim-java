@@ -60,18 +60,18 @@ import java.util.stream.Collectors;
 public final class NeovimStreamNotificationHandler implements NeovimNotificationHandler {
     private static final Logger log = LoggerFactory.getLogger(NeovimStreamNotificationHandler.class);
 
-    private ReactiveRpcStreamer reactiveRPCStreamer;
+    private ReactiveRpcStreamer reactiveRpcStreamer;
     private ObjectMapper objectMapper;
 
     /**
      * Creates a new {@link NeovimStreamNotificationHandler} reading notifications from {@link ReactiveRpcStreamer}
      * passed in the constructor. It may not be null.
-     * @param reactiveRPCStreamer streamer to be used to read notifications
-     * @throws NullPointerException if reactiveRPCStreamer is null
+     * @param reactiveRpcStreamer streamer to be used to read notifications
+     * @throws NullPointerException if reactiveRpcStreamer is null
      */
-    public NeovimStreamNotificationHandler(ReactiveRpcStreamer reactiveRPCStreamer) {
-        Objects.requireNonNull(reactiveRPCStreamer, "reactiveRPCStreamer is required to receive notifications");
-        this.reactiveRPCStreamer = reactiveRPCStreamer;
+    public NeovimStreamNotificationHandler(ReactiveRpcStreamer reactiveRpcStreamer) {
+        Objects.requireNonNull(reactiveRpcStreamer, "reactiveRpcStreamer is required to receive notifications");
+        this.reactiveRpcStreamer = reactiveRpcStreamer;
         this.objectMapper = ObjectMappers.defaultNeovimMapper();
     }
 
@@ -90,7 +90,7 @@ public final class NeovimStreamNotificationHandler implements NeovimNotification
                                     .collect(Collectors.toList())
                     );
                 });
-        reactiveRPCStreamer.notificationsFlow().subscribe(uiEventFilterProcessor);
+        reactiveRpcStreamer.notificationsFlow().subscribe(uiEventFilterProcessor);
         uiEventFilterProcessor.subscribe(uiEventMappingProcessor);
         return uiEventMappingProcessor;
     }
@@ -106,7 +106,7 @@ public final class NeovimStreamNotificationHandler implements NeovimNotification
                                         .get(notificationMessage.getName())
                                         .apply(notificationMessage.getArguments())
                 );
-        reactiveRPCStreamer.notificationsFlow().subscribe(bufferEventFilterProcessor);
+        reactiveRpcStreamer.notificationsFlow().subscribe(bufferEventFilterProcessor);
         bufferEventFilterProcessor.subscribe(bufferEventMappingProcessor);
         return bufferEventMappingProcessor;
     }

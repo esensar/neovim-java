@@ -51,23 +51,23 @@ public class ProcessRpcConnectionTest {
     @Mock
     OutputStream outputStream;
 
-    ProcessRpcConnection processRPCConnection;
+    ProcessRpcConnection processRpcConnection;
 
     @Before
     public void setUp() throws Exception {
-        processRPCConnection = new ProcessRpcConnection(process);
+        processRpcConnection = new ProcessRpcConnection(process);
         given(process.getInputStream()).willReturn(inputStream);
         given(process.getOutputStream()).willReturn(outputStream);
     }
 
     @Test
     public void testIncomingStream() {
-        assertEquals(inputStream, processRPCConnection.getIncomingStream());
+        assertEquals(inputStream, processRpcConnection.getIncomingStream());
     }
 
     @Test
     public void testOugtoingStream() {
-        assertEquals(outputStream, processRPCConnection.getOutgoingStream());
+        assertEquals(outputStream, processRpcConnection.getOutgoingStream());
     }
 
     @Test

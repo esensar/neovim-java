@@ -44,7 +44,7 @@ import java.util.Objects;
  *     {@code
  *     Socket socket = new Socket("127.0.0.1", 1234);
  *
- *     RPCConnection localConnection = new TcpSocketRPCConnection(socket);
+ *     RpcConnection localConnection = new TcpSocketRpcConnection(socket);
  *
  *     // It can now be used for communication
  *     rpcStreamer.attach(localConnection);
@@ -65,7 +65,7 @@ public final class TcpSocketRpcConnection implements RpcConnection {
      * @throws NullPointerException if socket is null
      */
     public TcpSocketRpcConnection(Socket socket) {
-        Objects.requireNonNull(socket, "socket is required to properly implement a RPCConnection");
+        Objects.requireNonNull(socket, "socket is required to properly implement a RpcConnection");
         this.socket = socket;
     }
 
@@ -115,7 +115,7 @@ public final class TcpSocketRpcConnection implements RpcConnection {
 
     @Override
     public String toString() {
-        return "TcpSocketRPCConnection{" +
+        return "TcpSocketRpcConnection{" +
                 "socket=" + socket +
                 '}';
     }

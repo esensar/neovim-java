@@ -53,7 +53,7 @@ public class RpcException extends Exception {
 
     @Override
     public String toString() {
-        return "RPCException{" +
+        return "RpcException{" +
                 "rpcError=" + rpcError +
                 '}';
     }

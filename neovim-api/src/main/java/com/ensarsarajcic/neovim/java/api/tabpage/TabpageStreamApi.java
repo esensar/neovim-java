@@ -46,8 +46,8 @@ public final class TabpageStreamApi extends BaseStreamApi implements NeovimTabpa
 
     private Tabpage model;
 
-    public TabpageStreamApi(ReactiveRpcStreamer reactiveRPCStreamer, Tabpage model) {
-        super(reactiveRPCStreamer);
+    public TabpageStreamApi(ReactiveRpcStreamer reactiveRpcStreamer, Tabpage model) {
+        super(reactiveRpcStreamer);
         Objects.requireNonNull(model, "tabpage model is required to work with it");
         this.model = model;
     }
@@ -61,13 +61,13 @@ public final class TabpageStreamApi extends BaseStreamApi implements NeovimTabpa
     public CompletableFuture<List<NeovimWindowApi>> getWindows() {
         return sendWithResponseOfListOfMsgPackType(prepareMessage(LIST_WINDOWS), Window.class)
                 .thenApply(windows -> windows.stream()
-                        .map(window -> new WindowStreamApi(reactiveRPCStreamer, window)).collect(Collectors.toList()));
+                        .map(window -> new WindowStreamApi(reactiveRpcStreamer, window)).collect(Collectors.toList()));
     }
 
     @Override
     public CompletableFuture<NeovimWindowApi> getWindow() {
         return sendWithResponseOfMsgPackType(prepareMessage(GET_WINDOW), Window.class)
-                .thenApply(window -> new WindowStreamApi(reactiveRPCStreamer, window));
+                .thenApply(window -> new WindowStreamApi(reactiveRpcStreamer, window));
     }
 
     @Override

@@ -52,7 +52,7 @@ public class TcpSocketRpcConnectionTest {
     OutputStream outputStream;
 
     @InjectMocks
-    TcpSocketRpcConnection tcpSocketRPCConnection;
+    TcpSocketRpcConnection tcpSocketRpcConnection;
 
     @Before
     public void setUp() throws Exception {
@@ -62,12 +62,12 @@ public class TcpSocketRpcConnectionTest {
 
     @Test
     public void testIncomingStream() {
-        assertEquals(inputStream, tcpSocketRPCConnection.getIncomingStream());
+        assertEquals(inputStream, tcpSocketRpcConnection.getIncomingStream());
     }
 
     @Test
     public void testOugtoingStream() {
-        assertEquals(outputStream, tcpSocketRPCConnection.getOutgoingStream());
+        assertEquals(outputStream, tcpSocketRpcConnection.getOutgoingStream());
     }
 
     @Test(expected = RuntimeException.class)
@@ -75,7 +75,7 @@ public class TcpSocketRpcConnectionTest {
         given(socket.getInputStream()).willThrow(new IOException());
 
         // When incoming stream is requested, crash the app
-        tcpSocketRPCConnection.getIncomingStream();
+        tcpSocketRpcConnection.getIncomingStream();
     }
 
     @Test(expected = RuntimeException.class)
@@ -83,12 +83,12 @@ public class TcpSocketRpcConnectionTest {
         given(socket.getOutputStream()).willThrow(new IOException());
 
         // When incoming stream is requested, crash the app
-        tcpSocketRPCConnection.getOutgoingStream();
+        tcpSocketRpcConnection.getOutgoingStream();
     }
 
     @Test
     public void testClose() throws IOException {
-        tcpSocketRPCConnection.close();
+        tcpSocketRpcConnection.close();
         verify(socket).close();
     }
 }

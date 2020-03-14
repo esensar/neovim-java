@@ -41,7 +41,7 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
-public class RPCClientTest {
+public class RpcClientTest {
 
     @Mock
     RpcStreamer rpcStreamer;
@@ -89,7 +89,7 @@ public class RPCClientTest {
         // When custom streamer is passed, it should be used
         var rpc1Streamer = Mockito.mock(RpcStreamer.class);
         var rpc1 = new RpcClient.Builder()
-                .withRPCStreamer(rpc1Streamer)
+                .withRpcStreamer(rpc1Streamer)
                 .build();
         validateDelegates(rpc1, rpc1Streamer);
     }
@@ -114,48 +114,48 @@ public class RPCClientTest {
         var rpcListener = Mockito.mock(RpcListener.class);
 
         // Building with just one custom component
-        // RPC Sender
+        // Rpc Sender
         // Sender can be changed later
         var rpc1 = new RpcClient.Builder()
-                .withRPCSender(rpcSender)
+                .withRpcSender(rpcSender)
                 .withObjectMapper(customObjectMapper)
                 .withExecutorService(executorService)
-                .withRPCSender(rpcSender)
+                .withRpcSender(rpcSender)
                 .build();
 
         var rpc2 = new RpcClient.Builder()
-                .withRPCSender(rpcSender)
+                .withRpcSender(rpcSender)
                 .build();
 
-        // RPC Listener
+        // Rpc Listener
         // Listener can be changed later
         var rpc3 = new RpcClient.Builder()
-                .withRPCListener(rpcListener)
+                .withRpcListener(rpcListener)
                 .withObjectMapper(customObjectMapper)
                 .withExecutorService(executorService)
-                .withRPCListener(rpcListener)
+                .withRpcListener(rpcListener)
                 .build();
 
         var rpc4 = new RpcClient.Builder()
-                .withRPCListener(rpcListener)
+                .withRpcListener(rpcListener)
                 .build();
 
         // With both
         var rpc5 = new RpcClient.Builder()
-                .withRPCListener(rpcListener)
-                .withRPCSender(rpcSender)
+                .withRpcListener(rpcListener)
+                .withRpcSender(rpcSender)
                 .build();
 
         var rpc6 = new RpcClient.Builder()
-                .withRPCSender(rpcSender)
-                .withRPCListener(rpcListener)
+                .withRpcSender(rpcSender)
+                .withRpcListener(rpcListener)
                 .build();
 
         // Components can be changed later
         var rpc7 = new RpcClient.Builder()
-                .withRPCSenderAndListener(rpcSender, rpcListener)
-                .withRPCSender(rpcSender)
-                .withRPCListener(rpcListener)
+                .withRpcSenderAndListener(rpcSender, rpcListener)
+                .withRpcSender(rpcSender)
+                .withRpcListener(rpcListener)
                 .build();
     }
 

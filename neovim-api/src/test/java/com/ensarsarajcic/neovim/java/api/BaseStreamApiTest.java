@@ -53,7 +53,7 @@ import static org.mockito.Mockito.verify;
 public class BaseStreamApiTest {
 
     @Mock
-    protected ReactiveRpcStreamer reactiveRPCStreamer;
+    protected ReactiveRpcStreamer reactiveRpcStreamer;
 
     protected void assertNormalBehavior(
             Supplier<CompletableFuture<ResponseMessage>> preparedResponse,
@@ -73,7 +73,7 @@ public class BaseStreamApiTest {
         var result = callSupplier.get();
         var requestMessage = argumentCaptor.getValue().build();
         requestAsserter.accept(requestMessage);
-        verify(reactiveRPCStreamer, atLeastOnce()).response(any());
+        verify(reactiveRpcStreamer, atLeastOnce()).response(any());
         resultAsserter.accept(result.get());
     }
 
@@ -85,7 +85,7 @@ public class BaseStreamApiTest {
         var errorResult = completableFutureSupplier.get();
         var errorResponse = errorArgumentCaptor.getValue().build();
         requestAsserter.accept(errorResponse);
-        verify(reactiveRPCStreamer, atLeastOnce()).response(any());
+        verify(reactiveRpcStreamer, atLeastOnce()).response(any());
         verifyError(errorResult);
     }
 
@@ -111,7 +111,7 @@ public class BaseStreamApiTest {
 
     protected ArgumentCaptor<RequestMessage.Builder> prepareArgumentCaptor(CompletableFuture<ResponseMessage> responseMessageCompletableFuture) {
         var argumentCaptor = ArgumentCaptor.forClass(RequestMessage.Builder.class);
-        given(reactiveRPCStreamer.response(argumentCaptor.capture())).willReturn(responseMessageCompletableFuture);
+        given(reactiveRpcStreamer.response(argumentCaptor.capture())).willReturn(responseMessageCompletableFuture);
         return argumentCaptor;
     }
 }

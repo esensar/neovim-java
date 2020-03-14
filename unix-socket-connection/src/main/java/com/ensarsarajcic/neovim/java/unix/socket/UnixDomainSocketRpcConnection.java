@@ -46,7 +46,7 @@ import java.util.Objects;
  *     {@code
  *     File socket = new File("/var/nvim/random");
  *
- *     RPCConnection fileConnection = new UnixDomainSocketRPCConnection(socket);
+ *     RpcConnection fileConnection = new UnixDomainSocketRpcConnection(socket);
  *
  *     // It can now be used for communication
  *     rpcStreamer.attach(fileConnection);
@@ -111,7 +111,7 @@ public final class UnixDomainSocketRpcConnection implements RpcConnection {
 
     @Override
     public String toString() {
-        return "UnixDomainSocketRPCConnection{" +
+        return "UnixDomainSocketRpcConnection{" +
                 "unixDomainSocket=" + unixDomainSocket +
                 '}';
     }

@@ -60,7 +60,7 @@ public class ReactiveRpcStreamerWrapperTest {
     RpcStreamer rpcStreamer;
 
     @InjectMocks
-    ReactiveRpcStreamerWrapper reactiveRPCStreamerWrapper;
+    ReactiveRpcStreamerWrapper reactiveRpcStreamerWrapper;
 
     @Mock
     InputStream inputStream;
@@ -95,7 +95,7 @@ public class ReactiveRpcStreamerWrapperTest {
 
     @Test
     public void testDelegation() throws ExecutionException, InterruptedException, IOException {
-        reactiveRPCStreamerWrapper.attach(connection);
+        reactiveRpcStreamerWrapper.attach(connection);
         verify(rpcStreamer).attach(connection);
         verifyAndAttachCallbacks();
 
@@ -103,7 +103,7 @@ public class ReactiveRpcStreamerWrapperTest {
             ((RpcListener.ResponseCallback) invocationOnMock.getArguments()[1]).responseReceived(1, new ResponseMessage.Builder("test").build());
             return null;
         }).when(rpcStreamer).send(any(), any());
-        reactiveRPCStreamerWrapper.response(new RequestMessage.Builder("test")).get();
+        reactiveRpcStreamerWrapper.response(new RequestMessage.Builder("test")).get();
         verify(rpcStreamer).send(any(), any());
     }
 
@@ -121,7 +121,7 @@ public class ReactiveRpcStreamerWrapperTest {
         var countDownLatch = new CountDownLatch(1);
 
         // When response is requested
-        reactiveRPCStreamerWrapper.response(message).thenAccept(responseMessage -> {
+        reactiveRpcStreamerWrapper.response(message).thenAccept(responseMessage -> {
             try {
                 assertTrue(countDownLatch.await(100, TimeUnit.MILLISECONDS));
             } catch (InterruptedException e) {
@@ -141,7 +141,7 @@ public class ReactiveRpcStreamerWrapperTest {
     @Test
     public void testRequestFlow() throws IOException {
         // Given a proper rpc listener and attached pack stream
-        reactiveRPCStreamerWrapper.attach(connection);
+        reactiveRpcStreamerWrapper.attach(connection);
         verifyAndAttachCallbacks();
 
         // When request flow is subscribed to
@@ -151,7 +151,7 @@ public class ReactiveRpcStreamerWrapperTest {
             subscription.request(Long.MAX_VALUE);
             return null;
         }).when(requestMessageSubscriber).onSubscribe(any());
-        reactiveRPCStreamerWrapper.requestsFlow()
+        reactiveRpcStreamerWrapper.requestsFlow()
                 .subscribe(requestMessageSubscriber);
 
         // It should receive events when requests arrive
@@ -163,7 +163,7 @@ public class ReactiveRpcStreamerWrapperTest {
     @Test
     public void testNotificationFlow() throws IOException {
         // Given a proper rpc listener and attached pack stream
-        reactiveRPCStreamerWrapper.attach(connection);
+        reactiveRpcStreamerWrapper.attach(connection);
         verifyAndAttachCallbacks();
 
         // When request flow is subscribed to
@@ -173,7 +173,7 @@ public class ReactiveRpcStreamerWrapperTest {
             subscription.request(Long.MAX_VALUE);
             return null;
         }).when(notificationMessageSubscriber).onSubscribe(any());
-        reactiveRPCStreamerWrapper.notificationsFlow()
+        reactiveRpcStreamerWrapper.notificationsFlow()
                 .subscribe(notificationMessageSubscriber);
 
         // It should receive events when notifications arrive

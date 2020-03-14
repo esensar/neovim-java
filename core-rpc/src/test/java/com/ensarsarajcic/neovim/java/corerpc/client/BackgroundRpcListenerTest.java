@@ -68,7 +68,7 @@ public class BackgroundRpcListenerTest {
     InputStream inputStream;
 
     @InjectMocks
-    BackgroundRpcListener backgroundRPCListener;
+    BackgroundRpcListener backgroundRpcListener;
 
     @Test
     public void testStart() throws IOException {
@@ -78,7 +78,7 @@ public class BackgroundRpcListenerTest {
         given(objectReader.readTree(inputStream)).willReturn(JsonNodeFactory.instance.arrayNode(), (JsonNode) null);
 
         // When start is called, nothing special happens
-        backgroundRPCListener.start(inputStream);
+        backgroundRpcListener.start(inputStream);
     }
 
     @Test
@@ -92,8 +92,8 @@ public class BackgroundRpcListenerTest {
         given(objectReader.readTree(inputStream)).willReturn(requestNode, (JsonNode) null);
         var requestCallback = Mockito.mock(RpcListener.RequestCallback.class);
 
-        backgroundRPCListener.listenForRequests(requestCallback);
-        backgroundRPCListener.start(inputStream);
+        backgroundRpcListener.listenForRequests(requestCallback);
+        backgroundRpcListener.start(inputStream);
 
         verify(requestCallback).requestReceived(requestMessage);
     }
@@ -104,7 +104,7 @@ public class BackgroundRpcListenerTest {
         prepareSequentialExecutorService();
         var requestCallback = Mockito.mock(RpcListener.RequestCallback.class);
 
-        backgroundRPCListener.listenForRequests(requestCallback);
+        backgroundRpcListener.listenForRequests(requestCallback);
 
         verify(requestCallback, never()).requestReceived(any());
     }
@@ -120,8 +120,8 @@ public class BackgroundRpcListenerTest {
         given(objectReader.readTree(inputStream)).willReturn(responseNode, (JsonNode) null);
         var responseCallback = Mockito.mock(RpcListener.ResponseCallback.class);
 
-        backgroundRPCListener.listenForResponse(responseMessage.getId(), responseCallback);
-        backgroundRPCListener.start(inputStream);
+        backgroundRpcListener.listenForResponse(responseMessage.getId(), responseCallback);
+        backgroundRpcListener.start(inputStream);
 
         verify(responseCallback).responseReceived(responseMessage.getId(), responseMessage);
     }
@@ -132,7 +132,7 @@ public class BackgroundRpcListenerTest {
         prepareSequentialExecutorService();
         var requestCallback = Mockito.mock(RpcListener.ResponseCallback.class);
 
-        backgroundRPCListener.listenForResponse(1, requestCallback);
+        backgroundRpcListener.listenForResponse(1, requestCallback);
 
         verify(requestCallback, never()).responseReceived(anyInt(), any());
     }
@@ -148,8 +148,8 @@ public class BackgroundRpcListenerTest {
         given(objectReader.readTree(inputStream)).willReturn(notificationNode, (JsonNode) null);
         var notificationCallback = Mockito.mock(RpcListener.NotificationCallback.class);
 
-        backgroundRPCListener.listenForNotifications(notificationCallback);
-        backgroundRPCListener.start(inputStream);
+        backgroundRpcListener.listenForNotifications(notificationCallback);
+        backgroundRpcListener.start(inputStream);
 
         verify(notificationCallback).notificationReceived(notificationMessage);
     }
@@ -160,7 +160,7 @@ public class BackgroundRpcListenerTest {
         prepareSequentialExecutorService();
         var notificationCallback = Mockito.mock(RpcListener.NotificationCallback.class);
 
-        backgroundRPCListener.listenForNotifications(notificationCallback);
+        backgroundRpcListener.listenForNotifications(notificationCallback);
 
         verify(notificationCallback, never()).notificationReceived(any());
     }
@@ -170,7 +170,7 @@ public class BackgroundRpcListenerTest {
         // Given a proper executor service and object mapper
         var multiLatch = new MultiLatch(10);
         executorService = Executors.newSingleThreadScheduledExecutor();
-        backgroundRPCListener = new BackgroundRpcListener(executorService, objectMapper);
+        backgroundRpcListener = new BackgroundRpcListener(executorService, objectMapper);
         given(objectMapper.reader()).willReturn(objectReader);
         var notificationNode = prepareNotificationNode();
         var notificationMessage = new NotificationMessage.Builder("test").build();
@@ -186,8 +186,8 @@ public class BackgroundRpcListenerTest {
             return null;
         }).when(notificationCallback).notificationReceived(any());
 
-        backgroundRPCListener.listenForNotifications(notificationCallback);
-        backgroundRPCListener.start(inputStream);
+        backgroundRpcListener.listenForNotifications(notificationCallback);
+        backgroundRpcListener.start(inputStream);
 
         multiLatch.countDown();
         verify(notificationCallback, timeout(100)).notificationReceived(notificationMessage);
@@ -195,7 +195,7 @@ public class BackgroundRpcListenerTest {
         verify(notificationCallback, timeout(100)).notificationReceived(notificationMessage);
 
         // After listener is stopped, no more notifications should arrive
-        backgroundRPCListener.stop();
+        backgroundRpcListener.stop();
         multiLatch.countDown();
         multiLatch.countDown();
         multiLatch.countDown();
@@ -210,7 +210,7 @@ public class BackgroundRpcListenerTest {
         given(objectMapper.reader()).willThrow(new IOException());
 
         // When listener is started, app should crash
-        backgroundRPCListener.start(inputStream);
+        backgroundRpcListener.start(inputStream);
     }
 
     @Test(expected = NullPointerException.class)

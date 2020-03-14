@@ -34,8 +34,8 @@ public final class NeovimApis {
     public static NeovimApi getApiForConnection(RpcConnection rpcConnection) {
         var rpcClient = new RpcClient.Builder()
                 .withObjectMapper(NeovimJacksonModule.createNeovimObjectMapper()).build();
-        var reactiveRPCStreamer = ReactiveRpcClient.createDefaultInstanceWithCustomStreamer(rpcClient);
-        reactiveRPCStreamer.attach(rpcConnection);
-        return new NeovimStreamApi(reactiveRPCStreamer);
+        var reactiveRpcStreamer = ReactiveRpcClient.createDefaultInstanceWithCustomStreamer(rpcClient);
+        reactiveRpcStreamer.attach(rpcConnection);
+        return new NeovimStreamApi(reactiveRpcStreamer);
     }
 }

@@ -39,7 +39,7 @@ public class RpcExceptionTest {
     }
 
     @Test
-    public void testStoresRPCError() {
+    public void testStoresRpcError() {
         var error = new RpcError(1, "msg");
         assertThat(new RpcException(error).toString(), new BaseMatcher<>() {
             @Override

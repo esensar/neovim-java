@@ -76,7 +76,7 @@ import java.util.concurrent.Future;
  *     factory.disable(JsonGenerator.Feature.AUTO_CLOSE_TARGET);
  *     ObjectMapper objectMapper = new ObjectMapper(factory);
  *
- *     RPCListener rpcListener = new BackgroundRPCListener(executorService, objectMapper);
+ *     RpcListener rpcListener = new BackgroundRpcListener(executorService, objectMapper);
  *     // Registering callbacks
  *     rpcListener.listenForRequests(request -> System.out.println(request));
  *     rpcListener.listenForNotifications(notification -> System.out.println(notification));
