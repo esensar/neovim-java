@@ -29,7 +29,7 @@ import com.ensarsarajcic.neovim.java.corerpc.message.NotificationMessage;
 import com.ensarsarajcic.neovim.java.corerpc.reactive.ReactiveRpcStreamer;
 import com.ensarsarajcic.neovim.java.notifications.buffer.BufferEvent;
 import com.ensarsarajcic.neovim.java.notifications.ui.NeovimRedrawEvent;
-import com.ensarsarajcic.neovim.java.notifications.ui.UIEvent;
+import com.ensarsarajcic.neovim.java.notifications.ui.UiEvent;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -111,7 +111,7 @@ public final class NeovimStreamNotificationHandler implements NeovimNotification
         return bufferEventMappingProcessor;
     }
 
-    private static List<UIEvent> eventFromRawData(List data) {
+    private static List<UiEvent> eventFromRawData(List data) {
         if (data.isEmpty()) {
             log.error("Cannot create UIEvent because data is empty!");
             throw new IllegalArgumentException("Empty data!");

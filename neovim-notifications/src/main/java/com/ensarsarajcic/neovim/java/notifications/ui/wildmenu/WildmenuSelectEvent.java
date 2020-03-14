@@ -28,7 +28,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonFormat(shape = JsonFormat.Shape.ARRAY)
-public final class WildmenuSelectEvent implements UIWildmenuEvent {
+public final class WildmenuSelectEvent implements UiWildmenuEvent {
     public static final String NAME = "wildmenu_select";
 
     private int selectedIndex;

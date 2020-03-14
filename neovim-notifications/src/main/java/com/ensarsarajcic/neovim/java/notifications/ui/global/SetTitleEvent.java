@@ -28,7 +28,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonFormat(shape = JsonFormat.Shape.ARRAY)
-public final class SetTitleEvent implements UIGlobalEvent {
+public final class SetTitleEvent implements UiGlobalEvent {
     public static final String NAME = "set_title";
 
     private final String title;

@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 @JsonFormat(shape = JsonFormat.Shape.ARRAY)
-public final class GridLineEvent implements UILineGridEvent {
+public final class GridLineEvent implements UiLineGridEvent {
     public static final String NAME = "grid_line";
 
     private int grid;

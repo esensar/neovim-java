@@ -22,9 +22,9 @@
  * SOFTWARE.
  */
 
-package com.ensarsarajcic.neovim.java.notifications.ui.grid.linegrid;
+package com.ensarsarajcic.neovim.java.notifications.ui.multigrid;
 
-import com.ensarsarajcic.neovim.java.notifications.ui.UIEvent;
+import com.ensarsarajcic.neovim.java.notifications.ui.UiEvent;
 
-public interface UILineGridEvent extends UIEvent {
+public interface UiMultigridEvent extends UiEvent {
 }

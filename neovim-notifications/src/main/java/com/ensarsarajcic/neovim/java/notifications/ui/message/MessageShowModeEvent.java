@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 @JsonFormat(shape = JsonFormat.Shape.ARRAY)
-public final class MessageShowModeEvent implements UIMessageEvent {
+public final class MessageShowModeEvent implements UiMessageEvent {
     public static final String NAME = "msg_showmode";
 
     private List<MessageChunk> content;

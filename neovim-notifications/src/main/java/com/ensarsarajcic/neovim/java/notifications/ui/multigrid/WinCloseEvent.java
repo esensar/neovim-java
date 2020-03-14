@@ -28,7 +28,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonFormat(shape = JsonFormat.Shape.ARRAY)
-public final class WinCloseEvent implements UIMultigridEvent {
+public final class WinCloseEvent implements UiMultigridEvent {
     public static final String NAME = "win_close";
 
     private int grid;

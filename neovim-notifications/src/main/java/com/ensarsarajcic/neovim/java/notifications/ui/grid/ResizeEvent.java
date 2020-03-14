@@ -28,7 +28,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonFormat(shape = JsonFormat.Shape.ARRAY)
-public final class ResizeEvent implements UIGridEvent {
+public final class ResizeEvent implements UiGridEvent {
     public static final String NAME = "resize";
 
     private int width;

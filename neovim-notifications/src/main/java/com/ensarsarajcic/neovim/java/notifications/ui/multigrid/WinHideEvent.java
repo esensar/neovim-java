@@ -24,12 +24,11 @@
 
 package com.ensarsarajcic.neovim.java.notifications.ui.multigrid;
 
-import com.ensarsarajcic.neovim.java.api.types.msgpack.Window;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonFormat(shape = JsonFormat.Shape.ARRAY)
-public final class WinHideEvent implements UIMultigridEvent {
+public final class WinHideEvent implements UiMultigridEvent {
     public static final String NAME = "win_hide";
 
     private int grid;

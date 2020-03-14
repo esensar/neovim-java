@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 @JsonFormat(shape = JsonFormat.Shape.ARRAY)
-public final class CmdlineShowEvent implements UICmdlineEvent {
+public final class CmdlineShowEvent implements UiCmdlineEvent {
     public static final String NAME = "cmdline_show";
 
     private List<List> content;

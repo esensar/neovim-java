@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 @JsonFormat(shape = JsonFormat.Shape.ARRAY)
-public final class MessageRulerEvent implements UIMessageEvent {
+public final class MessageRulerEvent implements UiMessageEvent {
     public static final String NAME = "msg_ruler";
 
     private List<MessageChunk> content;

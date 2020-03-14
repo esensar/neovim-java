@@ -27,7 +27,7 @@ package com.ensarsarajcic.neovim.java.notifications.ui.popupmenu;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 @JsonFormat(shape = JsonFormat.Shape.ARRAY)
-public final class PopupmenuHideEvent implements UIPopupmenuEvent {
+public final class PopupmenuHideEvent implements UiPopupmenuEvent {
     public static final String NAME = "popupmenu_hide";
 
     @Override

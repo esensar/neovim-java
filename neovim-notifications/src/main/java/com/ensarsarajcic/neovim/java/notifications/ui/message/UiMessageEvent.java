@@ -22,9 +22,9 @@
  * SOFTWARE.
  */
 
-package com.ensarsarajcic.neovim.java.notifications.ui.cmdline;
+package com.ensarsarajcic.neovim.java.notifications.ui.message;
 
-import com.ensarsarajcic.neovim.java.notifications.ui.UIEvent;
+import com.ensarsarajcic.neovim.java.notifications.ui.UiEvent;
 
-public interface UICmdlineEvent extends UIEvent {
+public interface UiMessageEvent extends UiEvent {
 }

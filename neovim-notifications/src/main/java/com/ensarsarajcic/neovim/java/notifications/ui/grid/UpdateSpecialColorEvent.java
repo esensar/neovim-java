@@ -28,7 +28,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonFormat(shape = JsonFormat.Shape.ARRAY)
-public final class UpdateSpecialColorEvent implements UIGridEvent {
+public final class UpdateSpecialColorEvent implements UiGridEvent {
     public static final String NAME = "update_sp";
 
     private int color;

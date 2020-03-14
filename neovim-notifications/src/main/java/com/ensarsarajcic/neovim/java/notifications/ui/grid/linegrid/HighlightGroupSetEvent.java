@@ -28,7 +28,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonFormat(shape = JsonFormat.Shape.ARRAY)
-public final class HighlightGroupSetEvent implements UILineGridEvent {
+public final class HighlightGroupSetEvent implements UiLineGridEvent {
     public static final String NAME = "hl_group_set";
 
     private String name;

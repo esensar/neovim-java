@@ -29,7 +29,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonFormat(shape = JsonFormat.Shape.ARRAY)
-public final class WinFloatingPositionEvent implements UIMultigridEvent {
+public final class WinFloatingPositionEvent implements UiMultigridEvent {
     public static final String NAME = "win_float_pos";
 
     private int grid;

@@ -25,12 +25,11 @@
 package com.ensarsarajcic.neovim.java.notifications.ui.multigrid;
 
 import com.ensarsarajcic.neovim.java.api.types.msgpack.Window;
-import com.ensarsarajcic.neovim.java.notifications.ui.grid.UIGridEvent;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonFormat(shape = JsonFormat.Shape.ARRAY)
-public final class WinPositionEvent implements UIMultigridEvent {
+public final class WinPositionEvent implements UiMultigridEvent {
     public static final String NAME = "win_pos";
 
     private int grid;

@@ -27,7 +27,7 @@ package com.ensarsarajcic.neovim.java.notifications.ui.grid;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 @JsonFormat(shape = JsonFormat.Shape.ARRAY)
-public final class ClearEvent implements UIGridEvent {
+public final class ClearEvent implements UiGridEvent {
     public static final String NAME = "clear";
 
     @Override

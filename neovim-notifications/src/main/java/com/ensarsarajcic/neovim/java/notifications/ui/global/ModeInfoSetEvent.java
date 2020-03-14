@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 @JsonFormat(shape = JsonFormat.Shape.ARRAY)
-public final class ModeInfoSetEvent implements UIGlobalEvent {
+public final class ModeInfoSetEvent implements UiGlobalEvent {
     public static final String NAME = "mode_info_set";
 
     private boolean cursorStyleEnabled;

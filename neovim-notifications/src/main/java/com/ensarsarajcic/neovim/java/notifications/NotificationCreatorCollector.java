@@ -26,7 +26,7 @@ package com.ensarsarajcic.neovim.java.notifications;
 
 import com.ensarsarajcic.neovim.java.api.util.ObjectMappers;
 import com.ensarsarajcic.neovim.java.notifications.buffer.BufferEvent;
-import com.ensarsarajcic.neovim.java.notifications.ui.UIEvent;
+import com.ensarsarajcic.neovim.java.notifications.ui.UiEvent;
 import com.ensarsarajcic.neovim.java.notifications.util.ReflectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,7 +48,7 @@ import java.util.function.Function;
 final class NotificationCreatorCollector {
     private static final Logger log = LoggerFactory.getLogger(NotificationCreatorCollector.class);
 
-    private static Map<String, Function<List, UIEvent>> uiEventCreators = null;
+    private static Map<String, Function<List, UiEvent>> uiEventCreators = null;
     private static Map<String, Function<List, BufferEvent>> bufferEventCreators = null;
 
 
@@ -56,22 +56,22 @@ final class NotificationCreatorCollector {
         throw new AssertionError("No instance");
     }
 
-    private static Map<String, Function<List, UIEvent>> createUIEventCreators() {
-        Map<String, Function<List, UIEvent>> uiEventCreators = new HashMap<>();
+    private static Map<String, Function<List, UiEvent>> createUiEventCreators() {
+        Map<String, Function<List, UiEvent>> uiEventCreators = new HashMap<>();
         try {
-            Class[] classes = ReflectionUtils.getClasses(UIEvent.class.getPackageName());
+            Class[] classes = ReflectionUtils.getClasses(UiEvent.class.getPackageName());
             for (Class clazz : classes) {
-                if (!UIEvent.class.isAssignableFrom(clazz) || clazz.isInterface()) {
+                if (!UiEvent.class.isAssignableFrom(clazz) || clazz.isInterface()) {
                     continue;
                 }
-                Class<? extends UIEvent> uiEventClass = clazz;
+                Class<? extends UiEvent> uiEventClass = clazz;
 
                 try {
                     Field nameField = uiEventClass.getDeclaredField("NAME");
-                    Function<List, UIEvent> creator = null;
+                    Function<List, UiEvent> creator = null;
                     try {
                         Field creatorField = uiEventClass.getDeclaredField("CREATOR");
-                        creator = (Function<List, UIEvent>) creatorField.get(null);
+                        creator = (Function<List, UiEvent>) creatorField.get(null);
                     } catch (NoSuchFieldException ex) {
                         creator = list -> ObjectMappers.defaultNeovimMapper().convertValue(list, uiEventClass);
                     }
@@ -123,14 +123,14 @@ final class NotificationCreatorCollector {
     }
 
     /**
-     * Provides all creators of {@link UIEvent} notifications
+     * Provides all creators of {@link UiEvent} notifications
      * @return Map of creators where key is notification name and value is function which creates notification from raw array
      */
-    public static Map<String, Function<List, UIEvent>> getUIEventCreators() {
+    public static Map<String, Function<List, UiEvent>> getUIEventCreators() {
         if (uiEventCreators == null) {
             synchronized (NotificationCreatorCollector.class) {
                 if (uiEventCreators == null) {
-                    uiEventCreators = createUIEventCreators();
+                    uiEventCreators = createUiEventCreators();
                 }
             }
         }

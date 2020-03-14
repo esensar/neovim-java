@@ -28,7 +28,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonFormat(shape = JsonFormat.Shape.ARRAY)
-public final class CmdlineSpecialCharEvent implements UICmdlineEvent {
+public final class CmdlineSpecialCharEvent implements UiCmdlineEvent {
     public static final String NAME = "cmdline_special_char";
 
     private String character;

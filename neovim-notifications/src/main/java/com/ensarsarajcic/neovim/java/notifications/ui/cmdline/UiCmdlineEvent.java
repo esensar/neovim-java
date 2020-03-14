@@ -22,11 +22,9 @@
  * SOFTWARE.
  */
 
-package com.ensarsarajcic.neovim.java.notifications.ui;
+package com.ensarsarajcic.neovim.java.notifications.ui.cmdline;
 
-/**
- * Represents one part of a {@link NeovimRedrawEvent}
- */
-public interface UIEvent {
-    String getEventName();
+import com.ensarsarajcic.neovim.java.notifications.ui.UiEvent;
+
+public interface UiCmdlineEvent extends UiEvent {
 }
