@@ -22,7 +22,7 @@ endfunction
 
 " Prints logs from java process error stream
 function! Receive(job_id, data, event)
-  " echom printf('%s: %s',a:event,string(a:data))
+  echom printf('%s: %s',a:event,string(a:data))
 endfunction
 
 

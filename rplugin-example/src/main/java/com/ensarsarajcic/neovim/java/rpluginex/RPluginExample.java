@@ -1,10 +1,8 @@
 package com.ensarsarajcic.neovim.java.rpluginex;
 
 import com.ensarsarajcic.neovim.java.corerpc.client.RpcClient;
-import com.ensarsarajcic.neovim.java.corerpc.client.RpcListener;
 import com.ensarsarajcic.neovim.java.corerpc.client.RpcStreamer;
 import com.ensarsarajcic.neovim.java.corerpc.client.StdIoRpcConnection;
-import com.ensarsarajcic.neovim.java.corerpc.message.NotificationMessage;
 import com.ensarsarajcic.neovim.java.corerpc.message.RequestMessage;
 import com.ensarsarajcic.neovim.java.corerpc.message.ResponseMessage;
 import com.ensarsarajcic.neovim.java.corerpc.message.RpcError;
@@ -39,7 +37,7 @@ public final class RPluginExample {
         public void incrementCalls(RequestMessage requestMessage) throws IOException {
             if (callCount == 5) {
                 rpcStreamer.send(
-                        new ResponseMessage(requestMessage.getId(), new RpcError(0, "Too many calls!"), null)
+                        new ResponseMessage(requestMessage.getId(), RpcError.exception("Too many calls!"), null)
                 );
                 return;
             }
