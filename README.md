@@ -2,6 +2,7 @@
 
 [![Build Status](https://travis-ci.org/esensar/neovim-java.svg?branch=master)](https://travis-ci.org/esensar/neovim-java)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.ensarsarajcic.neovim.java/parent/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.ensarsarajcic.neovim.java/parent)
+![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/com.ensarsarajcic.neovim.java/parent?server=https%3A%2F%2Foss.sonatype.org)
 
 Neovim Java client
 
@@ -46,6 +47,8 @@ Gradle(*Neovim Rx API*):
 ```groovy
 compile 'com.ensarsarajcic.neovim.java:neovim-rx-api:${neovimjava.version}'
 ```
+
+If you wish to use latest SNAPSHOT version, it is available in Sonatype snapshots repository.
 
 For more information, check out README of modules you are interested in.
 
