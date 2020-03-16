@@ -1,22 +1,20 @@
 package com.ensarsarajcic.neovim.java.rpluginex;
 
 import com.ensarsarajcic.neovim.java.corerpc.client.RpcClient;
-import com.ensarsarajcic.neovim.java.corerpc.client.RpcStreamer;
 import com.ensarsarajcic.neovim.java.corerpc.client.StdIoRpcConnection;
 import com.ensarsarajcic.neovim.java.corerpc.message.RequestMessage;
-import com.ensarsarajcic.neovim.java.corerpc.message.ResponseMessage;
-import com.ensarsarajcic.neovim.java.corerpc.message.RpcError;
 import com.ensarsarajcic.neovim.java.handler.NeovimHandlerManager;
 import com.ensarsarajcic.neovim.java.handler.annotations.NeovimRequestHandler;
+import com.ensarsarajcic.neovim.java.handler.errors.NeovimRequestException;
 
 import java.io.IOException;
 
 public final class RPluginExample {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         var rpcConnection = new StdIoRpcConnection();
         var streamer = RpcClient.getDefaultAsyncInstance();
         NeovimHandlerManager neovimHandlerManager = new NeovimHandlerManager();
-        neovimHandlerManager.registerNeovimHandler(new Limit(streamer));
+        neovimHandlerManager.registerNeovimHandler(new Limit());
         neovimHandlerManager.attachToStream(streamer);
         streamer.attach(rpcConnection);
     }
@@ -27,24 +25,14 @@ public final class RPluginExample {
      */
     public static final class Limit {
         private int callCount = 0;
-        private final RpcStreamer rpcStreamer;
-
-        public Limit(RpcStreamer rpcStreamer) {
-            this.rpcStreamer = rpcStreamer;
-        }
 
         @NeovimRequestHandler("increment_calls")
-        public void incrementCalls(RequestMessage requestMessage) throws IOException {
+        public String incrementCalls(RequestMessage requestMessage) throws NeovimRequestException {
             if (callCount == 5) {
-                rpcStreamer.send(
-                        new ResponseMessage(requestMessage.getId(), RpcError.exception("Too many calls!"), null)
-                );
-                return;
+                throw new NeovimRequestException("Too many calls!");
             }
             callCount++;
-            rpcStreamer.send(
-                    new ResponseMessage(requestMessage.getId(), null, "Count: " + callCount)
-            );
+            return "Count: " + callCount;
         }
     }
 }
