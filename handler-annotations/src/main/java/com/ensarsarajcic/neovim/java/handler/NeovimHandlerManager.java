@@ -26,12 +26,17 @@ package com.ensarsarajcic.neovim.java.handler;
 
 import com.ensarsarajcic.neovim.java.corerpc.client.RpcListener;
 import com.ensarsarajcic.neovim.java.corerpc.client.RpcStreamer;
+import com.ensarsarajcic.neovim.java.corerpc.message.ResponseMessage;
 import com.ensarsarajcic.neovim.java.handler.annotations.NeovimNotificationHandler;
 import com.ensarsarajcic.neovim.java.handler.annotations.NeovimRequestHandler;
+import com.ensarsarajcic.neovim.java.handler.annotations.NeovimRequestListener;
+import com.ensarsarajcic.neovim.java.handler.errors.NeovimHandlerException;
 import com.ensarsarajcic.neovim.java.handler.util.ReflectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -62,6 +67,7 @@ public final class NeovimHandlerManager {
 
     private NeovimHandlerProxy neovimHandlerProxy;
     private Map<Object, Map.Entry<List<RpcListener.NotificationCallback>, List<RpcListener.RequestCallback>>> handlers = new HashMap<>();
+    private WeakReference<RpcStreamer> rpcStreamer;
 
     /**
      * Creates a new {@link NeovimHandlerManager} with default {@link NeovimHandlerProxy} using {@link ImmediateExecutorService}
@@ -93,6 +99,7 @@ public final class NeovimHandlerManager {
         Objects.requireNonNull(rpcStreamer, "rpcStreamer may not be null");
         rpcStreamer.addNotificationCallback(neovimHandlerProxy);
         rpcStreamer.addRequestCallback(neovimHandlerProxy);
+        this.rpcStreamer = new WeakReference<>(rpcStreamer);
     }
 
     /**
@@ -116,6 +123,8 @@ public final class NeovimHandlerManager {
 
         List<Map.Entry<Method, NeovimNotificationHandler>> notificationHandlers =
                 ReflectionUtils.getMethodsAnnotatedWith(handler.getClass(), NeovimNotificationHandler.class);
+        List<Map.Entry<Method, NeovimRequestListener>> requestListeners =
+                ReflectionUtils.getMethodsAnnotatedWith(handler.getClass(), NeovimRequestListener.class);
         List<Map.Entry<Method, NeovimRequestHandler>> requestHandlers =
                 ReflectionUtils.getMethodsAnnotatedWith(handler.getClass(), NeovimRequestHandler.class);
 
@@ -151,11 +160,29 @@ public final class NeovimHandlerManager {
                     return (RpcListener.RequestCallback) requestMessage -> {
                         if (requestName.equals(requestMessage.getMethod())) {
                             try {
-                                methodNeovimRequestHandlerEntry.getKey().invoke(handler, requestMessage);
-                            } catch (IllegalAccessException | InvocationTargetException e) {
+                                Object result = null;
+                                NeovimHandlerException error = null;
+                                try {
+                                    if (Modifier.isStatic(methodNeovimRequestHandlerEntry.getKey().getModifiers())) {
+                                        result = methodNeovimRequestHandlerEntry.getKey().invoke(null, requestMessage);
+                                    } else {
+                                        result = methodNeovimRequestHandlerEntry.getKey().invoke(handler, requestMessage);
+                                    }
+                                } catch (InvocationTargetException ex) {
+                                    if (ex.getCause() instanceof NeovimHandlerException) {
+                                        error = (NeovimHandlerException) ex.getCause();
+                                    } else {
+                                        throw ex;
+                                    }
+                                }
+                                var streamer = rpcStreamer.get();
+                                if (streamer != null) {
+                                    streamer.send(new ResponseMessage(requestMessage.getId(), error != null ? error.toRpcError() : null, result));
+                                }
+                            } catch (IllegalAccessException | InvocationTargetException | IOException e) {
                                 log.error("Error ocurred while invoking handler for request: " + requestName, e);
                                 e.printStackTrace();
-                                throw new RuntimeException(e);
+//                                throw new RuntimeException(e);
                             }
                         }
                     };
@@ -164,6 +191,30 @@ public final class NeovimHandlerManager {
 
         requestCallbacks.forEach(neovimHandlerProxy::addRequestCallback);
         handlers.get(handler).getValue().addAll(requestCallbacks);
+
+        List<RpcListener.RequestCallback> requestListenersCallbacks = requestListeners.stream()
+                .map(methodNeovimRequestListenerEntry -> {
+                    String requestName = methodNeovimRequestListenerEntry.getValue().value();
+                    return (RpcListener.RequestCallback) requestMessage -> {
+                        if (requestName.equals(requestMessage.getMethod())) {
+                            try {
+                                if (Modifier.isStatic(methodNeovimRequestListenerEntry.getKey().getModifiers())) {
+                                    methodNeovimRequestListenerEntry.getKey().invoke(null, requestMessage);
+                                } else {
+                                    methodNeovimRequestListenerEntry.getKey().invoke(handler, requestMessage);
+                                }
+                            } catch (IllegalAccessException | InvocationTargetException e) {
+                                log.error("Error ocurred while invoking request listener for request: " + requestName, e);
+                                e.printStackTrace();
+                                throw new RuntimeException(e);
+                            }
+                        }
+                    };
+                })
+                .collect(Collectors.toList());
+
+        requestListenersCallbacks.forEach(neovimHandlerProxy::addRequestCallback);
+        handlers.get(handler).getValue().addAll(requestListenersCallbacks);
     }
 
     /**
@@ -175,6 +226,8 @@ public final class NeovimHandlerManager {
      */
     public void unregisterNeovimHandler(Object handler) {
         log.info("Neovim handler unregistered ({})", handler);
-        handlers.remove(handler);
+        var callbacks = handlers.remove(handler);
+        callbacks.getKey().forEach(neovimHandlerProxy::removeNotificationCallback);
+        callbacks.getValue().forEach(neovimHandlerProxy::removeRequestCallback);
     }
 }

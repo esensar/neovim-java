@@ -26,6 +26,7 @@ package com.ensarsarajcic.neovim.java.corerpc.message;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonValue;
@@ -94,14 +95,17 @@ public final class RpcError {
         this.message = message;
     }
 
+    @JsonIgnore
     public Type getType() {
         return type;
     }
 
+    @JsonProperty("id")
     public int getId() {
         return type.getId();
     }
 
+    @JsonProperty("message")
     public String getMessage() {
         return message;
     }
