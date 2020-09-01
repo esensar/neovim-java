@@ -4,8 +4,8 @@
 name: Maven Package Snapshot
 
 on:
-  push:
-    branches: [master]
+  release:
+    types: [created]
 
 jobs:
   build:
@@ -19,10 +19,13 @@ jobs:
       with:
         java-version: 11
 
+    - name: Remove SNAPSHOT from version
+      run: mvn versions:set -DremoveSnapshot
+
     - name: Publish to GitHub Packages Apache Maven
-      run: mvn clean source:jar deploy -DskipTests
+      run: mvn deploy -DaltDeploymentRepository=github::default::https://maven.pkg.github.com/esensar/neovim-java -Dtoken=$GH_TOKEN -P github 
       env:
-        GITHUB_TOKEN: ${{ github.token }} # GITHUB_TOKEN is the default env for the password
+        GH_TOKEN: ${{ github.token }} # GITHUB_TOKEN is the default env for the password
 
     - name: Set up Apache Maven Central
       uses: actions/setup-java@v1
@@ -34,8 +37,8 @@ jobs:
         gpg-private-key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }} # Value of the GPG private key to import
         gpg-passphrase: MAVEN_GPG_PASSPHRASE # env variable for GPG private key passphrase
 
-    - name: Publish to Apache Maven Central
-      run: mvn clean source:jar deploy -DskipTests
+    - name: Publish to Apache Maven Central, visit https://oss.sonatype.org/#stagingRepositories to release.
+      run: mvn clean source:jar javadoc:jar verify gpg:sign deploy -DskipTests -P release 
       env:
         MAVEN_USERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
         MAVEN_CENTRAL_TOKEN: ${{ secrets.MAVEN_CENTRAL_TOKEN }}

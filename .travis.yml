@@ -1,6 +1,0 @@
-language: java
-jdk:
-  - openjdk13
-
-after_success:
-  - .buildscript/deploy_snapshot.sh
