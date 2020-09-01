@@ -26,6 +26,7 @@ package com.ensarsarajcic.neovim.java.notifications.util;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -49,7 +50,7 @@ public final class ReflectionUtils {
      * @throws IOException
      */
     public static Class[] getClasses(String packageName)
-            throws ClassNotFoundException, IOException {
+            throws ClassNotFoundException, IOException, URISyntaxException {
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         assert classLoader != null;
         String path = packageName.replace('.', '/');
@@ -57,7 +58,7 @@ public final class ReflectionUtils {
         List<File> dirs = new ArrayList<>();
         while (resources.hasMoreElements()) {
             URL resource = (URL) resources.nextElement();
-            dirs.add(new File(resource.getFile()));
+            dirs.add(new File(resource.toURI()));
         }
         ArrayList classes = new ArrayList();
         for (File directory : dirs) {

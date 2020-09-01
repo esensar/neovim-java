@@ -33,6 +33,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -82,7 +83,7 @@ final class NotificationCreatorCollector {
                     e.printStackTrace();
                 }
             }
-        } catch (ClassNotFoundException | IOException e) {
+        } catch (ClassNotFoundException | IOException | URISyntaxException e) {
             log.error("An error ocurred while building creators for ui events!", e);
             e.printStackTrace();
         }
@@ -115,7 +116,7 @@ final class NotificationCreatorCollector {
                     e.printStackTrace();
                 }
             }
-        } catch (ClassNotFoundException | IOException e) {
+        } catch (ClassNotFoundException | IOException | URISyntaxException e) {
             log.error("An error ocurred while building creators for buffer events!", e);
             e.printStackTrace();
         }
