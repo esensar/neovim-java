@@ -11,5 +11,4 @@ neovim-api:
   - handler-annotations/**/*
 
 tests:
-  - */src/test/**/*
   - testing-helpers/**/*
