@@ -1,0 +1,15 @@
+api-explorer:
+  - api-explorer/**/*
+
+core-rpc:
+  - core-rpc/**/*
+
+neovim-api:
+  - neovim-api/**/*
+  - neovim-rx-api/**/*
+  - neovim-notifications/**/*
+  - handler-annotations/**/*
+
+tests:
+  - **/src/test/**/*
+  - testing-helpers/**/*
