@@ -220,6 +220,16 @@
 
     <profiles>
         <profile>
+            <id>github</id>
+            <repositories>
+                <repository>
+                    <id>github</id>
+                    <name>GitHub esensar neovim-java Apache Maven Packages</name>
+                    <url>https://maven.pkg.github.com/esensar/neovim-java</url>
+                </repository>
+            </repositories>
+        </profile>
+        <profile>
             <id>release</id>
             <build>
                 <pluginManagement>
