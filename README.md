@@ -1,6 +1,6 @@
 # neovim-java
 
-[![Build Status](https://travis-ci.org/esensar/neovim-java.svg?branch=master)](https://travis-ci.org/esensar/neovim-java)
+![Tests](https://github.com/esensar/neovim-java/workflows/Tests/badge.svg?branch=master&event=push)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.ensarsarajcic.neovim.java/parent/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.ensarsarajcic.neovim.java/parent)
 ![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/com.ensarsarajcic.neovim.java/parent?server=https%3A%2F%2Foss.sonatype.org)
 
