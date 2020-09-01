@@ -20,7 +20,7 @@ jobs:
         java-version: 11
 
     - name: Publish to GitHub Packages Apache Maven
-      run: mvn clean source:jar deploy -DskipTests
+      run: mvn deploy -DaltDeploymentRepository=github::default::https://maven.pkg.github.com/esensar/neovim-java -Dtoken=$GITHUB_TOKEN -P github -DskipTests
       env:
         GITHUB_TOKEN: ${{ github.token }} # GITHUB_TOKEN is the default env for the password
 
