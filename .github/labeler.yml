@@ -11,4 +11,5 @@ neovim-api:
   - handler-annotations/**/*
 
 tests:
-  - any: ['**/src/test/**/*', 'testing-helpers/**/*']
+  - "**/src/test/**/*"
+  - testing-helpers/**/*
