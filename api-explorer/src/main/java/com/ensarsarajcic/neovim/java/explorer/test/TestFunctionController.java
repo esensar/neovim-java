@@ -24,9 +24,9 @@
 
 package com.ensarsarajcic.neovim.java.explorer.test;
 
-import com.ensarsarajcic.neovim.java.corerpc.message.RpcError;
 import com.ensarsarajcic.neovim.java.corerpc.message.RequestMessage;
 import com.ensarsarajcic.neovim.java.corerpc.message.ResponseMessage;
+import com.ensarsarajcic.neovim.java.corerpc.message.RpcError;
 import com.ensarsarajcic.neovim.java.corerpc.reactive.RpcException;
 import com.ensarsarajcic.neovim.java.explorer.api.ConnectionHolder;
 import com.ensarsarajcic.neovim.java.explorer.api.NeovimFunction;
@@ -92,7 +92,7 @@ public final class TestFunctionController {
                     new RequestMessage.Builder(neovimFunction.getName())
                             .addArguments(args)
             ).exceptionally(throwable -> {
-                if (throwable instanceof  CompletionException) {
+                if (throwable instanceof CompletionException) {
                     throwable = throwable.getCause();
                 }
                 if (throwable instanceof RpcException) {

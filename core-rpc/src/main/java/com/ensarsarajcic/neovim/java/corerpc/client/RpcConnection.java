@@ -36,12 +36,14 @@ public interface RpcConnection extends Closeable, AutoCloseable {
 
     /**
      * Incoming data stream (coming from other participant)
+     *
      * @return {@link InputStream} with incoming data
      */
     InputStream getIncomingStream();
 
     /**
      * Outgoing data stream (going to other participant)
+     *
      * @return {@link OutputStream} for outgoing data
      */
     OutputStream getOutgoingStream();

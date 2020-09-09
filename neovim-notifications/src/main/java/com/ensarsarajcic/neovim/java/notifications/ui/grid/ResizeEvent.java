@@ -31,8 +31,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public final class ResizeEvent implements UiGridEvent {
     public static final String NAME = "resize";
 
-    private int width;
-    private int height;
+    private final int width;
+    private final int height;
 
     public ResizeEvent(
             @JsonProperty(value = "width", index = 0) int width,
@@ -56,9 +56,8 @@ public final class ResizeEvent implements UiGridEvent {
 
     @Override
     public String toString() {
-        return "ResizeEvent{" +
-                "width=" + width +
-                ", height=" + height +
-                '}';
+        return "ResizeEvent{"
+                + "width=" + width
+                + ", height=" + height + '}';
     }
 }

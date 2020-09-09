@@ -31,7 +31,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public final class HighlightSetEvent implements UiGridEvent {
     public static final String NAME = "highlight_set";
 
-    private HighlightAttributes attributes;
+    private final HighlightAttributes attributes;
 
     public HighlightSetEvent(
             @JsonProperty(value = "attributes", index = 0) HighlightAttributes attributes) {
@@ -49,8 +49,6 @@ public final class HighlightSetEvent implements UiGridEvent {
 
     @Override
     public String toString() {
-        return "HighlightSetEvent{" +
-                "attributes=" + attributes +
-                '}';
+        return "HighlightSetEvent{" + "attributes=" + attributes + '}';
     }
 }

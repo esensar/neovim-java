@@ -31,10 +31,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public final class MessageSetEvent implements UiMultigridEvent {
     public static final String NAME = "msg_set_pos";
 
-    private int grid;
-    private int row;
-    private boolean scrolled;
-    private String sepChar;
+    private final int grid;
+    private final int row;
+    private final boolean scrolled;
+    private final String sepChar;
 
     public MessageSetEvent(
             @JsonProperty(value = "grid", index = 0) int grid,
@@ -70,11 +70,10 @@ public final class MessageSetEvent implements UiMultigridEvent {
 
     @Override
     public String toString() {
-        return "MessageSetEvent{" +
-                "grid=" + grid +
-                ", row=" + row +
-                ", scrolled=" + scrolled +
-                ", sepChar='" + sepChar + '\'' +
-                '}';
+        return "MessageSetEvent{"
+                + "grid=" + grid
+                + ", row=" + row
+                + ", scrolled=" + scrolled
+                + ", sepChar='" + sepChar + '\'' + '}';
     }
 }

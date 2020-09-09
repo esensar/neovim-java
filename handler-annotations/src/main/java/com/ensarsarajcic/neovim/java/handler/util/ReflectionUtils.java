@@ -26,7 +26,11 @@ package com.ensarsarajcic.neovim.java.handler.util;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.AbstractMap;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Utilities for reflection required by this library, since all handlers are called reflectively
@@ -39,9 +43,10 @@ public final class ReflectionUtils {
 
     /**
      * Runs through passed type to find methods annotated with annotation
-     * @param type type to run through
+     *
+     * @param type       type to run through
      * @param annotation annotation to look for
-     * @param <T> type of annotation
+     * @param <T>        type of annotation
      * @return list of method and annotation pairs
      */
     public static <T extends Annotation> List<Map.Entry<Method, T>> getMethodsAnnotatedWith(final Class<?> type, final Class<T> annotation) {

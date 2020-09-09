@@ -33,10 +33,10 @@ import java.util.List;
 public final class GridLineEvent implements UiLineGridEvent {
     public static final String NAME = "grid_line";
 
-    private int grid;
-    private int row;
-    private int colStart;
-    private List<CellData> data;
+    private final int grid;
+    private final int row;
+    private final int colStart;
+    private final List<CellData> data;
 
     public GridLineEvent(
             @JsonProperty(value = "grid", index = 0) int grid,
@@ -72,11 +72,10 @@ public final class GridLineEvent implements UiLineGridEvent {
 
     @Override
     public String toString() {
-        return "GridLineEvent{" +
-                "grid=" + grid +
-                ", row=" + row +
-                ", colStart=" + colStart +
-                ", data=" + data +
-                '}';
+        return "GridLineEvent{"
+                + "grid=" + grid
+                + ", row=" + row
+                + ", colStart=" + colStart
+                + ", data=" + data + '}';
     }
 }

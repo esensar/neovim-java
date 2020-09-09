@@ -33,7 +33,7 @@ import java.util.List;
 public final class MessageShowModeEvent implements UiMessageEvent {
     public static final String NAME = "msg_showmode";
 
-    private List<MessageChunk> content;
+    private final List<MessageChunk> content;
 
     public MessageShowModeEvent(
             @JsonProperty(value = "content", index = 0) List<MessageChunk> content) {
@@ -51,8 +51,6 @@ public final class MessageShowModeEvent implements UiMessageEvent {
 
     @Override
     public String toString() {
-        return "MessageShowModeEvent{" +
-                "content=" + content +
-                '}';
+        return "MessageShowModeEvent{" + "content=" + content + '}';
     }
 }

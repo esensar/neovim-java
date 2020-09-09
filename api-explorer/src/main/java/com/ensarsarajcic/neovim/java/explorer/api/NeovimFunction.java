@@ -34,26 +34,26 @@ import java.util.List;
  */
 public final class NeovimFunction {
 
-    private boolean method;
-    private String name;
-    private String returnType;
-    private int since;
-    private int deprecatedSince;
-    private List<List<String>> parameters;
+    private final boolean method;
+    private final String name;
+    private final String returnType;
+    private final int since;
+    private final int deprecatedSince;
+    private final List<List<String>> parameters;
 
     public NeovimFunction(
             @JsonProperty("method")
-            boolean method,
+                    boolean method,
             @JsonProperty("name")
-            String name,
+                    String name,
             @JsonProperty("return_type")
-            String returnType,
+                    String returnType,
             @JsonProperty("since")
-            int since,
+                    int since,
             @JsonProperty("deprecated_since")
-            int deprecatedSince,
+                    int deprecatedSince,
             @JsonProperty("parameters")
-            List<List<String>> parameters) {
+                    List<List<String>> parameters) {
         this.method = method;
         this.name = name;
         this.returnType = returnType;
@@ -88,13 +88,12 @@ public final class NeovimFunction {
 
     @Override
     public String toString() {
-        return "NeovimFunction{" +
-                "method=" + method +
-                ", name='" + name + '\'' +
-                ", returnType='" + returnType + '\'' +
-                ", since=" + since +
-                ", deprecatedSince=" + deprecatedSince +
-                ", parameters=" + parameters +
-                '}';
+        return "NeovimFunction{"
+                + "method=" + method
+                + ", name='" + name + '\''
+                + ", returnType='" + returnType + '\''
+                + ", since=" + since
+                + ", deprecatedSince=" + deprecatedSince
+                + ", parameters=" + parameters + '}';
     }
 }

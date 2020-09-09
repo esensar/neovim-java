@@ -24,7 +24,12 @@
 
 package com.ensarsarajcic.neovim.java.corerpc.client;
 
-import com.ensarsarajcic.neovim.java.corerpc.message.*;
+import com.ensarsarajcic.neovim.java.corerpc.message.Message;
+import com.ensarsarajcic.neovim.java.corerpc.message.MessageIdGenerator;
+import com.ensarsarajcic.neovim.java.corerpc.message.NotificationMessage;
+import com.ensarsarajcic.neovim.java.corerpc.message.RequestMessage;
+import com.ensarsarajcic.neovim.java.corerpc.message.ResponseMessage;
+import com.ensarsarajcic.neovim.java.corerpc.message.SequentialMessageIdGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -88,8 +93,8 @@ public final class PackStream implements RpcStreamer {
     private final RpcSender rpcSender;
     private final MessageIdGenerator messageIdGenerator;
 
-    private List<RpcListener.RequestCallback> requestCallbacks = new ArrayList<>();
-    private List<RpcListener.NotificationCallback> notificationCallbacks = new ArrayList<>();
+    private final List<RpcListener.RequestCallback> requestCallbacks = new ArrayList<>();
+    private final List<RpcListener.NotificationCallback> notificationCallbacks = new ArrayList<>();
 
     /**
      * Creates a new {@link PackStream} with given {@link RpcSender} for sending messages
@@ -224,9 +229,9 @@ public final class PackStream implements RpcStreamer {
      */
     @Override
     public void stop() {
-      log.info("Stopping resources");
-      this.rpcListener.stop();
-      this.rpcSender.stop();
+        log.info("Stopping resources");
+        this.rpcListener.stop();
+        this.rpcSender.stop();
     }
 
     private void requestReceived(RequestMessage requestMessage) {

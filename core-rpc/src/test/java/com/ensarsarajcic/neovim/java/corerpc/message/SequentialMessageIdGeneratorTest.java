@@ -27,10 +27,14 @@ package com.ensarsarajcic.neovim.java.corerpc.message;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Set;
-import java.util.concurrent.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class SequentialMessageIdGeneratorTest {
 

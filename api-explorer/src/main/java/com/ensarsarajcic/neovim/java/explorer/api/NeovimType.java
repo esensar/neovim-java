@@ -33,8 +33,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public final class NeovimType {
 
-    private int id;
-    private String prefix;
+    private final int id;
+    private final String prefix;
 
     public int getId() {
         return id;
@@ -53,9 +53,8 @@ public final class NeovimType {
 
     @Override
     public String toString() {
-        return "NeovimType{" +
-                "id=" + id +
-                ", prefix='" + prefix + '\'' +
-                '}';
+        return "NeovimType{"
+                + "id=" + id
+                + ", prefix='" + prefix + '\'' + '}';
     }
 }

@@ -31,7 +31,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public final class GridClearEvent implements UiLineGridEvent {
     public static final String NAME = "grid_clear";
 
-    private int grid;
+    private final int grid;
 
     public GridClearEvent(
             @JsonProperty(value = "grid", index = 0) int grid) {
@@ -49,8 +49,6 @@ public final class GridClearEvent implements UiLineGridEvent {
 
     @Override
     public String toString() {
-        return "GridClearEvent{" +
-                "grid=" + grid +
-                '}';
+        return "GridClearEvent{" + "grid=" + grid + '}';
     }
 }

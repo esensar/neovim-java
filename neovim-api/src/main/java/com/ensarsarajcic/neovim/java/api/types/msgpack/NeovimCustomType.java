@@ -31,10 +31,10 @@ public enum NeovimCustomType {
     WINDOW(1, Window.class, Window::new),
     TABPAGE(2, Tabpage.class, Tabpage::new);
 
-    private NeovimTypeSerializer<? extends BaseCustomIdType> serializer;
-    private NeovimTypeDeserializer<? extends BaseCustomIdType> deserializer;
-    private Class<? extends BaseCustomIdType> type;
-    private int typeId;
+    private final NeovimTypeSerializer<? extends BaseCustomIdType> serializer;
+    private final NeovimTypeDeserializer<? extends BaseCustomIdType> deserializer;
+    private final Class<? extends BaseCustomIdType> type;
+    private final int typeId;
 
     <T extends BaseCustomIdType> NeovimCustomType(
             int typeId,

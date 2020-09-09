@@ -71,9 +71,7 @@ public final class RpcError {
 
         @Override
         public String toString() {
-            return "Type{" +
-                    "value=" + id +
-                    '}';
+            return "Type{" + "value=" + id + '}';
         }
     }
 
@@ -88,9 +86,9 @@ public final class RpcError {
     @JsonCreator
     public RpcError(
             @JsonProperty("id")
-            Type type,
+                    Type type,
             @JsonProperty("message")
-            String message) {
+                    String message) {
         this.type = type;
         this.message = message;
     }
@@ -127,7 +125,7 @@ public final class RpcError {
     }
 
     private String typeToString() {
-        if (type.id == Type.EXCEPTION.id)  {
+        if (type.id == Type.EXCEPTION.id) {
             return "Exception";
         } else if (type.id == Type.VALIDATION.id) {
             return "Validation";
@@ -138,9 +136,8 @@ public final class RpcError {
 
     @Override
     public String toString() {
-        return "RpcError{" +
-                "type=" + typeToString() +
-                ", message='" + message + '\'' +
-                '}';
+        return "RpcError{"
+                + "type=" + typeToString()
+                + ", message='" + message + '\'' + '}';
     }
 }

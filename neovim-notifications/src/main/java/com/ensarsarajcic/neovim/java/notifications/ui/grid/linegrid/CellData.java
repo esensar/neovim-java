@@ -28,9 +28,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public final class CellData {
 
-    private String text;
-    private int highlightId;
-    private int repeat;
+    private final String text;
+    private final int highlightId;
+    private final int repeat;
 
     public CellData(
             @JsonProperty(value = "text", index = 0, required = true) String text,
@@ -55,10 +55,9 @@ public final class CellData {
 
     @Override
     public String toString() {
-        return "CellData{" +
-                "text='" + text + '\'' +
-                ", highlightId=" + highlightId +
-                ", repeat=" + repeat +
-                '}';
+        return "CellData{"
+                + "text='" + text + '\''
+                + ", highlightId=" + highlightId
+                + ", repeat=" + repeat + '}';
     }
 }

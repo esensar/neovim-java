@@ -34,9 +34,9 @@ import java.util.List;
  */
 public final class NeovimUiEvent {
 
-    private String name;
-    private List<List<String>> parameters;
-    private int since;
+    private final String name;
+    private final List<List<String>> parameters;
+    private final int since;
 
     public String getName() {
         return name;
@@ -61,10 +61,9 @@ public final class NeovimUiEvent {
 
     @Override
     public String toString() {
-        return "NeovimUiEvent{" +
-                "name='" + name + '\'' +
-                ", parameters=" + parameters +
-                ", since=" + since +
-                '}';
+        return "NeovimUiEvent{"
+                + "name='" + name + '\''
+                + ", parameters=" + parameters
+                + ", since=" + since + '}';
     }
 }

@@ -30,20 +30,20 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public final class ClientVersionInfo {
 
-    private int major;
-    private int minor;
-    private int patch;
-    private String preRelease;
+    private final int major;
+    private final int minor;
+    private final int patch;
+    private final String preRelease;
 
     public ClientVersionInfo(
             @JsonProperty("major")
-            int major,
+                    int major,
             @JsonProperty("minor")
-            int minor,
+                    int minor,
             @JsonProperty("patch")
-            int patch,
+                    int patch,
             @JsonProperty("prerelease")
-            String preRelease) {
+                    String preRelease) {
         this.major = major;
         this.minor = minor;
         this.patch = patch;
@@ -69,11 +69,10 @@ public final class ClientVersionInfo {
 
     @Override
     public String toString() {
-        return "ClientVersionInfo{" +
-                "major=" + major +
-                ", minor=" + minor +
-                ", patch=" + patch +
-                ", preRelease='" + preRelease + '\'' +
-                '}';
+        return "ClientVersionInfo{"
+                + "major=" + major
+                + ", minor=" + minor
+                + ", patch=" + patch
+                + ", preRelease='" + preRelease + '\'' + '}';
     }
 }

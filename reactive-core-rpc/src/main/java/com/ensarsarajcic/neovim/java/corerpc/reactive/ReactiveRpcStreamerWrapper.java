@@ -34,7 +34,12 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.Objects;
-import java.util.concurrent.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Flow;
+import java.util.concurrent.SubmissionPublisher;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
 
@@ -75,6 +80,7 @@ public final class ReactiveRpcStreamerWrapper implements ReactiveRpcStreamer {
 
     /**
      * Constructs {@link ReactiveRpcStreamerWrapper} with provided {@link RpcStreamer} and default {@link Executor}
+     *
      * @param rpcStreamer {@link RpcStreamer} to use for making calls and listening for notifications/requests
      * @throws NullPointerException if {@link RpcStreamer} is null
      */
@@ -85,8 +91,9 @@ public final class ReactiveRpcStreamerWrapper implements ReactiveRpcStreamer {
     /**
      * Constructs {@link ReactiveRpcStreamerWrapper} with provided {@link RpcStreamer}
      * and with provided {@link Executor} - it is used only for requests
+     *
      * @param rpcStreamer {@link RpcStreamer} to use for making calls and listening for notifications/requests
-     * @param executor {@link Executor} to use for creating {@link CompletableFuture} for requests
+     * @param executor    {@link Executor} to use for creating {@link CompletableFuture} for requests
      * @throws NullPointerException if {@link RpcStreamer} is null
      */
     public ReactiveRpcStreamerWrapper(RpcStreamer rpcStreamer, Executor executor) {
@@ -143,7 +150,7 @@ public final class ReactiveRpcStreamerWrapper implements ReactiveRpcStreamer {
     }
 
     private Supplier<ResponseMessage> responseSupplier(RequestMessage.Builder requestMessage) {
-        return() -> {
+        return () -> {
             // Prepare for blocking until response comes
             var countDownLatch = new CountDownLatch(1);
             var responseMessage = new AtomicReference<ResponseMessage>();

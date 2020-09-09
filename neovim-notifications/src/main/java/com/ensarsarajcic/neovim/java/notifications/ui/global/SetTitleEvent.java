@@ -49,8 +49,6 @@ public final class SetTitleEvent implements UiGlobalEvent {
 
     @Override
     public String toString() {
-        return "SetTitleEvent{" +
-                "title='" + title + '\'' +
-                '}';
+        return "SetTitleEvent{" + "title='" + title + '\'' + '}';
     }
 }

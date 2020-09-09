@@ -33,7 +33,7 @@ import java.util.List;
 public final class MessageHistoryShowEvent implements UiMessageEvent {
     public static final String NAME = "msg_history_show";
 
-    private List<MessageHistoryEntry> entries;
+    private final List<MessageHistoryEntry> entries;
 
     public MessageHistoryShowEvent(
             @JsonProperty(value = "entries", index = 0) List<MessageHistoryEntry> entries) {
@@ -51,8 +51,6 @@ public final class MessageHistoryShowEvent implements UiMessageEvent {
 
     @Override
     public String toString() {
-        return "MessageHistoryShowEvent{" +
-                "entries=" + entries +
-                '}';
+        return "MessageHistoryShowEvent{" + "entries=" + entries + '}';
     }
 }

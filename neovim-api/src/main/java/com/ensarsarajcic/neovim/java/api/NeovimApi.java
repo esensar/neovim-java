@@ -26,11 +26,23 @@ package com.ensarsarajcic.neovim.java.api;
 
 import com.ensarsarajcic.neovim.java.api.buffer.NeovimBufferApi;
 import com.ensarsarajcic.neovim.java.api.tabpage.NeovimTabpageApi;
-import com.ensarsarajcic.neovim.java.api.types.api.*;
+import com.ensarsarajcic.neovim.java.api.types.api.ChannelInfo;
+import com.ensarsarajcic.neovim.java.api.types.api.ClientAttributes;
+import com.ensarsarajcic.neovim.java.api.types.api.ClientType;
+import com.ensarsarajcic.neovim.java.api.types.api.ClientVersionInfo;
+import com.ensarsarajcic.neovim.java.api.types.api.CommandInfo;
+import com.ensarsarajcic.neovim.java.api.types.api.GetCommandsOptions;
+import com.ensarsarajcic.neovim.java.api.types.api.MethodInfo;
+import com.ensarsarajcic.neovim.java.api.types.api.Mouse;
+import com.ensarsarajcic.neovim.java.api.types.api.UiInfo;
+import com.ensarsarajcic.neovim.java.api.types.api.UiOptions;
+import com.ensarsarajcic.neovim.java.api.types.api.VimColorMap;
+import com.ensarsarajcic.neovim.java.api.types.api.VimKeyMap;
+import com.ensarsarajcic.neovim.java.api.types.api.VimMode;
+import com.ensarsarajcic.neovim.java.api.types.apiinfo.ApiInfo;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.Buffer;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.Tabpage;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.Window;
-import com.ensarsarajcic.neovim.java.api.types.apiinfo.ApiInfo;
 import com.ensarsarajcic.neovim.java.api.window.NeovimWindowApi;
 
 import java.util.List;
@@ -117,6 +129,7 @@ public interface NeovimApi {
 
     @NeovimApiFunction(name = CALL_ATOMIC, since = 1)
     CompletableFuture<List> sendAtomic(AtomicCallBuilder atomicCallBuilder);
+
     AtomicCallBuilder prepareAtomic();
 
     @NeovimApiFunction(name = GET_HIGHLIGHT_BY_ID, since = 3)

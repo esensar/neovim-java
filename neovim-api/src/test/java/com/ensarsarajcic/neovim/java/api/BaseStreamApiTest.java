@@ -24,11 +24,11 @@
 
 package com.ensarsarajcic.neovim.java.api;
 
-import com.ensarsarajcic.neovim.java.corerpc.message.RpcError;
 import com.ensarsarajcic.neovim.java.corerpc.message.RequestMessage;
 import com.ensarsarajcic.neovim.java.corerpc.message.ResponseMessage;
-import com.ensarsarajcic.neovim.java.corerpc.reactive.RpcException;
+import com.ensarsarajcic.neovim.java.corerpc.message.RpcError;
 import com.ensarsarajcic.neovim.java.corerpc.reactive.ReactiveRpcStreamer;
+import com.ensarsarajcic.neovim.java.corerpc.reactive.RpcException;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.runner.RunWith;

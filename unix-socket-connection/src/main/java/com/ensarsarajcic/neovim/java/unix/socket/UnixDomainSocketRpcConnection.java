@@ -57,7 +57,7 @@ import java.util.Objects;
 public final class UnixDomainSocketRpcConnection implements RpcConnection {
     private static final Logger log = LoggerFactory.getLogger(UnixDomainSocketRpcConnection.class);
 
-    private UnixDomainSocket unixDomainSocket;
+    private final UnixDomainSocket unixDomainSocket;
 
     /**
      * Creates a new {@link UnixDomainSocketRpcConnection} connected to the file on given path
@@ -111,8 +111,6 @@ public final class UnixDomainSocketRpcConnection implements RpcConnection {
 
     @Override
     public String toString() {
-        return "UnixDomainSocketRpcConnection{" +
-                "unixDomainSocket=" + unixDomainSocket +
-                '}';
+        return "UnixDomainSocketRpcConnection{" + "unixDomainSocket=" + unixDomainSocket + '}';
     }
 }

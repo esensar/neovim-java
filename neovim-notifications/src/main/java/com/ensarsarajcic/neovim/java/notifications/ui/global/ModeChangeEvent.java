@@ -31,8 +31,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public final class ModeChangeEvent implements UiGlobalEvent {
     public static final String NAME = "mode_change";
 
-    private String mode;
-    private int modeId;
+    private final String mode;
+    private final int modeId;
 
     public ModeChangeEvent(
             @JsonProperty(value = "mode", index = 0) String mode,
@@ -56,9 +56,8 @@ public final class ModeChangeEvent implements UiGlobalEvent {
 
     @Override
     public String toString() {
-        return "ModeChangeEvent{" +
-                "mode='" + mode + '\'' +
-                ", modeId=" + modeId +
-                '}';
+        return "ModeChangeEvent{"
+                + "mode='" + mode + '\''
+                + ", modeId=" + modeId + '}';
     }
 }

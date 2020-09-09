@@ -80,28 +80,28 @@ public abstract class BaseStreamApi {
 
     protected <T extends BaseCustomIdType> CompletableFuture<T> sendWithResponseOfMsgPackType(RequestMessage.Builder request, Class<T> type) {
         return sendWithBytesResponse(request).thenApply(bytes -> {
-                    try {
-                        return objectMapper.readerFor(type).readValue(bytes);
-                    } catch (IOException e) {
-                        log.error("Failed to read bytes as " + type, e);
-                        e.printStackTrace();
-                        throw new CompletionException(e);
-                    }
-                });
+            try {
+                return objectMapper.readerFor(type).readValue(bytes);
+            } catch (IOException e) {
+                log.error("Failed to read bytes as " + type, e);
+                e.printStackTrace();
+                throw new CompletionException(e);
+            }
+        });
     }
 
     protected <T extends BaseCustomIdType> CompletableFuture<List<T>> sendWithResponseOfListOfMsgPackType(RequestMessage.Builder request, Class<T> type) {
         return sendWithBytesResponse(request).thenApply(bytes -> {
-                    try {
-                        return objectMapper.readerFor(
-                                objectMapper.getTypeFactory().constructCollectionType(List.class, type)
-                        ).readValue(bytes);
-                    } catch (IOException e) {
-                        log.error("Failed to construct a list of " + type, e);
-                        e.printStackTrace();
-                        throw new CompletionException(e);
-                    }
-                });
+            try {
+                return objectMapper.readerFor(
+                        objectMapper.getTypeFactory().constructCollectionType(List.class, type)
+                ).readValue(bytes);
+            } catch (IOException e) {
+                log.error("Failed to construct a list of " + type, e);
+                e.printStackTrace();
+                throw new CompletionException(e);
+            }
+        });
     }
 
     protected <T> CompletableFuture<List<T>> sendWithResponseOfListType(RequestMessage.Builder request, Class<T> type) {

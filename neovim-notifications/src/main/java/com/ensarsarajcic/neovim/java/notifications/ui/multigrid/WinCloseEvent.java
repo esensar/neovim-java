@@ -31,7 +31,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public final class WinCloseEvent implements UiMultigridEvent {
     public static final String NAME = "win_close";
 
-    private int grid;
+    private final int grid;
 
     public WinCloseEvent(
             @JsonProperty(value = "grid", index = 0) int grid) {
@@ -49,8 +49,6 @@ public final class WinCloseEvent implements UiMultigridEvent {
 
     @Override
     public String toString() {
-        return "WinCloseEvent{" +
-                "grid=" + grid +
-                '}';
+        return "WinCloseEvent{" + "grid=" + grid + '}';
     }
 }

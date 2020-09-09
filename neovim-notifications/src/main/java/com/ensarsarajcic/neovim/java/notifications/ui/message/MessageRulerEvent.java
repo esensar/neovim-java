@@ -33,7 +33,7 @@ import java.util.List;
 public final class MessageRulerEvent implements UiMessageEvent {
     public static final String NAME = "msg_ruler";
 
-    private List<MessageChunk> content;
+    private final List<MessageChunk> content;
 
     public MessageRulerEvent(
             @JsonProperty(value = "content", index = 0) List<MessageChunk> content) {
@@ -51,8 +51,6 @@ public final class MessageRulerEvent implements UiMessageEvent {
 
     @Override
     public String toString() {
-        return "MessageRulerEvent{" +
-                "content=" + content +
-                '}';
+        return "MessageRulerEvent{" + "content=" + content + '}';
     }
 }

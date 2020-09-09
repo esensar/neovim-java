@@ -31,8 +31,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public final class CursorGotoEvent implements UiGridEvent {
     public static final String NAME = "cursor_goto";
 
-    private int row;
-    private int col;
+    private final int row;
+    private final int col;
 
     public CursorGotoEvent(
             @JsonProperty(value = "row", index = 0) int row,
@@ -56,9 +56,8 @@ public final class CursorGotoEvent implements UiGridEvent {
 
     @Override
     public String toString() {
-        return "CursorGotoEvent{" +
-                "row=" + row +
-                ", col=" + col +
-                '}';
+        return "CursorGotoEvent{"
+                + "row=" + row
+                + ", col=" + col + '}';
     }
 }

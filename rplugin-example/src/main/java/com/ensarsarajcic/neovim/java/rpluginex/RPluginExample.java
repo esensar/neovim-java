@@ -10,6 +10,10 @@ import com.ensarsarajcic.neovim.java.handler.errors.NeovimRequestException;
 import java.io.IOException;
 
 public final class RPluginExample {
+    private RPluginExample() {
+        //no instance
+    }
+
     public static void main(String[] args) throws IOException {
         var rpcConnection = new StdIoRpcConnection();
         var streamer = RpcClient.getDefaultAsyncInstance();

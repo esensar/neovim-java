@@ -39,7 +39,7 @@ public enum ClientType {
 
     private static final Logger log = LoggerFactory.getLogger(ClientType.class);
 
-    private String value;
+    private final String value;
 
     @JsonCreator
     public static ClientType fromString(String value) {
@@ -64,8 +64,6 @@ public enum ClientType {
 
     @Override
     public String toString() {
-        return "ClientType{" +
-                "value='" + value + '\'' +
-                '}';
+        return "ClientType{" + "value='" + value + '\'' + '}';
     }
 }

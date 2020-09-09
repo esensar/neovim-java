@@ -31,9 +31,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public final class GridCursorGotoEvent implements UiLineGridEvent {
     public static final String NAME = "grid_cursor_goto";
 
-    private int grid;
-    private int row;
-    private int col;
+    private final int grid;
+    private final int row;
+    private final int col;
 
     public GridCursorGotoEvent(
             @JsonProperty(value = "grid", index = 0) int grid,
@@ -63,10 +63,9 @@ public final class GridCursorGotoEvent implements UiLineGridEvent {
 
     @Override
     public String toString() {
-        return "GridResizeEvent{" +
-                "grid=" + grid +
-                ", row=" + row +
-                ", col=" + col +
-                '}';
+        return "GridResizeEvent{"
+                + "grid=" + grid
+                + ", row=" + row
+                + ", col=" + col + '}';
     }
 }

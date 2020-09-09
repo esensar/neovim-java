@@ -33,7 +33,10 @@ import org.msgpack.jackson.dataformat.MessagePackFactory;
 
 import java.io.IOException;
 import java.util.Objects;
-import java.util.concurrent.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Wrapper around {@link RpcStreamer}
@@ -265,7 +268,7 @@ public final class RpcClient implements RpcStreamer {
      */
     @Override
     public void stop() {
-      rpcStreamer.stop();
+        rpcStreamer.stop();
     }
 
     /**

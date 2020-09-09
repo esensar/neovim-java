@@ -28,9 +28,8 @@ public final class MessageHistoryEntry {
 
     @Override
     public String toString() {
-        return "MessageHistoryEntry{" +
-                "kind='" + kind + '\'' +
-                ", content=" + content +
-                '}';
+        return "MessageHistoryEntry{"
+                + "kind='" + kind + '\''
+                + ", content=" + content + '}';
     }
 }

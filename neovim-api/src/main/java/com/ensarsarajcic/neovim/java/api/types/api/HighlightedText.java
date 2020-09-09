@@ -42,9 +42,9 @@ public final class HighlightedText {
 
     public HighlightedText(
             @JsonProperty("text")
-            String text,
+                    String text,
             @JsonProperty("hlGroup")
-            String hlGroup) {
+                    String hlGroup) {
         this.text = text;
         this.hlGroup = hlGroup;
     }
@@ -63,9 +63,8 @@ public final class HighlightedText {
 
     @Override
     public String toString() {
-        return "HighlightedText{" +
-                "text='" + text + '\'' +
-                ", hlGroup='" + hlGroup + '\'' +
-                '}';
+        return "HighlightedText{"
+                + "text='" + text + '\''
+                + ", hlGroup='" + hlGroup + '\'' + '}';
     }
 }

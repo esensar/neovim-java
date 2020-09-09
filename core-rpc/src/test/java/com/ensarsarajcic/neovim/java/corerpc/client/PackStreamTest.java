@@ -24,7 +24,10 @@
 
 package com.ensarsarajcic.neovim.java.corerpc.client;
 
-import com.ensarsarajcic.neovim.java.corerpc.message.*;
+import com.ensarsarajcic.neovim.java.corerpc.message.Message;
+import com.ensarsarajcic.neovim.java.corerpc.message.MessageIdGenerator;
+import com.ensarsarajcic.neovim.java.corerpc.message.NotificationMessage;
+import com.ensarsarajcic.neovim.java.corerpc.message.RequestMessage;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -38,10 +41,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
 public class PackStreamTest {

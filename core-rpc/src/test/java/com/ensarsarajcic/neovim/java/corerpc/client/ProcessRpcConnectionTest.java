@@ -81,7 +81,7 @@ public class ProcessRpcConnectionTest {
         verify(process).destroy();
 
         var newProcess = Mockito.mock(Process.class);
-        try(var autoClosedConnection = new ProcessRpcConnection(newProcess, true)) {
+        try (var autoClosedConnection = new ProcessRpcConnection(newProcess, true)) {
             autoClosedConnection.getIncomingStream();
         }
         verify(newProcess).destroy();

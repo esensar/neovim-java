@@ -26,7 +26,9 @@ package com.ensarsarajcic.neovim.java.handler;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.*;
+import java.util.concurrent.AbstractExecutorService;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Simple implementation of {@link ExecutorService} which runs all tasks on thread the call was made from
@@ -48,6 +50,7 @@ public final class ImmediateExecutorService extends AbstractExecutorService {
 
     /**
      * Returns an empty list of runnables, since it can't hold any and sets the same flag as {@link #shutdown()}
+     *
      * @return an empty list
      */
     @Override
@@ -58,6 +61,7 @@ public final class ImmediateExecutorService extends AbstractExecutorService {
 
     /**
      * Returns the shutdown flag set by {@link #shutdown()} and {@link #shutdownNow()}
+     *
      * @return shutdown flag
      */
     @Override
@@ -67,6 +71,7 @@ public final class ImmediateExecutorService extends AbstractExecutorService {
 
     /**
      * Returns the shutdown flag set by {@link #shutdown()} and {@link #shutdownNow()}
+     *
      * @return shutdown flag
      */
     @Override
@@ -76,6 +81,7 @@ public final class ImmediateExecutorService extends AbstractExecutorService {
 
     /**
      * No-op
+     *
      * @return true
      */
     @Override
@@ -86,6 +92,7 @@ public final class ImmediateExecutorService extends AbstractExecutorService {
     /**
      * Immediately runs the passed command, unless shutdown flag is set
      * If shutdown flag is set, this is a no-op
+     *
      * @param command to run
      */
     @Override

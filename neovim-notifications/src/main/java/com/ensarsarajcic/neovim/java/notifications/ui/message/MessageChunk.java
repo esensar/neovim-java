@@ -26,9 +26,8 @@ public final class MessageChunk {
 
     @Override
     public String toString() {
-        return "MessageChunk{" +
-                "highlightId=" + highlightId +
-                ", text='" + text + '\'' +
-                '}';
+        return "MessageChunk{"
+                + "highlightId=" + highlightId
+                + ", text='" + text + '\'' + '}';
     }
 }

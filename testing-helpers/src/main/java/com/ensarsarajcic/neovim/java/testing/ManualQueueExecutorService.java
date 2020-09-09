@@ -24,12 +24,23 @@
 
 package com.ensarsarajcic.neovim.java.testing;
 
-import java.util.*;
-import java.util.concurrent.*;
+import java.util.AbstractMap;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
 
 /**
- * Wraps an executor service to manually submit tasks
+ * Wraps an executor service to manually submit tasks.
  */
 public final class ManualQueueExecutorService implements ExecutorService {
 
@@ -90,24 +101,32 @@ public final class ManualQueueExecutorService implements ExecutorService {
     }
 
     @Override
-    public <T> List<Future<T>> invokeAll(Collection<? extends Callable<T>> tasks) throws InterruptedException {
+    public <T> List<Future<T>> invokeAll(
+            Collection<? extends Callable<T>> tasks
+    ) throws InterruptedException {
         return tasks.stream()
                 .map(this::prepareCallable)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public <T> List<Future<T>> invokeAll(Collection<? extends Callable<T>> tasks, long timeout, TimeUnit unit) throws InterruptedException {
+    public <T> List<Future<T>> invokeAll(
+            Collection<? extends Callable<T>> tasks, long timeout, TimeUnit unit
+    ) throws InterruptedException {
         return invokeAll(tasks);
     }
 
     @Override
-    public <T> T invokeAny(Collection<? extends Callable<T>> tasks) throws InterruptedException, ExecutionException {
+    public <T> T invokeAny(
+            Collection<? extends Callable<T>> tasks
+    ) throws InterruptedException, ExecutionException {
         return invokeAll(tasks).get(0).get();
     }
 
     @Override
-    public <T> T invokeAny(Collection<? extends Callable<T>> tasks, long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
+    public <T> T invokeAny(
+            Collection<? extends Callable<T>> tasks, long timeout, TimeUnit unit
+    ) throws InterruptedException, ExecutionException, TimeoutException {
         return invokeAny(tasks);
     }
 

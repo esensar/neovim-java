@@ -40,7 +40,12 @@ import java.lang.ref.WeakReference;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.*;
+import java.util.AbstractMap;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -78,6 +83,7 @@ public final class NeovimHandlerManager {
 
     /**
      * Creates a new {@link NeovimHandlerManager} with given {@link NeovimHandlerProxy}
+     *
      * @param neovimHandlerProxy proxy to use for dispatching notifications/messages
      * @throws NullPointerException if passed {@link NeovimHandlerProxy} is null
      */

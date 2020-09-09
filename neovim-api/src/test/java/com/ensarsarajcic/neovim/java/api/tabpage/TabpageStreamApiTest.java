@@ -25,7 +25,6 @@
 package com.ensarsarajcic.neovim.java.api.tabpage;
 
 import com.ensarsarajcic.neovim.java.api.BaseStreamApiTest;
-import com.ensarsarajcic.neovim.java.api.NeovimApi;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.NeovimCustomType;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.Tabpage;
 import com.ensarsarajcic.neovim.java.corerpc.message.ResponseMessage;
@@ -40,7 +39,7 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 @RunWith(MockitoJUnitRunner.class)
 public class TabpageStreamApiTest extends BaseStreamApiTest {

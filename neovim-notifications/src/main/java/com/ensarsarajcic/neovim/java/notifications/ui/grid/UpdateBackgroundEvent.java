@@ -31,7 +31,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public final class UpdateBackgroundEvent implements UiGridEvent {
     public static final String NAME = "update_bg";
 
-    private int color;
+    private final int color;
 
     public UpdateBackgroundEvent(
             @JsonProperty(value = "color", index = 0) int color) {
@@ -49,8 +49,6 @@ public final class UpdateBackgroundEvent implements UiGridEvent {
 
     @Override
     public String toString() {
-        return "UpdateBackgroundEvent{" +
-                "color=" + color +
-                '}';
+        return "UpdateBackgroundEvent{" + "color=" + color + '}';
     }
 }

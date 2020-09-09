@@ -26,9 +26,20 @@ package com.ensarsarajcic.neovim.java.explorer.api.discovery;
 
 import com.ensarsarajcic.neovim.java.api.NeovimApi;
 import com.ensarsarajcic.neovim.java.api.NeovimApis;
-import com.ensarsarajcic.neovim.java.api.types.apiinfo.*;
+import com.ensarsarajcic.neovim.java.api.types.apiinfo.ApiInfo;
+import com.ensarsarajcic.neovim.java.api.types.apiinfo.ErrorInfo;
+import com.ensarsarajcic.neovim.java.api.types.apiinfo.FunctionInfo;
+import com.ensarsarajcic.neovim.java.api.types.apiinfo.ParamInfo;
+import com.ensarsarajcic.neovim.java.api.types.apiinfo.TypeInfo;
+import com.ensarsarajcic.neovim.java.api.types.apiinfo.UiEventInfo;
+import com.ensarsarajcic.neovim.java.api.types.apiinfo.VersionInfo;
 import com.ensarsarajcic.neovim.java.corerpc.client.RpcConnection;
-import com.ensarsarajcic.neovim.java.explorer.api.*;
+import com.ensarsarajcic.neovim.java.explorer.api.NeovimApiList;
+import com.ensarsarajcic.neovim.java.explorer.api.NeovimError;
+import com.ensarsarajcic.neovim.java.explorer.api.NeovimFunction;
+import com.ensarsarajcic.neovim.java.explorer.api.NeovimType;
+import com.ensarsarajcic.neovim.java.explorer.api.NeovimUiEvent;
+import com.ensarsarajcic.neovim.java.explorer.api.NeovimVersion;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -46,6 +57,10 @@ import java.util.stream.Collectors;
  * Collection of utils for collecting API Info for API Explorer GUI
  */
 public final class ApiDiscovery {
+
+    private ApiDiscovery() {
+        //no instance
+    }
 
     /**
      * Generates a process call for loading up API info
@@ -71,6 +86,7 @@ public final class ApiDiscovery {
 
     /**
      * Loads API Info from running Neovim instance, represented with {@link RpcConnection}
+     *
      * @param rpcConnection connection to Neovim instance
      */
     public static NeovimApiList discoverApiFromConnection(RpcConnection rpcConnection) throws ExecutionException, InterruptedException {

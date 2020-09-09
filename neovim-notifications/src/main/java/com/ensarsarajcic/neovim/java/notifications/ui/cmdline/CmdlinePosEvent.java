@@ -31,8 +31,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public final class CmdlinePosEvent implements UiCmdlineEvent {
     public static final String NAME = "cmdline_pos";
 
-    private int pos;
-    private int level;
+    private final int pos;
+    private final int level;
 
     public CmdlinePosEvent(
             @JsonProperty(value = "pos", index = 0) int pos,
@@ -56,9 +56,8 @@ public final class CmdlinePosEvent implements UiCmdlineEvent {
 
     @Override
     public String toString() {
-        return "CmdlinePosEvent{" +
-                "pos=" + pos +
-                ", level=" + level +
-                '}';
+        return "CmdlinePosEvent{"
+                + "pos=" + pos
+                + ", level=" + level + '}';
     }
 }

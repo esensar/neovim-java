@@ -36,6 +36,7 @@ public class RpcException extends Exception {
 
     /**
      * Creates a new {@link RpcException} with given {@link RpcError}
+     *
      * @param rpcError error representing this exception
      */
     public RpcException(RpcError rpcError) {
@@ -45,6 +46,7 @@ public class RpcException extends Exception {
 
     /**
      * Returns the cause - {@link RpcError}
+     *
      * @return {@link RpcError} that caused the exception
      */
     public RpcError getRpcError() {
@@ -53,8 +55,6 @@ public class RpcException extends Exception {
 
     @Override
     public String toString() {
-        return "RpcException{" +
-                "rpcError=" + rpcError +
-                '}';
+        return "RpcException{" + "rpcError=" + rpcError + '}';
     }
 }

@@ -46,7 +46,7 @@ public final class OptionSetEvent implements UiGlobalEvent {
         EXT_CMDLINE("ext_cmdline"),
         EXT_WILD_MENU("ext_wildmenu");
 
-        private String rawValue;
+        private final String rawValue;
 
         Option(String rawValue) {
             this.rawValue = rawValue;
@@ -66,8 +66,8 @@ public final class OptionSetEvent implements UiGlobalEvent {
         }
     }
 
-    private String optionName;
-    private Object value;
+    private final String optionName;
+    private final Object value;
 
     public OptionSetEvent(
             @JsonProperty(value = "option_name", index = 0) String optionName,
@@ -95,9 +95,8 @@ public final class OptionSetEvent implements UiGlobalEvent {
 
     @Override
     public String toString() {
-        return "OptionSetEvent{" +
-                "optionName='" + optionName + '\'' +
-                ", value=" + value +
-                '}';
+        return "OptionSetEvent{"
+                + "optionName='" + optionName + '\''
+                + ", value=" + value + '}';
     }
 }

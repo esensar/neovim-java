@@ -32,8 +32,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public final class WinExternalPositionEvent implements UiMultigridEvent {
     public static final String NAME = "win_external_pos";
 
-    private int grid;
-    private Window win;
+    private final int grid;
+    private final Window win;
 
     public WinExternalPositionEvent(
             @JsonProperty(value = "grid", index = 0) int grid,
@@ -57,9 +57,8 @@ public final class WinExternalPositionEvent implements UiMultigridEvent {
 
     @Override
     public String toString() {
-        return "WinExternalPositionEvent{" +
-                "grid=" + grid +
-                ", win=" + win +
-                '}';
+        return "WinExternalPositionEvent{"
+                + "grid=" + grid
+                + ", win=" + win + '}';
     }
 }

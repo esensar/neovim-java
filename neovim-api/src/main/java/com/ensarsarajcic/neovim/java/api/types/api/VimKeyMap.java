@@ -33,15 +33,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public final class VimKeyMap {
 
-    private boolean silent;
-    private boolean noRemap;
-    private String keyStroke;
-    private String actionExpression;
-    private String mode;
-    private boolean noWait;
-    private boolean expr;
-    private int sid;
-    private boolean buffer;
+    private final boolean silent;
+    private final boolean noRemap;
+    private final String keyStroke;
+    private final String actionExpression;
+    private final String mode;
+    private final boolean noWait;
+    private final boolean expr;
+    private final int sid;
+    private final boolean buffer;
 
     public VimKeyMap(
             @JsonProperty("silent")
@@ -111,16 +111,15 @@ public final class VimKeyMap {
 
     @Override
     public String toString() {
-        return "VimKeyMap{" +
-                "silent=" + silent +
-                ", noRemap=" + noRemap +
-                ", keyStroke='" + keyStroke + '\'' +
-                ", actionExpression='" + actionExpression + '\'' +
-                ", mode='" + mode + '\'' +
-                ", noWait=" + noWait +
-                ", expr=" + expr +
-                ", sid=" + sid +
-                ", buffer=" + buffer +
-                '}';
+        return "VimKeyMap{"
+                + "silent=" + silent
+                + ", noRemap=" + noRemap
+                + ", keyStroke='" + keyStroke + '\''
+                + ", actionExpression='" + actionExpression + '\''
+                + ", mode='" + mode + '\''
+                + ", noWait=" + noWait
+                + ", expr=" + expr
+                + ", sid=" + sid
+                + ", buffer=" + buffer + '}';
     }
 }

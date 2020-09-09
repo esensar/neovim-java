@@ -41,13 +41,14 @@ public interface RpcSender {
      *
      * @param message message to send
      * @throws IllegalStateException if current instance is not attached to a {@link OutputStream}
-     * @throws IOException if issues arise in communication or serialization
+     * @throws IOException           if issues arise in communication or serialization
      */
     void send(Message message) throws IOException;
 
     /**
      * Attaches this {@link RpcSender} to a {@link OutputStream}
      * That {@link OutputStream} can (and should) then be used to communicate (for sending data)
+     *
      * @param outputStream {@link OutputStream} to write to
      */
     void attach(OutputStream outputStream);

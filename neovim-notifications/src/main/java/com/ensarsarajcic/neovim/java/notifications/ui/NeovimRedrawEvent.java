@@ -35,14 +35,14 @@ import java.util.List;
 public final class NeovimRedrawEvent implements NeovimNotification {
     public static final String NAME = "redraw";
 
-    private List<UiEvent> uiEvents;
+    private final List<UiEvent> uiEvents;
 
     public NeovimRedrawEvent(List<UiEvent> uiEvents) {
         this.uiEvents = Collections.unmodifiableList(uiEvents);
     }
 
     @Override
-    public final String getNotificationName() {
+    public String getNotificationName() {
         return NAME;
     }
 
@@ -52,8 +52,6 @@ public final class NeovimRedrawEvent implements NeovimNotification {
 
     @Override
     public String toString() {
-        return "NeovimRedrawEvent{" +
-                "uiEvents=" + uiEvents +
-                '}';
+        return "NeovimRedrawEvent{" + "uiEvents=" + uiEvents + '}';
     }
 }

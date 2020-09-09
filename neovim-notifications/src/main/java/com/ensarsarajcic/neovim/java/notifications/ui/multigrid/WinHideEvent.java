@@ -31,7 +31,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public final class WinHideEvent implements UiMultigridEvent {
     public static final String NAME = "win_hide";
 
-    private int grid;
+    private final int grid;
 
     public WinHideEvent(
             @JsonProperty(value = "grid", index = 0) int grid) {
@@ -49,8 +49,6 @@ public final class WinHideEvent implements UiMultigridEvent {
 
     @Override
     public String toString() {
-        return "WinHideEvent{" +
-                "grid=" + grid +
-                '}';
+        return "WinHideEvent{" + "grid=" + grid + '}';
     }
 }

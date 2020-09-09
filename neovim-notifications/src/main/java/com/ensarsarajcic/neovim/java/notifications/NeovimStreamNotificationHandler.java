@@ -60,12 +60,13 @@ import java.util.stream.Collectors;
 public final class NeovimStreamNotificationHandler implements NeovimNotificationHandler {
     private static final Logger log = LoggerFactory.getLogger(NeovimStreamNotificationHandler.class);
 
-    private ReactiveRpcStreamer reactiveRpcStreamer;
-    private ObjectMapper objectMapper;
+    private final ReactiveRpcStreamer reactiveRpcStreamer;
+    private final ObjectMapper objectMapper;
 
     /**
      * Creates a new {@link NeovimStreamNotificationHandler} reading notifications from {@link ReactiveRpcStreamer}
      * passed in the constructor. It may not be null.
+     *
      * @param reactiveRpcStreamer streamer to be used to read notifications
      * @throws NullPointerException if reactiveRpcStreamer is null
      */

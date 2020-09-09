@@ -38,7 +38,7 @@ public final class ObjectMappers {
         throw new AssertionError("No instances");
     }
 
-    private static final ObjectMapper createDefaultNeovimMapper() {
+    private static ObjectMapper createDefaultNeovimMapper() {
         var factory = new MessagePackFactory();
         factory.disable(JsonParser.Feature.AUTO_CLOSE_SOURCE);
         factory.disable(JsonGenerator.Feature.AUTO_CLOSE_TARGET);
@@ -47,7 +47,7 @@ public final class ObjectMappers {
         return objectMapper;
     }
 
-    public static final ObjectMapper defaultNeovimMapper() {
+    public static ObjectMapper defaultNeovimMapper() {
         if (defaultNeovimMapper == null) {
             synchronized (ObjectMappers.class) {
                 if (defaultNeovimMapper == null) {

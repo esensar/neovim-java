@@ -67,8 +67,8 @@ public final class TablineUpdateEvent implements UiTablineEvent {
 
     @JsonFormat(shape = JsonFormat.Shape.ARRAY)
     public static final class TabInfo {
-        private Tabpage tab;
-        private String name;
+        private final Tabpage tab;
+        private final String name;
 
         public TabInfo(Tabpage tab, String name) {
             this.tab = tab;
@@ -85,15 +85,14 @@ public final class TablineUpdateEvent implements UiTablineEvent {
 
         @Override
         public String toString() {
-            return "TabInfo{" +
-                    "tab=" + tab +
-                    ", name='" + name + '\'' +
-                    '}';
+            return "TabInfo{"
+                    + "tab=" + tab
+                    + ", name='" + name + '\'' + '}';
         }
     }
 
-    private Tabpage currentTabpage;
-    private List<TabInfo> tabs;
+    private final Tabpage currentTabpage;
+    private final List<TabInfo> tabs;
 
     public TablineUpdateEvent(Tabpage currentTabpage, List<TabInfo> tabs) {
         this.currentTabpage = currentTabpage;
@@ -115,9 +114,8 @@ public final class TablineUpdateEvent implements UiTablineEvent {
 
     @Override
     public String toString() {
-        return "TablineUpdateEvent{" +
-                "currentTabpage=" + currentTabpage +
-                ", tabs=" + tabs +
-                '}';
+        return "TablineUpdateEvent{"
+                + "currentTabpage=" + currentTabpage
+                + ", tabs=" + tabs + '}';
     }
 }

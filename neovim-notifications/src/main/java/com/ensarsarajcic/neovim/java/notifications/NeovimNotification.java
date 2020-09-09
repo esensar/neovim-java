@@ -31,6 +31,7 @@ package com.ensarsarajcic.neovim.java.notifications;
 public interface NeovimNotification {
     /**
      * Provides the name of this notification type. This will usually have the same value between instances.
+     *
      * @return name of this notification type
      */
     String getNotificationName();

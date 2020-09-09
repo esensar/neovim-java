@@ -37,7 +37,7 @@ public final class ModeInfo {
         HORIZONTAL("horizontal"),
         VERTICAL("vertical");
 
-        private String value;
+        private final String value;
 
         @JsonCreator
         public static CursorShape fromString(String value) {
@@ -60,22 +60,20 @@ public final class ModeInfo {
 
         @Override
         public String toString() {
-            return "CursorShape{" +
-                    "value='" + value + '\'' +
-                    '}';
+            return "CursorShape{" + "value='" + value + '\'' + '}';
         }
     }
 
-    private CursorShape cursorShape;
-    private int cellPercentage;
-    private int blinkWait;
-    private int blinkOn;
-    private int blinkOff;
-    private int highlightId;
-    private int highlightLangmapId;
-    private String shortName;
-    private String fullName;
-    private Object mouseShape;
+    private final CursorShape cursorShape;
+    private final int cellPercentage;
+    private final int blinkWait;
+    private final int blinkOn;
+    private final int blinkOff;
+    private final int highlightId;
+    private final int highlightLangmapId;
+    private final String shortName;
+    private final String fullName;
+    private final Object mouseShape;
 
     public ModeInfo(
             @JsonProperty(value = "cursor_shape", index = 0) CursorShape cursorShape,
@@ -142,17 +140,16 @@ public final class ModeInfo {
 
     @Override
     public String toString() {
-        return "ModeInfo{" +
-                "cursorShape=" + cursorShape +
-                ", cellPercentage=" + cellPercentage +
-                ", blinkWait=" + blinkWait +
-                ", blinkOn=" + blinkOn +
-                ", blinkOff=" + blinkOff +
-                ", highlightId=" + highlightId +
-                ", highlightLangmapId=" + highlightLangmapId +
-                ", shortName='" + shortName + '\'' +
-                ", fullName='" + fullName + '\'' +
-                ", mouseShape=" + mouseShape +
-                '}';
+        return "ModeInfo{"
+                + "cursorShape=" + cursorShape
+                + ", cellPercentage=" + cellPercentage
+                + ", blinkWait=" + blinkWait
+                + ", blinkOn=" + blinkOn
+                + ", blinkOff=" + blinkOff
+                + ", highlightId=" + highlightId
+                + ", highlightLangmapId=" + highlightLangmapId
+                + ", shortName='" + shortName + '\''
+                + ", fullName='" + fullName + '\''
+                + ", mouseShape=" + mouseShape + '}';
     }
 }

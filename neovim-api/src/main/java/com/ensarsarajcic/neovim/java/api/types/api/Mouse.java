@@ -21,7 +21,7 @@ public final class Mouse {
 
         private static final Logger log = LoggerFactory.getLogger(Button.class);
 
-        private String value;
+        private final String value;
 
         @JsonCreator
         public static Button fromString(String value) {
@@ -46,9 +46,7 @@ public final class Mouse {
 
         @Override
         public String toString() {
-            return "Button{" +
-                    "value='" + value + '\'' +
-                    '}';
+            return "Button{" + "value='" + value + '\'' + '}';
         }
     }
 
@@ -65,7 +63,7 @@ public final class Mouse {
 
         private static final Logger log = LoggerFactory.getLogger(Action.class);
 
-        private String value;
+        private final String value;
 
         @JsonCreator
         public static Action fromString(String value) {
@@ -90,9 +88,7 @@ public final class Mouse {
 
         @Override
         public String toString() {
-            return "Action{" +
-                    "value='" + value + '\'' +
-                    '}';
+            return "Action{" + "value='" + value + '\'' + '}';
         }
     }
 }

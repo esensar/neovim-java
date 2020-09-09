@@ -37,7 +37,7 @@ import java.lang.annotation.Target;
  * To actually use this, object with this method needs to be registered in {@link com.ensarsarajcic.neovim.java.handler.NeovimHandlerManager}
  * <p>
  * Currently, only single argument methods are supported and that argument must be of {@link com.ensarsarajcic.neovim.java.corerpc.message.RequestMessage} type
- *
+ * <p>
  * Difference between this and {@link NeovimRequestHandler} is that Neovim request handler's result will be used to respond to rpc connection
  */
 @Inherited

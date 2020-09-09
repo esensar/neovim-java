@@ -33,12 +33,12 @@ import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 
 /**
  * Defines a response
- *
+ * <p>
  * Format is defined as:
- *  * type as Integer
- *  * id as Integer
- *  * error as RpcError
- *  * result
+ * * type as Integer
+ * * id as Integer
+ * * error as RpcError
+ * * result
  */
 @JsonFormat(shape = JsonFormat.Shape.ARRAY)
 @JsonPropertyOrder({"type", "id", "error", "result"})
@@ -56,8 +56,8 @@ public final class ResponseMessage implements IdentifiableMessage {
     /**
      * Creates a new {@link ResponseMessage}
      *
-     * @param id response id - it should match id of request
-     * @param error error if present
+     * @param id     response id - it should match id of request
+     * @param error  error if present
      * @param result result if present
      */
     public ResponseMessage(int id, RpcError error, Object result) {
@@ -105,6 +105,7 @@ public final class ResponseMessage implements IdentifiableMessage {
          * Prepares new builder for successful {@link ResponseMessage} with a result
          * Result may be changed later
          * Error may be added later, but is probably a bad thing to do
+         *
          * @param result result to send, may be any object, but it must be serializable to MsgPack
          */
         public Builder(Object result) {
@@ -115,6 +116,7 @@ public final class ResponseMessage implements IdentifiableMessage {
          * Prepares new builder for error {@link ResponseMessage} with an error
          * Result may be added later, but is probably a bad thing to do
          * Error may be changed later
+         *
          * @param error {@link RpcError} error to send
          */
         public Builder(RpcError error) {
@@ -125,7 +127,8 @@ public final class ResponseMessage implements IdentifiableMessage {
          * Prepares new builder for error {@link ResponseMessage} with an error and a result
          * Both may be changed later
          * This constructor is meant for use by deserializer
-         * @param error {@link RpcError} error to send
+         *
+         * @param error  {@link RpcError} error to send
          * @param result result to send, may be any object, but it must be serializable to MsgPack
          */
         @JsonCreator
@@ -140,6 +143,7 @@ public final class ResponseMessage implements IdentifiableMessage {
 
         /**
          * Adds id to the message. This should match the request that this responds to
+         *
          * @param id id to add
          */
         public Builder withId(int id) {
@@ -149,6 +153,7 @@ public final class ResponseMessage implements IdentifiableMessage {
 
         /**
          * Adds (or changes) error to the message.
+         *
          * @param error error to add
          */
         public Builder withError(RpcError error) {
@@ -158,6 +163,7 @@ public final class ResponseMessage implements IdentifiableMessage {
 
         /**
          * Adds (or changes) result to the message.
+         *
          * @param result result to add
          */
         public Builder withResult(Object result) {
@@ -167,6 +173,7 @@ public final class ResponseMessage implements IdentifiableMessage {
 
         /**
          * Creates a new {@link ResponseMessage} using arguments added to this instance
+         *
          * @return a new {@link ResponseMessage}. Multiple calls will create different instances.
          */
         public ResponseMessage build() {
@@ -176,10 +183,9 @@ public final class ResponseMessage implements IdentifiableMessage {
 
     @Override
     public String toString() {
-        return "ResponseMessage{" +
-                "id=" + id +
-                ", error=" + error +
-                ", result=" + result +
-                '}';
+        return "ResponseMessage{"
+                + "id=" + id
+                + ", error=" + error
+                + ", result=" + result + '}';
     }
 }

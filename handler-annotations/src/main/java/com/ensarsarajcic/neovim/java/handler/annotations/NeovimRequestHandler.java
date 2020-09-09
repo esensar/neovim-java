@@ -24,7 +24,11 @@
 
 package com.ensarsarajcic.neovim.java.handler.annotations;
 
-import java.lang.annotation.*;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Inherited;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * Annotation used to mark a method as a request handler
@@ -33,7 +37,7 @@ import java.lang.annotation.*;
  * To actually use this, object with this method needs to be registered in {@link com.ensarsarajcic.neovim.java.handler.NeovimHandlerManager}
  * <p>
  * Currently, only single argument methods are supported and that argument must be of {@link com.ensarsarajcic.neovim.java.corerpc.message.RequestMessage} type
- *
+ * <p>
  * Methods return value will be used to respond to attached Neovim instance
  * If methods throws an exception, it will be returned as RpcError, but only if it is instance of NeovimRequestException or NeovimRequestValidationException
  */

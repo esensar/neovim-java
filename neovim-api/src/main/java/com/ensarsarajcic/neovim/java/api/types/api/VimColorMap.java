@@ -31,7 +31,7 @@ import java.util.Map;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public final class VimColorMap {
 
-    private Map<String, Integer> colorMap;
+    private final Map<String, Integer> colorMap;
 
     public VimColorMap(Map<String, Integer> colorMap) {
         this.colorMap = colorMap;
@@ -43,8 +43,7 @@ public final class VimColorMap {
 
     @Override
     public String toString() {
-        return "VimColorMap{" +
-                "colorMap=" + colorMap +
-                '}';
+        return "VimColorMap{"
+                + "colorMap=" + colorMap + '}';
     }
 }

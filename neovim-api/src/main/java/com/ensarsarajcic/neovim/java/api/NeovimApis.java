@@ -31,6 +31,10 @@ import com.ensarsarajcic.neovim.java.corerpc.reactive.ReactiveRpcClient;
 
 public final class NeovimApis {
 
+    private NeovimApis() {
+        //no instance
+    }
+
     public static NeovimApi getApiForConnection(RpcConnection rpcConnection) {
         var rpcClient = new RpcClient.Builder()
                 .withObjectMapper(NeovimJacksonModule.createNeovimObjectMapper()).build();

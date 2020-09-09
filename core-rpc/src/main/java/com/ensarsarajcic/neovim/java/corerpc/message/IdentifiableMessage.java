@@ -32,6 +32,7 @@ public interface IdentifiableMessage extends Message {
 
     /**
      * Get ID of the message
+     *
      * @return integer representing ID of the message
      */
     int getId();

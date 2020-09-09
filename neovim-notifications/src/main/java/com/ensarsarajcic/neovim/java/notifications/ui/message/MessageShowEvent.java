@@ -33,9 +33,9 @@ import java.util.List;
 public final class MessageShowEvent implements UiMessageEvent {
     public static final String NAME = "msg_show";
 
-    private String kind;
-    private List<MessageChunk> content;
-    private boolean replaceLast;
+    private final String kind;
+    private final List<MessageChunk> content;
+    private final boolean replaceLast;
 
     public MessageShowEvent(
             @JsonProperty(value = "kind", index = 0) String kind,
@@ -65,10 +65,9 @@ public final class MessageShowEvent implements UiMessageEvent {
 
     @Override
     public String toString() {
-        return "MessageShowEvent{" +
-                "kind='" + kind + '\'' +
-                ", content=" + content +
-                ", replaceLast=" + replaceLast +
-                '}';
+        return "MessageShowEvent{"
+                + "kind='" + kind + '\''
+                + ", content=" + content
+                + ", replaceLast=" + replaceLast + '}';
     }
 }

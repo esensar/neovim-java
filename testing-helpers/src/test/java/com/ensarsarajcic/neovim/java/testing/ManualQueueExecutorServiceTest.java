@@ -33,12 +33,23 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import java.io.IOException;
 import java.util.Collections;
-import java.util.concurrent.*;
+import java.util.concurrent.Callable;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
-import static org.junit.Assert.*;
-import static org.mockito.ArgumentMatchers.*;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ManualQueueExecutorServiceTest {
@@ -153,7 +164,8 @@ public class ManualQueueExecutorServiceTest {
 
         verify(executorService, times(5)).submit(any(Callable.class));
 
-        var sixth = manualQueueExecutorService.submit(() -> {}, null);
+        var sixth = manualQueueExecutorService.submit(() -> {
+        }, null);
         verify(executorService, times(5)).submit(any(Callable.class));
 
         manualQueueExecutorService.runOne();

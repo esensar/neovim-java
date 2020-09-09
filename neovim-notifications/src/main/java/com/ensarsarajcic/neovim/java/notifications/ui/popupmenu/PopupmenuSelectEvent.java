@@ -31,7 +31,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public final class PopupmenuSelectEvent implements UiPopupmenuEvent {
     public static final String NAME = "popupmenu_select";
 
-    private int selected;
+    private final int selected;
 
     public PopupmenuSelectEvent(
             @JsonProperty(value = "selected", index = 0) int selected) {
@@ -49,8 +49,6 @@ public final class PopupmenuSelectEvent implements UiPopupmenuEvent {
 
     @Override
     public String toString() {
-        return "PopupmenuSelectEvent{" +
-                "selected=" + selected +
-                '}';
+        return "PopupmenuSelectEvent{" + "selected=" + selected + '}';
     }
 }

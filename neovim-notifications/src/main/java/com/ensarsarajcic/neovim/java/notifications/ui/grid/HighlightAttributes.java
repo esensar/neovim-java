@@ -6,16 +6,16 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 // TODO make all fields optional
 public final class HighlightAttributes {
-    private int foreground;
-    private int background;
-    private int special;
-    private boolean reverse;
-    private boolean italic;
-    private boolean bold;
-    private boolean strikethrough;
-    private boolean underline;
-    private boolean undercurl;
-    private int blend;
+    private final int foreground;
+    private final int background;
+    private final int special;
+    private final boolean reverse;
+    private final boolean italic;
+    private final boolean bold;
+    private final boolean strikethrough;
+    private final boolean underline;
+    private final boolean undercurl;
+    private final int blend;
 
     public HighlightAttributes(
             @JsonProperty(value = "foreground", index = 1) int foreground,
@@ -82,17 +82,16 @@ public final class HighlightAttributes {
 
     @Override
     public String toString() {
-        return "Attributes{" +
-                "foreground=" + foreground +
-                ", background=" + background +
-                ", special=" + special +
-                ", reverse=" + reverse +
-                ", italic=" + italic +
-                ", bold=" + bold +
-                ", strikethrough=" + strikethrough +
-                ", underline=" + underline +
-                ", undercurl=" + undercurl +
-                ", blend=" + blend +
-                '}';
+        return "Attributes{"
+                + "foreground=" + foreground
+                + ", background=" + background
+                + ", special=" + special
+                + ", reverse=" + reverse
+                + ", italic=" + italic
+                + ", bold=" + bold
+                + ", strikethrough=" + strikethrough
+                + ", underline=" + underline
+                + ", undercurl=" + undercurl
+                + ", blend=" + blend + '}';
     }
 }

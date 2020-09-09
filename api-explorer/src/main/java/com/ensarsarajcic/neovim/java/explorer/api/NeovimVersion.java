@@ -32,26 +32,26 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public final class NeovimVersion {
 
-    private int apiCompatible;
-    private int apiLevel;
-    private boolean apiPreRelease;
-    private int major;
-    private int minor;
-    private int patch;
+    private final int apiCompatible;
+    private final int apiLevel;
+    private final boolean apiPreRelease;
+    private final int major;
+    private final int minor;
+    private final int patch;
 
     public NeovimVersion(
             @JsonProperty("api_compatible")
-            int apiCompatible,
+                    int apiCompatible,
             @JsonProperty("api_level")
-            int apiLevel,
+                    int apiLevel,
             @JsonProperty("api_prerelease")
-            boolean apiPreRelease,
+                    boolean apiPreRelease,
             @JsonProperty("major")
-            int major,
+                    int major,
             @JsonProperty("minor")
-            int minor,
+                    int minor,
             @JsonProperty("patch")
-            int patch) {
+                    int patch) {
         this.apiCompatible = apiCompatible;
         this.apiLevel = apiLevel;
         this.apiPreRelease = apiPreRelease;
@@ -86,13 +86,12 @@ public final class NeovimVersion {
 
     @Override
     public String toString() {
-        return "NeovimVersion{" +
-                "apiCompatible=" + apiCompatible +
-                ", apiLevel=" + apiLevel +
-                ", apiPreRelease=" + apiPreRelease +
-                ", major=" + major +
-                ", minor=" + minor +
-                ", patch=" + patch +
-                '}';
+        return "NeovimVersion{"
+                + "apiCompatible=" + apiCompatible
+                + ", apiLevel=" + apiLevel
+                + ", apiPreRelease=" + apiPreRelease
+                + ", major=" + major
+                + ", minor=" + minor
+                + ", patch=" + patch + '}';
     }
 }

@@ -167,8 +167,6 @@ public final class WindowStreamApi extends BaseStreamApi implements NeovimWindow
 
     @Override
     public String toString() {
-        return "WindowStreamApi{" +
-                "model=" + model +
-                '}';
+        return "WindowStreamApi{" + "model=" + model + '}';
     }
 }

@@ -115,8 +115,7 @@ public final class TcpSocketRpcConnection implements RpcConnection {
 
     @Override
     public String toString() {
-        return "TcpSocketRpcConnection{" +
-                "socket=" + socket +
-                '}';
+        return "TcpSocketRpcConnection{"
+                + "socket=" + socket + '}';
     }
 }

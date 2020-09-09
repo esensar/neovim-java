@@ -33,7 +33,7 @@ import java.util.List;
 public final class WildmenuShowEvent implements UiWildmenuEvent {
     public static final String NAME = "wildmenu_show";
 
-    private List<String> items;
+    private final List<String> items;
 
     public WildmenuShowEvent(
             @JsonProperty(value = "items", index = 0) List<String> items) {
@@ -51,8 +51,6 @@ public final class WildmenuShowEvent implements UiWildmenuEvent {
 
     @Override
     public String toString() {
-        return "WildmenuShowEvent{" +
-                "items=" + items +
-                '}';
+        return "WildmenuShowEvent{" + "items=" + items + '}';
     }
 }

@@ -32,23 +32,23 @@ import java.util.Map;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public final class ClientInfo {
 
-    private String name;
-    private ClientVersionInfo version;
-    private ClientType type;
-    private Map<String, MethodInfo> methods;
-    private ClientAttributes attributes;
+    private final String name;
+    private final ClientVersionInfo version;
+    private final ClientType type;
+    private final Map<String, MethodInfo> methods;
+    private final ClientAttributes attributes;
 
     public ClientInfo(
             @JsonProperty("name")
-            String name,
+                    String name,
             @JsonProperty("version")
-            ClientVersionInfo version,
+                    ClientVersionInfo version,
             @JsonProperty("type")
-            ClientType type,
+                    ClientType type,
             @JsonProperty("methods")
-            Map<String, MethodInfo> methods,
+                    Map<String, MethodInfo> methods,
             @JsonProperty("attributes")
-            ClientAttributes attributes) {
+                    ClientAttributes attributes) {
         this.name = name;
         this.version = version;
         this.type = type;
@@ -78,12 +78,11 @@ public final class ClientInfo {
 
     @Override
     public String toString() {
-        return "ClientInfo{" +
-                "name='" + name + '\'' +
-                ", version=" + version +
-                ", type=" + type +
-                ", methods=" + methods +
-                ", attributes=" + attributes +
-                '}';
+        return "ClientInfo{"
+                + "name='" + name + '\''
+                + ", version=" + version
+                + ", type=" + type
+                + ", methods=" + methods
+                + ", attributes=" + attributes + '}';
     }
 }

@@ -37,7 +37,7 @@ public final class HighlightInfo {
         SYNTAX("syntax"),
         TERMINAL("terminal");
 
-        private String value;
+        private final String value;
 
         @JsonCreator
         public static Kind fromString(String value) {
@@ -60,16 +60,14 @@ public final class HighlightInfo {
 
         @Override
         public String toString() {
-            return "Kind{" +
-                    "value='" + value + '\'' +
-                    '}';
+            return "Kind{" + "value='" + value + '\'' + '}';
         }
     }
 
-    private Kind kind;
-    private String uiName;
-    private String highlightName;
-    private int id;
+    private final Kind kind;
+    private final String uiName;
+    private final String highlightName;
+    private final int id;
 
     public HighlightInfo(
             @JsonProperty(value = "kind", index = 0, required = true) Kind kind,
@@ -100,11 +98,10 @@ public final class HighlightInfo {
 
     @Override
     public String toString() {
-        return "HighlightInfo{" +
-                "kind=" + kind +
-                ", uiName='" + uiName + '\'' +
-                ", highlightName='" + highlightName + '\'' +
-                ", id=" + id +
-                '}';
+        return "HighlightInfo{"
+                + "kind=" + kind
+                + ", uiName='" + uiName + '\''
+                + ", highlightName='" + highlightName + '\''
+                + ", id=" + id + '}';
     }
 }

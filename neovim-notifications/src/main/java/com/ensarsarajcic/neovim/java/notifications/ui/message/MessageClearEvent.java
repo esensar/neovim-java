@@ -30,7 +30,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 public final class MessageClearEvent implements UiMessageEvent {
     public static final String NAME = "msg_clear";
 
-    public MessageClearEvent() { }
+    public MessageClearEvent() {
+    }
 
     @Override
     public String getEventName() {

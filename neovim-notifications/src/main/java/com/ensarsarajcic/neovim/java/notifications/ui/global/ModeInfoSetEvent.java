@@ -33,8 +33,8 @@ import java.util.List;
 public final class ModeInfoSetEvent implements UiGlobalEvent {
     public static final String NAME = "mode_info_set";
 
-    private boolean cursorStyleEnabled;
-    private List<ModeInfo> modeInfoList;
+    private final boolean cursorStyleEnabled;
+    private final List<ModeInfo> modeInfoList;
 
     public ModeInfoSetEvent(
             @JsonProperty(value = "cursor_style_enabled", index = 0) boolean cursorStyleEnabled,
@@ -58,9 +58,8 @@ public final class ModeInfoSetEvent implements UiGlobalEvent {
 
     @Override
     public String toString() {
-        return "ModeInfoSetEvent{" +
-                "cursorStyleEnabled=" + cursorStyleEnabled +
-                ", modeInfoList=" + modeInfoList +
-                '}';
+        return "ModeInfoSetEvent{"
+                + "cursorStyleEnabled=" + cursorStyleEnabled
+                + ", modeInfoList=" + modeInfoList + '}';
     }
 }

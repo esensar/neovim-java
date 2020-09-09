@@ -46,26 +46,26 @@ public final class ApiInfo {
     private ApiInfoInternal apiInfoInternal;
 
     static final class ApiInfoInternal {
-        private Map<String, ErrorInfo.Props> errorTypes;
-        private List<FunctionInfo> functions;
-        private Map<String, TypeInfo.Props> types;
-        private List<UiEventInfo> uiEvents;
-        private List<String> uiOptions;
-        private VersionInfo version;
+        private final Map<String, ErrorInfo.Props> errorTypes;
+        private final List<FunctionInfo> functions;
+        private final Map<String, TypeInfo.Props> types;
+        private final List<UiEventInfo> uiEvents;
+        private final List<String> uiOptions;
+        private final VersionInfo version;
 
-        public ApiInfoInternal(
+        ApiInfoInternal(
                 @JsonProperty("error_types")
-                Map<String, ErrorInfo.Props> errorTypes,
+                        Map<String, ErrorInfo.Props> errorTypes,
                 @JsonProperty("functions")
-                List<FunctionInfo> functions,
+                        List<FunctionInfo> functions,
                 @JsonProperty("types")
-                Map<String, TypeInfo.Props> types,
+                        Map<String, TypeInfo.Props> types,
                 @JsonProperty("ui_events")
-                List<UiEventInfo> uiEvents,
+                        List<UiEventInfo> uiEvents,
                 @JsonProperty("ui_options")
-                List<String> uiOptions,
+                        List<String> uiOptions,
                 @JsonProperty("version")
-                VersionInfo version) {
+                        VersionInfo version) {
             this.errorTypes = errorTypes;
             this.functions = functions;
             this.types = types;
@@ -113,13 +113,12 @@ public final class ApiInfo {
 
     @Override
     public String toString() {
-        return "ApiInfo{" +
-                "channelId=" + channelId +
-                ", errorTypes=" + getErrors() +
-                ", functions=" + getFunctions() +
-                ", types=" + getTypes() +
-                ", uiEvents=" + getUiEvents() +
-                ", version=" + getVersion() +
-                '}';
+        return "ApiInfo{"
+                + "channelId=" + channelId
+                + ", errorTypes=" + getErrors()
+                + ", functions=" + getFunctions()
+                + ", types=" + getTypes()
+                + ", uiEvents=" + getUiEvents()
+                + ", version=" + getVersion() + '}';
     }
 }

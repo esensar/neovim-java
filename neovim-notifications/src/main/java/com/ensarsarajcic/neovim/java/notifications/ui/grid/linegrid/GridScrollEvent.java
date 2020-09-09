@@ -31,13 +31,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public final class GridScrollEvent implements UiLineGridEvent {
     public static final String NAME = "grid_scroll";
 
-    private int grid;
-    private int top;
-    private int bot;
-    private int left;
-    private int right;
-    private int rows;
-    private int cols;
+    private final int grid;
+    private final int top;
+    private final int bot;
+    private final int left;
+    private final int right;
+    private final int rows;
+    private final int cols;
 
     public GridScrollEvent(
             @JsonProperty(value = "grid", index = 0) int grid,
@@ -91,14 +91,13 @@ public final class GridScrollEvent implements UiLineGridEvent {
 
     @Override
     public String toString() {
-        return "GridScrollEvent{" +
-                "grid=" + grid +
-                ", top=" + top +
-                ", bot=" + bot +
-                ", left=" + left +
-                ", right=" + right +
-                ", rows=" + rows +
-                ", cols=" + cols +
-                '}';
+        return "GridScrollEvent{"
+                + "grid=" + grid
+                + ", top=" + top
+                + ", bot=" + bot
+                + ", left=" + left
+                + ", right=" + right
+                + ", rows=" + rows
+                + ", cols=" + cols + '}';
     }
 }

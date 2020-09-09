@@ -33,26 +33,26 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public final class VersionInfo {
-    private int major;
-    private int minor;
-    private int patch;
-    private int level;
-    private int compatible;
-    private boolean preRelease;
+    private final int major;
+    private final int minor;
+    private final int patch;
+    private final int level;
+    private final int compatible;
+    private final boolean preRelease;
 
     public VersionInfo(
             @JsonProperty("major")
-            int major,
+                    int major,
             @JsonProperty("minor")
-            int minor,
+                    int minor,
             @JsonProperty("patch")
-            int patch,
+                    int patch,
             @JsonProperty("api_level")
-            int level,
+                    int level,
             @JsonProperty("api_compatible")
-            int compatible,
+                    int compatible,
             @JsonProperty("api_prerelease")
-            boolean preRelease) {
+                    boolean preRelease) {
         this.major = major;
         this.minor = minor;
         this.patch = patch;
@@ -91,13 +91,12 @@ public final class VersionInfo {
 
     @Override
     public String toString() {
-        return "VersionInfo{" +
-                "major=" + major +
-                ", minor=" + minor +
-                ", patch=" + patch +
-                ", level=" + level +
-                ", compatible=" + compatible +
-                ", preRelease=" + preRelease +
-                '}';
+        return "VersionInfo{"
+                + "major=" + major
+                + ", minor=" + minor
+                + ", patch=" + patch
+                + ", level=" + level
+                + ", compatible=" + compatible
+                + ", preRelease=" + preRelease + '}';
     }
 }

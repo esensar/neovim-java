@@ -40,7 +40,7 @@ import java.util.Objects;
 
 public final class NeovimBufferRxWrapper implements NeovimBufferRxApi {
 
-    private NeovimBufferApi neovimBufferApi;
+    private final NeovimBufferApi neovimBufferApi;
 
     public NeovimBufferRxWrapper(NeovimBufferApi neovimBufferApi) {
         Objects.requireNonNull(neovimBufferApi, "neovimBufferApi is required to wrap it in RX interface");

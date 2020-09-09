@@ -31,8 +31,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public final class HighlightGroupSetEvent implements UiLineGridEvent {
     public static final String NAME = "hl_group_set";
 
-    private String name;
-    private int id;
+    private final String name;
+    private final int id;
 
     public HighlightGroupSetEvent(
             @JsonProperty(value = "name", index = 0) String name,
@@ -56,9 +56,8 @@ public final class HighlightGroupSetEvent implements UiLineGridEvent {
 
     @Override
     public String toString() {
-        return "HighlightGroupSetEvent{" +
-                "name='" + name + '\'' +
-                ", id=" + id +
-                '}';
+        return "HighlightGroupSetEvent{"
+                + "name='" + name + '\''
+                + ", id=" + id + '}';
     }
 }

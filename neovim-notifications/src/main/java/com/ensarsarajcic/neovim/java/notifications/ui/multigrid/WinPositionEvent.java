@@ -32,12 +32,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public final class WinPositionEvent implements UiMultigridEvent {
     public static final String NAME = "win_pos";
 
-    private int grid;
-    private Window win;
-    private int startRow;
-    private int startCol;
-    private int width;
-    private int height;
+    private final int grid;
+    private final Window win;
+    private final int startRow;
+    private final int startCol;
+    private final int width;
+    private final int height;
 
     public WinPositionEvent(
             @JsonProperty(value = "grid", index = 0) int grid,
@@ -85,13 +85,12 @@ public final class WinPositionEvent implements UiMultigridEvent {
 
     @Override
     public String toString() {
-        return "WinPositionEvent{" +
-                "grid=" + grid +
-                ", win=" + win +
-                ", startRow=" + startRow +
-                ", startCol=" + startCol +
-                ", width=" + width +
-                ", height=" + height +
-                '}';
+        return "WinPositionEvent{"
+                + "grid=" + grid
+                + ", win=" + win
+                + ", startRow=" + startRow
+                + ", startCol=" + startCol
+                + ", width=" + width
+                + ", height=" + height + '}';
     }
 }

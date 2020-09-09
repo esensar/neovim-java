@@ -30,20 +30,20 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public final class UiInfo {
 
-    private int height;
-    private int width;
-    private boolean rgb;
-    private int chan;
+    private final int height;
+    private final int width;
+    private final boolean rgb;
+    private final int chan;
 
     public UiInfo(
             @JsonProperty("height")
-            int height,
+                    int height,
             @JsonProperty("width")
-            int width,
+                    int width,
             @JsonProperty("rgb")
-            boolean rgb,
+                    boolean rgb,
             @JsonProperty("chan")
-            int chan) {
+                    int chan) {
         this.height = height;
         this.width = width;
         this.rgb = rgb;
@@ -68,11 +68,10 @@ public final class UiInfo {
 
     @Override
     public String toString() {
-        return "UiInfo{" +
-                "height=" + height +
-                ", width=" + width +
-                ", rgb=" + rgb +
-                ", chan=" + chan +
-                '}';
+        return "UiInfo{"
+                + "height=" + height
+                + ", width=" + width
+                + ", rgb=" + rgb
+                + ", chan=" + chan + '}';
     }
 }

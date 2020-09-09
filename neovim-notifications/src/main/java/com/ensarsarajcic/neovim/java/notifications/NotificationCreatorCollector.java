@@ -125,6 +125,7 @@ final class NotificationCreatorCollector {
 
     /**
      * Provides all creators of {@link UiEvent} notifications
+     *
      * @return Map of creators where key is notification name and value is function which creates notification from raw array
      */
     public static Map<String, Function<List, UiEvent>> getUIEventCreators() {
@@ -140,6 +141,7 @@ final class NotificationCreatorCollector {
 
     /**
      * Provides all creators of {@link BufferEvent} notifications
+     *
      * @return Map of creators where key is notification name and value is function which creates notification from raw array
      */
     public static Map<String, Function<List, BufferEvent>> getBufferEventCreators() {

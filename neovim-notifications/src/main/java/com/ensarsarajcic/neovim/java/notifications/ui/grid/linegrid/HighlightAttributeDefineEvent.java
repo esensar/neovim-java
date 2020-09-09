@@ -34,10 +34,10 @@ import java.util.List;
 public final class HighlightAttributeDefineEvent implements UiLineGridEvent {
     public static final String NAME = "hl_attr_define";
 
-    private int id;
-    private HighlightAttributes rgbAttributes;
-    private HighlightAttributes cTermAttrbutes;
-    private List<HighlightInfo> info;
+    private final int id;
+    private final HighlightAttributes rgbAttributes;
+    private final HighlightAttributes cTermAttrbutes;
+    private final List<HighlightInfo> info;
 
     public HighlightAttributeDefineEvent(
             @JsonProperty(value = "id", index = 0) int id,
@@ -73,11 +73,10 @@ public final class HighlightAttributeDefineEvent implements UiLineGridEvent {
 
     @Override
     public String toString() {
-        return "HighlightAttributeDefineEvent{" +
-                "id=" + id +
-                ", rgbAttributes=" + rgbAttributes +
-                ", cTermAttrbutes=" + cTermAttrbutes +
-                ", info=" + info +
-                '}';
+        return "HighlightAttributeDefineEvent{"
+                + "id=" + id
+                + ", rgbAttributes=" + rgbAttributes
+                + ", cTermAttrbutes=" + cTermAttrbutes
+                + ", info=" + info + '}';
     }
 }

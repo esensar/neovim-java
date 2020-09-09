@@ -31,10 +31,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public final class SetScrollRegionEvent implements UiGridEvent {
     public static final String NAME = "set_scroll_region";
 
-    private int top;
-    private int bot;
-    private int left;
-    private int right;
+    private final int top;
+    private final int bot;
+    private final int left;
+    private final int right;
 
     public SetScrollRegionEvent(
             @JsonProperty(value = "top", index = 0) int top,
@@ -71,11 +71,10 @@ public final class SetScrollRegionEvent implements UiGridEvent {
 
     @Override
     public String toString() {
-        return "SetScrollRegionEvent{" +
-                "top=" + top +
-                ", bot=" + bot +
-                ", left=" + left +
-                ", right=" + right +
-                '}';
+        return "SetScrollRegionEvent{"
+                + "top=" + top
+                + ", bot=" + bot
+                + ", left=" + left
+                + ", right=" + right + '}';
     }
 }

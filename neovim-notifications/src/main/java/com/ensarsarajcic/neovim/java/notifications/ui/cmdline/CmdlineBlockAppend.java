@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 public final class CmdlineBlockAppend implements UiCmdlineEvent {
     public static final String NAME = "cmdline_block_append";
 
-    private String line;
+    private final String line;
 
     public CmdlineBlockAppend(String line) {
         this.line = line;
@@ -47,8 +47,6 @@ public final class CmdlineBlockAppend implements UiCmdlineEvent {
 
     @Override
     public String toString() {
-        return "CmdlineBlockAppend{" +
-                "line='" + line + '\'' +
-                '}';
+        return "CmdlineBlockAppend{" + "line='" + line + '\'' + '}';
     }
 }
