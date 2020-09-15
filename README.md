@@ -3,6 +3,7 @@
 ![Tests](https://github.com/esensar/neovim-java/workflows/Tests/badge.svg?branch=master&event=push)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.ensarsarajcic.neovim.java/parent/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.ensarsarajcic.neovim.java/parent)
 ![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/com.ensarsarajcic.neovim.java/parent?server=https%3A%2F%2Foss.sonatype.org)
+[![javadoc](https://javadoc.io/badge2/com.ensarsarajcic.neovim.java/core-rpc/javadoc.svg)](https://javadoc.io/doc/com.ensarsarajcic.neovim.java)
 
 Neovim Java client
 
