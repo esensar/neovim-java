@@ -2,20 +2,22 @@
 
 [![Build Status](https://travis-ci.org/esensar/neovim-java.svg?branch=master)](https://travis-ci.org/esensar/neovim-java)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.ensarsarajcic.neovim.java/parent/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.ensarsarajcic.neovim.java/parent)
+[![javadoc](https://javadoc.io/badge2/com.ensarsarajcic.neovim.java/core-rpc/javadoc.svg)](https://javadoc.io/doc/com.ensarsarajcic.neovim.java)
 
 Neovim Java is a Java Client for Neovim RPC API. Currently it is best suited for creating a GUI using Java and either an embedded Neovim instance or connecting to an exisitng instance either using Unix domain sockets or TCP sockets. Plugin development may be possible as well, but it was not tested.
 
 This library consists of multiple modules and you may choose which one you want to use (depending on preferences and level of abstraction needed):
-* [**Core RPC**](#core-rpc) - core of the library providing most basic interface for communicating with Neovim - it can be used without other modules, but other modules are recommended for most uses
- * [**Reactive Core RPC**](#reactive-core-rpc) - simple wrapper around Core RPC module for providing a reactive interface
- * [**Unix Socket Connection**](#unix-socket-connection) - simple addition of another RPCConnection for using unix domain sockets
- * [**Neovim API**](#neovim-api) - main interface for communicating with neovim. This is the recommended module to use, it provides a reactive interface and greatly simplified interface, providing complete implementations for all functions provided by Neovim.
- * [**Neovim RX API**](#neovim-rx-api) - small wrapper around Neovim API providing RxJava2 interface instead of Java reactive interface
- * [**Handler annotations**](#handler-annotations) - addition allowing creation of annotation based handlers for requests and notifications
- * [**Neovim notifications**](#neovim-notifications) - addition allowing usage of notifications through Java 9 Flows interface and also provides data models for all neovim notifications
- * [**API Explorer**](#api-explorer) - simple JavaFX application used for testing library and exploring neovim API
+* [**Core RPC**](#core-rpc) [![javadoc](https://javadoc.io/badge2/com.ensarsarajcic.neovim.java/core-rpc/javadoc.svg)](https://javadoc.io/doc/com.ensarsarajcic.neovim.java/core-rpc) - core of the library providing most basic interface for communicating with Neovim - it can be used without other modules, but other modules are recommended for most uses
+ * [**Reactive Core RPC**](#reactive-core-rpc) [![javadoc](https://javadoc.io/badge2/com.ensarsarajcic.neovim.java/reactive-core-rpc/javadoc.svg)](https://javadoc.io/doc/com.ensarsarajcic.neovim.java/reactive-core-rpc) - simple wrapper around Core RPC module for providing a reactive interface
+ * [**Unix Socket Connection**](#unix-socket-connection) [![javadoc](https://javadoc.io/badge2/com.ensarsarajcic.neovim.java/unix-socket-connection/javadoc.svg)](https://javadoc.io/doc/com.ensarsarajcic.neovim.java/unix-socket-connection) - simple addition of another RPCConnection for using unix domain sockets
+ * [**Neovim API**](#neovim-api) [![javadoc](https://javadoc.io/badge2/com.ensarsarajcic.neovim.java/neovim-api/javadoc.svg)](https://javadoc.io/doc/com.ensarsarajcic.neovim.java/neovim-api) - main interface for communicating with neovim. This is the recommended module to use, it provides a reactive interface and greatly simplified interface, providing complete implementations for all functions provided by Neovim.
+ * [**Neovim RX API**](#neovim-rx-api) [![javadoc](https://javadoc.io/badge2/com.ensarsarajcic.neovim.java/neovim-rx-api/javadoc.svg)](https://javadoc.io/doc/com.ensarsarajcic.neovim.java/neovim-rx-api) - small wrapper around Neovim API providing RxJava2 interface instead of Java reactive interface
+ * [**Handler annotations**](#handler-annotations) [![javadoc](https://javadoc.io/badge2/com.ensarsarajcic.neovim.java/handler-annotations/javadoc.svg)](https://javadoc.io/doc/com.ensarsarajcic.neovim.java/handler-annotations) - addition allowing creation of annotation based handlers for requests and notifications
+ * [**Neovim notifications**](#neovim-notifications) [![javadoc](https://javadoc.io/badge2/com.ensarsarajcic.neovim.java/neovim-notifications/javadoc.svg)](https://javadoc.io/doc/com.ensarsarajcic.neovim.java/neovim-notifications) - addition allowing usage of notifications through Java 9 Flows interface and also provides data models for all neovim notifications
+ * [**API Explorer**](#api-explorer) [![javadoc](https://javadoc.io/badge2/com.ensarsarajcic.neovim.java/api-explorer/javadoc.svg)](https://javadoc.io/doc/com.ensarsarajcic.neovim.java/api-explorer) - simple JavaFX application used for testing library and exploring neovim API
 
-## Core RPC
+## Core RPC 
+[![javadoc](https://javadoc.io/badge2/com.ensarsarajcic.neovim.java/core-rpc/javadoc.svg)](https://javadoc.io/doc/com.ensarsarajcic.neovim.java/core-rpc)
 Core of the library with a basic interface for RPC communication through a `RPCConnection`. This implements basic Neovim API definition, without any specific types or functions. It can be used if functions to be used may not be known beforehand. All of the classes in this module may be replaced with a different implementation if special behaviour is required.
 
 Basic usage:
@@ -75,6 +77,7 @@ compile 'com.ensarsarajcic.neovim.java:core-rpc:${neovimjava.version}'
 ```
 
 ## Reactive Core RPC
+[![javadoc](https://javadoc.io/badge2/com.ensarsarajcic.neovim.java/reactive-core-rpc/javadoc.svg)](https://javadoc.io/doc/com.ensarsarajcic.neovim.java/reactive-core-rpc)
 Reactive core RPC module is a simple wrapper around core RPC module. It provides a reactive interface using Java 9 Flows. Requests and notifications
 are provided through a `Flow`, while sending messages returns a `CompletableFuture` which can return a response.
 
@@ -109,6 +112,7 @@ It handles the same `RPCConnection` interface as core RPC module and creation is
 RxJava wrapper is not provided, since it is very easy to wrap this Java 9 Flow implementation into an RxJava implementation.
 
 ## Unix Socket Connection
+[![javadoc](https://javadoc.io/badge2/com.ensarsarajcic.neovim.java/unix-socket-connection/javadoc.svg)](https://javadoc.io/doc/com.ensarsarajcic.neovim.java/unix-socket-connection)
 Unix socket connection module provides a very simple additional implementation of `RPCConnection` based on Unix domain sockets.
 
 Include it in your dependencies:  
@@ -137,6 +141,7 @@ Example usage:
 ```
 
 ## Neovim API
+[![javadoc](https://javadoc.io/badge2/com.ensarsarajcic.neovim.java/neovim-api/javadoc.svg)](https://javadoc.io/doc/com.ensarsarajcic.neovim.java/neovim-api)
 This is the main high level interface for this library. It provides all of the Neovim RPC API functions in an easy to use way. It holds all types as models
 and provides 4 separate **APIs**: *Neovim*, *Buffer*, *Tabpage* and *Window* (the way they were meant to be used in OOP languages).
 
@@ -172,6 +177,7 @@ Example usage:
 ```
 
 ## Neovim RX API
+[![javadoc](https://javadoc.io/badge2/com.ensarsarajcic.neovim.java/neovim-rx-api/javadoc.svg)](https://javadoc.io/doc/com.ensarsarajcic.neovim.java/neovim-rx-api)
 Neovim RX api module provides a same API as neovim API module, but using RxJava2.
 
 Include it in your dependencies:  
@@ -201,6 +207,7 @@ Example:
 ```
 
 ## Handler annotations
+[![javadoc](https://javadoc.io/badge2/com.ensarsarajcic.neovim.java/handler-annotations/javadoc.svg)](https://javadoc.io/doc/com.ensarsarajcic.neovim.java/handler-annotations)
 Handler annotations module provides a way to register listeners for requests and notifications using annotations and different handlers. There needs to be an
 object with methods annotated with `NeovimNotificationHandler` or `NeovimRequestHandler`. These methods need to take only one parameter, `NotificationMessage`
 and `RequestMessage` respectively.
@@ -241,6 +248,7 @@ By default, all notifications and requests will be blocking. If you need a diffe
 ```
 
 ## Neovim notifications
+[![javadoc](https://javadoc.io/badge2/com.ensarsarajcic.neovim.java/neovim-notifications/javadoc.svg)](https://javadoc.io/doc/com.ensarsarajcic.neovim.java/neovim-notifications)
 Neovim notifications module provides a way to receive notifications through Java 9 Flows. Besides that it provides models for all neovim notifications,
 which can only be checked using *instanceof* operator currently, but provide an easier way to parse data.
 
@@ -267,6 +275,7 @@ Example usage:
 ```
 
 ## API Explorer
+[![javadoc](https://javadoc.io/badge2/com.ensarsarajcic.neovim.java/api-explorer/javadoc.svg)](https://javadoc.io/doc/com.ensarsarajcic.neovim.java/api-explorer)
 Simple JavaFX application loading Neovim API information using `nvim --api-info`. Displays all loaded information in tables for simple overview.
 
 It can also be used as an example of usage of library.
