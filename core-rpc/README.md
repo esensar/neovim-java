@@ -1,6 +1,7 @@
 # core-rpc
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.ensarsarajcic.neovim.java/core-rpc/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.ensarsarajcic.neovim.java/core-rpc)
+[![javadoc](https://javadoc.io/badge2/com.ensarsarajcic.neovim.java/core-rpc/javadoc.svg)](https://javadoc.io/doc/com.ensarsarajcic.neovim.java/core-rpc)
 
 This is the Core RPC module, the core of this library. It provides the most basic interface for communicating with Neovim.
 

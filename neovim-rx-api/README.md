@@ -1,6 +1,7 @@
 # neovim-rx-api
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.ensarsarajcic.neovim.java/neovim-rx-api/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.ensarsarajcic.neovim.java/neovim-rx-api)
+[![javadoc](https://javadoc.io/badge2/com.ensarsarajcic.neovim.java/neovim-rx-api/javadoc.svg)](https://javadoc.io/doc/com.ensarsarajcic.neovim.java/neovim-rx-api)
 
 Neovim RX api module provides a same API as neovim API module, but using RxJava2.
 

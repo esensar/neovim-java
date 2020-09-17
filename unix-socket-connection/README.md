@@ -1,6 +1,7 @@
 # unix-socket-connection
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.ensarsarajcic.neovim.java/unix-socket-connection/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.ensarsarajcic.neovim.java/unix-socket-connection)
+[![javadoc](https://javadoc.io/badge2/com.ensarsarajcic.neovim.java/unix-socket-connection/javadoc.svg)](https://javadoc.io/doc/com.ensarsarajcic.neovim.java/unix-socket-connection)
 
 Unix socket connection module provides a very simple additional implementation of `RpcConnection` based on Unix domain sockets.
 

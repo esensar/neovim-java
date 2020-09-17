@@ -1,6 +1,7 @@
 # handler-annotations
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.ensarsarajcic.neovim.java/handler-annotations/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.ensarsarajcic.neovim.java/handler-annotations)
+[![javadoc](https://javadoc.io/badge2/com.ensarsarajcic.neovim.java/handler-annotations/javadoc.svg)](https://javadoc.io/doc/com.ensarsarajcic.neovim.java/handler-annotations)
 
 Handler annotations module provides a way to register listeners for requests and notifications using annotations and different handlers. There needs to be an
 object with methods annotated with `NeovimNotificationHandler` or `NeovimRequestHandler`. These methods need to take only one parameter, `NotificationMessage`
