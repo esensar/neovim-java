@@ -65,7 +65,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <junit.version>4.12</junit.version>
+        <junit.version>4.13.1</junit.version>
         <mockito.version>3.1.0</mockito.version>
         <assertj.version>3.13.2</assertj.version>
         <msgpack.version>0.8.18</msgpack.version>
