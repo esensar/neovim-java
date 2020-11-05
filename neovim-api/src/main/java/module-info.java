@@ -1,5 +1,6 @@
 module neovimapi {
     opens com.ensarsarajcic.neovim.java.api;
+    opens com.ensarsarajcic.neovim.java.api.atomic;
     opens com.ensarsarajcic.neovim.java.api.buffer;
     opens com.ensarsarajcic.neovim.java.api.tabpage;
     opens com.ensarsarajcic.neovim.java.api.window;
@@ -9,6 +10,7 @@ module neovimapi {
     opens com.ensarsarajcic.neovim.java.api.util;
 
     exports com.ensarsarajcic.neovim.java.api;
+    exports com.ensarsarajcic.neovim.java.api.atomic;
     exports com.ensarsarajcic.neovim.java.api.buffer;
     exports com.ensarsarajcic.neovim.java.api.tabpage;
     exports com.ensarsarajcic.neovim.java.api.window;

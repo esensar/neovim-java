@@ -25,6 +25,7 @@
 package com.ensarsarajcic.neovim.java.rxapi;
 
 import com.ensarsarajcic.neovim.java.api.NeovimApi;
+import com.ensarsarajcic.neovim.java.api.atomic.AtomicCallResponse;
 import com.ensarsarajcic.neovim.java.api.buffer.NeovimBufferApi;
 import com.ensarsarajcic.neovim.java.api.tabpage.NeovimTabpageApi;
 import com.ensarsarajcic.neovim.java.api.types.api.ChannelInfo;
@@ -41,6 +42,7 @@ import com.ensarsarajcic.neovim.java.api.types.msgpack.Buffer;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.Tabpage;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.Window;
 import com.ensarsarajcic.neovim.java.api.window.NeovimWindowApi;
+import com.ensarsarajcic.neovim.java.corerpc.message.RequestMessage;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -103,11 +105,10 @@ public class NeovimRxWrapperTest {
 
     @Test
     public void delegatesAtomicCall() {
-        var atomicCallBuilder = neovimRxWrapper.prepareAtomic();
-        verify(neovimApi).prepareAtomic();
-        given(neovimApi.sendAtomic(atomicCallBuilder)).willReturn(CompletableFuture.completedFuture(Collections.emptyList()));
-        neovimRxWrapper.sendAtomic(atomicCallBuilder);
-        verify(neovimApi).sendAtomic(atomicCallBuilder);
+        var request = List.of(new RequestMessage.Builder("test").build());
+        given(neovimApi.sendAtomic(request)).willReturn(CompletableFuture.completedFuture(new AtomicCallResponse(Collections.emptyList(), null)));
+        neovimRxWrapper.sendAtomic(request);
+        verify(neovimApi).sendAtomic(request);
     }
 
     @Test

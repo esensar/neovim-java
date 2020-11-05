@@ -73,22 +73,6 @@ public class NeovimStreamApiTest extends BaseStreamApiTest {
     }
 
     @Test
-    public void atomicNotSupported() {
-        try {
-            neovimStreamApi.prepareAtomic();
-            fail("Should have thrown unsupported operation exception");
-        } catch (UnsupportedOperationException ex) {
-
-        }
-        try {
-            neovimStreamApi.sendAtomic(null);
-            fail("Should have thrown unsupported operation exception");
-        } catch (UnsupportedOperationException ex) {
-
-        }
-    }
-
-    @Test
     public void getHightlightByIdTest() throws ExecutionException, InterruptedException {
         // Happy case
         assertNormalBehavior(

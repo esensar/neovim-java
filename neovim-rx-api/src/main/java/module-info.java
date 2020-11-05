@@ -4,4 +4,5 @@ module neovimrxapi {
 
     requires neovimapi;
     requires io.reactivex.rxjava2;
+    requires corerpc;
 }

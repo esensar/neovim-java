@@ -24,8 +24,8 @@
 
 package com.ensarsarajcic.neovim.java.rxapi;
 
-import com.ensarsarajcic.neovim.java.api.AtomicCallBuilder;
 import com.ensarsarajcic.neovim.java.api.NeovimApi;
+import com.ensarsarajcic.neovim.java.api.atomic.AtomicCallResponse;
 import com.ensarsarajcic.neovim.java.api.types.api.ChannelInfo;
 import com.ensarsarajcic.neovim.java.api.types.api.ClientAttributes;
 import com.ensarsarajcic.neovim.java.api.types.api.ClientType;
@@ -43,6 +43,7 @@ import com.ensarsarajcic.neovim.java.api.types.apiinfo.ApiInfo;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.Buffer;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.Tabpage;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.Window;
+import com.ensarsarajcic.neovim.java.corerpc.message.RequestMessage;
 import io.reactivex.Completable;
 import io.reactivex.Single;
 
@@ -61,13 +62,8 @@ public final class NeovimRxWrapper implements NeovimRxApi {
     }
 
     @Override
-    public Single<List> sendAtomic(AtomicCallBuilder atomicCallBuilder) {
-        return Single.fromFuture(neovimApi.sendAtomic(atomicCallBuilder));
-    }
-
-    @Override
-    public AtomicCallBuilder prepareAtomic() {
-        return neovimApi.prepareAtomic();
+    public Single<AtomicCallResponse> sendAtomic(List<RequestMessage> requestMessages) {
+        return Single.fromFuture(neovimApi.sendAtomic(requestMessages));
     }
 
     @Override
