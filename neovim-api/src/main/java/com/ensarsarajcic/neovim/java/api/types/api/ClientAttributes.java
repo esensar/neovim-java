@@ -29,17 +29,17 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ClientAttributes {
-    private String website;
-    private String license;
-    private String logo;
+    private final String website;
+    private final String license;
+    private final String logo;
 
     public ClientAttributes(
             @JsonProperty("website")
-            String website,
+                    String website,
             @JsonProperty("license")
-            String license,
+                    String license,
             @JsonProperty("logo")
-            String logo) {
+                    String logo) {
         this.website = website;
         this.license = license;
         this.logo = logo;
@@ -62,10 +62,9 @@ public class ClientAttributes {
 
     @Override
     public String toString() {
-        return "ClientAttributes{" +
-                "website='" + website + '\'' +
-                ", license='" + license + '\'' +
-                ", logo='" + logo + '\'' +
-                '}';
+        return "ClientAttributes{"
+                + "website='" + website + '\''
+                + ", license='" + license + '\''
+                + ", logo='" + logo + '\'' + '}';
     }
 }

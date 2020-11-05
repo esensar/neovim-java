@@ -33,7 +33,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public final class NeovimError {
 
-    private int id;
+    private final int id;
 
     public int getId() {
         return id;
@@ -46,8 +46,6 @@ public final class NeovimError {
 
     @Override
     public String toString() {
-        return "NeovimError{" +
-                "id=" + id +
-                '}';
+        return "NeovimError{" + "id=" + id + '}';
     }
 }

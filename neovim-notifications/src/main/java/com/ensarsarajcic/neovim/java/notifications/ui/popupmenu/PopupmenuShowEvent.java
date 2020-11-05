@@ -30,15 +30,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 @JsonFormat(shape = JsonFormat.Shape.ARRAY)
-public final class PopupmenuShowEvent implements UIPopupmenuEvent {
+public final class PopupmenuShowEvent implements UiPopupmenuEvent {
     public static final String NAME = "popupmenu_show";
 
     @JsonFormat(shape = JsonFormat.Shape.ARRAY)
     public static final class Item {
-        private String word;
-        private String kind;
-        private String menu;
-        private String info;
+        private final String word;
+        private final String kind;
+        private final String menu;
+        private final String info;
 
         public Item(
                 @JsonProperty(value = "word", index = 0) String word,
@@ -68,10 +68,10 @@ public final class PopupmenuShowEvent implements UIPopupmenuEvent {
         }
     }
 
-    private List<Item> items;
-    private int selected;
-    private int row;
-    private int col;
+    private final List<Item> items;
+    private final int selected;
+    private final int row;
+    private final int col;
 
     public PopupmenuShowEvent(
             @JsonProperty(value = "items", index = 0) List<Item> items,
@@ -107,11 +107,10 @@ public final class PopupmenuShowEvent implements UIPopupmenuEvent {
 
     @Override
     public String toString() {
-        return "PopupmenuShowEvent{" +
-                "items=" + items +
-                ", selected=" + selected +
-                ", row=" + row +
-                ", col=" + col +
-                '}';
+        return "PopupmenuShowEvent{"
+                + "items=" + items
+                + ", selected=" + selected
+                + ", row=" + row
+                + ", col=" + col + '}';
     }
 }

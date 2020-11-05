@@ -28,7 +28,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
 
 @RunWith(MockitoJUnitRunner.class)
 public class MultiLatchTest {
@@ -36,9 +36,9 @@ public class MultiLatchTest {
 
     @Test(timeout = 1000)
     public void countsAutomatically() throws InterruptedException {
-        MultiLatch multiLatch = new MultiLatch(5);
+        var multiLatch = new MultiLatch(5);
 
-        Thread thread = new Thread(() -> {
+        var thread = new Thread(() -> {
             for (int i = 0; i < 5; i++) {
                 try {
                     multiLatch.await();

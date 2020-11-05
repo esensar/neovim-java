@@ -29,28 +29,29 @@ import com.ensarsarajcic.neovim.java.notifications.NeovimNotification;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Represents a special notification that consists of multiple {@link UiEvent}s
+ */
 public final class NeovimRedrawEvent implements NeovimNotification {
     public static final String NAME = "redraw";
 
-    private List<UIEvent> uiEvents;
+    private final List<UiEvent> uiEvents;
 
-    public NeovimRedrawEvent(List<UIEvent> uiEvents) {
+    public NeovimRedrawEvent(List<UiEvent> uiEvents) {
         this.uiEvents = Collections.unmodifiableList(uiEvents);
     }
 
     @Override
-    public final String getNotificationName() {
+    public String getNotificationName() {
         return NAME;
     }
 
-    public List<UIEvent> getUiEvents() {
+    public List<UiEvent> getUiEvents() {
         return uiEvents;
     }
 
     @Override
     public String toString() {
-        return "NeovimRedrawEvent{" +
-                "uiEvents=" + uiEvents +
-                '}';
+        return "NeovimRedrawEvent{" + "uiEvents=" + uiEvents + '}';
     }
 }

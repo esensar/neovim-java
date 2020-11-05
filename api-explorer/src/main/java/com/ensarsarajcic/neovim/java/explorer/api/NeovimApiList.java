@@ -35,26 +35,26 @@ import java.util.Map;
  */
 public final class NeovimApiList {
 
-    private Map<String, NeovimError> errorTypes;
-    private List<NeovimFunction> functions;
-    private Map<String, NeovimType> types;
-    private List<NeovimUiEvent> uiEvents;
-    private List<String> uiOptions;
-    private NeovimVersion version;
+    private final Map<String, NeovimError> errorTypes;
+    private final List<NeovimFunction> functions;
+    private final Map<String, NeovimType> types;
+    private final List<NeovimUiEvent> uiEvents;
+    private final List<String> uiOptions;
+    private final NeovimVersion version;
 
     public NeovimApiList(
             @JsonProperty("error_types")
-            Map<String, NeovimError> errorTypes,
+                    Map<String, NeovimError> errorTypes,
             @JsonProperty("functions")
-            List<NeovimFunction> functions,
+                    List<NeovimFunction> functions,
             @JsonProperty("types")
-            Map<String, NeovimType> types,
+                    Map<String, NeovimType> types,
             @JsonProperty("ui_events")
-            List<NeovimUiEvent> uiEvents,
+                    List<NeovimUiEvent> uiEvents,
             @JsonProperty("ui_options")
-            List<String> uiOptions,
+                    List<String> uiOptions,
             @JsonProperty("version")
-            NeovimVersion version) {
+                    NeovimVersion version) {
         this.errorTypes = errorTypes;
         this.functions = functions;
         this.types = types;
@@ -89,12 +89,11 @@ public final class NeovimApiList {
 
     @Override
     public String toString() {
-        return "NeovimApiList{" +
-                "errorTypes=" + errorTypes +
-                ", functions=" + functions +
-                ", types=" + types +
-                ", uiEvents=" + uiEvents +
-                ", version=" + version +
-                '}';
+        return "NeovimApiList{"
+                + "errorTypes=" + errorTypes
+                + ", functions=" + functions
+                + ", types=" + types
+                + ", uiEvents=" + uiEvents
+                + ", version=" + version + '}';
     }
 }

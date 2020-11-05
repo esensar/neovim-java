@@ -33,8 +33,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public final class ErrorInfo {
 
-    private String name;
-    private Props props;
+    private final String name;
+    private final Props props;
 
     public ErrorInfo(String name, Props props) {
         this.name = name;
@@ -43,9 +43,9 @@ public final class ErrorInfo {
 
     static class Props {
 
-        private int id;
+        private final int id;
 
-        public Props(@JsonProperty("id") int id) {
+        Props(@JsonProperty("id") int id) {
             this.id = id;
         }
     }
@@ -60,9 +60,8 @@ public final class ErrorInfo {
 
     @Override
     public String toString() {
-        return "ErrorInfo{" +
-                "id=" + props.id +
-                ", name='" + name + '\'' +
-                '}';
+        return "ErrorInfo{"
+                + "id=" + props.id
+                + ", name='" + name + '\'' + '}';
     }
 }

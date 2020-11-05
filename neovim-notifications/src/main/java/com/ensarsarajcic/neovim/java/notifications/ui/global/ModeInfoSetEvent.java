@@ -30,11 +30,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 @JsonFormat(shape = JsonFormat.Shape.ARRAY)
-public final class ModeInfoSetEvent implements UIGlobalEvent {
+public final class ModeInfoSetEvent implements UiGlobalEvent {
     public static final String NAME = "mode_info_set";
 
-    private boolean cursorStyleEnabled;
-    private List<ModeInfo> modeInfoList;
+    private final boolean cursorStyleEnabled;
+    private final List<ModeInfo> modeInfoList;
 
     public ModeInfoSetEvent(
             @JsonProperty(value = "cursor_style_enabled", index = 0) boolean cursorStyleEnabled,
@@ -58,9 +58,8 @@ public final class ModeInfoSetEvent implements UIGlobalEvent {
 
     @Override
     public String toString() {
-        return "ModeInfoSetEvent{" +
-                "cursorStyleEnabled=" + cursorStyleEnabled +
-                ", modeInfoList=" + modeInfoList +
-                '}';
+        return "ModeInfoSetEvent{"
+                + "cursorStyleEnabled=" + cursorStyleEnabled
+                + ", modeInfoList=" + modeInfoList + '}';
     }
 }

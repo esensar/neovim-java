@@ -26,9 +26,20 @@ package com.ensarsarajcic.neovim.java.explorer.api.discovery;
 
 import com.ensarsarajcic.neovim.java.api.NeovimApi;
 import com.ensarsarajcic.neovim.java.api.NeovimApis;
-import com.ensarsarajcic.neovim.java.api.types.apiinfo.*;
-import com.ensarsarajcic.neovim.java.corerpc.client.RPCConnection;
-import com.ensarsarajcic.neovim.java.explorer.api.*;
+import com.ensarsarajcic.neovim.java.api.types.apiinfo.ApiInfo;
+import com.ensarsarajcic.neovim.java.api.types.apiinfo.ErrorInfo;
+import com.ensarsarajcic.neovim.java.api.types.apiinfo.FunctionInfo;
+import com.ensarsarajcic.neovim.java.api.types.apiinfo.ParamInfo;
+import com.ensarsarajcic.neovim.java.api.types.apiinfo.TypeInfo;
+import com.ensarsarajcic.neovim.java.api.types.apiinfo.UiEventInfo;
+import com.ensarsarajcic.neovim.java.api.types.apiinfo.VersionInfo;
+import com.ensarsarajcic.neovim.java.corerpc.client.RpcConnection;
+import com.ensarsarajcic.neovim.java.explorer.api.NeovimApiList;
+import com.ensarsarajcic.neovim.java.explorer.api.NeovimError;
+import com.ensarsarajcic.neovim.java.explorer.api.NeovimFunction;
+import com.ensarsarajcic.neovim.java.explorer.api.NeovimType;
+import com.ensarsarajcic.neovim.java.explorer.api.NeovimUiEvent;
+import com.ensarsarajcic.neovim.java.explorer.api.NeovimVersion;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -40,7 +51,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -48,11 +58,15 @@ import java.util.stream.Collectors;
  */
 public final class ApiDiscovery {
 
+    private ApiDiscovery() {
+        //no instance
+    }
+
     /**
      * Generates a process call for loading up API info
      */
     private static List<String> createArgs(String executable) {
-        List<String> allArgs = new ArrayList<>(2);
+        var allArgs = new ArrayList<String>(2);
         allArgs.add(executable);
         allArgs.add("--api-info");
         return allArgs;
@@ -62,25 +76,26 @@ public final class ApiDiscovery {
      * Loads API Info from --api-info
      */
     public static NeovimApiList discoverApi() throws IOException {
-        ProcessBuilder pb = new ProcessBuilder(createArgs("nvim"));
-        Process neovim = pb.start();
-        MessagePackFactory factory = new MessagePackFactory();
+        var pb = new ProcessBuilder(createArgs("nvim"));
+        var neovim = pb.start();
+        var factory = new MessagePackFactory();
         factory.disable(JsonParser.Feature.AUTO_CLOSE_SOURCE);
         factory.disable(JsonGenerator.Feature.AUTO_CLOSE_TARGET);
         return new ObjectMapper(factory).readerFor(NeovimApiList.class).readValue(neovim.getInputStream());
     }
 
     /**
-     * Loads API Info from running Neovim instance, represented with {@link RPCConnection}
+     * Loads API Info from running Neovim instance, represented with {@link RpcConnection}
+     *
      * @param rpcConnection connection to Neovim instance
      */
-    public static NeovimApiList discoverApiFromConnection(RPCConnection rpcConnection) throws ExecutionException, InterruptedException {
-        NeovimApi neovimApi = NeovimApis.getApiForConnection(rpcConnection);
+    public static NeovimApiList discoverApiFromConnection(RpcConnection rpcConnection) throws ExecutionException, InterruptedException {
+        var neovimApi = NeovimApis.getApiForConnection(rpcConnection);
         return discoverApiFromInstance(neovimApi);
     }
 
     public static NeovimApiList discoverApiFromInstance(NeovimApi neovimApi) throws ExecutionException, InterruptedException {
-        ApiInfo apiInfo = neovimApi.getApiInfo().get();
+        var apiInfo = neovimApi.getApiInfo().get();
         return transform(apiInfo);
     }
 
@@ -107,7 +122,7 @@ public final class ApiDiscovery {
     }
 
     private static Map<String, NeovimError> transformErrors(List<ErrorInfo> errorInfos) {
-        Map<String, NeovimError> neovimErrorMap = new HashMap<>();
+        var neovimErrorMap = new HashMap<String, NeovimError>();
         for (ErrorInfo errorInfo : errorInfos) {
             neovimErrorMap.put(errorInfo.getName(), new NeovimError(errorInfo.getId()));
         }
@@ -127,8 +142,8 @@ public final class ApiDiscovery {
     }
 
     private static Map<String, NeovimType> transformTypes(List<TypeInfo> typeInfos) {
-        Map<String, NeovimType> neovimTypeMap = new HashMap<>();
-        for (TypeInfo typeInfo : typeInfos) {
+        var neovimTypeMap = new HashMap<String, NeovimType>();
+        for (var typeInfo : typeInfos) {
             neovimTypeMap.put(typeInfo.getName(), new NeovimType(typeInfo.getId(), typeInfo.getPrefix()));
         }
         return neovimTypeMap;

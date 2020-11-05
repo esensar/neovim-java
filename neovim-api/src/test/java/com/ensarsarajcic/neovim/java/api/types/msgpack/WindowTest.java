@@ -26,20 +26,22 @@ package com.ensarsarajcic.neovim.java.api.types.msgpack;
 
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
 
 public class WindowTest {
 
     @Test
     public void equalsTest() {
-        Window windowOne = new Window(1);
-        Window windowTwo = new Window(2);
+        var windowOne = new Window(1);
+        var windowTwo = new Window(2);
 
         assertNotEquals(windowOne, windowTwo);
         assertEquals(windowOne.equals(windowTwo), windowTwo.equals(windowOne));
 
-        Window windowOneAgain = new Window(1);
-        Window windowOneSame = windowOne;
+        var windowOneAgain = new Window(1);
+        var windowOneSame = windowOne;
 
         assertEquals(windowOne, windowOneSame);
         assertEquals(windowOne, windowOneAgain);
@@ -48,13 +50,13 @@ public class WindowTest {
 
     @Test
     public void hashCodeTest() {
-        Window windowOne = new Window(1);
-        Window windowTwo = new Window(2);
+        var windowOne = new Window(1);
+        var windowTwo = new Window(2);
 
         assertNotEquals(windowOne.hashCode(), windowTwo.hashCode());
 
-        Window windowOneAgain = new Window(1);
-        Window windowOneSame = windowOne;
+        var windowOneAgain = new Window(1);
+        var windowOneSame = windowOne;
 
         assertEquals(windowOne.hashCode(), windowOneSame.hashCode());
         assertEquals(windowOne.hashCode(), windowOneAgain.hashCode());
@@ -62,13 +64,13 @@ public class WindowTest {
 
     @Test
     public void compareToTest() {
-        Window windowOne = new Window(1);
-        Window windowTwo = new Window(2);
+        var windowOne = new Window(1);
+        var windowTwo = new Window(2);
 
         assertTrue(windowOne.compareTo(windowTwo) < 0);
         assertTrue(windowTwo.compareTo(windowOne) > 0);
 
-        Window windowOneAgain = new Window(1);
+        var windowOneAgain = new Window(1);
 
         assertEquals(0, windowOne.compareTo(windowOneAgain));
         assertEquals(0, windowOneAgain.compareTo(windowOne));

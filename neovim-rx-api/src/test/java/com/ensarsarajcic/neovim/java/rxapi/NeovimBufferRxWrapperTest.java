@@ -26,6 +26,7 @@ package com.ensarsarajcic.neovim.java.rxapi;
 
 import com.ensarsarajcic.neovim.java.api.buffer.NeovimBufferApi;
 import com.ensarsarajcic.neovim.java.api.types.api.GetCommandsOptions;
+import com.ensarsarajcic.neovim.java.api.types.api.HighlightedText;
 import com.ensarsarajcic.neovim.java.api.types.api.VimCoords;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.Buffer;
 import org.junit.Test;
@@ -38,7 +39,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
@@ -58,7 +59,7 @@ public class NeovimBufferRxWrapperTest {
 
     @Test
     public void delegatesGet() {
-        Buffer buffer = new Buffer(1);
+        var buffer = new Buffer(1);
         given(neovimBufferApi.get()).willReturn(buffer);
         assertEquals(neovimBufferRxWrapper.get(), buffer);
         verify(neovimBufferApi).get();
@@ -66,7 +67,7 @@ public class NeovimBufferRxWrapperTest {
 
     @Test
     public void delegatesLineOperations() {
-        List<String> replacement = List.of();
+        var replacement = List.<String>of();
         given(neovimBufferApi.getLines(1, 5, true)).willReturn(CompletableFuture.completedFuture(List.of()));
         given(neovimBufferApi.setLines(1, 5, true, replacement)).willReturn(CompletableFuture.completedFuture(null));
         given(neovimBufferApi.getLineCount()).willReturn(CompletableFuture.completedFuture(5));
@@ -90,8 +91,19 @@ public class NeovimBufferRxWrapperTest {
     }
 
     @Test
+    public void delegatesGetOffset() {
+        given(neovimBufferApi.getOffset(1)).willReturn(CompletableFuture.completedFuture(5));
+        neovimBufferRxWrapper.getOffset(1)
+                .test()
+                .assertNoErrors()
+                .assertComplete()
+                .assertValue(5);
+        verify(neovimBufferApi).getOffset(1);
+    }
+
+    @Test
     public void delegatesVarOperations() {
-        Object result = new Object();
+        var result = new Object();
         given(neovimBufferApi.getVar("name")).willReturn(CompletableFuture.completedFuture(result));
         given(neovimBufferApi.setVar("name", result)).willReturn(CompletableFuture.completedFuture(null));
         given(neovimBufferApi.deleteVar("name")).willReturn(CompletableFuture.completedFuture(null));
@@ -115,7 +127,7 @@ public class NeovimBufferRxWrapperTest {
 
     @Test
     public void delegatesOptionOperations() {
-        Object result = new Object();
+        var result = new Object();
         given(neovimBufferApi.getOption("name")).willReturn(CompletableFuture.completedFuture(result));
         given(neovimBufferApi.setOption("name", result)).willReturn(CompletableFuture.completedFuture(null));
         neovimBufferRxWrapper.getOption("name")
@@ -161,19 +173,26 @@ public class NeovimBufferRxWrapperTest {
     }
 
     @Test
-    public void delegatesValidity() {
+    public void delegatesStateChecks() {
         given(neovimBufferApi.isValid()).willReturn(CompletableFuture.completedFuture(true));
+        given(neovimBufferApi.isLoaded()).willReturn(CompletableFuture.completedFuture(false));
         neovimBufferRxWrapper.isValid()
                 .test()
                 .assertNoErrors()
                 .assertComplete()
                 .assertValue(true);
         verify(neovimBufferApi).isValid();
+        neovimBufferRxWrapper.isLoaded()
+                .test()
+                .assertNoErrors()
+                .assertComplete()
+                .assertValue(false);
+        verify(neovimBufferApi).isLoaded();
     }
 
     @Test
     public void delegatesGetMark() {
-        VimCoords vimCoords = new VimCoords(10, 10);
+        var vimCoords = new VimCoords(10, 10);
         given(neovimBufferApi.getMark("name")).willReturn(CompletableFuture.completedFuture(vimCoords));
         neovimBufferRxWrapper.getMark("name")
                 .test()
@@ -185,7 +204,7 @@ public class NeovimBufferRxWrapperTest {
 
     @Test
     public void delegatesGetChangedTick() {
-        Object result = new Object();
+        var result = new Object();
         given(neovimBufferApi.getChangedTick()).willReturn(CompletableFuture.completedFuture(result));
         neovimBufferRxWrapper.getChangedTick()
                 .test()
@@ -224,8 +243,26 @@ public class NeovimBufferRxWrapperTest {
     }
 
     @Test
+    public void delegatesNamespaceOperations() {
+        List<HighlightedText> chunks = List.of(new HighlightedText("justText"));
+        given(neovimBufferApi.clearNamespace(1, 5, 10)).willReturn(CompletableFuture.completedFuture(null));
+        given(neovimBufferApi.setVirtualText(1, 5, chunks, Map.of())).willReturn(CompletableFuture.completedFuture(1));
+        neovimBufferRxWrapper.clearNamespace(1, 5, 10)
+                .test()
+                .assertNoErrors()
+                .assertComplete();
+        verify(neovimBufferApi).clearNamespace(1, 5, 10);
+        neovimBufferRxWrapper.setVirtualText(1, 5, chunks, Map.of())
+                .test()
+                .assertNoErrors()
+                .assertComplete()
+                .assertValue(1);
+        verify(neovimBufferApi).setVirtualText(1, 5, chunks, Map.of());
+    }
+
+    @Test
     public void delegatesAttach() {
-        Map opts = Map.of();
+        var opts = Map.of();
         given(neovimBufferApi.attach(false, opts)).willReturn(CompletableFuture.completedFuture(true));
         neovimBufferRxWrapper.attach(false, opts)
                 .test()
@@ -248,7 +285,7 @@ public class NeovimBufferRxWrapperTest {
 
     @Test
     public void delegatesGetCommands() {
-        GetCommandsOptions getCommandsOptions = new GetCommandsOptions(false);
+        var getCommandsOptions = new GetCommandsOptions(false);
         given(neovimBufferApi.getCommands(getCommandsOptions)).willReturn(CompletableFuture.completedFuture(Map.of()));
         neovimBufferRxWrapper.getCommands(getCommandsOptions)
                 .test()

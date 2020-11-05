@@ -26,6 +26,7 @@ package com.ensarsarajcic.neovim.java.api.window;
 
 import com.ensarsarajcic.neovim.java.api.BaseStreamApiTest;
 import com.ensarsarajcic.neovim.java.api.types.api.VimCoords;
+import com.ensarsarajcic.neovim.java.api.types.msgpack.Buffer;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.NeovimCustomType;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.Window;
 import com.ensarsarajcic.neovim.java.corerpc.message.ResponseMessage;
@@ -40,7 +41,7 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 @RunWith(MockitoJUnitRunner.class)
 public class WindowStreamApiTest extends BaseStreamApiTest {
@@ -52,14 +53,14 @@ public class WindowStreamApiTest extends BaseStreamApiTest {
     public void setUp() throws Exception {
         window = new Window(1);
         windowStreamApi = new WindowStreamApi(
-                reactiveRPCStreamer,
+                reactiveRpcStreamer,
                 window
         );
     }
 
     @Test(expected = NullPointerException.class)
     public void cantConstructWithNullModel() {
-        new WindowStreamApi(reactiveRPCStreamer, null);
+        new WindowStreamApi(reactiveRpcStreamer, null);
     }
 
     @Test(expected = NullPointerException.class)
@@ -75,7 +76,7 @@ public class WindowStreamApiTest extends BaseStreamApiTest {
     @Test
     public void getVarTest() throws ExecutionException, InterruptedException {
         // Happy case
-        Object varVal = "value";
+        var varVal = "value";
         assertNormalBehavior(
                 () -> CompletableFuture.completedFuture(new ResponseMessage(1, null, varVal)),
                 () -> windowStreamApi.getVar("name"),
@@ -93,7 +94,7 @@ public class WindowStreamApiTest extends BaseStreamApiTest {
     @Test
     public void setVarTest() throws ExecutionException, InterruptedException {
         // Happy case
-        Object varVal = "value";
+        var varVal = "value";
         assertNormalBehavior(
                 () -> CompletableFuture.completedFuture(new ResponseMessage(1, null, null)),
                 () -> windowStreamApi.setVar("name", varVal),
@@ -101,7 +102,7 @@ public class WindowStreamApiTest extends BaseStreamApiTest {
         );
 
         // Error case
-        Object badVal = new Object();
+        var badVal = new Object();
         assertErrorBehavior(
                 () -> windowStreamApi.setVar("wrong name", badVal),
                 request -> assertMethodAndArguments(request, NeovimWindowApi.SET_VAR, window, "wrong name", badVal)
@@ -176,26 +177,43 @@ public class WindowStreamApiTest extends BaseStreamApiTest {
     }
 
     @Test
+    public void setBufferTest() throws InterruptedException, ExecutionException {
+        // Happy case
+        var buffer = new Buffer(1);
+        assertNormalBehavior(
+                () -> CompletableFuture.completedFuture(new ResponseMessage(1, null, null)),
+                () -> windowStreamApi.setBuffer(buffer),
+                request -> assertMethodAndArguments(request, NeovimWindowApi.SET_BUFFER, window, buffer)
+        );
+
+        // Error case
+        assertErrorBehavior(
+                () -> windowStreamApi.setBuffer(buffer),
+                request -> assertMethodAndArguments(request, NeovimWindowApi.SET_BUFFER, window, buffer)
+        );
+    }
+
+    @Test
     public void getTabpageTest() throws InterruptedException, ExecutionException {
         // Happy case
         assertNormalBehavior(
                 () -> CompletableFuture.completedFuture(new ResponseMessage(1, null, new MessagePackExtensionType((byte) NeovimCustomType.TABPAGE.getTypeId(), new byte[]{4}))),
                 () -> windowStreamApi.getTabpage(),
-                request -> assertMethodAndArguments(request, NeovimWindowApi.GET_TABPAGE),
+                request -> assertMethodAndArguments(request, NeovimWindowApi.GET_TABPAGE, window),
                 result -> assertEquals(4, result.get().getId())
         );
 
         // Error case
         assertErrorBehavior(
                 () -> windowStreamApi.getTabpage(),
-                request -> assertMethodAndArguments(request, NeovimWindowApi.GET_TABPAGE)
+                request -> assertMethodAndArguments(request, NeovimWindowApi.GET_TABPAGE, window)
         );
     }
 
     @Test
     public void getCursorTest() throws ExecutionException, InterruptedException {
         // Happy case
-        List coords = List.of(100, 200);
+        var coords = List.of(100, 200);
         assertNormalBehavior(
                 () -> CompletableFuture.completedFuture(new ResponseMessage(1, null, coords)),
                 () -> windowStreamApi.getCursor(),
@@ -219,7 +237,7 @@ public class WindowStreamApiTest extends BaseStreamApiTest {
     @Test
     public void setCursorTest() throws ExecutionException, InterruptedException {
         // Happy case
-        VimCoords vimCoords = new VimCoords(500, 600);
+        var vimCoords = new VimCoords(500, 600);
         assertNormalBehavior(
                 () -> CompletableFuture.completedFuture(new ResponseMessage(1, null, null)),
                 () -> windowStreamApi.setCursor(vimCoords),
@@ -227,7 +245,7 @@ public class WindowStreamApiTest extends BaseStreamApiTest {
         );
 
         // Error case
-        VimCoords badCoords = new VimCoords(1, 2);
+        var badCoords = new VimCoords(1, 2);
         assertErrorBehavior(
                 () -> windowStreamApi.setCursor(badCoords),
                 request -> assertMethodAndArguments(request, NeovimWindowApi.SET_CURSOR, window, badCoords)

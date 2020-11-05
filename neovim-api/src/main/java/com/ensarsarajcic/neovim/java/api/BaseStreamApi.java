@@ -25,16 +25,15 @@
 package com.ensarsarajcic.neovim.java.api;
 
 import com.ensarsarajcic.neovim.java.api.types.msgpack.BaseCustomIdType;
-import com.ensarsarajcic.neovim.java.api.types.msgpack.NeovimJacksonModule;
+import com.ensarsarajcic.neovim.java.api.types.msgpack.NeovimTypeDeserializer;
 import com.ensarsarajcic.neovim.java.api.util.ObjectMappers;
 import com.ensarsarajcic.neovim.java.corerpc.message.RequestMessage;
 import com.ensarsarajcic.neovim.java.corerpc.message.ResponseMessage;
-import com.ensarsarajcic.neovim.java.corerpc.reactive.ReactiveRPCStreamer;
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonParser;
+import com.ensarsarajcic.neovim.java.corerpc.reactive.ReactiveRpcStreamer;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.msgpack.jackson.dataformat.MessagePackFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.List;
@@ -48,29 +47,31 @@ import java.util.concurrent.CompletionException;
  * Provides convenience methods for sending and parsing messages
  */
 public abstract class BaseStreamApi {
+    private static final Logger log = LoggerFactory.getLogger(NeovimTypeDeserializer.class);
 
-    protected ReactiveRPCStreamer reactiveRPCStreamer;
+    protected ReactiveRpcStreamer reactiveRpcStreamer;
     protected ObjectMapper objectMapper;
 
-    public BaseStreamApi(ReactiveRPCStreamer reactiveRPCStreamer) {
-        Objects.requireNonNull(reactiveRPCStreamer, "reactiveRpcStreamer is required for stream API");
-        this.reactiveRPCStreamer = reactiveRPCStreamer;
+    public BaseStreamApi(ReactiveRpcStreamer reactiveRpcStreamer) {
+        Objects.requireNonNull(reactiveRpcStreamer, "reactiveRpcStreamer is required for stream API");
+        this.reactiveRpcStreamer = reactiveRpcStreamer;
         this.objectMapper = ObjectMappers.defaultNeovimMapper();
     }
 
     protected <T> CompletableFuture<T> sendWithResponseOfType(RequestMessage.Builder request, Class<T> type) {
-        return reactiveRPCStreamer.response(request)
+        return reactiveRpcStreamer.response(request)
                 .thenApply(ResponseMessage::getResult)
                 .thenApply(o -> objectMapper.convertValue(o, type));
     }
 
     protected CompletableFuture<byte[]> sendWithBytesResponse(RequestMessage.Builder request) {
-        return reactiveRPCStreamer.response(request)
+        return reactiveRpcStreamer.response(request)
                 .thenApply(ResponseMessage::getResult)
                 .thenApply(o -> {
                     try {
                         return objectMapper.writeValueAsBytes(o);
                     } catch (JsonProcessingException e) {
+                        log.error("Failed to convert response to bytes!", e);
                         e.printStackTrace();
                         throw new CompletionException(e);
                     }
@@ -79,26 +80,28 @@ public abstract class BaseStreamApi {
 
     protected <T extends BaseCustomIdType> CompletableFuture<T> sendWithResponseOfMsgPackType(RequestMessage.Builder request, Class<T> type) {
         return sendWithBytesResponse(request).thenApply(bytes -> {
-                    try {
-                        return objectMapper.readerFor(type).readValue(bytes);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        throw new CompletionException(e);
-                    }
-                });
+            try {
+                return objectMapper.readerFor(type).readValue(bytes);
+            } catch (IOException e) {
+                log.error("Failed to read bytes as " + type, e);
+                e.printStackTrace();
+                throw new CompletionException(e);
+            }
+        });
     }
 
     protected <T extends BaseCustomIdType> CompletableFuture<List<T>> sendWithResponseOfListOfMsgPackType(RequestMessage.Builder request, Class<T> type) {
         return sendWithBytesResponse(request).thenApply(bytes -> {
-                    try {
-                        return objectMapper.readerFor(
-                                objectMapper.getTypeFactory().constructCollectionType(List.class, type)
-                        ).readValue(bytes);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        throw new CompletionException(e);
-                    }
-                });
+            try {
+                return objectMapper.readerFor(
+                        objectMapper.getTypeFactory().constructCollectionType(List.class, type)
+                ).readValue(bytes);
+            } catch (IOException e) {
+                log.error("Failed to construct a list of " + type, e);
+                e.printStackTrace();
+                throw new CompletionException(e);
+            }
+        });
     }
 
     protected <T> CompletableFuture<List<T>> sendWithResponseOfListType(RequestMessage.Builder request, Class<T> type) {
@@ -126,6 +129,6 @@ public abstract class BaseStreamApi {
     }
 
     protected CompletableFuture<Void> sendWithNoResponse(RequestMessage.Builder request) {
-        return reactiveRPCStreamer.response(request).thenApply(responseMessage -> null);
+        return reactiveRpcStreamer.response(request).thenApply(responseMessage -> null);
     }
 }

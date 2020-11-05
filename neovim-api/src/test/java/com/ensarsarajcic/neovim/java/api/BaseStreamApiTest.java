@@ -24,11 +24,11 @@
 
 package com.ensarsarajcic.neovim.java.api;
 
-import com.ensarsarajcic.neovim.java.corerpc.message.RPCError;
 import com.ensarsarajcic.neovim.java.corerpc.message.RequestMessage;
 import com.ensarsarajcic.neovim.java.corerpc.message.ResponseMessage;
-import com.ensarsarajcic.neovim.java.corerpc.reactive.RPCException;
-import com.ensarsarajcic.neovim.java.corerpc.reactive.ReactiveRPCStreamer;
+import com.ensarsarajcic.neovim.java.corerpc.message.RpcError;
+import com.ensarsarajcic.neovim.java.corerpc.reactive.ReactiveRpcStreamer;
+import com.ensarsarajcic.neovim.java.corerpc.reactive.RpcException;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.runner.RunWith;
@@ -53,7 +53,7 @@ import static org.mockito.Mockito.verify;
 public class BaseStreamApiTest {
 
     @Mock
-    protected ReactiveRPCStreamer reactiveRPCStreamer;
+    protected ReactiveRpcStreamer reactiveRpcStreamer;
 
     protected void assertNormalBehavior(
             Supplier<CompletableFuture<ResponseMessage>> preparedResponse,
@@ -69,30 +69,30 @@ public class BaseStreamApiTest {
             Consumer<RequestMessage> requestAsserter,
             Consumer<T> resultAsserter
     ) throws ExecutionException, InterruptedException {
-        ArgumentCaptor<RequestMessage.Builder> argumentCaptor = prepareArgumentCaptor(preparedResponse.get());
-        CompletableFuture<T> result = callSupplier.get();
-        RequestMessage requestMessage = argumentCaptor.getValue().build();
+        var argumentCaptor = prepareArgumentCaptor(preparedResponse.get());
+        var result = callSupplier.get();
+        var requestMessage = argumentCaptor.getValue().build();
         requestAsserter.accept(requestMessage);
-        verify(reactiveRPCStreamer, atLeastOnce()).response(any());
+        verify(reactiveRpcStreamer, atLeastOnce()).response(any());
         resultAsserter.accept(result.get());
     }
 
     protected void assertErrorBehavior(
             Supplier<CompletableFuture<?>> completableFutureSupplier,
             Consumer<RequestMessage> requestAsserter) throws InterruptedException {
-        ArgumentCaptor<RequestMessage.Builder> errorArgumentCaptor = prepareArgumentCaptor(
-                CompletableFuture.failedFuture(new RPCException(new RPCError(1, "error"))));
-        CompletableFuture errorResult = completableFutureSupplier.get();
-        RequestMessage errorResponse = errorArgumentCaptor.getValue().build();
+        var errorArgumentCaptor = prepareArgumentCaptor(
+                CompletableFuture.failedFuture(new RpcException(new RpcError(1, "error"))));
+        var errorResult = completableFutureSupplier.get();
+        var errorResponse = errorArgumentCaptor.getValue().build();
         requestAsserter.accept(errorResponse);
-        verify(reactiveRPCStreamer, atLeastOnce()).response(any());
+        verify(reactiveRpcStreamer, atLeastOnce()).response(any());
         verifyError(errorResult);
     }
 
     protected void assertMethodAndArguments(RequestMessage message, String method, Object... arguments) {
         assertEquals(message.getMethod(), method);
         int i = 0;
-        for (Object arg : arguments) {
+        for (var arg : arguments) {
             assertEquals(message.getArguments().get(i), arg);
             i++;
         }
@@ -103,15 +103,15 @@ public class BaseStreamApiTest {
             completableFuture.get();
             fail("Should have thrown an error");
         } catch (ExecutionException ex) {
-            if (!(ex.getCause() instanceof RPCException)) {
+            if (!(ex.getCause() instanceof RpcException)) {
                 fail("Should have been an RCP Exception");
             }
         }
     }
 
     protected ArgumentCaptor<RequestMessage.Builder> prepareArgumentCaptor(CompletableFuture<ResponseMessage> responseMessageCompletableFuture) {
-        ArgumentCaptor<RequestMessage.Builder> argumentCaptor = ArgumentCaptor.forClass(RequestMessage.Builder.class);
-        given(reactiveRPCStreamer.response(argumentCaptor.capture())).willReturn(responseMessageCompletableFuture);
+        var argumentCaptor = ArgumentCaptor.forClass(RequestMessage.Builder.class);
+        given(reactiveRpcStreamer.response(argumentCaptor.capture())).willReturn(responseMessageCompletableFuture);
         return argumentCaptor;
     }
 }

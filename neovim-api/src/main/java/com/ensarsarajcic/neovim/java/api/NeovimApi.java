@@ -28,11 +28,23 @@ import com.ensarsarajcic.neovim.java.api.atomic.AtomicCallBuilder;
 import com.ensarsarajcic.neovim.java.api.atomic.AtomicCallResponse;
 import com.ensarsarajcic.neovim.java.api.buffer.NeovimBufferApi;
 import com.ensarsarajcic.neovim.java.api.tabpage.NeovimTabpageApi;
-import com.ensarsarajcic.neovim.java.api.types.api.*;
+import com.ensarsarajcic.neovim.java.api.types.api.ChannelInfo;
+import com.ensarsarajcic.neovim.java.api.types.api.ClientAttributes;
+import com.ensarsarajcic.neovim.java.api.types.api.ClientType;
+import com.ensarsarajcic.neovim.java.api.types.api.ClientVersionInfo;
+import com.ensarsarajcic.neovim.java.api.types.api.CommandInfo;
+import com.ensarsarajcic.neovim.java.api.types.api.GetCommandsOptions;
+import com.ensarsarajcic.neovim.java.api.types.api.MethodInfo;
+import com.ensarsarajcic.neovim.java.api.types.api.Mouse;
+import com.ensarsarajcic.neovim.java.api.types.api.UiInfo;
+import com.ensarsarajcic.neovim.java.api.types.api.UiOptions;
+import com.ensarsarajcic.neovim.java.api.types.api.VimColorMap;
+import com.ensarsarajcic.neovim.java.api.types.api.VimKeyMap;
+import com.ensarsarajcic.neovim.java.api.types.api.VimMode;
+import com.ensarsarajcic.neovim.java.api.types.apiinfo.ApiInfo;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.Buffer;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.Tabpage;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.Window;
-import com.ensarsarajcic.neovim.java.api.types.apiinfo.ApiInfo;
 import com.ensarsarajcic.neovim.java.api.window.NeovimWindowApi;
 
 import java.util.List;
@@ -51,6 +63,9 @@ public interface NeovimApi {
     String ATTACH_UI = "nvim_ui_attach";
     String DETACH_UI = "nvim_ui_detach";
     String RESIZE_UI = "nvim_ui_try_resize";
+    String RESIZE_UI_GRID = "nvim_ui_try_resize_grid";
+    String SET_POPUPMENU_HEIGHT = "nvim_ui_pum_set_height";
+    String INPUT_MOUSE = "nvim_input_mouse";
     String EXECUTE_LUA = "nvim_execute_lua";
     String EXECUTE_COMMAND = "nvim_command";
     String SET_CURRENT_DIR = "nvim_set_current_dir";
@@ -61,10 +76,13 @@ public interface NeovimApi {
     String FEEDKEYS = "nvim_feedkeys";
     String INPUT = "nvim_input";
     String GET_KEYMAP = "nvim_get_keymap";
+    String SET_KEYMAP = "nvim_set_keymap";
+    String DEL_KEYMAP = "nvim_del_keymap";
     String SET_UI_OPTION = "nvim_ui_set_option";
     String SET_VAR = "nvim_set_var";
     String GET_VAR = "nvim_get_var";
     String DEL_VAR = "nvim_del_var";
+    String SET_VIM_VARIABLE = "nvim_set_vvar";
     String GET_VIM_VARIABLE = "nvim_get_vvar";
     String SET_OPTION = "nvim_set_option";
     String GET_OPTION = "nvim_get_option";
@@ -80,9 +98,11 @@ public interface NeovimApi {
     String SET_CURRENT_LINE = "nvim_set_current_line";
     String DEL_CURRENT_LINE = "nvim_del_current_line";
     String LIST_BUFS = "nvim_list_bufs";
+    String CREATE_BUF = "nvim_create_buf";
     String GET_CURRENT_BUF = "nvim_get_current_buf";
     String SET_CURRENT_BUF = "nvim_set_current_buf";
     String LIST_WINS = "nvim_list_wins";
+    String OPEN_WIN = "nvim_open_win";
     String GET_CURRENT_WIN = "nvim_get_current_win";
     String SET_CURRENT_WIN = "nvim_set_current_win";
     String LIST_TABPAGES = "nvim_list_tabpages";
@@ -100,6 +120,13 @@ public interface NeovimApi {
     String LIST_UIS = "nvim_list_uis";
     String GET_PROC_CHILDREN = "nvim_get_proc_children";
     String GET_PROC = "nvim_get_proc";
+    String GET_NAMESPACES = "nvim_get_namespaces";
+    String CREATE_NAMESPACES = "nvim_create_namespaces";
+    String PASTE = "nvim_paste";
+    String PUT = "nvim_put";
+    String GET_CONTEXT = "nvim_get_context";
+    String LOAD_CONTEXT = "nvim_load_context";
+    String SELECT_POPUPMENU_ITEM = "nvim_select_popupmenu_item";
     // endregion
 
     @NeovimApiFunction(name = CALL_ATOMIC, since = 1)
@@ -113,13 +140,22 @@ public interface NeovimApi {
     CompletableFuture<Map> getHighlightByName(String name, boolean rgb);
 
     @NeovimApiFunction(name = ATTACH_UI, since = 1)
-    CompletableFuture<Void> attachUI(int width, int height, UiOptions options);
+    CompletableFuture<Void> attachUi(int width, int height, UiOptions options);
 
     @NeovimApiFunction(name = DETACH_UI, since = 1)
-    CompletableFuture<Void> detachUI();
+    CompletableFuture<Void> detachUi();
 
     @NeovimApiFunction(name = RESIZE_UI, since = 1)
-    CompletableFuture<Void> resizeUI(int width, int height);
+    CompletableFuture<Void> resizeUi(int width, int height);
+
+    @NeovimApiFunction(name = RESIZE_UI_GRID, since = 6)
+    CompletableFuture<Void> resizeUiGrid(int width, int height);
+
+    @NeovimApiFunction(name = SET_POPUPMENU_HEIGHT, since = 6)
+    CompletableFuture<Void> setPopupmenuHeight(int height);
+
+    @NeovimApiFunction(name = INPUT_MOUSE, since = 6)
+    CompletableFuture<Void> inputMouse(Mouse.Button button, Mouse.Action action, String modifier, int grid, int row, int col);
 
     @NeovimApiFunction(name = EXECUTE_LUA, since = 3)
     CompletableFuture<Object> executeLua(String luaCode, List<String> args);
@@ -140,7 +176,7 @@ public interface NeovimApi {
     CompletableFuture<Object> eval(String expression);
 
     @NeovimApiFunction(name = CALL_FUNCTION, since = 1)
-    CompletableFuture<Object> callFunction(String name, List<String> args);
+    CompletableFuture<Object> callFunction(String name, List<Object> args);
 
     @NeovimApiFunction(name = FEEDKEYS, since = 1)
     CompletableFuture<Void> feedKeys(String keys, String mode, boolean escape);
@@ -150,6 +186,12 @@ public interface NeovimApi {
 
     @NeovimApiFunction(name = GET_KEYMAP, since = 3)
     CompletableFuture<List<VimKeyMap>> getKeymap(String mode);
+
+    @NeovimApiFunction(name = SET_KEYMAP, since = 6)
+    CompletableFuture<Void> setKeymap(String mode, String lhs, String rhs, Map<String, Boolean> options);
+
+    @NeovimApiFunction(name = DEL_KEYMAP, since = 6)
+    CompletableFuture<Void> deleteKeymap(String mode, String lhs);
 
     @NeovimApiFunction(name = SET_UI_OPTION, since = 1)
     CompletableFuture<Void> setUiOption(String name, Object value);
@@ -165,6 +207,9 @@ public interface NeovimApi {
 
     @NeovimApiFunction(name = GET_VIM_VARIABLE, since = 1)
     CompletableFuture<Object> getVimVariable(String name);
+
+    @NeovimApiFunction(name = SET_VIM_VARIABLE, since = 6)
+    CompletableFuture<Void> setVimVariable(String name, Object value);
 
     @NeovimApiFunction(name = SET_OPTION, since = 1)
     CompletableFuture<Void> setOption(String name, Object value);
@@ -208,6 +253,9 @@ public interface NeovimApi {
     @NeovimApiFunction(name = LIST_BUFS, since = 1)
     CompletableFuture<List<NeovimBufferApi>> getBuffers();
 
+    @NeovimApiFunction(name = CREATE_BUF, since = 6)
+    CompletableFuture<NeovimBufferApi> createBuffer(boolean listed, boolean scratch);
+
     @NeovimApiFunction(name = GET_CURRENT_BUF, since = 1)
     CompletableFuture<NeovimBufferApi> getCurrentBuffer();
 
@@ -217,6 +265,9 @@ public interface NeovimApi {
 
     @NeovimApiFunction(name = LIST_WINS, since = 1)
     CompletableFuture<List<NeovimWindowApi>> getWindows();
+
+    @NeovimApiFunction(name = OPEN_WIN, since = 6)
+    CompletableFuture<NeovimWindowApi> openWindow(Buffer buffer, boolean enter, Map<String, Object> config);
 
     @NeovimApiFunction(name = GET_CURRENT_WIN, since = 1)
     CompletableFuture<NeovimWindowApi> getCurrentWindow();
@@ -270,4 +321,25 @@ public interface NeovimApi {
 
     @NeovimApiFunction(name = GET_PROC, since = 4)
     CompletableFuture<Object> getProcess();
+
+    @NeovimApiFunction(name = GET_NAMESPACES, since = 5)
+    CompletableFuture<Map<String, Integer>> getNamespaces();
+
+    @NeovimApiFunction(name = CREATE_NAMESPACES, since = 5)
+    CompletableFuture<Integer> createNamespace(String name);
+
+    @NeovimApiFunction(name = PASTE, since = 6)
+    CompletableFuture<Boolean> paste(String data, boolean crlf, int phase);
+
+    @NeovimApiFunction(name = PUT, since = 6)
+    CompletableFuture<Void> put(List<String> lines, String type, boolean after, boolean follow);
+
+    @NeovimApiFunction(name = GET_CONTEXT, since = 6)
+    CompletableFuture<Map<String, Object>> getContext(Map<String, Object> options);
+
+    @NeovimApiFunction(name = LOAD_CONTEXT, since = 6)
+    CompletableFuture<Void> loadContext(Map<String, Object> contextMap);
+
+    @NeovimApiFunction(name = SELECT_POPUPMENU_ITEM, since = 6)
+    CompletableFuture<Void> selectPopupmenuItem(int item, boolean insert, boolean finish, Map<String, Object> options);
 }

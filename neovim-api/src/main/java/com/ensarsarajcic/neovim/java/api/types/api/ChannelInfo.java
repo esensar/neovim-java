@@ -24,10 +24,17 @@
 
 package com.ensarsarajcic.neovim.java.api.types.api;
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public final class ChannelInfo {
+    private static final Logger log = LoggerFactory.getLogger(ChannelInfo.class);
 
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     public enum Stream {
@@ -35,16 +42,18 @@ public final class ChannelInfo {
         STANDARD_ERROR("stderr"),
         SOCKET("socket"),
         JOB("job");
-        private String value;
+        private final String value;
 
         @JsonCreator
         public static Stream fromString(String value) {
-            for (Stream stream : values()) {
+            for (var stream : values()) {
                 if (stream.value.equals(value)) {
                     return stream;
                 }
             }
-            throw new IllegalArgumentException(String.format("Stream (%s) does not exist.", value));
+
+            log.error("Tried to create an invalid channel Stream ({})", value);
+            throw new IllegalArgumentException(String.format("ChannelInfo.Stream (%s) does not exist.", value));
         }
 
         Stream(String value) {
@@ -58,9 +67,7 @@ public final class ChannelInfo {
 
         @Override
         public String toString() {
-            return "Stream{" +
-                    "value='" + value + '\'' +
-                    '}';
+            return "Stream{" + "value='" + value + '\'' + '}';
         }
     }
 
@@ -71,16 +78,18 @@ public final class ChannelInfo {
         RPC("rpc"),
         PSEUDOTERMINAL("pty");
 
-        private String value;
+        private final String value;
 
         @JsonCreator
         public static Mode fromString(String value) {
-            for (Mode mode : values()) {
+            for (var mode : values()) {
                 if (mode.value.equals(value)) {
                     return mode;
                 }
             }
-            throw new IllegalArgumentException(String.format("Mode (%s) does not exist.", value));
+
+            log.error("Tried to create an invalid channel Mode ({})", value);
+            throw new IllegalArgumentException(String.format("ChannelInfo.Mode (%s) does not exist.", value));
         }
 
         Mode(String value) {
@@ -94,26 +103,24 @@ public final class ChannelInfo {
 
         @Override
         public String toString() {
-            return "Mode{" +
-                    "value='" + value + '\'' +
-                    '}';
+            return "Mode{" + "value='" + value + '\'' + '}';
         }
     }
 
-    private int id;
-    private Stream stream;
-    private Mode mode;
-    private ClientInfo client;
+    private final int id;
+    private final Stream stream;
+    private final Mode mode;
+    private final ClientInfo client;
 
     public ChannelInfo(
             @JsonProperty("id")
-            int id,
+                    int id,
             @JsonProperty("stream")
-            Stream stream,
+                    Stream stream,
             @JsonProperty("mode")
-            Mode mode,
+                    Mode mode,
             @JsonProperty("client")
-            ClientInfo client) {
+                    ClientInfo client) {
         this.id = id;
         this.stream = stream;
         this.mode = mode;
@@ -138,11 +145,10 @@ public final class ChannelInfo {
 
     @Override
     public String toString() {
-        return "ChannelInfo{" +
-                "id=" + id +
-                ", stream=" + stream +
-                ", mode=" + mode +
-                ", client=" + client +
-                '}';
+        return "ChannelInfo{"
+                + "id=" + id
+                + ", stream=" + stream
+                + ", mode=" + mode
+                + ", client=" + client + '}';
     }
 }

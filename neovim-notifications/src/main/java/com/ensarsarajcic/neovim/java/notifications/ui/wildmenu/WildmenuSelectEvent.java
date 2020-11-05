@@ -28,10 +28,10 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonFormat(shape = JsonFormat.Shape.ARRAY)
-public final class WildmenuSelectEvent implements UIWildmenuEvent {
+public final class WildmenuSelectEvent implements UiWildmenuEvent {
     public static final String NAME = "wildmenu_select";
 
-    private int selectedIndex;
+    private final int selectedIndex;
 
     public WildmenuSelectEvent(
             @JsonProperty(value = "selected_index", index = 0) int selectedIndex) {
@@ -49,8 +49,6 @@ public final class WildmenuSelectEvent implements UIWildmenuEvent {
 
     @Override
     public String toString() {
-        return "WildmenuSelectEvent{" +
-                "selectedIndex=" + selectedIndex +
-                '}';
+        return "WildmenuSelectEvent{" + "selectedIndex=" + selectedIndex + '}';
     }
 }

@@ -24,19 +24,15 @@
 
 package com.ensarsarajcic.neovim.java.notifications.ui.cmdline;
 
-import com.ensarsarajcic.neovim.java.notifications.ui.UIEvent;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.List;
-import java.util.function.Function;
-
 @JsonFormat(shape = JsonFormat.Shape.ARRAY)
-public final class CmdlinePosEvent implements UICmdlineEvent {
+public final class CmdlinePosEvent implements UiCmdlineEvent {
     public static final String NAME = "cmdline_pos";
 
-    private int pos;
-    private int level;
+    private final int pos;
+    private final int level;
 
     public CmdlinePosEvent(
             @JsonProperty(value = "pos", index = 0) int pos,
@@ -60,9 +56,8 @@ public final class CmdlinePosEvent implements UICmdlineEvent {
 
     @Override
     public String toString() {
-        return "CmdlinePosEvent{" +
-                "pos=" + pos +
-                ", level=" + level +
-                '}';
+        return "CmdlinePosEvent{"
+                + "pos=" + pos
+                + ", level=" + level + '}';
     }
 }

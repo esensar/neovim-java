@@ -28,7 +28,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonFormat(shape = JsonFormat.Shape.ARRAY)
-public final class OptionSetEvent implements UIGlobalEvent {
+public final class OptionSetEvent implements UiGlobalEvent {
     public static final String NAME = "option_set";
 
     public enum Option {
@@ -46,7 +46,7 @@ public final class OptionSetEvent implements UIGlobalEvent {
         EXT_CMDLINE("ext_cmdline"),
         EXT_WILD_MENU("ext_wildmenu");
 
-        private String rawValue;
+        private final String rawValue;
 
         Option(String rawValue) {
             this.rawValue = rawValue;
@@ -66,8 +66,8 @@ public final class OptionSetEvent implements UIGlobalEvent {
         }
     }
 
-    private String optionName;
-    private Object value;
+    private final String optionName;
+    private final Object value;
 
     public OptionSetEvent(
             @JsonProperty(value = "option_name", index = 0) String optionName,
@@ -95,9 +95,8 @@ public final class OptionSetEvent implements UIGlobalEvent {
 
     @Override
     public String toString() {
-        return "OptionSetEvent{" +
-                "optionName='" + optionName + '\'' +
-                ", value=" + value +
-                '}';
+        return "OptionSetEvent{"
+                + "optionName='" + optionName + '\''
+                + ", value=" + value + '}';
     }
 }

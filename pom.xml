@@ -7,16 +7,28 @@
     <groupId>com.ensarsarajcic.neovim.java</groupId>
     <artifactId>parent</artifactId>
     <packaging>pom</packaging>
-    <version>0.0</version>
+    <version>1.0.0-SNAPSHOT</version>
+
     <modules>
+        <!-- Core -->
         <module>core-rpc</module>
-        <module>api-explorer</module>
-        <module>neovim-api</module>
         <module>reactive-core-rpc</module>
+
+        <!-- API -->
+        <module>neovim-api</module>
         <module>neovim-rx-api</module>
-        <module>testing-helpers</module>
+
+        <!-- Extras -->
         <module>neovim-notifications</module>
         <module>handler-annotations</module>
+        <module>unix-socket-connection</module>
+
+        <!-- Testing -->
+        <module>testing-helpers</module>
+
+        <!-- Helpers -->
+        <module>api-explorer</module>
+        <module>rplugin-example</module>
     </modules>
 
     <name>neovim-java (Parent)</name>
@@ -53,16 +65,18 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <junit.version>4.12</junit.version>
-        <mockito.version>2.18.3</mockito.version>
-        <assertj.version>3.9.0</assertj.version>
-        <msgpack.version>0.8.16</msgpack.version>
+        <junit.version>4.13.1</junit.version>
+        <mockito.version>3.1.0</mockito.version>
+        <assertj.version>3.13.2</assertj.version>
+        <msgpack.version>0.8.18</msgpack.version>
         <rxjava2.version>2.1.14</rxjava2.version>
-        <jackson.databind.version>2.9.5</jackson.databind.version>
+        <jackson.databind.version>2.9.10</jackson.databind.version>
         <apache.commons.version>3.4</apache.commons.version>
         <slf4j.version>1.7.25</slf4j.version>
-        <maven.compiler.source>10</maven.compiler.source>
-        <maven.compiler.target>10</maven.compiler.target>
+        <ipcsocket.version>1.0.0</ipcsocket.version>
+        <asm.version>7.2</asm.version>
+        <java.version>11</java.version>
+        <javafx.version>11</javafx.version>
     </properties>
 
     <dependencies>
@@ -79,12 +93,38 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>net.bytebuddy</groupId>
+            <artifactId>byte-buddy</artifactId>
+            <version>1.10.2</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.objenesis</groupId>
+            <artifactId>objenesis</artifactId>
+            <version>3.1</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
             <version>${assertj.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <distributionManagement>
+        <!-- Repository for snapshots -->
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <!-- Repository for releases -->
+        <repository>
+            <id>ossrh</id>
+            <name>Nexus Release Repository</name>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+        </repository>
+    </distributionManagement>
 
     <build>
         <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
@@ -100,11 +140,28 @@
                 </plugin>
                 <plugin>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.7.0</version>
+                    <version>3.8.0</version>
+                    <configuration>
+                        <release>${java.version}</release>
+                    </configuration>
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.ow2.asm</groupId>
+                            <artifactId>asm</artifactId>
+                            <version>${asm.version}</version> <!-- Use newer version of ASM -->
+                        </dependency>
+                    </dependencies>
                 </plugin>
                 <plugin>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>2.21.0</version>
+                    <version>3.0.0-M2</version>
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.ow2.asm</groupId>
+                            <artifactId>asm</artifactId>
+                            <version>${asm.version}</version> <!-- Use newer version of ASM -->
+                        </dependency>
+                    </dependencies>
                 </plugin>
                 <plugin>
                     <artifactId>maven-jar-plugin</artifactId>
@@ -115,15 +172,160 @@
                     <version>2.5.2</version>
                 </plugin>
                 <plugin>
-                    <artifactId>maven-deploy-plugin</artifactId>
-                    <version>2.8.2</version>
-                </plugin>
-                <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-checkstyle-plugin</artifactId>
                     <version>3.0.0</version>
                 </plugin>
+                <plugin>
+                    <artifactId>maven-assembly-plugin</artifactId>
+                    <version>2.3</version>
+                    <configuration>
+                        <descriptorRefs>
+                            <descriptorRef>jar-with-dependencies</descriptorRef>
+                        </descriptorRefs>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>single</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.sonatype.plugins</groupId>
+                    <artifactId>nexus-staging-maven-plugin</artifactId>
+                    <version>1.6.8</version>
+                    <extensions>true</extensions>
+                    <configuration>
+                        <serverId>ossrh</serverId>
+                        <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                        <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-release-plugin</artifactId>
+                    <version>2.5.3</version>
+                    <configuration>
+                        <autoVersionSubmodules>true</autoVersionSubmodules>
+                        <useReleaseProfile>false</useReleaseProfile>
+                        <releaseProfiles>release</releaseProfiles>
+                        <goals>deploy nexus-staging:release</goals>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-checkstyle-plugin</artifactId>
+                    <version>3.1.1</version>
+                    <configuration>
+                        <failsOnError>true</failsOnError>
+                        <configLocation>checkstyle.xml</configLocation>
+                        <consoleOutput>true</consoleOutput>
+                        <excludes>**/module-info.java</excludes>
+
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <phase>verify</phase>
+                            <goals>
+                                <goal>checkstyle</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
             </plugins>
         </pluginManagement>
     </build>
+
+    <profiles>
+        <profile>
+            <id>github</id>
+            <repositories>
+                <repository>
+                    <id>github</id>
+                    <name>GitHub esensar neovim-java Apache Maven Packages</name>
+                    <url>https://maven.pkg.github.com/esensar/neovim-java</url>
+                </repository>
+            </repositories>
+        </profile>
+        <profile>
+            <id>release</id>
+            <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-source-plugin</artifactId>
+                            <version>3.0.1</version>
+                            <executions>
+                                <execution>
+                                    <id>attach-sources</id>
+                                    <goals>
+                                        <goal>jar-no-fork</goal>
+                                    </goals>
+                                </execution>
+                            </executions>
+                        </plugin>
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-javadoc-plugin</artifactId>
+                            <version>3.0.1</version>
+                            <dependencies>
+                                <dependency>
+                                    <groupId>org.ow2.asm</groupId>
+                                    <artifactId>asm</artifactId>
+                                    <version>${asm.version}</version> <!-- Use newer version of ASM -->
+                                </dependency>
+                            </dependencies>
+                            <executions>
+                                <execution>
+                                    <id>attach-javadocs</id>
+                                    <goals>
+                                        <goal>jar</goal>
+                                    </goals>
+                                </execution>
+                            </executions>
+                        </plugin>
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-gpg-plugin</artifactId>
+                            <version>1.6</version>
+                            <executions>
+                                <execution>
+                                    <id>sign-artifacts</id>
+                                    <phase>verify</phase>
+                                    <goals>
+                                        <goal>sign</goal>
+                                    </goals>
+                                    <configuration>
+                                        <gpgArguments>
+                                            <arg>--pinentry-mode</arg>
+                                            <arg>loopback</arg>
+                                        </gpgArguments>
+                                    </configuration>
+                                </execution>
+                            </executions>
+                        </plugin>
+                        <plugin>
+                            <artifactId>maven-deploy-plugin</artifactId>
+                            <version>2.8.2</version>
+                            <executions>
+                                <execution>
+                                    <id>default-deploy</id>
+                                    <phase>deploy</phase>
+                                    <goals>
+                                        <goal>deploy</goal>
+                                    </goals>
+                                </execution>
+                            </executions>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+            </build>
+        </profile>
+    </profiles>
+
 </project>

@@ -27,7 +27,7 @@ package com.ensarsarajcic.neovim.java.notifications.ui.global;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 @JsonFormat(shape = JsonFormat.Shape.ARRAY)
-public final class MouseOnEvent implements UIGlobalEvent {
+public final class MouseOnEvent implements UiGlobalEvent {
     public static final String NAME = "mouse_on";
 
     @Override

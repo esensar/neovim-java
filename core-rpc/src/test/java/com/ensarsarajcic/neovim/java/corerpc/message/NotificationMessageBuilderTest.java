@@ -28,19 +28,20 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 public class NotificationMessageBuilderTest {
 
     @Test
     public void testFullConstructor() {
         // Given a name and arguments
-        ArrayList<String> arguments = new ArrayList<>();
+        var arguments = new ArrayList<String>();
         arguments.add("argOne");
-        NotificationMessage.Builder builder = new NotificationMessage.Builder("test", arguments);
+        var builder = new NotificationMessage.Builder("test", arguments);
 
         // When builder builds response
-        NotificationMessage notificationMessage = builder.build();
+        var notificationMessage = builder.build();
 
         // It should contain these objects and should have NOTIFICATION type
         assertEquals("test", notificationMessage.getName());
@@ -53,30 +54,30 @@ public class NotificationMessageBuilderTest {
         assertEquals(MessageType.NOTIFICATION, builder.build().getType());
 
         // To string doesn't crash
-        String result = builder.build().toString();
+        var result = builder.build().toString();
     }
 
     @Test
     public void testNewInstanceEveryTime() {
         // Given a name and arguments
-        ArrayList<String> arguments = new ArrayList<>();
+        var arguments = new ArrayList<String>();
         arguments.add("argOne");
-        NotificationMessage.Builder builder = new NotificationMessage.Builder("test", arguments);
+        var builder = new NotificationMessage.Builder("test", arguments);
 
         // When builder builds multiple requests
-        NotificationMessage notificationMessage = builder.build();
+        var notificationMessage = builder.build();
 
         // They should not be same
         assertNotEquals(notificationMessage, builder.build());
 
         // To string doesn't crash
-        String result = builder.build().toString();
+        var result = builder.build().toString();
     }
 
     @Test
     public void testNameConstructor() {
         // Given a builder with just a name
-        NotificationMessage.Builder builder = new NotificationMessage.Builder("test");
+        var builder = new NotificationMessage.Builder("test");
 
         // When build is called
         // Result should contain given method
@@ -87,17 +88,17 @@ public class NotificationMessageBuilderTest {
         assertEquals(MessageType.NOTIFICATION, builder.build().getType());
 
         // To string doesn't crash
-        String result = builder.build().toString();
+        var result = builder.build().toString();
     }
 
     @Test
     public void testAddArgument() {
         // Given a builder with some defaults
-        ArrayList<String> arguments = new ArrayList<>();
+        var arguments = new ArrayList<String>();
         arguments.add("argOne");
-        NotificationMessage.Builder builder = new NotificationMessage.Builder("test", arguments);
+        var builder = new NotificationMessage.Builder("test", arguments);
 
-        NotificationMessage notificationMessage = builder.build();
+        var notificationMessage = builder.build();
         assertEquals(arguments, notificationMessage.getArguments());
 
         // When add argument is called, it is added to the new list
@@ -112,25 +113,25 @@ public class NotificationMessageBuilderTest {
         assertEquals(MessageType.NOTIFICATION, builder.build().getType());
 
         // To string doesn't crash
-        String result = builder.build().toString();
+        var result = builder.build().toString();
     }
 
     @Test
     public void testAddArguments() {
         // Given a builder with some defaults
-        ArrayList<String> arguments = new ArrayList<>();
+        var arguments = new ArrayList<String>();
         arguments.add("argOne");
-        NotificationMessage.Builder builder = new NotificationMessage.Builder("test", arguments);
+        var builder = new NotificationMessage.Builder("test", arguments);
 
-        NotificationMessage notificationMessage = builder.build();
+        var notificationMessage = builder.build();
         assertEquals(arguments, notificationMessage.getArguments());
 
         // When add argument is called, it is added to the new list
-        ArrayList<String> extraArgs = new ArrayList<>();
+        var extraArgs = new ArrayList<String>();
         extraArgs.add("argTwo");
 
         builder.addArguments(extraArgs);
-        NotificationMessage twoArgsMessage = builder.build();
+        var twoArgsMessage = builder.build();
         assertEquals(2, twoArgsMessage.getArguments().size());
 
         // And not affecting any old objects
@@ -145,6 +146,6 @@ public class NotificationMessageBuilderTest {
         assertEquals(MessageType.NOTIFICATION, builder.build().getType());
 
         // To string doesn't crash
-        String result = builder.build().toString();
+        var result = builder.build().toString();
     }
 }

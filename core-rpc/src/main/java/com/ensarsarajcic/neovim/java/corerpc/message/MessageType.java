@@ -28,13 +28,15 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
  * Defines types used in RPC communication
+ * <p>
+ * Contains int value used in RPC communication which represents the type
  */
 public enum MessageType {
     REQUEST(0),
     RESPONSE(1),
     NOTIFICATION(2);
 
-    private int value;
+    private final int value;
 
     MessageType(int intValue) {
         this.value = intValue;
@@ -42,12 +44,13 @@ public enum MessageType {
 
     /**
      * Transforms passed integer into {@link MessageType}
+     *
      * @param value a valid integer representing {@link MessageType} (it should be inside bounds [0 - 2])
      * @return Corresponding instance of {@link MessageType}
      * @throws IllegalArgumentException if value is not inside bounds
      */
     public static MessageType fromInt(int value) {
-        for(MessageType messageType : values()) {
+        for (var messageType : values()) {
             if (value == messageType.value) {
                 return messageType;
             }
@@ -58,6 +61,7 @@ public enum MessageType {
 
     /**
      * Gets integer representation of this {@link MessageType}
+     *
      * @return Corresponding integer value
      */
     @JsonValue

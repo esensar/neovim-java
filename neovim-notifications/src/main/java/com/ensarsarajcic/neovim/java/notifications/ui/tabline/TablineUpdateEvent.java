@@ -26,7 +26,7 @@ package com.ensarsarajcic.neovim.java.notifications.ui.tabline;
 
 import com.ensarsarajcic.neovim.java.api.types.msgpack.Tabpage;
 import com.ensarsarajcic.neovim.java.api.util.ObjectMappers;
-import com.ensarsarajcic.neovim.java.notifications.ui.UIEvent;
+import com.ensarsarajcic.neovim.java.notifications.ui.UiEvent;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -35,10 +35,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
-public final class TablineUpdateEvent implements UITablineEvent {
+public final class TablineUpdateEvent implements UiTablineEvent {
     public static final String NAME = "tabline_update";
 
-    public static final Function<List, UIEvent> CREATOR = list -> {
+    public static final Function<List, UiEvent> CREATOR = list -> {
         try {
             ObjectMapper objectMapper = ObjectMappers.defaultNeovimMapper();
 
@@ -67,8 +67,8 @@ public final class TablineUpdateEvent implements UITablineEvent {
 
     @JsonFormat(shape = JsonFormat.Shape.ARRAY)
     public static final class TabInfo {
-        private Tabpage tab;
-        private String name;
+        private final Tabpage tab;
+        private final String name;
 
         public TabInfo(Tabpage tab, String name) {
             this.tab = tab;
@@ -85,15 +85,14 @@ public final class TablineUpdateEvent implements UITablineEvent {
 
         @Override
         public String toString() {
-            return "TabInfo{" +
-                    "tab=" + tab +
-                    ", name='" + name + '\'' +
-                    '}';
+            return "TabInfo{"
+                    + "tab=" + tab
+                    + ", name='" + name + '\'' + '}';
         }
     }
 
-    private Tabpage currentTabpage;
-    private List<TabInfo> tabs;
+    private final Tabpage currentTabpage;
+    private final List<TabInfo> tabs;
 
     public TablineUpdateEvent(Tabpage currentTabpage, List<TabInfo> tabs) {
         this.currentTabpage = currentTabpage;
@@ -115,9 +114,8 @@ public final class TablineUpdateEvent implements UITablineEvent {
 
     @Override
     public String toString() {
-        return "TablineUpdateEvent{" +
-                "currentTabpage=" + currentTabpage +
-                ", tabs=" + tabs +
-                '}';
+        return "TablineUpdateEvent{"
+                + "currentTabpage=" + currentTabpage
+                + ", tabs=" + tabs + '}';
     }
 }

@@ -24,7 +24,16 @@
 
 package com.ensarsarajcic.neovim.java.api;
 
-import com.ensarsarajcic.neovim.java.api.types.api.*;
+import com.ensarsarajcic.neovim.java.api.types.api.ChannelInfo;
+import com.ensarsarajcic.neovim.java.api.types.api.ClientAttributes;
+import com.ensarsarajcic.neovim.java.api.types.api.ClientInfo;
+import com.ensarsarajcic.neovim.java.api.types.api.ClientType;
+import com.ensarsarajcic.neovim.java.api.types.api.ClientVersionInfo;
+import com.ensarsarajcic.neovim.java.api.types.api.CommandInfo;
+import com.ensarsarajcic.neovim.java.api.types.api.GetCommandsOptions;
+import com.ensarsarajcic.neovim.java.api.types.api.MethodInfo;
+import com.ensarsarajcic.neovim.java.api.types.api.UiOptions;
+import com.ensarsarajcic.neovim.java.api.types.api.VimKeyMap;
 import com.ensarsarajcic.neovim.java.api.types.apiinfo.FunctionInfo;
 import com.ensarsarajcic.neovim.java.api.types.apiinfo.ParamInfo;
 import com.ensarsarajcic.neovim.java.api.types.apiinfo.TypeInfo;
@@ -45,7 +54,12 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 @RunWith(MockitoJUnitRunner.class)
 public class NeovimStreamApiTest extends BaseStreamApiTest {
@@ -114,13 +128,13 @@ public class NeovimStreamApiTest extends BaseStreamApiTest {
         var opts = UiOptions.FULL_UI;
         assertNormalBehavior(
                 () -> CompletableFuture.completedFuture(new ResponseMessage(1, null, null)),
-                () -> neovimStreamApi.attachUI(500, 500, opts),
+                () -> neovimStreamApi.attachUi(500, 500, opts),
                 request -> assertMethodAndArguments(request, NeovimApi.ATTACH_UI, 500, 500, opts)
         );
 
         // Error case
         assertErrorBehavior(
-                () -> neovimStreamApi.detachUI(),
+                () -> neovimStreamApi.detachUi(),
                 request -> assertMethodAndArguments(request, NeovimApi.DETACH_UI)
         );
     }
@@ -130,13 +144,13 @@ public class NeovimStreamApiTest extends BaseStreamApiTest {
         // Happy case
         assertNormalBehavior(
                 () -> CompletableFuture.completedFuture(new ResponseMessage(1, null, null)),
-                () -> neovimStreamApi.resizeUI(500, 500),
+                () -> neovimStreamApi.resizeUi(500, 500),
                 request -> assertMethodAndArguments(request, NeovimApi.RESIZE_UI, 500, 500)
         );
 
         // Error case
         assertErrorBehavior(
-                () -> neovimStreamApi.resizeUI(150, 450),
+                () -> neovimStreamApi.resizeUi(150, 450),
                 request -> assertMethodAndArguments(request, NeovimApi.RESIZE_UI, 150, 450)
         );
     }
@@ -144,8 +158,8 @@ public class NeovimStreamApiTest extends BaseStreamApiTest {
     @Test
     public void executeLuaTest() throws InterruptedException, ExecutionException {
         // Happy case
-        String realLuaResult = "lua exec result";
-        List<String> args = List.of("lua arg1");
+        var realLuaResult = "lua exec result";
+        var args = List.of("lua arg1");
         assertNormalBehavior(
                 () -> CompletableFuture.completedFuture(new ResponseMessage(1, null, realLuaResult)),
                 () -> neovimStreamApi.executeLua("real lua code", args),
@@ -154,7 +168,7 @@ public class NeovimStreamApiTest extends BaseStreamApiTest {
         );
 
         // Error case
-        List<String> badArgs = List.of();
+        var badArgs = List.of("");
         assertErrorBehavior(
                 () -> neovimStreamApi.executeLua("bad lua code", badArgs),
                 request -> assertMethodAndArguments(request, NeovimApi.EXECUTE_LUA, "bad lua code", badArgs)
@@ -228,7 +242,7 @@ public class NeovimStreamApiTest extends BaseStreamApiTest {
     @Test
     public void evalTest() throws InterruptedException, ExecutionException {
         // Happy case
-        Object expectedResult = "expression result";
+        var expectedResult = "expression result";
         assertNormalBehavior(
                 () -> CompletableFuture.completedFuture(new ResponseMessage(1, null, expectedResult)),
                 () -> neovimStreamApi.eval("real expression"),
@@ -246,8 +260,8 @@ public class NeovimStreamApiTest extends BaseStreamApiTest {
     @Test
     public void callFunctionTest() throws InterruptedException, ExecutionException {
         // Happy case
-        Object expectedResult = "function result";
-        List<String> args = List.of("arg1", "arg2");
+        var expectedResult = "function result";
+        List<Object> args = List.of("arg1", "arg2");
         assertNormalBehavior(
                 () -> CompletableFuture.completedFuture(new ResponseMessage(1, null, expectedResult)),
                 () -> neovimStreamApi.callFunction("the function", args),
@@ -256,7 +270,7 @@ public class NeovimStreamApiTest extends BaseStreamApiTest {
         );
 
         // Error case
-        List<String> badArgs = List.of("ont bad arg");
+        List<Object> badArgs = List.of("ont bad arg");
         assertErrorBehavior(
                 () -> neovimStreamApi.callFunction("bad function", badArgs),
                 request -> assertMethodAndArguments(request, NeovimApi.CALL_FUNCTION, "bad function", badArgs)
@@ -299,8 +313,8 @@ public class NeovimStreamApiTest extends BaseStreamApiTest {
     @Test
     public void getKeymapTest() throws InterruptedException, ExecutionException {
         // Happy case
-        List<Map> vimKeyMaps = List.of(
-                Map.of(
+        var vimKeyMaps = List.of(
+                Map.<String, Object>of(
                         "silent", 1,
                         "noremap", 1,
                         "lhs", "keys",
@@ -340,8 +354,8 @@ public class NeovimStreamApiTest extends BaseStreamApiTest {
     @Test
     public void setUiOptionTest() throws InterruptedException, ExecutionException {
         // Happy case
-        String optionName = "name";
-        Object optionValue = "VALUE";
+        var optionName = "name";
+        var optionValue = "VALUE";
         assertNormalBehavior(
                 () -> CompletableFuture.completedFuture(new ResponseMessage(1, null, null)),
                 () -> neovimStreamApi.setUiOption(optionName, optionValue),
@@ -349,8 +363,8 @@ public class NeovimStreamApiTest extends BaseStreamApiTest {
         );
 
         // Error case
-        String badName = "badName";
-        Object badValue = "badValue";
+        var badName = "badName";
+        var badValue = "badValue";
         assertErrorBehavior(
                 () -> neovimStreamApi.setUiOption(badName, badValue),
                 request -> assertMethodAndArguments(request, NeovimApi.SET_UI_OPTION, badName, badValue)
@@ -360,8 +374,8 @@ public class NeovimStreamApiTest extends BaseStreamApiTest {
     @Test
     public void setVariableTest() throws InterruptedException, ExecutionException {
         // Happy case
-        String varName = "name";
-        Object varValue = "VALUE";
+        var varName = "name";
+        var varValue = "VALUE";
         assertNormalBehavior(
                 () -> CompletableFuture.completedFuture(new ResponseMessage(1, null, null)),
                 () -> neovimStreamApi.setVariable(varName, varValue),
@@ -369,8 +383,8 @@ public class NeovimStreamApiTest extends BaseStreamApiTest {
         );
 
         // Error case
-        String badVarName = "badName";
-        Object badValue = "badValue";
+        var badVarName = "badName";
+        var badValue = "badValue";
         assertErrorBehavior(
                 () -> neovimStreamApi.setVariable(badVarName, badValue),
                 request -> assertMethodAndArguments(request, NeovimApi.SET_VAR, badVarName, badValue)
@@ -380,7 +394,7 @@ public class NeovimStreamApiTest extends BaseStreamApiTest {
     @Test
     public void deleteVariableTest() throws InterruptedException, ExecutionException {
         // Happy case
-        String varName = "name";
+        var varName = "name";
         assertNormalBehavior(
                 () -> CompletableFuture.completedFuture(new ResponseMessage(1, null, null)),
                 () -> neovimStreamApi.deleteVariable(varName),
@@ -388,7 +402,7 @@ public class NeovimStreamApiTest extends BaseStreamApiTest {
         );
 
         // Error case
-        String badVarName = "badName";
+        var badVarName = "badName";
         assertErrorBehavior(
                 () -> neovimStreamApi.deleteVariable(badVarName),
                 request -> assertMethodAndArguments(request, NeovimApi.DEL_VAR, badVarName)
@@ -398,8 +412,8 @@ public class NeovimStreamApiTest extends BaseStreamApiTest {
     @Test
     public void getVariableTest() throws InterruptedException, ExecutionException {
         // Happy case
-        String varName = "name";
-        Object varValue = "value";
+        var varName = "name";
+        var varValue = "value";
         assertNormalBehavior(
                 () -> CompletableFuture.completedFuture(new ResponseMessage(1, null, varValue)),
                 () -> neovimStreamApi.getVariable(varName),
@@ -408,7 +422,7 @@ public class NeovimStreamApiTest extends BaseStreamApiTest {
         );
 
         // Error case
-        String badVarName = "badName";
+        var badVarName = "badName";
         assertErrorBehavior(
                 () -> neovimStreamApi.getVariable(badVarName),
                 request -> assertMethodAndArguments(request, NeovimApi.GET_VAR, badVarName)
@@ -418,8 +432,8 @@ public class NeovimStreamApiTest extends BaseStreamApiTest {
     @Test
     public void getVimVariableTest() throws InterruptedException, ExecutionException {
         // Happy case
-        String varName = "name";
-        Object varValue = "value";
+        var varName = "name";
+        var varValue = "value";
         assertNormalBehavior(
                 () -> CompletableFuture.completedFuture(new ResponseMessage(1, null, varValue)),
                 () -> neovimStreamApi.getVimVariable(varName),
@@ -428,7 +442,7 @@ public class NeovimStreamApiTest extends BaseStreamApiTest {
         );
 
         // Error case
-        String badVarName = "badName";
+        var badVarName = "badName";
         assertErrorBehavior(
                 () -> neovimStreamApi.getVimVariable(badVarName),
                 request -> assertMethodAndArguments(request, NeovimApi.GET_VIM_VARIABLE, badVarName)
@@ -438,8 +452,8 @@ public class NeovimStreamApiTest extends BaseStreamApiTest {
     @Test
     public void setOptionTest() throws InterruptedException, ExecutionException {
         // Happy case
-        String optName = "name";
-        Object optValue = "VALUE";
+        var optName = "name";
+        var optValue = "VALUE";
         assertNormalBehavior(
                 () -> CompletableFuture.completedFuture(new ResponseMessage(1, null, null)),
                 () -> neovimStreamApi.setOption(optName, optValue),
@@ -447,8 +461,8 @@ public class NeovimStreamApiTest extends BaseStreamApiTest {
         );
 
         // Error case
-        String badOptName = "badName";
-        Object badOptValue = "badValue";
+        var badOptName = "badName";
+        var badOptValue = "badValue";
         assertErrorBehavior(
                 () -> neovimStreamApi.setOption(badOptName, badOptValue),
                 request -> assertMethodAndArguments(request, NeovimApi.SET_OPTION, badOptName, badOptValue)
@@ -458,8 +472,8 @@ public class NeovimStreamApiTest extends BaseStreamApiTest {
     @Test
     public void getOptionTest() throws InterruptedException, ExecutionException {
         // Happy case
-        String optName = "name";
-        Object optValue = "value";
+        var optName = "name";
+        var optValue = "value";
         assertNormalBehavior(
                 () -> CompletableFuture.completedFuture(new ResponseMessage(1, null, optValue)),
                 () -> neovimStreamApi.getOption(optName),
@@ -468,7 +482,7 @@ public class NeovimStreamApiTest extends BaseStreamApiTest {
         );
 
         // Error case
-        String badOptName = "badName";
+        var badOptName = "badName";
         assertErrorBehavior(
                 () -> neovimStreamApi.getOption(badOptName),
                 request -> assertMethodAndArguments(request, NeovimApi.GET_OPTION, badOptName)
@@ -595,7 +609,7 @@ public class NeovimStreamApiTest extends BaseStreamApiTest {
     @Test
     public void listRuntimePathsTest() throws InterruptedException, ExecutionException {
         // Happy case
-        List<String> list = List.of("runtime path");
+        var list = List.of("runtime path");
         assertNormalBehavior(
                 () -> CompletableFuture.completedFuture(new ResponseMessage(1, null, list)),
                 () -> neovimStreamApi.listRuntimePaths(),
@@ -662,7 +676,7 @@ public class NeovimStreamApiTest extends BaseStreamApiTest {
     @Test
     public void getBuffersTest() throws InterruptedException, ExecutionException {
         // Happy case
-        List<MessagePackExtensionType> buffers = List.of(
+        var buffers = List.of(
                 new MessagePackExtensionType((byte) NeovimCustomType.BUFFER.getTypeId(), new byte[]{1}),
                 new MessagePackExtensionType((byte) NeovimCustomType.BUFFER.getTypeId(), new byte[]{2}),
                 new MessagePackExtensionType((byte) NeovimCustomType.BUFFER.getTypeId(), new byte[]{3})
@@ -705,7 +719,7 @@ public class NeovimStreamApiTest extends BaseStreamApiTest {
     @Test
     public void setCurrentBufferTest() throws InterruptedException, ExecutionException {
         // Happy case
-        Buffer buffer = new Buffer(1);
+        var buffer = new Buffer(1);
         assertNormalBehavior(
                 () -> CompletableFuture.completedFuture(new ResponseMessage(1, null, null)),
                 () -> neovimStreamApi.setCurrentBuffer(buffer),
@@ -713,7 +727,7 @@ public class NeovimStreamApiTest extends BaseStreamApiTest {
         );
 
         // Error case
-        Buffer badBuffer = new Buffer(4);
+        var badBuffer = new Buffer(4);
         assertErrorBehavior(
                 () -> neovimStreamApi.setCurrentBuffer(badBuffer),
                 request -> assertMethodAndArguments(request, NeovimApi.SET_CURRENT_BUF)
@@ -723,7 +737,7 @@ public class NeovimStreamApiTest extends BaseStreamApiTest {
     @Test
     public void getWindowsTest() throws InterruptedException, ExecutionException {
         // Happy case
-        List<MessagePackExtensionType> windows = List.of(
+        var windows = List.of(
                 new MessagePackExtensionType((byte) NeovimCustomType.WINDOW.getTypeId(), new byte[]{1}),
                 new MessagePackExtensionType((byte) NeovimCustomType.WINDOW.getTypeId(), new byte[]{2}),
                 new MessagePackExtensionType((byte) NeovimCustomType.WINDOW.getTypeId(), new byte[]{3}),
@@ -770,7 +784,7 @@ public class NeovimStreamApiTest extends BaseStreamApiTest {
     @Test
     public void setCurrentWindowTest() throws InterruptedException, ExecutionException {
         // Happy case
-        Window window = new Window(3);
+        var window = new Window(3);
         assertNormalBehavior(
                 () -> CompletableFuture.completedFuture(new ResponseMessage(1, null, null)),
                 () -> neovimStreamApi.setCurrentWindow(window),
@@ -778,7 +792,7 @@ public class NeovimStreamApiTest extends BaseStreamApiTest {
         );
 
         // Error case
-        Window badWindow = new Window(7);
+        var badWindow = new Window(7);
         assertErrorBehavior(
                 () -> neovimStreamApi.setCurrentWindow(badWindow),
                 request -> assertMethodAndArguments(request, NeovimApi.SET_CURRENT_WIN)
@@ -788,7 +802,7 @@ public class NeovimStreamApiTest extends BaseStreamApiTest {
     @Test
     public void getTabpagesTest() throws InterruptedException, ExecutionException {
         // Happy case
-        List<MessagePackExtensionType> tabpages = List.of(
+        var tabpages = List.of(
                 new MessagePackExtensionType((byte) NeovimCustomType.TABPAGE.getTypeId(), new byte[]{1}),
                 new MessagePackExtensionType((byte) NeovimCustomType.TABPAGE.getTypeId(), new byte[]{2})
         );
@@ -829,7 +843,7 @@ public class NeovimStreamApiTest extends BaseStreamApiTest {
     @Test
     public void setCurrentTabpageTest() throws InterruptedException, ExecutionException {
         // Happy case
-        Tabpage tabpage = new Tabpage(4);
+        var tabpage = new Tabpage(4);
         assertNormalBehavior(
                 () -> CompletableFuture.completedFuture(new ResponseMessage(1, null, null)),
                 () -> neovimStreamApi.setCurrentTabpage(tabpage),
@@ -837,7 +851,7 @@ public class NeovimStreamApiTest extends BaseStreamApiTest {
         );
 
         // Error case
-        Tabpage badTabpage = new Tabpage(2);
+        var badTabpage = new Tabpage(2);
         assertErrorBehavior(
                 () -> neovimStreamApi.setCurrentTabpage(badTabpage),
                 request -> assertMethodAndArguments(request, NeovimApi.SET_CURRENT_TABPAGE)
@@ -847,7 +861,7 @@ public class NeovimStreamApiTest extends BaseStreamApiTest {
     @Test
     public void getColormapTest() throws InterruptedException, ExecutionException {
         // Happy case
-        Map<String, Integer> colorMap = Map.of(
+        var colorMap = Map.of(
                 "bg", 1,
                 "fg", 3
         );
@@ -874,7 +888,7 @@ public class NeovimStreamApiTest extends BaseStreamApiTest {
     @Test
     public void getModeTest() throws InterruptedException, ExecutionException {
         // Happy case
-        Map modeMap = Map.of(
+        var modeMap = Map.<String, Object>of(
                 "mode", "n",
                 "blocking", false
         );
@@ -901,7 +915,7 @@ public class NeovimStreamApiTest extends BaseStreamApiTest {
     @Test
     public void getApiInfoTest() throws InterruptedException, ExecutionException {
         // Happy case
-        List apiInfo = List.of(
+        var apiInfo = List.of(
                 1,
                 Map.of(
                         "error_types", Map.of("Exception", Map.of("id", 0)),
@@ -1029,12 +1043,12 @@ public class NeovimStreamApiTest extends BaseStreamApiTest {
     @Test
     public void callDictFunctionTest() throws InterruptedException, ExecutionException {
         // Happy case
-        Map map = Map.of(
+        var map = Map.of(
                 "par1", "n"
         );
-        List args = List.of("arg1", "arg2");
-        String function = "function_name";
-        Object callResult = "result of function";
+        var args = List.of("arg1", "arg2");
+        var function = "function_name";
+        var callResult = "result of function";
         assertNormalBehavior(
                 () -> CompletableFuture.completedFuture(new ResponseMessage(1, null, callResult)),
                 () -> neovimStreamApi.callDictFunction(map, function, args),
@@ -1043,11 +1057,11 @@ public class NeovimStreamApiTest extends BaseStreamApiTest {
         );
 
         // Error case
-        Map badMap = Map.of(
+        var badMap = Map.of(
                 "par6", "null"
         );
-        List badArgs = List.of();
-        String badFunction = "bad_func";
+        var badArgs = List.of();
+        var badFunction = "bad_func";
         assertErrorBehavior(
                 () -> neovimStreamApi.callDictFunction(badMap, badFunction, badArgs),
                 request -> assertMethodAndArguments(request, NeovimApi.CALL_DICT_FUNCTION, badMap, badFunction, badArgs)
@@ -1057,8 +1071,8 @@ public class NeovimStreamApiTest extends BaseStreamApiTest {
     @Test
     public void getCommandsTest() throws InterruptedException, ExecutionException {
         // Happy case
-        Map map = Map.of(
-                "command1", Map.of(
+        var map = Map.of(
+                "command1", Map.<String, Object>of(
                         "name", "command1",
                         "definition", ":q!",
                         "script_id", 55,
@@ -1067,7 +1081,7 @@ public class NeovimStreamApiTest extends BaseStreamApiTest {
                         "register", false,
                         "nargs", "0"
                 ),
-                "command2", Map.of(
+                "command2", Map.<String, Object>of(
                         "name", "command2",
                         "definition", ":wq!",
                         "script_id", 55,
@@ -1077,7 +1091,7 @@ public class NeovimStreamApiTest extends BaseStreamApiTest {
                         "nargs", "*"
                 )
         );
-        GetCommandsOptions commandsOptions = new GetCommandsOptions(false);
+        var commandsOptions = new GetCommandsOptions(false);
         assertNormalBehavior(
                 () -> CompletableFuture.completedFuture(new ResponseMessage(1, null, map)),
                 () -> neovimStreamApi.getCommands(commandsOptions),
@@ -1110,7 +1124,7 @@ public class NeovimStreamApiTest extends BaseStreamApiTest {
         );
 
         // Error case
-        GetCommandsOptions badOptions = new GetCommandsOptions(true);
+        var badOptions = new GetCommandsOptions(true);
         assertErrorBehavior(
                 () -> neovimStreamApi.getCommands(badOptions),
                 request -> assertMethodAndArguments(request, NeovimApi.GET_COMMANDS, badOptions)
@@ -1120,15 +1134,15 @@ public class NeovimStreamApiTest extends BaseStreamApiTest {
     @Test
     public void setClientInfoTest() throws InterruptedException, ExecutionException {
         // Happy case
-        ClientVersionInfo clientVersionInfo = new ClientVersionInfo(1, 1, 1, "dev");
+        var clientVersionInfo = new ClientVersionInfo(1, 1, 1, "dev");
         // Ensure to string doesn't crash
         clientVersionInfo.toString();
-        ClientType clientType = ClientType.REMOTE;
-        Map<String, MethodInfo> methodInfoMap = Map.of(
+        var clientType = ClientType.REMOTE;
+        var methodInfoMap = Map.of(
                 "method_name", new MethodInfo(false, 3),
                 "method_2_name", new MethodInfo(true, 1)
         );
-        ClientAttributes clientAttributes = new ClientAttributes(
+        var clientAttributes = new ClientAttributes(
                 "web",
                 "MIT",
                 "logo"
@@ -1142,13 +1156,13 @@ public class NeovimStreamApiTest extends BaseStreamApiTest {
         );
 
         // Error case
-        ClientVersionInfo badClientVersionInfo = new ClientVersionInfo(1, 1, 1, "dev");
-        ClientType badClientType = ClientType.REMOTE;
-        Map<String, MethodInfo> badMethodInfoMap = Map.of(
+        var badClientVersionInfo = new ClientVersionInfo(1, 1, 1, "dev");
+        var badClientType = ClientType.REMOTE;
+        var badMethodInfoMap = Map.of(
                 "method_name", new MethodInfo(false, 3),
                 "method_2_name", new MethodInfo(true, 1)
         );
-        ClientAttributes badClientAttributes = new ClientAttributes(
+        var badClientAttributes = new ClientAttributes(
                 "web",
                 "MIT",
                 "logo"
@@ -1162,13 +1176,13 @@ public class NeovimStreamApiTest extends BaseStreamApiTest {
     @Test
     public void getChannelInfoTest() throws InterruptedException, ExecutionException {
         // Happy case
-        Map channelInfo = Map.of(
+        var channelInfo = Map.<String, Object>of(
                 "id", 1,
                 "stream", "socket",
                 "mode", "rpc",
                 "client", Map.of(
                         "name", "client_name",
-                        "version", Map.of(
+                        "version", Map.<String, Object>of(
                                 "major", 1,
                                 "minor", 2,
                                 "patch", 3,
@@ -1221,14 +1235,14 @@ public class NeovimStreamApiTest extends BaseStreamApiTest {
     @Test
     public void getChannelsTest() throws InterruptedException, ExecutionException {
         // Happy case
-        List<Map> channels = List.of(
-                Map.of(
+        var channels = List.of(
+                Map.<String, Object>of(
                         "id", 1,
                         "stream", "socket",
                         "mode", "rpc",
                         "client", Map.of(
                                 "name", "client_name",
-                                "version", Map.of(
+                                "version", Map.<String, Object>of(
                                         "major", 1,
                                         "minor", 2,
                                         "patch", 3,
@@ -1239,17 +1253,17 @@ public class NeovimStreamApiTest extends BaseStreamApiTest {
                                 "attributes", Map.of()
                         )
                 ),
-                Map.of(
+                Map.<String, Object>of(
                         "id", 2,
                         "stream", "stdio",
                         "mode", "bytes"
                 ),
-                Map.of(
+                Map.<String, Object>of(
                         "id", 3,
                         "stream", "stderr",
                         "mode", "terminal"
                 ),
-                Map.of(
+                Map.<String, Object>of(
                         "id", 4,
                         "stream", "job",
                         "mode", "pty"
@@ -1310,7 +1324,7 @@ public class NeovimStreamApiTest extends BaseStreamApiTest {
     @Test
     public void parseExpressionTest() throws InterruptedException, ExecutionException {
         // Happy case
-        Map map = Map.of(
+        var map = Map.of(
                 "expr", "result"
         );
         assertNormalBehavior(
@@ -1330,14 +1344,14 @@ public class NeovimStreamApiTest extends BaseStreamApiTest {
     @Test
     public void getUisTest() throws InterruptedException, ExecutionException {
         // Happy case
-        List uis = List.of(
-                Map.of(
+        var uis = List.of(
+                Map.<String, Object>of(
                         "height", 100,
                         "width", 200,
                         "rgb", false,
                         "chan", 1
                 ),
-                Map.of(
+                Map.<String, Object>of(
                         "height", 500,
                         "width", 500,
                         "rgb", true,
@@ -1374,7 +1388,7 @@ public class NeovimStreamApiTest extends BaseStreamApiTest {
     public void getProcessChildrenTest() throws InterruptedException, ExecutionException {
         // Happy case
         List children = List.of(
-                1,2,3
+                1, 2, 3
         );
         assertNormalBehavior(
                 () -> CompletableFuture.completedFuture(new ResponseMessage(1, null, children)),
@@ -1398,7 +1412,7 @@ public class NeovimStreamApiTest extends BaseStreamApiTest {
     @Test
     public void getProcessTest() throws InterruptedException, ExecutionException {
         // Happy case
-        Map procInfo = Map.of(
+        var procInfo = Map.of(
                 "name", "proc"
         );
         assertNormalBehavior(
@@ -1415,4 +1429,41 @@ public class NeovimStreamApiTest extends BaseStreamApiTest {
         );
     }
 
+    @Test
+    public void getNamespacesTest() throws ExecutionException, InterruptedException {
+        // Happy case
+        var namespaces = Map.of(
+                "name", 1,
+                "name2", 2
+        );
+        assertNormalBehavior(
+                () -> CompletableFuture.completedFuture(new ResponseMessage(1, null, namespaces)),
+                () -> neovimStreamApi.getNamespaces(),
+                request -> assertMethodAndArguments(request, NeovimApi.GET_NAMESPACES),
+                result -> assertEquals(namespaces, result)
+        );
+
+        // Error case
+        assertErrorBehavior(
+                () -> neovimStreamApi.getNamespaces(),
+                request -> assertMethodAndArguments(request, NeovimApi.GET_NAMESPACES)
+        );
+    }
+
+    @Test
+    public void createNamespacesTest() throws ExecutionException, InterruptedException {
+        // Happy case
+        assertNormalBehavior(
+                () -> CompletableFuture.completedFuture(new ResponseMessage(1, null, 1)),
+                () -> neovimStreamApi.createNamespace("test"),
+                request -> assertMethodAndArguments(request, NeovimApi.CREATE_NAMESPACES, "test"),
+                result -> assertEquals(result, Integer.valueOf(1))
+        );
+
+        // Error case
+        assertErrorBehavior(
+                () -> neovimStreamApi.createNamespace("test"),
+                request -> assertMethodAndArguments(request, NeovimApi.CREATE_NAMESPACES, "test")
+        );
+    }
 }

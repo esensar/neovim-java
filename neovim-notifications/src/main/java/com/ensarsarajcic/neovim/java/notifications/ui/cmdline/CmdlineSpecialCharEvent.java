@@ -28,12 +28,12 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonFormat(shape = JsonFormat.Shape.ARRAY)
-public final class CmdlineSpecialCharEvent implements UICmdlineEvent {
+public final class CmdlineSpecialCharEvent implements UiCmdlineEvent {
     public static final String NAME = "cmdline_special_char";
 
-    private String character;
-    private boolean shift;
-    private int level;
+    private final String character;
+    private final boolean shift;
+    private final int level;
 
     public CmdlineSpecialCharEvent(
             @JsonProperty(value = "character", index = 0) String character,
@@ -63,10 +63,9 @@ public final class CmdlineSpecialCharEvent implements UICmdlineEvent {
 
     @Override
     public String toString() {
-        return "CmdlineSpecialCharEvent{" +
-                "character='" + character + '\'' +
-                ", shift=" + shift +
-                ", level=" + level +
-                '}';
+        return "CmdlineSpecialCharEvent{"
+                + "character='" + character + '\''
+                + ", shift=" + shift
+                + ", level=" + level + '}';
     }
 }

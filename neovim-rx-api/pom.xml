@@ -5,18 +5,19 @@
     <parent>
         <artifactId>parent</artifactId>
         <groupId>com.ensarsarajcic.neovim.java</groupId>
-        <version>0.0</version>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>neovim-rx-api</artifactId>
     <name>neovim-rx-api</name>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
-
     <dependencies>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>neovim-api</artifactId>

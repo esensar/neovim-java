@@ -30,14 +30,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public final class VimMode {
 
-    private String mode;
-    private boolean blocking;
+    private final String mode;
+    private final boolean blocking;
 
     public VimMode(
             @JsonProperty("mode")
-            String mode,
+                    String mode,
             @JsonProperty("blocking")
-            boolean blocking) {
+                    boolean blocking) {
         this.mode = mode;
         this.blocking = blocking;
     }
@@ -52,9 +52,8 @@ public final class VimMode {
 
     @Override
     public String toString() {
-        return "VimMode{" +
-                "mode='" + mode + '\'' +
-                ", blocking=" + blocking +
-                '}';
+        return "VimMode{"
+                + "mode='" + mode + '\''
+                + ", blocking=" + blocking + '}';
     }
 }

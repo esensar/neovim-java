@@ -32,6 +32,7 @@ public interface MessageIdGenerator {
 
     /**
      * Get next id. It must not be an id that was already used
+     *
      * @return next id
      */
     int nextId();

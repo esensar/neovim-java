@@ -28,10 +28,10 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonFormat(shape = JsonFormat.Shape.ARRAY)
-public final class UpdateForegroundEvent implements UIGridEvent {
+public final class UpdateForegroundEvent implements UiGridEvent {
     public static final String NAME = "update_fg";
 
-    private int color;
+    private final int color;
 
     public UpdateForegroundEvent(
             @JsonProperty(value = "color", index = 0) int color) {
@@ -49,8 +49,6 @@ public final class UpdateForegroundEvent implements UIGridEvent {
 
     @Override
     public String toString() {
-        return "UpdateForegroundEvent{" +
-                "color=" + color +
-                '}';
+        return "UpdateForegroundEvent{" + "color=" + color + '}';
     }
 }

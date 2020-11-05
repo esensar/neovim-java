@@ -27,7 +27,19 @@ package com.ensarsarajcic.neovim.java.rxapi;
 import com.ensarsarajcic.neovim.java.api.atomic.AtomicCallBuilder;
 import com.ensarsarajcic.neovim.java.api.NeovimApi;
 import com.ensarsarajcic.neovim.java.api.atomic.AtomicCallResponse;
-import com.ensarsarajcic.neovim.java.api.types.api.*;
+import com.ensarsarajcic.neovim.java.api.types.api.ChannelInfo;
+import com.ensarsarajcic.neovim.java.api.types.api.ClientAttributes;
+import com.ensarsarajcic.neovim.java.api.types.api.ClientType;
+import com.ensarsarajcic.neovim.java.api.types.api.ClientVersionInfo;
+import com.ensarsarajcic.neovim.java.api.types.api.CommandInfo;
+import com.ensarsarajcic.neovim.java.api.types.api.GetCommandsOptions;
+import com.ensarsarajcic.neovim.java.api.types.api.MethodInfo;
+import com.ensarsarajcic.neovim.java.api.types.api.Mouse;
+import com.ensarsarajcic.neovim.java.api.types.api.UiInfo;
+import com.ensarsarajcic.neovim.java.api.types.api.UiOptions;
+import com.ensarsarajcic.neovim.java.api.types.api.VimColorMap;
+import com.ensarsarajcic.neovim.java.api.types.api.VimKeyMap;
+import com.ensarsarajcic.neovim.java.api.types.api.VimMode;
 import com.ensarsarajcic.neovim.java.api.types.apiinfo.ApiInfo;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.Buffer;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.Tabpage;
@@ -42,7 +54,7 @@ import java.util.stream.Collectors;
 
 public final class NeovimRxWrapper implements NeovimRxApi {
 
-    private NeovimApi neovimApi;
+    private final NeovimApi neovimApi;
 
     public NeovimRxWrapper(NeovimApi neovimApi) {
         Objects.requireNonNull(neovimApi, "neovimApi is required to wrap it in RX interface");
@@ -70,18 +82,33 @@ public final class NeovimRxWrapper implements NeovimRxApi {
     }
 
     @Override
-    public Completable attachUI(int width, int height, UiOptions options) {
-        return Completable.fromFuture(neovimApi.attachUI(width, height, options));
+    public Completable attachUi(int width, int height, UiOptions options) {
+        return Completable.fromFuture(neovimApi.attachUi(width, height, options));
     }
 
     @Override
-    public Completable detachUI() {
-        return Completable.fromFuture(neovimApi.detachUI());
+    public Completable detachUi() {
+        return Completable.fromFuture(neovimApi.detachUi());
     }
 
     @Override
-    public Completable resizeUI(int width, int height) {
-        return Completable.fromFuture(neovimApi.resizeUI(width, height));
+    public Completable resizeUi(int width, int height) {
+        return Completable.fromFuture(neovimApi.resizeUi(width, height));
+    }
+
+    @Override
+    public Completable resizeUiGrid(int width, int height) {
+        return Completable.fromFuture(neovimApi.resizeUiGrid(width, height));
+    }
+
+    @Override
+    public Completable setPopupmenuHeight(int height) {
+        return Completable.fromFuture(neovimApi.setPopupmenuHeight(height));
+    }
+
+    @Override
+    public Completable inputMouse(Mouse.Button button, Mouse.Action action, String modifier, int grid, int row, int col) {
+        return Completable.fromFuture(neovimApi.inputMouse(button, action, modifier, grid, row, col));
     }
 
     @Override
@@ -115,7 +142,7 @@ public final class NeovimRxWrapper implements NeovimRxApi {
     }
 
     @Override
-    public Single<Object> callFunction(String name, List<String> args) {
+    public Single<Object> callFunction(String name, List<Object> args) {
         return Single.fromFuture(neovimApi.callFunction(name, args));
     }
 
@@ -132,6 +159,16 @@ public final class NeovimRxWrapper implements NeovimRxApi {
     @Override
     public Single<List<VimKeyMap>> getKeymap(String mode) {
         return Single.fromFuture(neovimApi.getKeymap(mode));
+    }
+
+    @Override
+    public Completable setKeymap(String mode, String lhs, String rhs, Map<String, Boolean> options) {
+        return Completable.fromFuture(neovimApi.setKeymap(mode, lhs, rhs, options));
+    }
+
+    @Override
+    public Completable deleteKeymap(String mode, String lhs) {
+        return Completable.fromFuture(neovimApi.deleteKeymap(mode, lhs));
     }
 
     @Override
@@ -157,6 +194,11 @@ public final class NeovimRxWrapper implements NeovimRxApi {
     @Override
     public Single<Object> getVimVariable(String name) {
         return Single.fromFuture(neovimApi.getVimVariable(name));
+    }
+
+    @Override
+    public Completable setVimVariable(String name, Object value) {
+        return Completable.fromFuture(neovimApi.setVimVariable(name, value));
     }
 
     @Override
@@ -233,6 +275,12 @@ public final class NeovimRxWrapper implements NeovimRxApi {
     }
 
     @Override
+    public Single<NeovimBufferRxApi> createBuffer(boolean listed, boolean scratch) {
+        return Single.fromFuture(neovimApi.createBuffer(listed, scratch))
+                .map(NeovimBufferRxWrapper::new);
+    }
+
+    @Override
     public Single<NeovimBufferRxApi> getCurrentBuffer() {
         return Single.fromFuture(neovimApi.getCurrentBuffer())
                 .map(NeovimBufferRxWrapper::new);
@@ -249,6 +297,12 @@ public final class NeovimRxWrapper implements NeovimRxApi {
                 .map(neovimWindowApis -> neovimWindowApis.stream()
                         .map(NeovimWindowRxWrapper::new)
                         .collect(Collectors.toList()));
+    }
+
+    @Override
+    public Single<NeovimWindowRxApi> openWindow(Buffer buffer, boolean enter, Map<String, Object> config) {
+        return Single.fromFuture(neovimApi.openWindow(buffer, enter, config))
+                .map(NeovimWindowRxWrapper::new);
     }
 
     @Override
@@ -339,5 +393,40 @@ public final class NeovimRxWrapper implements NeovimRxApi {
     @Override
     public Single<Object> getProcess() {
         return Single.fromFuture(neovimApi.getProcess());
+    }
+
+    @Override
+    public Single<Map<String, Integer>> getNamespaces() {
+        return Single.fromFuture(neovimApi.getNamespaces());
+    }
+
+    @Override
+    public Single<Integer> createNamespace(String name) {
+        return Single.fromFuture(neovimApi.createNamespace(name));
+    }
+
+    @Override
+    public Single<Boolean> paste(String data, boolean crlf, int phase) {
+        return Single.fromFuture(neovimApi.paste(data, crlf, phase));
+    }
+
+    @Override
+    public Completable put(List<String> lines, String type, boolean after, boolean follow) {
+        return Completable.fromFuture(neovimApi.put(lines, type, after, follow));
+    }
+
+    @Override
+    public Single<Map<String, Object>> getContext(Map<String, Object> options) {
+        return Single.fromFuture(neovimApi.getContext(options));
+    }
+
+    @Override
+    public Completable loadContext(Map<String, Object> contextMap) {
+        return Completable.fromFuture(neovimApi.loadContext(contextMap));
+    }
+
+    @Override
+    public Completable selectPopupmenuItem(int item, boolean insert, boolean finish, Map<String, Object> options) {
+        return Completable.fromFuture(neovimApi.selectPopupmenuItem(item, insert, finish, options));
     }
 }

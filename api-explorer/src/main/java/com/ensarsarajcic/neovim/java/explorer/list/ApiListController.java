@@ -24,34 +24,38 @@
 
 package com.ensarsarajcic.neovim.java.explorer.list;
 
-import com.ensarsarajcic.neovim.java.corerpc.client.TcpSocketRPCConnection;
 import com.ensarsarajcic.neovim.java.explorer.ApiExplorer;
-import com.ensarsarajcic.neovim.java.explorer.api.*;
+import com.ensarsarajcic.neovim.java.explorer.api.ConnectionHolder;
+import com.ensarsarajcic.neovim.java.explorer.api.NeovimApiList;
+import com.ensarsarajcic.neovim.java.explorer.api.NeovimError;
+import com.ensarsarajcic.neovim.java.explorer.api.NeovimFunction;
+import com.ensarsarajcic.neovim.java.explorer.api.NeovimType;
+import com.ensarsarajcic.neovim.java.explorer.api.NeovimUiEvent;
+import com.ensarsarajcic.neovim.java.explorer.api.NeovimVersion;
 import com.ensarsarajcic.neovim.java.explorer.api.discovery.ApiDiscovery;
 import com.ensarsarajcic.neovim.java.explorer.test.TestFunctionController;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.beans.value.ObservableValueBase;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.collections.ObservableMap;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
 import java.io.IOException;
-import java.net.Socket;
 import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
-import java.util.function.Predicate;
 
 public final class ApiListController {
     // Functions
@@ -128,10 +132,10 @@ public final class ApiListController {
                 apiList = ApiDiscovery.discoverApiFromInstance(ConnectionHolder.getApi());
                 hasConnection = true;
             }
-            NeovimApiList finalApiList = apiList;
+            var finalApiList = apiList;
 
             // Show Functions
-            ObservableList<NeovimFunction> neovimFunctions = FXCollections.observableArrayList(apiList.getFunctions());
+            var neovimFunctions = FXCollections.observableArrayList(apiList.getFunctions());
             functionColMethod.setCellValueFactory(new PropertyValueFactory<>("method"));
             functionColName.setCellValueFactory(new PropertyValueFactory<>("name"));
             functionColReturnType.setCellValueFactory(new PropertyValueFactory<>("returnType"));
@@ -152,7 +156,7 @@ public final class ApiListController {
                                 setText(null);
                             } else {
                                 btn.setOnAction(event -> {
-                                    NeovimFunction function = getTableView().getItems().get(getIndex());
+                                    var function = getTableView().getItems().get(getIndex());
                                     ApiExplorer.hostServices.showDocument(
                                             String.format("https://neovim.io/doc/user/api.html#%s()", function.getName())
                                     );
@@ -178,13 +182,13 @@ public final class ApiListController {
                                 setText(null);
                             } else {
                                 btn.setOnAction(event -> {
-                                    NeovimFunction function = getTableView().getItems().get(getIndex());
+                                    var function = getTableView().getItems().get(getIndex());
                                     try {
-                                        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("test-function.fxml"));
+                                        var loader = new FXMLLoader(getClass().getClassLoader().getResource("test-function.fxml"));
                                         Parent root = null;
                                         root = loader.load();
-                                        Stage stage = new Stage();
-                                        Scene scene = new Scene(root);
+                                        var stage = new Stage();
+                                        var scene = new Scene(root);
                                         scene.getStylesheets().add("styles.css");
                                         stage.setTitle("Testing function " + function.getName());
                                         stage.setScene(scene);
@@ -238,7 +242,7 @@ public final class ApiListController {
             functionTable.setItems(neovimFunctions);
 
             // Show Ui Events
-            ObservableList<NeovimUiEvent> neovimUiEvents = FXCollections.observableArrayList(apiList.getUiEvents());
+            var neovimUiEvents = FXCollections.observableArrayList(apiList.getUiEvents());
             uiEventsColName.setCellValueFactory(new PropertyValueFactory<>("name"));
             uiEventsColSince.setCellValueFactory(new PropertyValueFactory<>("since"));
             uiEventsColParams.setCellValueFactory(new PropertyValueFactory<>("parameters"));
@@ -266,25 +270,25 @@ public final class ApiListController {
             uiEventsTable.setItems(neovimUiEvents);
 
             // Show Ui Options
-            ObservableList<String> neovimUiOptions = FXCollections.observableArrayList(apiList.getUiOptions());
+            var neovimUiOptions = FXCollections.observableArrayList(apiList.getUiOptions());
             uiOptionsColName.setCellValueFactory(c -> new SimpleStringProperty(c.getValue()));
             uiOptionsTable.setItems(neovimUiOptions);
 
             // Show Errors
-            ObservableMap<String, NeovimError> neovimErrors = FXCollections.observableMap(apiList.getErrorTypes());
+            var neovimErrors = FXCollections.observableMap(apiList.getErrorTypes());
             errorsColName.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getKey()));
             errorsColId.setCellValueFactory(param -> new SimpleStringProperty(String.valueOf(param.getValue().getValue().getId())));
             errorsTable.setItems(FXCollections.observableArrayList(neovimErrors.entrySet()));
 
             // Show types
-            ObservableMap<String, NeovimType> neovimTypes = FXCollections.observableMap(apiList.getTypes());
+            var neovimTypes = FXCollections.observableMap(apiList.getTypes());
             typesColName.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getKey()));
             typesColId.setCellValueFactory(param -> new SimpleStringProperty(String.valueOf(param.getValue().getValue().getId())));
             typesColPrefix.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getValue().getPrefix()));
             typesTable.setItems(FXCollections.observableArrayList(neovimTypes.entrySet()));
 
             // Show information
-            ObservableValue<NeovimVersion> neovimVersions = new ObservableValueBase<>() {
+            var neovimVersions = new ObservableValueBase<>() {
                 @Override
                 public NeovimVersion getValue() {
                     return finalApiList.getVersion();
@@ -292,9 +296,9 @@ public final class ApiListController {
             };
             labelInformation.setText(getVersionInfo(neovimVersions.getValue()));
 
-            NeovimApiList finalApiList1 = apiList;
+            var finalApiList1 = apiList;
             fieldSearch.setOnAction(event -> {
-                String searchValue = fieldSearch.getText();
+                var searchValue = fieldSearch.getText();
                 neovimFunctions.removeAll(finalApiList1.getFunctions());
                 neovimFunctions.addAll(finalApiList1.getFunctions());
                 neovimUiEvents.removeAll(finalApiList1.getUiEvents());
@@ -311,7 +315,7 @@ public final class ApiListController {
     }
 
     private String getVersionInfo(NeovimVersion neovimVersion) {
-        StringBuilder stringBuilder = new StringBuilder();
+        var stringBuilder = new StringBuilder();
 
         stringBuilder.append(
                 String.format(

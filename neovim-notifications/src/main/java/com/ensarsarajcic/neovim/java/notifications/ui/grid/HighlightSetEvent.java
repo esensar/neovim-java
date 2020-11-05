@@ -25,98 +25,20 @@
 package com.ensarsarajcic.neovim.java.notifications.ui.grid;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonFormat(shape = JsonFormat.Shape.ARRAY)
-public final class HighlightSetEvent implements UIGridEvent {
+public final class HighlightSetEvent implements UiGridEvent {
     public static final String NAME = "highlight_set";
 
-    @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Attributes {
-        private int foreground;
-        private int background;
-        private int special;
-        private boolean reverse;
-        private boolean italic;
-        private boolean bold;
-        private boolean underline;
-        private boolean undercurl;
-
-        public Attributes(
-                @JsonProperty(value = "foreground", index = 1) int foreground,
-                @JsonProperty(value = "background", index = 2) int background,
-                @JsonProperty(value = "special", index = 3) int special,
-                @JsonProperty(value = "reverse", index = 4) boolean reverse,
-                @JsonProperty(value = "italic", index = 5) boolean italic,
-                @JsonProperty(value = "bold", index = 6) boolean bold,
-                @JsonProperty(value = "underline", index = 7) boolean underline,
-                @JsonProperty(value = "undercurl", index = 8) boolean undercurl) {
-            this.foreground = foreground;
-            this.background = background;
-            this.special = special;
-            this.reverse = reverse;
-            this.italic = italic;
-            this.bold = bold;
-            this.underline = underline;
-            this.undercurl = undercurl;
-        }
-
-        public int getForeground() {
-            return foreground;
-        }
-
-        public int getBackground() {
-            return background;
-        }
-
-        public int getSpecial() {
-            return special;
-        }
-
-        public boolean isReverse() {
-            return reverse;
-        }
-
-        public boolean isItalic() {
-            return italic;
-        }
-
-        public boolean isBold() {
-            return bold;
-        }
-
-        public boolean isUnderline() {
-            return underline;
-        }
-
-        public boolean isUndercurl() {
-            return undercurl;
-        }
-
-        @Override
-        public String toString() {
-            return "Attributes{" +
-                    "foreground=" + foreground +
-                    ", background=" + background +
-                    ", special=" + special +
-                    ", reverse=" + reverse +
-                    ", italic=" + italic +
-                    ", bold=" + bold +
-                    ", underline=" + underline +
-                    ", undercurl=" + undercurl +
-                    '}';
-        }
-    }
-
-    private Attributes attributes;
+    private final HighlightAttributes attributes;
 
     public HighlightSetEvent(
-            @JsonProperty(value = "attributes", index = 0) Attributes attributes) {
+            @JsonProperty(value = "attributes", index = 0) HighlightAttributes attributes) {
         this.attributes = attributes;
     }
 
-    public Attributes getAttributes() {
+    public HighlightAttributes getAttributes() {
         return attributes;
     }
 
@@ -127,8 +49,6 @@ public final class HighlightSetEvent implements UIGridEvent {
 
     @Override
     public String toString() {
-        return "HighlightSetEvent{" +
-                "attributes=" + attributes +
-                '}';
+        return "HighlightSetEvent{" + "attributes=" + attributes + '}';
     }
 }

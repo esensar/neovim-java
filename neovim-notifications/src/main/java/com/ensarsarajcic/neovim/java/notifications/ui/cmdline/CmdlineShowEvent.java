@@ -30,15 +30,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 @JsonFormat(shape = JsonFormat.Shape.ARRAY)
-public final class CmdlineShowEvent implements UICmdlineEvent {
+public final class CmdlineShowEvent implements UiCmdlineEvent {
     public static final String NAME = "cmdline_show";
 
-    private List<List> content;
-    private int pos;
-    private String firstc;
-    private String prompt;
-    private int indent;
-    private int level;
+    private final List<List> content;
+    private final int pos;
+    private final String firstc;
+    private final String prompt;
+    private final int indent;
+    private final int level;
 
     public CmdlineShowEvent(
             @JsonProperty(value = "content", index = 0) List<List> content,
@@ -86,13 +86,12 @@ public final class CmdlineShowEvent implements UICmdlineEvent {
 
     @Override
     public String toString() {
-        return "CmdlineShowEvent{" +
-                "content=" + content +
-                ", pos=" + pos +
-                ", firstc='" + firstc + '\'' +
-                ", prompt='" + prompt + '\'' +
-                ", indent=" + indent +
-                ", level=" + level +
-                '}';
+        return "CmdlineShowEvent{"
+                + "content=" + content
+                + ", pos=" + pos
+                + ", firstc='" + firstc + '\''
+                + ", prompt='" + prompt + '\''
+                + ", indent=" + indent
+                + ", level=" + level + '}';
     }
 }

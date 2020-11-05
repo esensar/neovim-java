@@ -25,7 +25,6 @@
 package com.ensarsarajcic.neovim.java.api.types.msgpack;
 
 import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import org.msgpack.core.MessagePack;
@@ -37,8 +36,8 @@ import java.io.IOException;
 
 public final class NeovimTypeSerializer<T extends BaseCustomIdType> extends JsonSerializer<T> {
 
-    private byte typeId;
-    private Class<T> type;
+    private final byte typeId;
+    private final Class<T> type;
 
     public NeovimTypeSerializer(byte typeId, Class<T> type) {
         this.typeId = typeId;
@@ -51,13 +50,12 @@ public final class NeovimTypeSerializer<T extends BaseCustomIdType> extends Json
     }
 
     @Override
-    public void serialize(T t, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException, JsonProcessingException {
-        MessagePackGenerator messagePackGenerator = (MessagePackGenerator) jsonGenerator;
+    public void serialize(T t, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
+        var messagePackGenerator = (MessagePackGenerator) jsonGenerator;
 
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        var byteArrayOutputStream = new ByteArrayOutputStream();
         MessagePack.newDefaultPacker(byteArrayOutputStream).packLong(t.getId()).close();
-        MessagePackExtensionType messagePackExtensionType =
-                new MessagePackExtensionType(typeId, byteArrayOutputStream.toByteArray());
+        var messagePackExtensionType = new MessagePackExtensionType(typeId, byteArrayOutputStream.toByteArray());
         messagePackGenerator.writeExtensionType(messagePackExtensionType);
     }
 }

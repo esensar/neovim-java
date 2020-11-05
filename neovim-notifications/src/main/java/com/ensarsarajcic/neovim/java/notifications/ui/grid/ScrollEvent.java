@@ -28,10 +28,10 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonFormat(shape = JsonFormat.Shape.ARRAY)
-public final class ScrollEvent implements UIGridEvent {
+public final class ScrollEvent implements UiGridEvent {
     public static final String NAME = "scroll";
 
-    private int count;
+    private final int count;
 
     public ScrollEvent(
             @JsonProperty(value = "count", index = 0) int count) {
@@ -49,8 +49,6 @@ public final class ScrollEvent implements UIGridEvent {
 
     @Override
     public String toString() {
-        return "ScrollEvent{" +
-                "count=" + count +
-                '}';
+        return "ScrollEvent{" + "count=" + count + '}';
     }
 }

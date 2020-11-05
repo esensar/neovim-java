@@ -24,12 +24,18 @@
 
 package com.ensarsarajcic.neovim.java.api;
 
-import java.lang.annotation.*;
+
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Inherited;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * Annotation marking that method is a NeovimApiFunction
  * Marking with this annotation means that the method will do the actual call
- *
+ * <p>
  * It is useful for documentation since it contains information about versions, params and name
  * It could also be used for generating clients and for compile time checking
  */

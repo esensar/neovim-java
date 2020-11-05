@@ -30,9 +30,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public final class MethodInfo {
 
-    private boolean async;
+    private final boolean async;
     @JsonProperty("nargs")
-    private int numberOfArguments;
+    private final int numberOfArguments;
 
     public MethodInfo(boolean async, int numberOfArguments) {
         this.async = async;

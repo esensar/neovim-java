@@ -24,10 +24,10 @@
 
 package com.ensarsarajcic.neovim.java.explorer.test;
 
-import com.ensarsarajcic.neovim.java.corerpc.message.RPCError;
 import com.ensarsarajcic.neovim.java.corerpc.message.RequestMessage;
 import com.ensarsarajcic.neovim.java.corerpc.message.ResponseMessage;
-import com.ensarsarajcic.neovim.java.corerpc.reactive.RPCException;
+import com.ensarsarajcic.neovim.java.corerpc.message.RpcError;
+import com.ensarsarajcic.neovim.java.corerpc.reactive.RpcException;
 import com.ensarsarajcic.neovim.java.explorer.api.ConnectionHolder;
 import com.ensarsarajcic.neovim.java.explorer.api.NeovimFunction;
 import javafx.fxml.FXML;
@@ -41,10 +41,8 @@ import javafx.scene.paint.Color;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletionException;
-import java.util.function.Function;
 
 public final class TestFunctionController {
 
@@ -58,51 +56,51 @@ public final class TestFunctionController {
 
     public void setFunctionData(NeovimFunction neovimFunction) {
         this.neovimFunction = neovimFunction;
-        List<Node> nodes = new ArrayList<>();
-        List<Map.Entry<String, Node>> inputNodes = new ArrayList<>();
+        var nodes = new ArrayList<Node>();
+        var inputNodes = new ArrayList<Map.Entry<String, Node>>();
 
         nodes.add(new Label(neovimFunction.getName()));
         nodes.add(new Label("Returns: " + neovimFunction.getReturnType()));
         if (neovimFunction.getDeprecatedSince() > 0) {
-            Label deprecatedLabel = new Label("Deprecated!");
+            var deprecatedLabel = new Label("Deprecated!");
             deprecatedLabel.setTextFill(Color.RED);
 
             nodes.add(deprecatedLabel);
         }
 
-        for (List<String> strings : neovimFunction.getParameters()) {
+        for (var strings : neovimFunction.getParameters()) {
             String type = strings.get(0);
             String name = strings.get(1);
-            Label label = new Label(name + ": ");
-            Node node = NodeHandler.generateNodeForType(type);
+            var label = new Label(name + ": ");
+            var node = NodeHandler.generateNodeForType(type);
             label.setLabelFor(node);
             nodes.add(new HBox(label, node));
             inputNodes.add(new AbstractMap.SimpleEntry<>(type, node));
         }
 
-        Label resultLabel = new Label("Result: ");
-        TextArea resultArea = new TextArea();
+        var resultLabel = new Label("Result: ");
+        var resultArea = new TextArea();
         resultArea.setEditable(false);
-        Button send = new Button();
+        var send = new Button();
         send.setText("SEND");
         send.setOnAction(event -> {
-            ArrayList<Object> args = new ArrayList<>();
-            for (Map.Entry<String, Node> node : inputNodes) {
+            var args = new ArrayList<>();
+            for (var node : inputNodes) {
                 args.add(NodeHandler.generateValueFromNodeOfType(node.getValue(), node.getKey()));
             }
-            ConnectionHolder.getReactiveRPCStreamer().response(
+            ConnectionHolder.getReactiveRpcStreamer().response(
                     new RequestMessage.Builder(neovimFunction.getName())
                             .addArguments(args)
             ).exceptionally(throwable -> {
-                if (throwable instanceof  CompletionException) {
+                if (throwable instanceof CompletionException) {
                     throwable = throwable.getCause();
                 }
-                if (throwable instanceof RPCException) {
-                    return new ResponseMessage(0, ((RPCException) throwable).getRpcError(), null);
+                if (throwable instanceof RpcException) {
+                    return new ResponseMessage(0, ((RpcException) throwable).getRpcError(), null);
                 } else {
                     return new ResponseMessage(
                             0,
-                            new RPCError(-1000, "LOCAL ERROR: " + throwable.toString()),
+                            new RpcError(-1000, "LOCAL ERROR: " + throwable.toString()),
                             null);
                 }
             }).thenAccept(responseMessage -> resultArea.setText(responseMessage.toString()));

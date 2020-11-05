@@ -38,7 +38,7 @@ public final class Window extends BaseCustomIdType implements Comparable<Window>
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Window buffer = (Window) o;
+        var buffer = (Window) o;
         return getId() == buffer.getId();
     }
 

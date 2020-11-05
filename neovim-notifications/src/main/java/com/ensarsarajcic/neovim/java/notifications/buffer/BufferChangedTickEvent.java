@@ -48,8 +48,8 @@ public final class BufferChangedTickEvent implements BufferEvent {
         }
     };
 
-    private Buffer buffer;
-    private long changedTick;
+    private final Buffer buffer;
+    private final long changedTick;
 
     public BufferChangedTickEvent(Buffer buffer, long changedTick) {
         this.buffer = buffer;
@@ -71,9 +71,8 @@ public final class BufferChangedTickEvent implements BufferEvent {
 
     @Override
     public String toString() {
-        return "BufferChangedTickEvent{" +
-                "buffer=" + buffer +
-                ", changedTick=" + changedTick +
-                '}';
+        return "BufferChangedTickEvent{"
+                + "buffer=" + buffer
+                + ", changedTick=" + changedTick + '}';
     }
 }

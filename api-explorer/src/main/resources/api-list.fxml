@@ -1,13 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Tab?>
-<?import javafx.scene.control.TabPane?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
-
 <!--
   ~ MIT License
   ~
@@ -32,88 +24,124 @@
   ~ SOFTWARE.
   -->
 
-<AnchorPane prefHeight="400.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ensarsarajcic.neovim.java.explorer.list.ApiListController">
-   <AnchorPane prefHeight="200.0" prefWidth="1000.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="17.0">
-      <children>
-          <TabPane prefHeight="303.0" prefWidth="1000.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-              <tabs>
-                  <Tab closable="false" text="Functions">
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="1000.0">
-                          <TableView fx:id="functionTable" prefHeight="367.0" prefWidth="1000.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                              <columns>
-                                  <TableColumn fx:id="functionColMethod" editable="false" prefWidth="45" text="Method" />
-                                  <TableColumn fx:id="functionColName" editable="false" prefWidth="160" text="Name" />
-                                  <TableColumn fx:id="functionColReturnType" editable="false" prefWidth="90" text="Return Type" />
-                                  <TableColumn fx:id="functionColSince" editable="false" prefWidth="30" text="Since" />
-                                  <TableColumn fx:id="functionColDepSince" editable="false" prefWidth="30" text="Deprecated Since" />
-                                  <TableColumn fx:id="functionColParams" editable="false" prefWidth="450" text="Parameters" />
-                                  <TableColumn fx:id="functionColOpenInBrowser" editable="false" text="Open" />
-                                  <TableColumn fx:id="functionColTestFunc" editable="false" text="Test" />
-                              </columns>
-                          </TableView>
-                      </AnchorPane>
-                  </Tab>
-                  <Tab closable="false" text="Errors">
-                      <content>
-                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                        <children>
-                           <TableView fx:id="errorsTable" prefHeight="367.0" prefWidth="600.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                              <columns>
-                                 <TableColumn fx:id="errorsColName" editable="false" prefWidth="315.0" text="Name" />
-                                 <TableColumn fx:id="errorsColId" editable="false" prefWidth="284.0" text="Id" />
-                              </columns>
-                           </TableView>
-                        </children>
-                     </AnchorPane>
-                      </content>
-                  </Tab>
-                  <Tab closable="false" text="UIOptions">
-                      <content>
-                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                              <children>
-                                  <TableView fx:id="uiOptionsTable" prefHeight="367.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                      <columns>
-                                          <TableColumn fx:id="uiOptionsColName" editable="false" prefWidth="138.0" text="Name" />
-                                      </columns>
-                                  </TableView>
-                              </children>
-                          </AnchorPane>
-                      </content>
-                  </Tab>
-                  <Tab closable="false" text="UIEvents">
-                      <content>
-                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                        <children>
-                           <TableView fx:id="uiEventsTable" prefHeight="367.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                              <columns>
-                                 <TableColumn fx:id="uiEventsColName" editable="false" prefWidth="138.0" text="Name" />
-                                 <TableColumn fx:id="uiEventsColSince" editable="false" prefWidth="117.0" text="Since" />
-                                 <TableColumn fx:id="uiEventsColParams" editable="false" prefWidth="344.0" text="Parameters" />
-                              </columns>
-                           </TableView>
-                        </children>
-                     </AnchorPane>
-                      </content>
-                  </Tab>
-                  <Tab closable="false" text="Types">
-                      <content>
-                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                        <children>
-                           <TableView fx:id="typesTable" prefHeight="367.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                              <columns>
-                                 <TableColumn fx:id="typesColName" editable="false" prefWidth="205.0" text="Name" />
-                                 <TableColumn fx:id="typesColId" editable="false" prefWidth="129.0" text="Id" />
-                                 <TableColumn fx:id="typesColPrefix" editable="false" prefWidth="265.0" text="Prefix" />
-                              </columns>
-                           </TableView>
-                        </children>
-                     </AnchorPane>
-                      </content>
-                  </Tab>
-              </tabs>
-          </TabPane>
-         <TextField fx:id="fieldSearch" prefHeight="27.0" prefWidth="305.0" promptText="Search" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="3.0" />
-      </children>
-   </AnchorPane>
-   <Label fx:id="labelInformation" text="Label" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<AnchorPane prefHeight="400.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.141"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.ensarsarajcic.neovim.java.explorer.list.ApiListController">
+    <AnchorPane prefHeight="200.0" prefWidth="1000.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="17.0">
+        <children>
+            <TabPane prefHeight="303.0" prefWidth="1000.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                     AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                <tabs>
+                    <Tab closable="false" text="Functions">
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="1000.0">
+                            <TableView fx:id="functionTable" prefHeight="367.0" prefWidth="1000.0"
+                                       AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                                       AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <columns>
+                                    <TableColumn fx:id="functionColMethod" editable="false" prefWidth="45"
+                                                 text="Method"/>
+                                    <TableColumn fx:id="functionColName" editable="false" prefWidth="160" text="Name"/>
+                                    <TableColumn fx:id="functionColReturnType" editable="false" prefWidth="90"
+                                                 text="Return Type"/>
+                                    <TableColumn fx:id="functionColSince" editable="false" prefWidth="30" text="Since"/>
+                                    <TableColumn fx:id="functionColDepSince" editable="false" prefWidth="30"
+                                                 text="Deprecated Since"/>
+                                    <TableColumn fx:id="functionColParams" editable="false" prefWidth="450"
+                                                 text="Parameters"/>
+                                    <TableColumn fx:id="functionColOpenInBrowser" editable="false" text="Open"/>
+                                    <TableColumn fx:id="functionColTestFunc" editable="false" text="Test"/>
+                                </columns>
+                            </TableView>
+                        </AnchorPane>
+                    </Tab>
+                    <Tab closable="false" text="Errors">
+                        <content>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                <children>
+                                    <TableView fx:id="errorsTable" prefHeight="367.0" prefWidth="600.0"
+                                               AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                                               AnchorPane.topAnchor="0.0">
+                                        <columns>
+                                            <TableColumn fx:id="errorsColName" editable="false" prefWidth="315.0"
+                                                         text="Name"/>
+                                            <TableColumn fx:id="errorsColId" editable="false" prefWidth="284.0"
+                                                         text="Id"/>
+                                        </columns>
+                                    </TableView>
+                                </children>
+                            </AnchorPane>
+                        </content>
+                    </Tab>
+                    <Tab closable="false" text="UIOptions">
+                        <content>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                <children>
+                                    <TableView fx:id="uiOptionsTable" prefHeight="367.0" prefWidth="600.0"
+                                               AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                                               AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                        <columns>
+                                            <TableColumn fx:id="uiOptionsColName" editable="false" prefWidth="138.0"
+                                                         text="Name"/>
+                                        </columns>
+                                    </TableView>
+                                </children>
+                            </AnchorPane>
+                        </content>
+                    </Tab>
+                    <Tab closable="false" text="UIEvents">
+                        <content>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                <children>
+                                    <TableView fx:id="uiEventsTable" prefHeight="367.0" prefWidth="600.0"
+                                               AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                                               AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                        <columns>
+                                            <TableColumn fx:id="uiEventsColName" editable="false" prefWidth="138.0"
+                                                         text="Name"/>
+                                            <TableColumn fx:id="uiEventsColSince" editable="false" prefWidth="117.0"
+                                                         text="Since"/>
+                                            <TableColumn fx:id="uiEventsColParams" editable="false" prefWidth="344.0"
+                                                         text="Parameters"/>
+                                        </columns>
+                                    </TableView>
+                                </children>
+                            </AnchorPane>
+                        </content>
+                    </Tab>
+                    <Tab closable="false" text="Types">
+                        <content>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                <children>
+                                    <TableView fx:id="typesTable" prefHeight="367.0" prefWidth="600.0"
+                                               AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                                               AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                        <columns>
+                                            <TableColumn fx:id="typesColName" editable="false" prefWidth="205.0"
+                                                         text="Name"/>
+                                            <TableColumn fx:id="typesColId" editable="false" prefWidth="129.0"
+                                                         text="Id"/>
+                                            <TableColumn fx:id="typesColPrefix" editable="false" prefWidth="265.0"
+                                                         text="Prefix"/>
+                                        </columns>
+                                    </TableView>
+                                </children>
+                            </AnchorPane>
+                        </content>
+                    </Tab>
+                </tabs>
+            </TabPane>
+            <TextField fx:id="fieldSearch" prefHeight="27.0" prefWidth="305.0" promptText="Search"
+                       AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="3.0"/>
+        </children>
+    </AnchorPane>
+    <Label fx:id="labelInformation" text="Label" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+           AnchorPane.topAnchor="0.0"/>
 </AnchorPane>

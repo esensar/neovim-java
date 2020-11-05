@@ -37,11 +37,11 @@ import java.util.ArrayList;
  * Defines a notification
  * Notifications should not be considered high priority and are not expected to block execution
  * They should be handled when possible
- *
+ * <p>
  * Format is defined as:
- *  * type as Integer
- *  * name (event name) as String
- *  * arguments as Array
+ * * type as Integer
+ * * name (event name) as String
+ * * arguments as Array
  */
 @JsonFormat(shape = JsonFormat.Shape.ARRAY)
 @JsonPropertyOrder({"type", "name", "arguments"})
@@ -59,12 +59,12 @@ public final class NotificationMessage implements Message {
      * Creates a new {@link NotificationMessage}
      * This should not be used outside this library, since it represents incoming notifications
      *
-     * @param name notification name
+     * @param name      notification name
      * @param arguments arguments of notification
      */
     public NotificationMessage(String name, ArrayList<Object> arguments) {
         this.name = name;
-        this.arguments = new ArrayList(arguments);
+        this.arguments = new ArrayList<>(arguments);
     }
 
     @JsonProperty("name")
@@ -86,7 +86,7 @@ public final class NotificationMessage implements Message {
     /**
      * Builder for {@link NotificationMessage} just for convention
      * Since all other {@link Message} implementations contain builder
-     *
+     * <p>
      * This should not be used outside of library, since notifications are usually only incoming messages
      */
     @JsonFormat(shape = JsonFormat.Shape.ARRAY)
@@ -99,6 +99,7 @@ public final class NotificationMessage implements Message {
         /**
          * Creates a new {@link NotificationMessage.Builder} with just a name. Arguments are set to an empty array.
          * They may be added additionally
+         *
          * @param name notification name
          */
         public Builder(String name) {
@@ -108,7 +109,8 @@ public final class NotificationMessage implements Message {
         /**
          * Creates a new {@link NotificationMessage.Builder} with name and arguments
          * More arguments may be added
-         * @param name notification name
+         *
+         * @param name      notification name
          * @param arguments arguments of notification
          */
         @JsonCreator
@@ -121,6 +123,7 @@ public final class NotificationMessage implements Message {
 
         /**
          * Adds all arguments provided
+         *
          * @param arguments argument list to add
          */
         public Builder addArguments(ArrayList<?> arguments) {
@@ -130,6 +133,7 @@ public final class NotificationMessage implements Message {
 
         /**
          * Adds a single argument
+         *
          * @param argument argument to add
          */
         public Builder addArgument(Object argument) {
@@ -139,6 +143,7 @@ public final class NotificationMessage implements Message {
 
         /**
          * Creates a new {@link NotificationMessage} using arguments added to this instance
+         *
          * @return a new {@link NotificationMessage}. Multiple calls will create different instances.
          */
         public NotificationMessage build() {
@@ -148,9 +153,8 @@ public final class NotificationMessage implements Message {
 
     @Override
     public String toString() {
-        return "NotificationMessage{" +
-                "name='" + name + '\'' +
-                ", arguments=" + arguments +
-                '}';
+        return "NotificationMessage{"
+                + "name='" + name + '\''
+                + ", arguments=" + arguments + '}';
     }
 }

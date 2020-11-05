@@ -52,12 +52,12 @@ public final class BufferLinesEvent implements BufferEvent {
         }
     };
 
-    private Buffer buffer;
-    private int changedTick;
-    private int firstLine;
-    private int lastLine;
-    private List<String> lineData;
-    private boolean more;
+    private final Buffer buffer;
+    private final int changedTick;
+    private final int firstLine;
+    private final int lastLine;
+    private final List<String> lineData;
+    private final boolean more;
 
     public BufferLinesEvent(Buffer buffer, int changedTick, int firstLine, int lastLine, List<String> lineData, boolean more) {
         this.buffer = buffer;
@@ -99,13 +99,12 @@ public final class BufferLinesEvent implements BufferEvent {
 
     @Override
     public String toString() {
-        return "BufferLinesEvent{" +
-                "buffer=" + buffer +
-                ", changedTick=" + changedTick +
-                ", firstLine=" + firstLine +
-                ", lastLine=" + lastLine +
-                ", lineData=" + lineData +
-                ", more=" + more +
-                '}';
+        return "BufferLinesEvent{"
+                + "buffer=" + buffer
+                + ", changedTick=" + changedTick
+                + ", firstLine=" + firstLine
+                + ", lastLine=" + lastLine
+                + ", lineData=" + lineData
+                + ", more=" + more + '}';
     }
 }

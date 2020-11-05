@@ -35,17 +35,17 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public final class UiEventInfo {
 
-    private String name;
-    private List<ParamInfo> parameters;
-    private int since;
+    private final String name;
+    private final List<ParamInfo> parameters;
+    private final int since;
 
     public UiEventInfo(
             @JsonProperty("name")
-            String name,
+                    String name,
             @JsonProperty("parameters")
-            List<ParamInfo> parameters,
+                    List<ParamInfo> parameters,
             @JsonProperty("since")
-            int since) {
+                    int since) {
         this.name = name;
         this.parameters = parameters;
         this.since = since;
@@ -65,10 +65,9 @@ public final class UiEventInfo {
 
     @Override
     public String toString() {
-        return "NeovimUiEvent{" +
-                "name='" + name + '\'' +
-                ", parameters=" + parameters +
-                ", since=" + since +
-                '}';
+        return "NeovimUiEvent{"
+                + "name='" + name + '\''
+                + ", parameters=" + parameters
+                + ", since=" + since + '}';
     }
 }

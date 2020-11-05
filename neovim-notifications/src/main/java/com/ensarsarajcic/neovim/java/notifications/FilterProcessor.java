@@ -28,12 +28,17 @@ import java.util.concurrent.Flow;
 import java.util.concurrent.SubmissionPublisher;
 import java.util.function.Function;
 
-public final class FilterProcessor<T> extends SubmissionPublisher<T> implements Flow.Processor<T, T> {
+/**
+ * Simple processor providing filter functionality. Items are filtered using function passed in constructor
+ *
+ * @param <T> type of items in the stream
+ */
+final class FilterProcessor<T> extends SubmissionPublisher<T> implements Flow.Processor<T, T> {
 
-    private Function<T, Boolean> filterFunction;
+    private final Function<T, Boolean> filterFunction;
     private Flow.Subscription subscription;
 
-    public FilterProcessor(Function<T, Boolean> filterFunction) {
+    FilterProcessor(Function<T, Boolean> filterFunction) {
         this.filterFunction = filterFunction;
     }
 

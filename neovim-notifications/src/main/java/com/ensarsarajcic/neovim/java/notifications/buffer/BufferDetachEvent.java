@@ -47,7 +47,7 @@ public final class BufferDetachEvent implements BufferEvent {
         }
     };
 
-    private Buffer buffer;
+    private final Buffer buffer;
 
     public BufferDetachEvent(Buffer buffer) {
         this.buffer = buffer;
@@ -64,8 +64,6 @@ public final class BufferDetachEvent implements BufferEvent {
 
     @Override
     public String toString() {
-        return "BufferDetachEvent{" +
-                "buffer=" + buffer +
-                '}';
+        return "BufferDetachEvent{" + "buffer=" + buffer + '}';
     }
 }

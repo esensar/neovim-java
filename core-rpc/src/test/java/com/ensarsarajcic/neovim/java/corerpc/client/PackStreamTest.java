@@ -24,7 +24,10 @@
 
 package com.ensarsarajcic.neovim.java.corerpc.client;
 
-import com.ensarsarajcic.neovim.java.corerpc.message.*;
+import com.ensarsarajcic.neovim.java.corerpc.message.Message;
+import com.ensarsarajcic.neovim.java.corerpc.message.MessageIdGenerator;
+import com.ensarsarajcic.neovim.java.corerpc.message.NotificationMessage;
+import com.ensarsarajcic.neovim.java.corerpc.message.RequestMessage;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -38,19 +41,22 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
 public class PackStreamTest {
 
     @Mock
-    RPCListener rpcListener;
+    RpcListener rpcListener;
 
     @Mock
-    RPCSender rpcSender;
+    RpcSender rpcSender;
 
     @Mock
     MessageIdGenerator messageIdGenerator;
@@ -64,15 +70,15 @@ public class PackStreamTest {
     @Mock
     OutputStream outputStream;
 
-    private RPCConnection connection;
+    private RpcConnection connection;
 
-    private ArgumentCaptor<RPCListener.RequestCallback> packStreamRequestCallback;
-    private ArgumentCaptor<RPCListener.NotificationCallback> packStreamNotificationCallback;
+    private ArgumentCaptor<RpcListener.RequestCallback> packStreamRequestCallback;
+    private ArgumentCaptor<RpcListener.NotificationCallback> packStreamNotificationCallback;
 
     @Before
     public void setUp() throws Exception {
         prepareListeners();
-        connection = new RPCConnection() {
+        connection = new RpcConnection() {
             @Override
             public InputStream getIncomingStream() {
                 return inputStream;
@@ -117,11 +123,11 @@ public class PackStreamTest {
         // Given a proper message id generator
         given(messageIdGenerator.nextId()).willReturn(25);
         // When send is called
-        RequestMessage.Builder message = new RequestMessage.Builder("test");
+        var message = new RequestMessage.Builder("test");
         packStream.send(message);
 
         // Rpc sender should be used
-        ArgumentCaptor<RequestMessage> argumentCaptor = ArgumentCaptor.forClass(RequestMessage.class);
+        var argumentCaptor = ArgumentCaptor.forClass(RequestMessage.class);
         verify(rpcSender).send(argumentCaptor.capture());
         assertEquals("test", argumentCaptor.getValue().getMethod());
         // And id for the message should be generated
@@ -135,13 +141,13 @@ public class PackStreamTest {
         // Given a proper message id generator
         given(messageIdGenerator.nextId()).willReturn(25);
         // And callback
-        RPCListener.ResponseCallback responseCallback = Mockito.mock(RPCListener.ResponseCallback.class);
+        var responseCallback = Mockito.mock(RpcListener.ResponseCallback.class);
         // When send is called
-        RequestMessage.Builder message = new RequestMessage.Builder("test");
+        var message = new RequestMessage.Builder("test");
         packStream.send(message, responseCallback);
 
         // Rpc sender should be used
-        ArgumentCaptor<RequestMessage> argumentCaptor = ArgumentCaptor.forClass(RequestMessage.class);
+        var argumentCaptor = ArgumentCaptor.forClass(RequestMessage.class);
         verify(rpcSender).send(argumentCaptor.capture());
         assertEquals("test", argumentCaptor.getValue().getMethod());
         // And id for the message should be generated
@@ -159,20 +165,20 @@ public class PackStreamTest {
         packStream.attach(connection);
 
         // When request callback is added
-        RPCListener.RequestCallback firstCallback = Mockito.mock(RPCListener.RequestCallback.class);
+        var firstCallback = Mockito.mock(RpcListener.RequestCallback.class);
         packStream.addRequestCallback(firstCallback);
 
         // It should receive requests
-        RequestMessage msg1 = new RequestMessage.Builder("test").build();
+        var msg1 = new RequestMessage.Builder("test").build();
         packStreamRequestCallback.getValue().requestReceived(msg1);
         verify(firstCallback).requestReceived(msg1);
 
         // Multiple callbacks should be supported too
-        RPCListener.RequestCallback secondCallback = Mockito.mock(RPCListener.RequestCallback.class);
+        var secondCallback = Mockito.mock(RpcListener.RequestCallback.class);
         packStream.addRequestCallback(secondCallback);
 
         // Both should receive messages
-        RequestMessage msg2 = new RequestMessage.Builder("test2").build();
+        var msg2 = new RequestMessage.Builder("test2").build();
         packStreamRequestCallback.getValue().requestReceived(msg2);
         verify(firstCallback).requestReceived(msg2);
         verify(secondCallback).requestReceived(msg2);
@@ -181,7 +187,7 @@ public class PackStreamTest {
         packStream.removeRequestCallback(firstCallback);
 
         // Only second should receive message now
-        RequestMessage msg3 = new RequestMessage.Builder("test3").build();
+        var msg3 = new RequestMessage.Builder("test3").build();
         packStreamRequestCallback.getValue().requestReceived(msg3);
         verify(firstCallback, never()).requestReceived(msg3);
         verify(secondCallback).requestReceived(msg3);
@@ -190,7 +196,7 @@ public class PackStreamTest {
         packStream.removeRequestCallback(secondCallback);
 
         // None should receive message now
-        RequestMessage msg4 = new RequestMessage.Builder("test4").build();
+        var msg4 = new RequestMessage.Builder("test4").build();
         packStreamRequestCallback.getValue().requestReceived(msg4);
         verify(firstCallback, never()).requestReceived(msg4);
         verify(secondCallback, never()).requestReceived(msg4);
@@ -202,20 +208,20 @@ public class PackStreamTest {
         packStream.attach(connection);
 
         // When notification callback is added
-        RPCListener.NotificationCallback firstCallback = Mockito.mock(RPCListener.NotificationCallback.class);
+        var firstCallback = Mockito.mock(RpcListener.NotificationCallback.class);
         packStream.addNotificationCallback(firstCallback);
 
         // It should receive requests
-        NotificationMessage msg1 = new NotificationMessage.Builder("test").build();
+        var msg1 = new NotificationMessage.Builder("test").build();
         packStreamNotificationCallback.getValue().notificationReceived(msg1);
         verify(firstCallback).notificationReceived(msg1);
 
         // Multiple callbacks should be supported too
-        RPCListener.NotificationCallback secondCallback = Mockito.mock(RPCListener.NotificationCallback.class);
+        var secondCallback = Mockito.mock(RpcListener.NotificationCallback.class);
         packStream.addNotificationCallback(secondCallback);
 
         // Both should receive messages
-        NotificationMessage msg2 = new NotificationMessage.Builder("test2").build();
+        var msg2 = new NotificationMessage.Builder("test2").build();
         packStreamNotificationCallback.getValue().notificationReceived(msg2);
         verify(firstCallback).notificationReceived(msg2);
         verify(secondCallback).notificationReceived(msg2);
@@ -224,7 +230,7 @@ public class PackStreamTest {
         packStream.removeNotificationCallback(firstCallback);
 
         // Only second should receive message now
-        NotificationMessage msg3 = new NotificationMessage.Builder("test3").build();
+        var msg3 = new NotificationMessage.Builder("test3").build();
         packStreamNotificationCallback.getValue().notificationReceived(msg3);
         verify(firstCallback, never()).notificationReceived(msg3);
         verify(secondCallback).notificationReceived(msg3);
@@ -233,7 +239,7 @@ public class PackStreamTest {
         packStream.removeNotificationCallback(secondCallback);
 
         // None should receive message now
-        NotificationMessage msg4 = new NotificationMessage.Builder("test4").build();
+        var msg4 = new NotificationMessage.Builder("test4").build();
         packStreamNotificationCallback.getValue().notificationReceived(msg4);
         verify(firstCallback, never()).notificationReceived(msg4);
         verify(secondCallback, never()).notificationReceived(msg4);
@@ -272,10 +278,10 @@ public class PackStreamTest {
     }
 
     private void prepareListeners() {
-        packStreamNotificationCallback = ArgumentCaptor.forClass(RPCListener.NotificationCallback.class);
+        packStreamNotificationCallback = ArgumentCaptor.forClass(RpcListener.NotificationCallback.class);
         doNothing().when(rpcListener).listenForNotifications(packStreamNotificationCallback.capture());
 
-        packStreamRequestCallback = ArgumentCaptor.forClass(RPCListener.RequestCallback.class);
+        packStreamRequestCallback = ArgumentCaptor.forClass(RpcListener.RequestCallback.class);
         doNothing().when(rpcListener).listenForRequests(packStreamRequestCallback.capture());
     }
 }

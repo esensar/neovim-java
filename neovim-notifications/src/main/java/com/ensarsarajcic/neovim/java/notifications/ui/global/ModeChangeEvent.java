@@ -27,15 +27,12 @@ package com.ensarsarajcic.neovim.java.notifications.ui.global;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.List;
-import java.util.function.Function;
-
 @JsonFormat(shape = JsonFormat.Shape.ARRAY)
-public final class ModeChangeEvent implements UIGlobalEvent {
+public final class ModeChangeEvent implements UiGlobalEvent {
     public static final String NAME = "mode_change";
 
-    private String mode;
-    private int modeId;
+    private final String mode;
+    private final int modeId;
 
     public ModeChangeEvent(
             @JsonProperty(value = "mode", index = 0) String mode,
@@ -59,9 +56,8 @@ public final class ModeChangeEvent implements UIGlobalEvent {
 
     @Override
     public String toString() {
-        return "ModeChangeEvent{" +
-                "mode='" + mode + '\'' +
-                ", modeId=" + modeId +
-                '}';
+        return "ModeChangeEvent{"
+                + "mode='" + mode + '\''
+                + ", modeId=" + modeId + '}';
     }
 }

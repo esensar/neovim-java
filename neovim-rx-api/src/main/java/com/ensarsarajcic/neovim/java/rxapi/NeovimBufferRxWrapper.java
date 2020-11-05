@@ -27,6 +27,7 @@ package com.ensarsarajcic.neovim.java.rxapi;
 import com.ensarsarajcic.neovim.java.api.buffer.NeovimBufferApi;
 import com.ensarsarajcic.neovim.java.api.types.api.CommandInfo;
 import com.ensarsarajcic.neovim.java.api.types.api.GetCommandsOptions;
+import com.ensarsarajcic.neovim.java.api.types.api.HighlightedText;
 import com.ensarsarajcic.neovim.java.api.types.api.VimCoords;
 import com.ensarsarajcic.neovim.java.api.types.api.VimKeyMap;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.Buffer;
@@ -39,7 +40,7 @@ import java.util.Objects;
 
 public final class NeovimBufferRxWrapper implements NeovimBufferRxApi {
 
-    private NeovimBufferApi neovimBufferApi;
+    private final NeovimBufferApi neovimBufferApi;
 
     public NeovimBufferRxWrapper(NeovimBufferApi neovimBufferApi) {
         Objects.requireNonNull(neovimBufferApi, "neovimBufferApi is required to wrap it in RX interface");
@@ -64,6 +65,11 @@ public final class NeovimBufferRxWrapper implements NeovimBufferRxApi {
     @Override
     public Completable setLines(int start, int end, boolean strictIndexing, List<String> replacement) {
         return Completable.fromFuture(neovimBufferApi.setLines(start, end, strictIndexing, replacement));
+    }
+
+    @Override
+    public Single<Integer> getOffset(int index) {
+        return Single.fromFuture(neovimBufferApi.getOffset(index));
     }
 
     @Override
@@ -107,6 +113,11 @@ public final class NeovimBufferRxWrapper implements NeovimBufferRxApi {
     }
 
     @Override
+    public Single<Boolean> isLoaded() {
+        return Single.fromFuture(neovimBufferApi.isLoaded());
+    }
+
+    @Override
     public Single<Boolean> isValid() {
         return Single.fromFuture(neovimBufferApi.isValid());
     }
@@ -127,6 +138,16 @@ public final class NeovimBufferRxWrapper implements NeovimBufferRxApi {
     }
 
     @Override
+    public Completable setKeymap(String mode, String lhs, String rhs, Map<String, Boolean> options) {
+        return Completable.fromFuture(neovimBufferApi.setKeymap(mode, lhs, rhs, options));
+    }
+
+    @Override
+    public Completable deleteKeymap(String mode, String lhs) {
+        return Completable.fromFuture(neovimBufferApi.deleteKeymap(mode, lhs));
+    }
+
+    @Override
     public Single<Integer> addHighlight(int srcId, String hlGroup, int line, int colStart, int colEnd) {
         return Single.fromFuture(neovimBufferApi.addHighlight(srcId, hlGroup, line, colStart, colEnd));
     }
@@ -134,6 +155,16 @@ public final class NeovimBufferRxWrapper implements NeovimBufferRxApi {
     @Override
     public Completable clearHighlight(int srcId, int lineStart, int lineEnd) {
         return Completable.fromFuture(neovimBufferApi.clearHighlight(srcId, lineStart, lineEnd));
+    }
+
+    @Override
+    public Completable clearNamespace(int namespaceId, int lineStart, int lineEnd) {
+        return Completable.fromFuture(neovimBufferApi.clearNamespace(namespaceId, lineStart, lineEnd));
+    }
+
+    @Override
+    public Single<Integer> setVirtualText(int namespaceId, int line, List<HighlightedText> chunks, Map optionalParams) {
+        return Single.fromFuture(neovimBufferApi.setVirtualText(namespaceId, line, chunks, optionalParams));
     }
 
     @Override

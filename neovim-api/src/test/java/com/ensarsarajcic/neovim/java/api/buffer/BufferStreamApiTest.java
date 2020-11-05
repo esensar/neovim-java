@@ -27,6 +27,7 @@ package com.ensarsarajcic.neovim.java.api.buffer;
 import com.ensarsarajcic.neovim.java.api.BaseStreamApiTest;
 import com.ensarsarajcic.neovim.java.api.types.api.CommandInfo;
 import com.ensarsarajcic.neovim.java.api.types.api.GetCommandsOptions;
+import com.ensarsarajcic.neovim.java.api.types.api.HighlightedText;
 import com.ensarsarajcic.neovim.java.api.types.api.VimKeyMap;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.Buffer;
 import com.ensarsarajcic.neovim.java.corerpc.message.ResponseMessage;
@@ -41,7 +42,10 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(MockitoJUnitRunner.class)
 public class BufferStreamApiTest extends BaseStreamApiTest {
@@ -53,14 +57,14 @@ public class BufferStreamApiTest extends BaseStreamApiTest {
     public void setUp() throws Exception {
         buffer = new Buffer(1);
         bufferStreamApi = new BufferStreamApi(
-                reactiveRPCStreamer,
+                reactiveRpcStreamer,
                 buffer
         );
     }
 
     @Test(expected = NullPointerException.class)
     public void cantConstructWithNullModel() {
-        new BufferStreamApi(reactiveRPCStreamer, null);
+        new BufferStreamApi(reactiveRpcStreamer, null);
     }
 
     @Test(expected = NullPointerException.class)
@@ -93,7 +97,7 @@ public class BufferStreamApiTest extends BaseStreamApiTest {
     @Test
     public void getLinesTest() throws ExecutionException, InterruptedException {
         // Happy case
-        List<String> lines = List.of(
+        var lines = List.of(
                 "line1",
                 "line2",
                 "line3"
@@ -115,7 +119,7 @@ public class BufferStreamApiTest extends BaseStreamApiTest {
     @Test
     public void setLinesTest() throws ExecutionException, InterruptedException {
         // Happy case
-        List<String> lines = List.of(
+        var lines = List.of(
                 "line1",
                 "line2",
                 "line3"
@@ -127,7 +131,7 @@ public class BufferStreamApiTest extends BaseStreamApiTest {
         );
 
         // Error case
-        List<String> badLines = List.of("BADLINE");
+        var badLines = List.of("BADLINE");
         assertErrorBehavior(
                 () -> bufferStreamApi.setLines(7, 4, false, badLines),
                 request -> assertMethodAndArguments(request, NeovimBufferApi.SET_LINES, buffer, 7, 4, false, badLines)
@@ -135,9 +139,26 @@ public class BufferStreamApiTest extends BaseStreamApiTest {
     }
 
     @Test
+    public void getOffsetTest() throws ExecutionException, InterruptedException {
+        // Happy case
+        assertNormalBehavior(
+                () -> CompletableFuture.completedFuture(new ResponseMessage(1, null, 10)),
+                () -> bufferStreamApi.getOffset(1),
+                request -> assertMethodAndArguments(request, NeovimBufferApi.GET_OFFSET, buffer, 1),
+                result -> assertEquals(result, Integer.valueOf(10))
+        );
+
+        // Error case
+        assertErrorBehavior(
+                () -> bufferStreamApi.getOffset(2),
+                request -> assertMethodAndArguments(request, NeovimBufferApi.GET_OFFSET, buffer, 2)
+        );
+    }
+
+    @Test
     public void getVarTest() throws ExecutionException, InterruptedException {
         // Happy case
-        Object varVal = "value";
+        var varVal = "value";
         assertNormalBehavior(
                 () -> CompletableFuture.completedFuture(new ResponseMessage(1, null, varVal)),
                 () -> bufferStreamApi.getVar("name"),
@@ -155,7 +176,7 @@ public class BufferStreamApiTest extends BaseStreamApiTest {
     @Test
     public void setVarTest() throws ExecutionException, InterruptedException {
         // Happy case
-        Object varVal = "value";
+        var varVal = "value";
         assertNormalBehavior(
                 () -> CompletableFuture.completedFuture(new ResponseMessage(1, null, null)),
                 () -> bufferStreamApi.setVar("name", varVal),
@@ -163,7 +184,7 @@ public class BufferStreamApiTest extends BaseStreamApiTest {
         );
 
         // Error case
-        Object badVal = new Object();
+        var badVal = new Object();
         assertErrorBehavior(
                 () -> bufferStreamApi.setVar("wrong name", badVal),
                 request -> assertMethodAndArguments(request, NeovimBufferApi.SET_VAR, buffer, "wrong name", badVal)
@@ -189,7 +210,7 @@ public class BufferStreamApiTest extends BaseStreamApiTest {
     @Test
     public void getOptionTest() throws ExecutionException, InterruptedException {
         // Happy case
-        Object optVal = "value";
+        var optVal = "value";
         assertNormalBehavior(
                 () -> CompletableFuture.completedFuture(new ResponseMessage(1, null, optVal)),
                 () -> bufferStreamApi.getOption("name"),
@@ -207,7 +228,7 @@ public class BufferStreamApiTest extends BaseStreamApiTest {
     @Test
     public void setOptionTest() throws ExecutionException, InterruptedException {
         // Happy case
-        Object optVal = "value";
+        var optVal = "value";
         assertNormalBehavior(
                 () -> CompletableFuture.completedFuture(new ResponseMessage(1, null, null)),
                 () -> bufferStreamApi.setOption("name", optVal),
@@ -215,7 +236,7 @@ public class BufferStreamApiTest extends BaseStreamApiTest {
         );
 
         // Error case
-        Object badVal = "badValue";
+        var badVal = "badValue";
         assertErrorBehavior(
                 () -> bufferStreamApi.setOption("wrong name", badVal),
                 request -> assertMethodAndArguments(request, NeovimBufferApi.SET_OPTION, buffer, "wrong name", badVal)
@@ -273,6 +294,23 @@ public class BufferStreamApiTest extends BaseStreamApiTest {
     }
 
     @Test
+    public void isLoadedTest() throws ExecutionException, InterruptedException {
+        // Happy case
+        assertNormalBehavior(
+                () -> CompletableFuture.completedFuture(new ResponseMessage(1, null, false)),
+                () -> bufferStreamApi.isLoaded(),
+                request -> assertMethodAndArguments(request, NeovimBufferApi.IS_LOADED, buffer),
+                Assert::assertFalse
+        );
+
+        // Error case
+        assertErrorBehavior(
+                () -> bufferStreamApi.isLoaded(),
+                request -> assertMethodAndArguments(request, NeovimBufferApi.IS_LOADED, buffer)
+        );
+    }
+
+    @Test
     public void isValidTest() throws ExecutionException, InterruptedException {
         // Happy case
         assertNormalBehavior(
@@ -292,7 +330,7 @@ public class BufferStreamApiTest extends BaseStreamApiTest {
     @Test
     public void getMarkTest() throws ExecutionException, InterruptedException {
         // Happy case
-        List mark = List.of(
+        var mark = List.of(
                 100,
                 500
         );
@@ -319,7 +357,7 @@ public class BufferStreamApiTest extends BaseStreamApiTest {
     @Test
     public void getChangedTickTest() throws ExecutionException, InterruptedException {
         // Happy case
-        Object changedTick = "changed tick";
+        var changedTick = "changed tick";
         assertNormalBehavior(
                 () -> CompletableFuture.completedFuture(new ResponseMessage(1, null, changedTick)),
                 () -> bufferStreamApi.getChangedTick(),
@@ -337,8 +375,8 @@ public class BufferStreamApiTest extends BaseStreamApiTest {
     @Test
     public void getKeymapTest() throws InterruptedException, ExecutionException {
         // Happy case
-        List<Map> vimKeyMaps = List.of(
-                Map.of(
+        var vimKeyMaps = List.of(
+                Map.<String, Object>of(
                         "silent", 0,
                         "noremap", 0,
                         "lhs", "keys",
@@ -409,9 +447,43 @@ public class BufferStreamApiTest extends BaseStreamApiTest {
     }
 
     @Test
+    public void clearNamespaceTest() throws ExecutionException, InterruptedException {
+        // Happy case
+        assertNormalBehavior(
+                () -> CompletableFuture.completedFuture(new ResponseMessage(1, null, null)),
+                () -> bufferStreamApi.clearNamespace(1, 5, 7),
+                request -> assertMethodAndArguments(request, NeovimBufferApi.CLEAR_NAMESPACE, buffer, 1, 5, 7)
+        );
+
+        // Error case
+        assertErrorBehavior(
+                () -> bufferStreamApi.clearNamespace(7, 3, 1),
+                request -> assertMethodAndArguments(request, NeovimBufferApi.CLEAR_NAMESPACE, buffer, 7, 3, 1)
+        );
+    }
+
+    @Test
+    public void setVirtualTextTest() throws ExecutionException, InterruptedException {
+        // Happy case
+        List<HighlightedText> highlightedTextList = List.of(new HighlightedText("noHl"), new HighlightedText("hightlighted", "hl"));
+        assertNormalBehavior(
+                () -> CompletableFuture.completedFuture(new ResponseMessage(1, null, 1)),
+                () -> bufferStreamApi.setVirtualText(1, 5, highlightedTextList, Map.of()),
+                request -> assertMethodAndArguments(request, NeovimBufferApi.SET_VIRTUAL_TEXT, buffer, 1, 5, highlightedTextList, Map.of()),
+                response -> assertEquals(response, Integer.valueOf(1))
+        );
+
+        // Error case
+        assertErrorBehavior(
+                () -> bufferStreamApi.setVirtualText(7, 3, highlightedTextList, Map.of()),
+                request -> assertMethodAndArguments(request, NeovimBufferApi.SET_VIRTUAL_TEXT, buffer, 7, 3, highlightedTextList, Map.of())
+        );
+    }
+
+    @Test
     public void attachTest() throws ExecutionException, InterruptedException {
         // Happy case
-        Map opts = Map.of(
+        var opts = Map.of(
                 "opt1", "val"
         );
         assertNormalBehavior(
@@ -422,7 +494,7 @@ public class BufferStreamApiTest extends BaseStreamApiTest {
         );
 
         // Error case
-        Map badOpts = Map.of(
+        var badOpts = Map.of(
                 "opt1", "badval"
         );
         assertErrorBehavior(
@@ -451,8 +523,8 @@ public class BufferStreamApiTest extends BaseStreamApiTest {
     @Test
     public void getCommandsTest() throws ExecutionException, InterruptedException {
         // Happy case
-        Map commands = Map.of(
-                "command1", Map.of(
+        var commands = Map.of(
+                "command1", Map.<String, Object>of(
                         "name", "command1",
                         "definition", ":noh",
                         "script_id", 55,
@@ -461,7 +533,7 @@ public class BufferStreamApiTest extends BaseStreamApiTest {
                         "register", false,
                         "nargs", "+"
                 ),
-                "command2", Map.of(
+                "command2", Map.<String, Object>of(
                         "name", "command2",
                         "definition", ":ls",
                         "script_id", 55,
@@ -471,7 +543,7 @@ public class BufferStreamApiTest extends BaseStreamApiTest {
                         "nargs", "?"
                 )
         );
-        GetCommandsOptions commandsOptions = new GetCommandsOptions(false);
+        var commandsOptions = new GetCommandsOptions(false);
         assertNormalBehavior(
                 () -> CompletableFuture.completedFuture(new ResponseMessage(1, null, commands)),
                 () -> bufferStreamApi.getCommands(commandsOptions),
@@ -504,7 +576,7 @@ public class BufferStreamApiTest extends BaseStreamApiTest {
         );
 
         // Error case
-        GetCommandsOptions badCommandsOptions = new GetCommandsOptions(true);
+        var badCommandsOptions = new GetCommandsOptions(true);
         assertErrorBehavior(
                 () -> bufferStreamApi.getCommands(badCommandsOptions),
                 request -> assertMethodAndArguments(request, NeovimBufferApi.GET_COMMANDS, buffer, badCommandsOptions)

@@ -24,6 +24,15 @@
 
 package com.ensarsarajcic.neovim.java.notifications;
 
+/**
+ * Interface describing a neovim notification type. Only common thing for all notifications is that they can have a name
+ * And any number of arguments
+ */
 public interface NeovimNotification {
+    /**
+     * Provides the name of this notification type. This will usually have the same value between instances.
+     *
+     * @return name of this notification type
+     */
     String getNotificationName();
 }

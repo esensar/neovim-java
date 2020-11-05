@@ -34,21 +34,21 @@ import org.mockito.junit.MockitoJUnitRunner;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNull;
 
 @RunWith(MockitoJUnitRunner.class)
 public class AtomicCallBuilderTest {
 
     @Test
     public void allMethodsReturnNullSinceUnimplemented() {
-        AtomicCallBuilder atomicCallBuilder = new AtomicCallBuilder();
-        assertNull(atomicCallBuilder.attachUI(1, 1, UiOptions.TERMINAL));
+        var atomicCallBuilder = new AtomicCallBuilder();
+        assertNull(atomicCallBuilder.attachUi(1, 1, UiOptions.TERMINAL));
         assertNull(atomicCallBuilder.callDictFunction(Map.of(), "", List.of()));
         assertNull(atomicCallBuilder.callFunction("", List.of()));
         assertNull(atomicCallBuilder.commandOutput(""));
         assertNull(atomicCallBuilder.deleteCurrentLine());
         assertNull(atomicCallBuilder.deleteVariable(""));
-        assertNull(atomicCallBuilder.detachUI());
+        assertNull(atomicCallBuilder.detachUi());
         assertNull(atomicCallBuilder.eval(""));
         assertNull(atomicCallBuilder.executeCommand(""));
         assertNull(atomicCallBuilder.executeLua("", List.of()));
@@ -88,7 +88,7 @@ public class AtomicCallBuilderTest {
         assertNull(atomicCallBuilder.setCurrentWindow(null));
         assertNull(atomicCallBuilder.setCurrentTabpage(null));
         assertNull(atomicCallBuilder.replaceTermcodes(null, false, false, false));
-        assertNull(atomicCallBuilder.resizeUI(1, 1));
+        assertNull(atomicCallBuilder.resizeUi(1, 1));
         assertNull(atomicCallBuilder.stringWidth(""));
         assertNull(atomicCallBuilder.subscribeToEvent(""));
         assertNull(atomicCallBuilder.unsubscribeFromEvent(""));

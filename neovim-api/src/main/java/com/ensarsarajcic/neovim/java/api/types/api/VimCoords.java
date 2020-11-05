@@ -42,9 +42,9 @@ public final class VimCoords {
 
     public VimCoords(
             @JsonProperty("row")
-            int row,
+                    int row,
             @JsonProperty("col")
-            int col) {
+                    int col) {
         this.row = row;
         this.col = col;
     }
@@ -59,9 +59,8 @@ public final class VimCoords {
 
     @Override
     public String toString() {
-        return "VimCoords{" +
-                "row=" + row +
-                ", col=" + col +
-                '}';
+        return "VimCoords{"
+                + "row=" + row
+                + ", col=" + col + '}';
     }
 }

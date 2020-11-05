@@ -24,12 +24,18 @@
 
 package com.ensarsarajcic.neovim.java.api;
 
-import java.lang.annotation.*;
+
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Inherited;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * Annotation marking that a class is a NeovimApiClient
  * Marking with this annotation means that the class should implement some of the neovim api functions
- *
+ * <p>
  * It is useful for documentation since it contains information about supported version
  * It could also be used for generating clients and for compile time checking
  */

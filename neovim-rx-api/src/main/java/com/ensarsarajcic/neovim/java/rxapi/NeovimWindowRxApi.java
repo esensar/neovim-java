@@ -26,10 +26,13 @@ package com.ensarsarajcic.neovim.java.rxapi;
 
 import com.ensarsarajcic.neovim.java.api.NeovimApiFunction;
 import com.ensarsarajcic.neovim.java.api.types.api.VimCoords;
+import com.ensarsarajcic.neovim.java.api.types.msgpack.Buffer;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.Window;
 import com.ensarsarajcic.neovim.java.api.window.NeovimWindowApi;
 import io.reactivex.Completable;
 import io.reactivex.Single;
+
+import java.util.Map;
 
 public interface NeovimWindowRxApi {
 
@@ -37,6 +40,9 @@ public interface NeovimWindowRxApi {
 
     @NeovimApiFunction(name = NeovimWindowApi.GET_BUFFER, since = 1)
     Single<NeovimBufferRxApi> getBuffer();
+
+    @NeovimApiFunction(name = NeovimWindowApi.SET_BUFFER, since = 5)
+    Completable setBuffer(Buffer buffer);
 
     @NeovimApiFunction(name = NeovimWindowApi.GET_CURSOR, since = 1)
     Single<VimCoords> getCursor();
@@ -71,6 +77,12 @@ public interface NeovimWindowRxApi {
     @NeovimApiFunction(name = NeovimWindowApi.SET_OPTION, since = 1)
     Completable setOption(String name, Object value);
 
+    @NeovimApiFunction(name = NeovimWindowApi.GET_CONFIG, since = 6)
+    Single<Map<String, Object>> getConfig();
+
+    @NeovimApiFunction(name = NeovimWindowApi.SET_CONFIG, since = 6)
+    Completable setConfig(Map<String, Object> config);
+
     @NeovimApiFunction(name = NeovimWindowApi.GET_TABPAGE, since = 1)
     Single<NeovimTabpageRxApi> getTabpage();
 
@@ -79,4 +91,7 @@ public interface NeovimWindowRxApi {
 
     @NeovimApiFunction(name = NeovimWindowApi.IS_VALID, since = 1)
     Single<Boolean> isValid();
+
+    @NeovimApiFunction(name = NeovimWindowApi.CLOSE, since = 6)
+    Completable close(boolean force);
 }

@@ -28,10 +28,10 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonFormat(shape = JsonFormat.Shape.ARRAY)
-public final class PutEvent implements UIGridEvent {
+public final class PutEvent implements UiGridEvent {
     public static final String NAME = "put";
 
-    private String text;
+    private final String text;
 
     public PutEvent(
             @JsonProperty(value = "text", index = 0) String text) {
@@ -49,8 +49,6 @@ public final class PutEvent implements UIGridEvent {
 
     @Override
     public String toString() {
-        return "PutEvent{" +
-                "text='" + text + '\'' +
-                '}';
+        return "PutEvent{" + "text='" + text + '\'' + '}';
     }
 }

@@ -26,29 +26,53 @@ package com.ensarsarajcic.neovim.java.notifications;
 
 import com.ensarsarajcic.neovim.java.api.util.ObjectMappers;
 import com.ensarsarajcic.neovim.java.corerpc.message.NotificationMessage;
-import com.ensarsarajcic.neovim.java.corerpc.reactive.ReactiveRPCStreamer;
+import com.ensarsarajcic.neovim.java.corerpc.reactive.ReactiveRpcStreamer;
 import com.ensarsarajcic.neovim.java.notifications.buffer.BufferEvent;
 import com.ensarsarajcic.neovim.java.notifications.ui.NeovimRedrawEvent;
-import com.ensarsarajcic.neovim.java.notifications.ui.UIEvent;
+import com.ensarsarajcic.neovim.java.notifications.ui.UiEvent;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.Flow;
-import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
+/**
+ * Implementation of {@link NeovimNotificationHandler} based on {@link ReactiveRpcStreamer}
+ * <p>
+ * Utilizes {@link NotificationCreatorCollector} for generating actual objects from raw data and {@link ReactiveRpcStreamer}
+ * for reading incoming notifications. Output should provide properly generated notifications of the right type
+ * which can be casted to access notification specific data.
+ * <p>
+ * Example:
+ * <pre>
+ *     {@code
+ *     NeovimNotificationHandler notificationHandler = new NeovimNotificationHandler(streamer);
+ *
+ *     notification.uiEvents().subscribe(uiEventSubscriber);
+ *     notification.bufferEvents().subscribe(bufferEventSubscriber);
+ *     }
+ * </pre>
+ */
 public final class NeovimStreamNotificationHandler implements NeovimNotificationHandler {
+    private static final Logger log = LoggerFactory.getLogger(NeovimStreamNotificationHandler.class);
 
-    private ReactiveRPCStreamer reactiveRPCStreamer;
-    private ObjectMapper objectMapper;
+    private final ReactiveRpcStreamer reactiveRpcStreamer;
+    private final ObjectMapper objectMapper;
 
-    public NeovimStreamNotificationHandler(ReactiveRPCStreamer reactiveRPCStreamer) {
-        Objects.requireNonNull(reactiveRPCStreamer, "reactiveRPCStreamer is required to receive notifications");
-        this.reactiveRPCStreamer = reactiveRPCStreamer;
+    /**
+     * Creates a new {@link NeovimStreamNotificationHandler} reading notifications from {@link ReactiveRpcStreamer}
+     * passed in the constructor. It may not be null.
+     *
+     * @param reactiveRpcStreamer streamer to be used to read notifications
+     * @throws NullPointerException if reactiveRpcStreamer is null
+     */
+    public NeovimStreamNotificationHandler(ReactiveRpcStreamer reactiveRpcStreamer) {
+        Objects.requireNonNull(reactiveRpcStreamer, "reactiveRpcStreamer is required to receive notifications");
+        this.reactiveRpcStreamer = reactiveRpcStreamer;
         this.objectMapper = ObjectMappers.defaultNeovimMapper();
     }
 
@@ -67,7 +91,7 @@ public final class NeovimStreamNotificationHandler implements NeovimNotification
                                     .collect(Collectors.toList())
                     );
                 });
-        reactiveRPCStreamer.notificationsFlow().subscribe(uiEventFilterProcessor);
+        reactiveRpcStreamer.notificationsFlow().subscribe(uiEventFilterProcessor);
         uiEventFilterProcessor.subscribe(uiEventMappingProcessor);
         return uiEventMappingProcessor;
     }
@@ -83,13 +107,14 @@ public final class NeovimStreamNotificationHandler implements NeovimNotification
                                         .get(notificationMessage.getName())
                                         .apply(notificationMessage.getArguments())
                 );
-        reactiveRPCStreamer.notificationsFlow().subscribe(bufferEventFilterProcessor);
+        reactiveRpcStreamer.notificationsFlow().subscribe(bufferEventFilterProcessor);
         bufferEventFilterProcessor.subscribe(bufferEventMappingProcessor);
         return bufferEventMappingProcessor;
     }
 
-    private static List<UIEvent> eventFromRawData(List data) {
+    private static List<UiEvent> eventFromRawData(List data) {
         if (data.isEmpty()) {
+            log.error("Cannot create UIEvent because data is empty!");
             throw new IllegalArgumentException("Empty data!");
         }
         String name = (String) data.get(0);
@@ -99,7 +124,7 @@ public final class NeovimStreamNotificationHandler implements NeovimNotification
                     try {
                         return NotificationCreatorCollector.getUIEventCreators().get(name).apply(o);
                     } catch (NullPointerException ex) {
-                        System.err.println("MISSING NAME: " + name);
+                        log.error("Missing creator for ui event {}" + name, ex);
                         throw ex;
                     }
                 })

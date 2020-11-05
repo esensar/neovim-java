@@ -50,15 +50,16 @@ public final class CommandInfo {
         }
 
         public static ArgumentNumberInfo fromString(String value) {
-            if (value.equals("*")) {
-                return new ArgumentNumberInfo(0, null);
-            } else if (value.equals("+")) {
-                return new ArgumentNumberInfo(1, null);
-            } else if (value.equals("?")) {
-                return new ArgumentNumberInfo(0, 1);
-            } else {
-                int count = Integer.parseInt(value);
-                return new ArgumentNumberInfo(count, count);
+            switch (value) {
+                case "*":
+                    return new ArgumentNumberInfo(0, null);
+                case "+":
+                    return new ArgumentNumberInfo(1, null);
+                case "?":
+                    return new ArgumentNumberInfo(0, 1);
+                default:
+                    var count = Integer.parseInt(value);
+                    return new ArgumentNumberInfo(count, count);
             }
         }
 
@@ -76,28 +77,27 @@ public final class CommandInfo {
 
         @Override
         public String toString() {
-            return "ArgumentNumberInfo{" +
-                    "min=" + min +
-                    ", max=" + max +
-                    '}';
+            return "ArgumentNumberInfo{"
+                    + "min=" + min
+                    + ", max=" + max + '}';
         }
     }
 
     public CommandInfo(
             @JsonProperty("name")
-            String name,
+                    String name,
             @JsonProperty("definition")
-            String definition,
+                    String definition,
             @JsonProperty("script_id")
-            int scriptId,
+                    int scriptId,
             @JsonProperty("bang")
-            boolean bang,
+                    boolean bang,
             @JsonProperty("bar")
-            boolean bar,
+                    boolean bar,
             @JsonProperty("register")
-            boolean register,
+                    boolean register,
             @JsonProperty("nargs")
-            String numberOfArgs) {
+                    String numberOfArgs) {
         this.name = name;
         this.definition = definition;
         this.scriptId = scriptId;
@@ -137,14 +137,13 @@ public final class CommandInfo {
 
     @Override
     public String toString() {
-        return "CommandInfo{" +
-                "name='" + name + '\'' +
-                ", definition='" + definition + '\'' +
-                ", scriptId=" + scriptId +
-                ", bang=" + bang +
-                ", bar=" + bar +
-                ", register=" + register +
-                ", numberOfArgs=" + numberOfArgs +
-                '}';
+        return "CommandInfo{"
+                + "name='" + name + '\''
+                + ", definition='" + definition + '\''
+                + ", scriptId=" + scriptId
+                + ", bang=" + bang
+                + ", bar=" + bar
+                + ", register=" + register
+                + ", numberOfArgs=" + numberOfArgs + '}';
     }
 }

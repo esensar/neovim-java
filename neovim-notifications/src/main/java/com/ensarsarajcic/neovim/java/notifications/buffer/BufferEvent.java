@@ -26,6 +26,7 @@ package com.ensarsarajcic.neovim.java.notifications.buffer;
 
 import com.ensarsarajcic.neovim.java.notifications.NeovimNotification;
 
+@SuppressWarnings("InterfaceIsType")
 public interface BufferEvent extends NeovimNotification {
     String PREFIX = "nvim_buf";
 }

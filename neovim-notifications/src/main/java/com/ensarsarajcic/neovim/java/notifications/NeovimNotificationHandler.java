@@ -29,6 +29,10 @@ import com.ensarsarajcic.neovim.java.notifications.ui.NeovimRedrawEvent;
 
 import java.util.concurrent.Flow;
 
+/**
+ * Represents a source of notifications coming from neovim. It separates notifications into multiple flows,
+ * and allows type safe access to these.
+ */
 public interface NeovimNotificationHandler {
 
     /**
@@ -36,6 +40,7 @@ public interface NeovimNotificationHandler {
      * {@link NeovimRedrawEvent} is a special type of notification that is received when
      * attached to Neovim
      * It will never complete
+     *
      * @return {@link Flow.Publisher} passing down ui events as they come
      */
     Flow.Publisher<NeovimRedrawEvent> uiEvents();
@@ -45,6 +50,7 @@ public interface NeovimNotificationHandler {
      * {@link BufferEvent} is a special type of notification that is received when
      * attached to a buffer in Neovim
      * It will never complete
+     *
      * @return {@link Flow.Publisher} passing down buffer events as they come
      */
     Flow.Publisher<BufferEvent> bufferEvents();

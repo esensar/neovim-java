@@ -33,8 +33,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public final class TypeInfo {
 
-    private String name;
-    private Props props;
+    private final String name;
+    private final Props props;
 
     public TypeInfo(String name, Props props) {
         this.name = name;
@@ -42,24 +42,23 @@ public final class TypeInfo {
     }
 
     static final class Props {
-        private int id;
-        private String prefix;
+        private final int id;
+        private final String prefix;
 
-        public Props(
+        Props(
                 @JsonProperty("id")
-                int id,
+                        int id,
                 @JsonProperty("prefix")
-                String prefix) {
+                        String prefix) {
             this.id = id;
             this.prefix = prefix;
         }
 
         @Override
         public String toString() {
-            return "Props{" +
-                    "id=" + id +
-                    ", prefix='" + prefix + '\'' +
-                    '}';
+            return "Props{"
+                    + "id=" + id
+                    + ", prefix='" + prefix + '\'' + '}';
         }
     }
 
@@ -77,10 +76,9 @@ public final class TypeInfo {
 
     @Override
     public String toString() {
-        return "TypeInfo{" +
-                "id=" + props.id +
-                ", prefix='" + props.prefix + '\'' +
-                "name='" + name + '\'' +
-                '}';
+        return "TypeInfo{"
+                + "id=" + props.id
+                + ", prefix='" + props.prefix + '\''
+                + "name='" + name + '\'' + '}';
     }
 }

@@ -30,13 +30,27 @@ import com.ensarsarajcic.neovim.java.api.buffer.BufferStreamApi;
 import com.ensarsarajcic.neovim.java.api.buffer.NeovimBufferApi;
 import com.ensarsarajcic.neovim.java.api.tabpage.NeovimTabpageApi;
 import com.ensarsarajcic.neovim.java.api.tabpage.TabpageStreamApi;
-import com.ensarsarajcic.neovim.java.api.types.api.*;
-import com.ensarsarajcic.neovim.java.api.types.msgpack.*;
+import com.ensarsarajcic.neovim.java.api.types.api.ChannelInfo;
+import com.ensarsarajcic.neovim.java.api.types.api.ClientAttributes;
+import com.ensarsarajcic.neovim.java.api.types.api.ClientType;
+import com.ensarsarajcic.neovim.java.api.types.api.ClientVersionInfo;
+import com.ensarsarajcic.neovim.java.api.types.api.CommandInfo;
+import com.ensarsarajcic.neovim.java.api.types.api.GetCommandsOptions;
+import com.ensarsarajcic.neovim.java.api.types.api.MethodInfo;
+import com.ensarsarajcic.neovim.java.api.types.api.Mouse;
+import com.ensarsarajcic.neovim.java.api.types.api.UiInfo;
+import com.ensarsarajcic.neovim.java.api.types.api.UiOptions;
+import com.ensarsarajcic.neovim.java.api.types.api.VimColorMap;
+import com.ensarsarajcic.neovim.java.api.types.api.VimKeyMap;
+import com.ensarsarajcic.neovim.java.api.types.api.VimMode;
 import com.ensarsarajcic.neovim.java.api.types.apiinfo.ApiInfo;
+import com.ensarsarajcic.neovim.java.api.types.msgpack.Buffer;
+import com.ensarsarajcic.neovim.java.api.types.msgpack.Tabpage;
+import com.ensarsarajcic.neovim.java.api.types.msgpack.Window;
 import com.ensarsarajcic.neovim.java.api.window.NeovimWindowApi;
 import com.ensarsarajcic.neovim.java.api.window.WindowStreamApi;
 import com.ensarsarajcic.neovim.java.corerpc.message.RequestMessage;
-import com.ensarsarajcic.neovim.java.corerpc.reactive.ReactiveRPCStreamer;
+import com.ensarsarajcic.neovim.java.corerpc.reactive.ReactiveRpcStreamer;
 
 import java.util.List;
 import java.util.Map;
@@ -44,13 +58,13 @@ import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 /**
- * Full implementation of {@link NeovimApi} based on {@link ReactiveRPCStreamer}
+ * Full implementation of {@link NeovimApi} based on {@link ReactiveRpcStreamer}
  */
-@NeovimApiClient(name = "full_stream_api", target = 4)
+@NeovimApiClient(name = "full_stream_api", target = 6)
 public final class NeovimStreamApi extends BaseStreamApi implements NeovimApi {
 
-    public NeovimStreamApi(ReactiveRPCStreamer reactiveRPCStreamer) {
-        super(reactiveRPCStreamer);
+    public NeovimStreamApi(ReactiveRpcStreamer reactiveRpcStreamer) {
+        super(reactiveRpcStreamer);
     }
 
     @Override
@@ -83,7 +97,7 @@ public final class NeovimStreamApi extends BaseStreamApi implements NeovimApi {
     }
 
     @Override
-    public CompletableFuture<Void> attachUI(int width, int height, UiOptions options) {
+    public CompletableFuture<Void> attachUi(int width, int height, UiOptions options) {
         return sendWithNoResponse(
                 new RequestMessage.Builder(ATTACH_UI)
                         .addArgument(width)
@@ -92,15 +106,37 @@ public final class NeovimStreamApi extends BaseStreamApi implements NeovimApi {
     }
 
     @Override
-    public CompletableFuture<Void> detachUI() {
+    public CompletableFuture<Void> detachUi() {
         return sendWithNoResponse(new RequestMessage.Builder(DETACH_UI));
     }
 
     @Override
-    public CompletableFuture<Void> resizeUI(int width, int height) {
+    public CompletableFuture<Void> resizeUi(int width, int height) {
         return sendWithNoResponse(new RequestMessage.Builder(RESIZE_UI)
                 .addArgument(width)
                 .addArgument(height));
+    }
+
+    @Override
+    public CompletableFuture<Void> resizeUiGrid(int width, int height) {
+        return sendWithNoResponse(new RequestMessage.Builder(RESIZE_UI_GRID)
+                .addArgument(width)
+                .addArgument(height));
+    }
+
+    @Override
+    public CompletableFuture<Void> setPopupmenuHeight(int height) {
+        return sendWithNoResponse(new RequestMessage.Builder(SET_POPUPMENU_HEIGHT).addArgument(height));
+    }
+
+    @Override
+    public CompletableFuture<Void> inputMouse(Mouse.Button button, Mouse.Action action, String modifier, int grid, int row, int col) {
+        return sendWithNoResponse(new RequestMessage.Builder(INPUT_MOUSE)
+                .addArgument(button)
+                .addArgument(action)
+                .addArgument(grid)
+                .addArgument(row)
+                .addArgument(col));
     }
 
     @Override
@@ -136,7 +172,7 @@ public final class NeovimStreamApi extends BaseStreamApi implements NeovimApi {
     }
 
     @Override
-    public CompletableFuture<Object> callFunction(String name, List<String> args) {
+    public CompletableFuture<Object> callFunction(String name, List<Object> args) {
         return sendWithGenericResponse(new RequestMessage.Builder(CALL_FUNCTION).addArgument(name).addArgument(args));
     }
 
@@ -160,6 +196,22 @@ public final class NeovimStreamApi extends BaseStreamApi implements NeovimApi {
                         .addArgument(mode),
                 VimKeyMap.class
         );
+    }
+
+    @Override
+    public CompletableFuture<Void> setKeymap(String mode, String lhs, String rhs, Map<String, Boolean> options) {
+        return sendWithNoResponse(new RequestMessage.Builder(SET_KEYMAP)
+                .addArgument(mode)
+                .addArgument(lhs)
+                .addArgument(rhs)
+                .addArgument(options));
+    }
+
+    @Override
+    public CompletableFuture<Void> deleteKeymap(String mode, String lhs) {
+        return sendWithNoResponse(new RequestMessage.Builder(DEL_KEYMAP)
+                .addArgument(mode)
+                .addArgument(lhs));
     }
 
     @Override
@@ -189,6 +241,13 @@ public final class NeovimStreamApi extends BaseStreamApi implements NeovimApi {
     @Override
     public CompletableFuture<Object> getVimVariable(String name) {
         return sendWithGenericResponse(new RequestMessage.Builder(GET_VIM_VARIABLE).addArgument(name));
+    }
+
+    @Override
+    public CompletableFuture<Void> setVimVariable(String name, Object value) {
+        return sendWithNoResponse(new RequestMessage.Builder(SET_VIM_VARIABLE)
+                .addArgument(name)
+                .addArgument(value));
     }
 
     @Override
@@ -284,13 +343,23 @@ public final class NeovimStreamApi extends BaseStreamApi implements NeovimApi {
     public CompletableFuture<List<NeovimBufferApi>> getBuffers() {
         return sendWithResponseOfListOfMsgPackType(new RequestMessage.Builder(LIST_BUFS), Buffer.class)
                 .thenApply(buffers -> buffers.stream()
-                        .map(buffer -> new BufferStreamApi(reactiveRPCStreamer, buffer)).collect(Collectors.toList()));
+                        .map(buffer -> new BufferStreamApi(reactiveRpcStreamer, buffer)).collect(Collectors.toList()));
+    }
+
+    @Override
+    public CompletableFuture<NeovimBufferApi> createBuffer(boolean listed, boolean scratch) {
+        return sendWithResponseOfMsgPackType(
+                new RequestMessage.Builder(CREATE_BUF)
+                        .addArgument(listed)
+                        .addArgument(scratch),
+                Buffer.class)
+                .thenApply(buffer -> new BufferStreamApi(reactiveRpcStreamer, buffer));
     }
 
     @Override
     public CompletableFuture<NeovimBufferApi> getCurrentBuffer() {
         return sendWithResponseOfMsgPackType(new RequestMessage.Builder(GET_CURRENT_BUF), Buffer.class)
-                .thenApply(buffer -> new BufferStreamApi(reactiveRPCStreamer, buffer));
+                .thenApply(buffer -> new BufferStreamApi(reactiveRpcStreamer, buffer));
     }
 
     @Override
@@ -312,26 +381,36 @@ public final class NeovimStreamApi extends BaseStreamApi implements NeovimApi {
     public CompletableFuture<List<NeovimWindowApi>> getWindows() {
         return sendWithResponseOfListOfMsgPackType(new RequestMessage.Builder(LIST_WINS), Window.class)
                 .thenApply(windows -> windows.stream()
-                        .map(window -> new WindowStreamApi(reactiveRPCStreamer, window)).collect(Collectors.toList()));
+                        .map(window -> new WindowStreamApi(reactiveRpcStreamer, window)).collect(Collectors.toList()));
+    }
+
+    @Override
+    public CompletableFuture<NeovimWindowApi> openWindow(Buffer buffer, boolean enter, Map<String, Object> config) {
+        return sendWithResponseOfMsgPackType(new RequestMessage.Builder(OPEN_WIN)
+                        .addArgument(buffer)
+                        .addArgument(enter)
+                        .addArgument(config),
+                Window.class)
+                .thenApply(window -> new WindowStreamApi(reactiveRpcStreamer, window));
     }
 
     @Override
     public CompletableFuture<NeovimWindowApi> getCurrentWindow() {
         return sendWithResponseOfMsgPackType(new RequestMessage.Builder(GET_CURRENT_WIN), Window.class)
-                .thenApply(window -> new WindowStreamApi(reactiveRPCStreamer, window));
+                .thenApply(window -> new WindowStreamApi(reactiveRpcStreamer, window));
     }
 
     @Override
     public CompletableFuture<List<NeovimTabpageApi>> getTabpages() {
         return sendWithResponseOfListOfMsgPackType(new RequestMessage.Builder(LIST_TABPAGES), Tabpage.class)
                 .thenApply(tabpages -> tabpages.stream()
-                        .map(tabpage -> new TabpageStreamApi(reactiveRPCStreamer, tabpage)).collect(Collectors.toList()));
+                        .map(tabpage -> new TabpageStreamApi(reactiveRpcStreamer, tabpage)).collect(Collectors.toList()));
     }
 
     @Override
     public CompletableFuture<NeovimTabpageApi> getCurrentTabpage() {
         return sendWithResponseOfMsgPackType(new RequestMessage.Builder(GET_CURRENT_TABPAGE), Tabpage.class)
-                .thenApply(tabpage -> new TabpageStreamApi(reactiveRPCStreamer, tabpage));
+                .thenApply(tabpage -> new TabpageStreamApi(reactiveRpcStreamer, tabpage));
     }
 
     @Override
@@ -427,5 +506,65 @@ public final class NeovimStreamApi extends BaseStreamApi implements NeovimApi {
     @Override
     public CompletableFuture<Object> getProcess() {
         return sendWithGenericResponse(new RequestMessage.Builder(GET_PROC));
+    }
+
+    @Override
+    public CompletableFuture<Map<String, Integer>> getNamespaces() {
+        return sendWithResponseOfMapType(
+                new RequestMessage.Builder(GET_NAMESPACES),
+                String.class,
+                Integer.class
+        );
+    }
+
+    @Override
+    public CompletableFuture<Integer> createNamespace(String name) {
+        return sendWithResponseOfType(
+                new RequestMessage.Builder(CREATE_NAMESPACES)
+                        .addArgument(name),
+                Integer.class
+        );
+    }
+
+    @Override
+    public CompletableFuture<Boolean> paste(String data, boolean crlf, int phase) {
+        return sendWithResponseOfType(new RequestMessage.Builder(PASTE)
+                        .addArgument(data)
+                        .addArgument(crlf)
+                        .addArgument(phase),
+                Boolean.class);
+    }
+
+    @Override
+    public CompletableFuture<Void> put(List<String> lines, String type, boolean after, boolean follow) {
+        return sendWithNoResponse(new RequestMessage.Builder(PUT)
+                .addArgument(lines)
+                .addArgument(type)
+                .addArgument(after)
+                .addArgument(follow));
+    }
+
+    @Override
+    public CompletableFuture<Map<String, Object>> getContext(Map<String, Object> options) {
+        return sendWithResponseOfMapType(
+                new RequestMessage.Builder(GET_CONTEXT)
+                        .addArgument(options),
+                String.class,
+                Object.class
+        );
+    }
+
+    @Override
+    public CompletableFuture<Void> loadContext(Map<String, Object> contextMap) {
+        return sendWithNoResponse(new RequestMessage.Builder(LOAD_CONTEXT).addArgument(contextMap));
+    }
+
+    @Override
+    public CompletableFuture<Void> selectPopupmenuItem(int item, boolean insert, boolean finish, Map<String, Object> options) {
+        return sendWithNoResponse(new RequestMessage.Builder(SELECT_POPUPMENU_ITEM)
+                .addArgument(item)
+                .addArgument(insert)
+                .addArgument(finish)
+                .addArgument(options));
     }
 }

@@ -35,15 +35,15 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 public final class ParamInfo {
 
     @JsonProperty("type")
-    private String type;
+    private final String type;
     @JsonProperty("name")
-    private String name;
+    private final String name;
 
     public ParamInfo(
             @JsonProperty("type")
-            String type,
+                    String type,
             @JsonProperty("name")
-            String name) {
+                    String name) {
         this.type = type;
         this.name = name;
     }
@@ -58,9 +58,8 @@ public final class ParamInfo {
 
     @Override
     public String toString() {
-        return "ParamInfo{" +
-                "type='" + type + '\'' +
-                ", name='" + name + '\'' +
-                '}';
+        return "ParamInfo{"
+                + "type='" + type + '\''
+                + ", name='" + name + '\'' + '}';
     }
 }

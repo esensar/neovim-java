@@ -28,7 +28,15 @@ import com.ensarsarajcic.neovim.java.api.NeovimApi;
 import com.ensarsarajcic.neovim.java.api.atomic.AtomicCallResponse;
 import com.ensarsarajcic.neovim.java.api.buffer.NeovimBufferApi;
 import com.ensarsarajcic.neovim.java.api.tabpage.NeovimTabpageApi;
-import com.ensarsarajcic.neovim.java.api.types.api.*;
+import com.ensarsarajcic.neovim.java.api.types.api.ChannelInfo;
+import com.ensarsarajcic.neovim.java.api.types.api.ClientAttributes;
+import com.ensarsarajcic.neovim.java.api.types.api.ClientType;
+import com.ensarsarajcic.neovim.java.api.types.api.ClientVersionInfo;
+import com.ensarsarajcic.neovim.java.api.types.api.GetCommandsOptions;
+import com.ensarsarajcic.neovim.java.api.types.api.MethodInfo;
+import com.ensarsarajcic.neovim.java.api.types.api.UiOptions;
+import com.ensarsarajcic.neovim.java.api.types.api.VimColorMap;
+import com.ensarsarajcic.neovim.java.api.types.api.VimMode;
 import com.ensarsarajcic.neovim.java.api.types.apiinfo.ApiInfo;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.Buffer;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.Tabpage;
@@ -42,7 +50,6 @@ import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -67,32 +74,32 @@ public class NeovimRxWrapperTest {
     @Test
     public void delegatesAttachUi() {
         var options = UiOptions.TERMINAL;
-        given(neovimApi.attachUI(1, 1, options)).willReturn(CompletableFuture.completedFuture(null));
-        neovimRxWrapper.attachUI(1, 1, options)
+        given(neovimApi.attachUi(1, 1, options)).willReturn(CompletableFuture.completedFuture(null));
+        neovimRxWrapper.attachUi(1, 1, options)
                 .test()
                 .assertComplete()
                 .assertNoErrors();
-        verify(neovimApi).attachUI(1, 1, options);
+        verify(neovimApi).attachUi(1, 1, options);
     }
 
     @Test
     public void delegatesDetachUI() {
-        given(neovimApi.detachUI()).willReturn(CompletableFuture.completedFuture(null));
-        neovimRxWrapper.detachUI()
+        given(neovimApi.detachUi()).willReturn(CompletableFuture.completedFuture(null));
+        neovimRxWrapper.detachUi()
                 .test()
                 .assertComplete()
                 .assertNoErrors();
-        verify(neovimApi).detachUI();
+        verify(neovimApi).detachUi();
     }
 
     @Test
     public void delegatesResizeUI() {
-        given(neovimApi.resizeUI(1, 1)).willReturn(CompletableFuture.completedFuture(null));
-        neovimRxWrapper.resizeUI(1, 1)
+        given(neovimApi.resizeUi(1, 1)).willReturn(CompletableFuture.completedFuture(null));
+        neovimRxWrapper.resizeUi(1, 1)
                 .test()
                 .assertComplete()
                 .assertNoErrors();
-        verify(neovimApi).resizeUI(1, 1);
+        verify(neovimApi).resizeUi(1, 1);
     }
 
     @Test
@@ -125,7 +132,7 @@ public class NeovimRxWrapperTest {
 
     @Test
     public void delegatesExecuteLua() {
-        List<String> args = Collections.emptyList();
+        var args = Collections.<String>emptyList();
         Object result = new Object();
         given(neovimApi.executeLua("lua", args)).willReturn(CompletableFuture.completedFuture(result));
         neovimRxWrapper.executeLua("lua", args)
@@ -174,7 +181,7 @@ public class NeovimRxWrapperTest {
 
     @Test
     public void delegatesEval() {
-        Object result = new Object();
+        var result = new Object();
         given(neovimApi.eval("expr")).willReturn(CompletableFuture.completedFuture(result));
         neovimRxWrapper.eval("expr")
                 .test()
@@ -186,8 +193,8 @@ public class NeovimRxWrapperTest {
 
     @Test
     public void delegatesCallFunction() {
-        Object result = new Object();
-        List<String> args = Collections.emptyList();
+        var result = new Object();
+        List<Object> args = Collections.emptyList();
         given(neovimApi.callFunction("func", args)).willReturn(CompletableFuture.completedFuture(result));
         neovimRxWrapper.callFunction("func", args)
                 .test()
@@ -231,7 +238,7 @@ public class NeovimRxWrapperTest {
 
     @Test
     public void delegatesOptions() {
-        Object option = new Object();
+        var option = new Object();
         given(neovimApi.setUiOption("name", option)).willReturn(CompletableFuture.completedFuture(null));
         given(neovimApi.setOption("name", option)).willReturn(CompletableFuture.completedFuture(null));
         given(neovimApi.getOption("name")).willReturn(CompletableFuture.completedFuture(option));
@@ -255,7 +262,7 @@ public class NeovimRxWrapperTest {
 
     @Test
     public void delegatesVariableOperations() {
-        Object var = new Object();
+        var var = new Object();
         given(neovimApi.setVariable("name", var)).willReturn(CompletableFuture.completedFuture(null));
         given(neovimApi.getVariable("name")).willReturn(CompletableFuture.completedFuture(var));
         given(neovimApi.getVimVariable("name")).willReturn(CompletableFuture.completedFuture(var));
@@ -352,7 +359,7 @@ public class NeovimRxWrapperTest {
 
     @Test
     public void delegatesListRuntimePaths() {
-        List<String> result = Collections.emptyList();
+        var result = Collections.<String>emptyList();
         given(neovimApi.listRuntimePaths()).willReturn(CompletableFuture.completedFuture(result));
         neovimRxWrapper.listRuntimePaths()
                 .test()
@@ -387,8 +394,8 @@ public class NeovimRxWrapperTest {
 
     @Test
     public void delegatesBufferOperations() {
-        NeovimBufferApi neovimBufferApi = Mockito.mock(NeovimBufferApi.class);
-        Buffer buffer = new Buffer(1);
+        var neovimBufferApi = Mockito.mock(NeovimBufferApi.class);
+        var buffer = new Buffer(1);
         given(neovimBufferApi.get()).willReturn(buffer);
         given(neovimApi.getBuffers()).willReturn(CompletableFuture.completedFuture(Collections.emptyList()));
         given(neovimApi.getCurrentBuffer()).willReturn(CompletableFuture.completedFuture(neovimBufferApi));
@@ -414,8 +421,8 @@ public class NeovimRxWrapperTest {
 
     @Test
     public void delegatesWindowOperations() {
-        NeovimWindowApi neovimWindowApi = Mockito.mock(NeovimWindowApi.class);
-        Window window = new Window(1);
+        var neovimWindowApi = Mockito.mock(NeovimWindowApi.class);
+        var window = new Window(1);
         given(neovimWindowApi.get()).willReturn(window);
         given(neovimApi.getWindows()).willReturn(CompletableFuture.completedFuture(Collections.emptyList()));
         given(neovimApi.getCurrentWindow()).willReturn(CompletableFuture.completedFuture(neovimWindowApi));
@@ -441,8 +448,8 @@ public class NeovimRxWrapperTest {
 
     @Test
     public void delegatesTabpageOperations() {
-        NeovimTabpageApi neovimTabpageApi = Mockito.mock(NeovimTabpageApi.class);
-        Tabpage tabpage = new Tabpage(1);
+        var neovimTabpageApi = Mockito.mock(NeovimTabpageApi.class);
+        var tabpage = new Tabpage(1);
         given(neovimTabpageApi.get()).willReturn(tabpage);
         given(neovimApi.getTabpages()).willReturn(CompletableFuture.completedFuture(Collections.emptyList()));
         given(neovimApi.getCurrentTabpage()).willReturn(CompletableFuture.completedFuture(neovimTabpageApi));
@@ -468,7 +475,7 @@ public class NeovimRxWrapperTest {
 
     @Test
     public void delegatesGetColorMap() {
-        VimColorMap vimColorMap = new VimColorMap(Map.of());
+        var vimColorMap = new VimColorMap(Map.of());
         given(neovimApi.getColorMap()).willReturn(CompletableFuture.completedFuture(vimColorMap));
         neovimRxWrapper.getColorMap()
                 .test()
@@ -480,7 +487,7 @@ public class NeovimRxWrapperTest {
 
     @Test
     public void delegatesGetMode() {
-        VimMode vimMode = new VimMode("n", true);
+        var vimMode = new VimMode("n", true);
         given(neovimApi.getMode()).willReturn(CompletableFuture.completedFuture(vimMode));
         neovimRxWrapper.getMode()
                 .test()
@@ -492,7 +499,7 @@ public class NeovimRxWrapperTest {
 
     @Test
     public void delegatesGetApiInfo() {
-        ApiInfo apiInfo = new ApiInfo();
+        var apiInfo = new ApiInfo();
         given(neovimApi.getApiInfo()).willReturn(CompletableFuture.completedFuture(apiInfo));
         neovimRxWrapper.getApiInfo()
                 .test()
@@ -504,9 +511,9 @@ public class NeovimRxWrapperTest {
 
     @Test
     public void delegatesCallDictFunction() {
-        Map map = Map.of();
-        List args = List.of();
-        Object result = new Object();
+        var map = Map.of();
+        var args = List.of();
+        var result = new Object();
         given(neovimApi.callDictFunction(map, "name", args)).willReturn(CompletableFuture.completedFuture(result));
         neovimRxWrapper.callDictFunction(map, "name", args)
                 .test()
@@ -518,7 +525,7 @@ public class NeovimRxWrapperTest {
 
     @Test
     public void delegatesGetCommands() {
-        GetCommandsOptions opts = new GetCommandsOptions(true);
+        var opts = new GetCommandsOptions(true);
         given(neovimApi.getCommands(opts)).willReturn(CompletableFuture.completedFuture(Map.of()));
         neovimRxWrapper.getCommands(opts)
                 .test()
@@ -530,9 +537,9 @@ public class NeovimRxWrapperTest {
 
     @Test
     public void delegatesSetClientInfo() {
-        ClientVersionInfo versionInfo = new ClientVersionInfo(0, 0, 0, "dev");
-        Map<String, MethodInfo> methodInfoMap = Map.of();
-        ClientAttributes clientAttributes = new ClientAttributes("web", "license", "logo");
+        var versionInfo = new ClientVersionInfo(0, 0, 0, "dev");
+        var methodInfoMap = Map.<String, MethodInfo>of();
+        var clientAttributes = new ClientAttributes("web", "license", "logo");
         given(neovimApi.setClientInfo("name", versionInfo, ClientType.REMOTE, methodInfoMap, clientAttributes))
                 .willReturn(CompletableFuture.completedFuture(null));
 
@@ -545,7 +552,7 @@ public class NeovimRxWrapperTest {
 
     @Test
     public void delegatesChannelOperations() {
-        ChannelInfo channelInfo = new ChannelInfo(1, ChannelInfo.Stream.STANDARD_ERROR, ChannelInfo.Mode.BYTES, null);
+        var channelInfo = new ChannelInfo(1, ChannelInfo.Stream.STANDARD_ERROR, ChannelInfo.Mode.BYTES, null);
         given(neovimApi.getChannels()).willReturn(CompletableFuture.completedFuture(List.of()));
         given(neovimApi.getChannelInfo(1)).willReturn(CompletableFuture.completedFuture(channelInfo));
         neovimRxWrapper.getChannels()
@@ -586,7 +593,7 @@ public class NeovimRxWrapperTest {
 
     @Test
     public void delegatesProcessOperations() {
-        Object result = new Object();
+        var result = new Object();
         given(neovimApi.getProcessChildren()).willReturn(CompletableFuture.completedFuture(List.of()));
         given(neovimApi.getProcess()).willReturn(CompletableFuture.completedFuture(result));
         neovimRxWrapper.getProcessChildren()
@@ -601,5 +608,24 @@ public class NeovimRxWrapperTest {
                 .assertNoErrors()
                 .assertValue(result);
         verify(neovimApi).getProcess();
+    }
+
+    @Test
+    public void delegatesNamespaceOperations() {
+        var result = Map.of("test", 1);
+        given(neovimApi.getNamespaces()).willReturn(CompletableFuture.completedFuture(result));
+        given(neovimApi.createNamespace("test")).willReturn(CompletableFuture.completedFuture(1));
+        neovimRxWrapper.getNamespaces()
+                .test()
+                .assertNoErrors()
+                .assertComplete()
+                .assertValue(result);
+        verify(neovimApi).getNamespaces();
+        neovimRxWrapper.createNamespace("test")
+                .test()
+                .assertNoErrors()
+                .assertComplete()
+                .assertValue(1);
+        verify(neovimApi).createNamespace("test");
     }
 }

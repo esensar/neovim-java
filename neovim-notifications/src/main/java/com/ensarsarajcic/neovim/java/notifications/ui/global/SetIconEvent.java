@@ -28,10 +28,10 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonFormat(shape = JsonFormat.Shape.ARRAY)
-public final class SetIconEvent implements UIGlobalEvent {
+public final class SetIconEvent implements UiGlobalEvent {
     public static final String NAME = "set_icon";
 
-    private String icon;
+    private final String icon;
 
     public SetIconEvent(
             @JsonProperty(value = "icon", index = 0) String icon) {
@@ -49,8 +49,6 @@ public final class SetIconEvent implements UIGlobalEvent {
 
     @Override
     public String toString() {
-        return "SetIconEvent{" +
-                "icon='" + icon + '\'' +
-                '}';
+        return "SetIconEvent{" + "icon='" + icon + '\'' + '}';
     }
 }

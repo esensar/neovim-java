@@ -40,7 +40,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.concurrent.CompletableFuture;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
@@ -60,7 +60,7 @@ public class NeovimWindowRxWrapperTest {
 
     @Test
     public void delegatesGet() {
-        Window window = new Window(1);
+        var window = new Window(1);
         given(neovimWindowApi.get()).willReturn(window);
         assertEquals(neovimWindowRxWrapper.get(), window);
         verify(neovimWindowApi).get();
@@ -68,8 +68,8 @@ public class NeovimWindowRxWrapperTest {
 
     @Test
     public void delegatesGetBuffer() {
-        NeovimBufferApi neovimBufferApi = Mockito.mock(NeovimBufferApi.class);
-        Buffer buffer = new Buffer(1);
+        var neovimBufferApi = Mockito.mock(NeovimBufferApi.class);
+        var buffer = new Buffer(1);
         given(neovimBufferApi.get()).willReturn(buffer);
         given(neovimWindowApi.getBuffer()).willReturn(CompletableFuture.completedFuture(neovimBufferApi));
         neovimWindowRxWrapper.getBuffer()
@@ -81,9 +81,20 @@ public class NeovimWindowRxWrapperTest {
     }
 
     @Test
+    public void delegatesSetBuffer() {
+        var buffer = new Buffer(1);
+        given(neovimWindowApi.setBuffer(buffer)).willReturn(CompletableFuture.completedFuture(null));
+        neovimWindowRxWrapper.setBuffer(buffer)
+                .test()
+                .assertComplete()
+                .assertNoErrors();
+        verify(neovimWindowApi).setBuffer(buffer);
+    }
+
+    @Test
     public void delegatesGetTabpage() {
-        NeovimTabpageApi neovimTabpageApi = Mockito.mock(NeovimTabpageApi.class);
-        Tabpage tabpage = new Tabpage(1);
+        var neovimTabpageApi = Mockito.mock(NeovimTabpageApi.class);
+        var tabpage = new Tabpage(1);
         given(neovimTabpageApi.get()).willReturn(tabpage);
         given(neovimWindowApi.getTabpage()).willReturn(CompletableFuture.completedFuture(neovimTabpageApi));
         neovimWindowRxWrapper.getTabpage()
@@ -96,7 +107,7 @@ public class NeovimWindowRxWrapperTest {
 
     @Test
     public void delegatesCursorOperations() {
-        VimCoords vimCoords = new VimCoords(1, 2);
+        var vimCoords = new VimCoords(1, 2);
         given(neovimWindowApi.getCursor()).willReturn(CompletableFuture.completedFuture(vimCoords));
         neovimWindowRxWrapper.getCursor()
                 .test()
@@ -144,7 +155,7 @@ public class NeovimWindowRxWrapperTest {
 
     @Test
     public void delegatesVarOperations() {
-        Object result = new Object();
+        var result = new Object();
         given(neovimWindowApi.getVar("name")).willReturn(CompletableFuture.completedFuture(result));
         given(neovimWindowApi.setVar("name", result)).willReturn(CompletableFuture.completedFuture(null));
         given(neovimWindowApi.deleteVar("name")).willReturn(CompletableFuture.completedFuture(null));
@@ -168,7 +179,7 @@ public class NeovimWindowRxWrapperTest {
 
     @Test
     public void delegatesOptionOperations() {
-        Object result = new Object();
+        var result = new Object();
         given(neovimWindowApi.getOption("name")).willReturn(CompletableFuture.completedFuture(result));
         given(neovimWindowApi.setOption("name", result)).willReturn(CompletableFuture.completedFuture(null));
         neovimWindowRxWrapper.getOption("name")

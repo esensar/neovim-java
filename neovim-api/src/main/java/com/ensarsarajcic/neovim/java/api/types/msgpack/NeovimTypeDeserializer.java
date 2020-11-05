@@ -26,20 +26,22 @@ package com.ensarsarajcic.neovim.java.api.types.msgpack;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import org.msgpack.core.MessagePack;
 import org.msgpack.jackson.dataformat.MessagePackExtensionType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.function.Function;
 
 public final class NeovimTypeDeserializer<T extends BaseCustomIdType> extends JsonDeserializer<T> {
+    private static final Logger log = LoggerFactory.getLogger(NeovimTypeDeserializer.class);
 
-    private byte typeId;
-    private Class<T> type;
-    private Function<Long, T> constructor;
+    private final byte typeId;
+    private final Class<T> type;
+    private final Function<Long, T> constructor;
 
     public NeovimTypeDeserializer(byte typeId, Class<T> type, Function<Long, T> constructor) {
         this.typeId = typeId;
@@ -53,10 +55,11 @@ public final class NeovimTypeDeserializer<T extends BaseCustomIdType> extends Js
     }
 
     @Override
-    public T deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
-        MessagePackExtensionType messagePackExtensionType = (MessagePackExtensionType) jsonParser.getEmbeddedObject();
+    public T deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
+        var messagePackExtensionType = (MessagePackExtensionType) jsonParser.getEmbeddedObject();
 
         if (messagePackExtensionType.getType() != typeId) {
+            log.error("Tried to parse a bad type ({})", messagePackExtensionType.getType());
             throw new JsonParseException(jsonParser, "Bad custom type");
         }
 

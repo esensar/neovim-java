@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public final class GetCommandsOptions {
 
-    private boolean builtin;
+    private final boolean builtin;
 
     public GetCommandsOptions(boolean builtin) {
         this.builtin = builtin;
@@ -43,8 +43,7 @@ public final class GetCommandsOptions {
 
     @Override
     public String toString() {
-        return "GetCommandsOptions{" +
-                "builtin=" + builtin +
-                '}';
+        return "GetCommandsOptions{"
+                + "builtin=" + builtin + '}';
     }
 }

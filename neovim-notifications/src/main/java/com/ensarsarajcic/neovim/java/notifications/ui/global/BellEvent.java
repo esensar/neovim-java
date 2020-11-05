@@ -27,7 +27,7 @@ package com.ensarsarajcic.neovim.java.notifications.ui.global;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 @JsonFormat(shape = JsonFormat.Shape.ARRAY)
-public final class BellEvent implements UIGlobalEvent {
+public final class BellEvent implements UiGlobalEvent {
     public static final String NAME = "bell";
 
     @Override

@@ -28,11 +28,12 @@ import com.ensarsarajcic.neovim.java.api.BaseStreamApi;
 import com.ensarsarajcic.neovim.java.api.NeovimApiClient;
 import com.ensarsarajcic.neovim.java.api.types.api.CommandInfo;
 import com.ensarsarajcic.neovim.java.api.types.api.GetCommandsOptions;
+import com.ensarsarajcic.neovim.java.api.types.api.HighlightedText;
 import com.ensarsarajcic.neovim.java.api.types.api.VimCoords;
 import com.ensarsarajcic.neovim.java.api.types.api.VimKeyMap;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.Buffer;
 import com.ensarsarajcic.neovim.java.corerpc.message.RequestMessage;
-import com.ensarsarajcic.neovim.java.corerpc.reactive.ReactiveRPCStreamer;
+import com.ensarsarajcic.neovim.java.corerpc.reactive.ReactiveRpcStreamer;
 
 import java.util.List;
 import java.util.Map;
@@ -40,16 +41,16 @@ import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 /**
- * Implementation of {@link NeovimBufferApi} based on {@link ReactiveRPCStreamer}
+ * Implementation of {@link NeovimBufferApi} based on {@link ReactiveRpcStreamer}
  */
-@NeovimApiClient(name = "full_buffer_api", target = 4)
+@NeovimApiClient(name = "full_buffer_api", target = 6)
 public final class BufferStreamApi extends BaseStreamApi implements NeovimBufferApi {
 
-    private Buffer model;
+    private final Buffer model;
 
-    public BufferStreamApi(ReactiveRPCStreamer reactiveRPCStreamer,
+    public BufferStreamApi(ReactiveRpcStreamer reactiveRpcStreamer,
                            Buffer model) {
-        super(reactiveRPCStreamer);
+        super(reactiveRpcStreamer);
         Objects.requireNonNull(model, "buffer model is required to work with it");
         this.model = model;
     }
@@ -85,6 +86,15 @@ public final class BufferStreamApi extends BaseStreamApi implements NeovimBuffer
                         .addArgument(end)
                         .addArgument(strictIndexing)
                         .addArgument(replacement)
+        );
+    }
+
+    @Override
+    public CompletableFuture<Integer> getOffset(int index) {
+        return sendWithResponseOfType(
+                prepareMessage(GET_OFFSET)
+                        .addArgument(index),
+                Integer.class
         );
     }
 
@@ -131,6 +141,11 @@ public final class BufferStreamApi extends BaseStreamApi implements NeovimBuffer
     }
 
     @Override
+    public CompletableFuture<Boolean> isLoaded() {
+        return sendWithResponseOfType(prepareMessage(IS_LOADED), Boolean.class);
+    }
+
+    @Override
     public CompletableFuture<Boolean> isValid() {
         return sendWithResponseOfType(prepareMessage(IS_VALID), Boolean.class);
     }
@@ -148,6 +163,22 @@ public final class BufferStreamApi extends BaseStreamApi implements NeovimBuffer
     @Override
     public CompletableFuture<List<VimKeyMap>> getKeymap(String mode) {
         return sendWithResponseOfListType(prepareMessage(GET_KEYMAP).addArgument(mode), VimKeyMap.class);
+    }
+
+    @Override
+    public CompletableFuture<Void> setKeymap(String mode, String lhs, String rhs, Map<String, Boolean> options) {
+        return sendWithNoResponse(prepareMessage(SET_KEYMAP)
+                .addArgument(mode)
+                .addArgument(lhs)
+                .addArgument(rhs)
+                .addArgument(options));
+    }
+
+    @Override
+    public CompletableFuture<Void> deleteKeymap(String mode, String lhs) {
+        return sendWithNoResponse(prepareMessage(DEL_KEYMAP)
+                .addArgument(mode)
+                .addArgument(lhs));
     }
 
     @Override
@@ -170,6 +201,28 @@ public final class BufferStreamApi extends BaseStreamApi implements NeovimBuffer
                         .addArgument(srcId)
                         .addArgument(lineStart)
                         .addArgument(lineEnd)
+        );
+    }
+
+    @Override
+    public CompletableFuture<Void> clearNamespace(int namespaceId, int lineStart, int lineEnd) {
+        return sendWithNoResponse(
+                prepareMessage(CLEAR_NAMESPACE)
+                        .addArgument(namespaceId)
+                        .addArgument(lineStart)
+                        .addArgument(lineEnd)
+        );
+    }
+
+    @Override
+    public CompletableFuture<Integer> setVirtualText(int namespaceId, int line, List<HighlightedText> chunks, Map optionalParams) {
+        return sendWithResponseOfType(
+                prepareMessage(SET_VIRTUAL_TEXT)
+                        .addArgument(namespaceId)
+                        .addArgument(line)
+                        .addArgument(chunks)
+                        .addArgument(optionalParams),
+                Integer.class
         );
     }
 
@@ -205,8 +258,6 @@ public final class BufferStreamApi extends BaseStreamApi implements NeovimBuffer
 
     @Override
     public String toString() {
-        return "BufferStreamApi{" +
-                "model=" + model +
-                '}';
+        return "BufferStreamApi{" + "model=" + model + '}';
     }
 }

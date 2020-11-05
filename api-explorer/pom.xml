@@ -5,7 +5,7 @@
     <parent>
         <artifactId>parent</artifactId>
         <groupId>com.ensarsarajcic.neovim.java</groupId>
-        <version>0.0</version>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -13,6 +13,26 @@
     <name>api-explorer</name>
 
     <dependencies>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-jdk14</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-controls</artifactId>
+            <version>${javafx.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-fxml</artifactId>
+            <version>${javafx.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.msgpack</groupId>
             <artifactId>msgpack-core</artifactId>
@@ -22,6 +42,11 @@
             <groupId>org.msgpack</groupId>
             <artifactId>jackson-dataformat-msgpack</artifactId>
             <version>${msgpack.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>unix-socket-connection</artifactId>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
@@ -45,4 +70,30 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <!-- Disabled for now, since it is causing signature errors -->
+    <!--<build>-->
+    <!--<plugins>-->
+    <!--<plugin>-->
+    <!--<groupId>org.apache.maven.plugins</groupId>-->
+    <!--<artifactId>maven-shade-plugin</artifactId>-->
+    <!--<version>3.2.0</version>-->
+    <!--<executions>-->
+    <!--<execution>-->
+    <!--<phase>package</phase>-->
+    <!--<goals>-->
+    <!--<goal>shade</goal>-->
+    <!--</goals>-->
+    <!--<configuration>-->
+    <!--<transformers>-->
+    <!--<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">-->
+    <!--<mainClass>com.ensarsarajcic.neovim.java.explorer.ApiExplorer</mainClass>-->
+    <!--</transformer>-->
+    <!--</transformers>-->
+    <!--</configuration>-->
+    <!--</execution>-->
+    <!--</executions>-->
+    <!--</plugin>-->
+    <!--</plugins>-->
+    <!--</build>-->
 </project>

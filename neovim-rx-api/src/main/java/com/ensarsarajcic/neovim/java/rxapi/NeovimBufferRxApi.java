@@ -28,6 +28,7 @@ import com.ensarsarajcic.neovim.java.api.NeovimApiFunction;
 import com.ensarsarajcic.neovim.java.api.buffer.NeovimBufferApi;
 import com.ensarsarajcic.neovim.java.api.types.api.CommandInfo;
 import com.ensarsarajcic.neovim.java.api.types.api.GetCommandsOptions;
+import com.ensarsarajcic.neovim.java.api.types.api.HighlightedText;
 import com.ensarsarajcic.neovim.java.api.types.api.VimCoords;
 import com.ensarsarajcic.neovim.java.api.types.api.VimKeyMap;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.Buffer;
@@ -48,6 +49,9 @@ public interface NeovimBufferRxApi {
 
     @NeovimApiFunction(name = NeovimBufferApi.SET_LINES, since = 1)
     Completable setLines(int start, int end, boolean strictIndexing, List<String> replacement);
+
+    @NeovimApiFunction(name = NeovimBufferApi.GET_OFFSET, since = 5)
+    Single<Integer> getOffset(int index);
 
     @NeovimApiFunction(name = NeovimBufferApi.GET_VAR, since = 1)
     Single<Object> getVar(String name);
@@ -74,6 +78,9 @@ public interface NeovimBufferRxApi {
     @NeovimApiFunction(name = NeovimBufferApi.SET_NAME, since = 1)
     Completable setName(String name);
 
+    @NeovimApiFunction(name = NeovimBufferApi.IS_LOADED, since = 5)
+    Single<Boolean> isLoaded();
+
     @NeovimApiFunction(name = NeovimBufferApi.IS_VALID, since = 1)
     Single<Boolean> isValid();
 
@@ -86,11 +93,23 @@ public interface NeovimBufferRxApi {
     @NeovimApiFunction(name = NeovimBufferApi.GET_KEYMAP, since = 3)
     Single<List<VimKeyMap>> getKeymap(String mode);
 
+    @NeovimApiFunction(name = NeovimBufferApi.SET_KEYMAP, since = 6)
+    Completable setKeymap(String mode, String lhs, String rhs, Map<String, Boolean> options);
+
+    @NeovimApiFunction(name = NeovimBufferApi.DEL_KEYMAP, since = 6)
+    Completable deleteKeymap(String mode, String lhs);
+
     @NeovimApiFunction(name = NeovimBufferApi.ADD_HIGHLIGHT, since = 1)
     Single<Integer> addHighlight(int srcId, String hlGroup, int line, int colStart, int colEnd);
 
     @NeovimApiFunction(name = NeovimBufferApi.CLEAR_HIGHLIGHT, since = 1)
     Completable clearHighlight(int srcId, int lineStart, int lineEnd);
+
+    @NeovimApiFunction(name = NeovimBufferApi.CLEAR_NAMESPACE, since = 5)
+    Completable clearNamespace(int namespaceId, int lineStart, int lineEnd);
+
+    @NeovimApiFunction(name = NeovimBufferApi.SET_VIRTUAL_TEXT, since = 5)
+    Single<Integer> setVirtualText(int namespaceId, int line, List<HighlightedText> chunks, Map optionalParams);
 
     @NeovimApiFunction(name = NeovimBufferApi.ATTACH_BUFFER, since = 4)
     Single<Boolean> attach(boolean loadFullBufferOnStart, Map opts);

@@ -29,10 +29,10 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import java.util.List;
 
 @JsonFormat(shape = JsonFormat.Shape.ARRAY)
-public final class CmdlineBlockShow implements UICmdlineEvent {
+public final class CmdlineBlockShow implements UiCmdlineEvent {
     public static final String NAME = "cmdline_block_show";
 
-    private List<List> lines;
+    private final List<List> lines;
 
     public CmdlineBlockShow(List<List> lines) {
         this.lines = lines;
@@ -49,8 +49,6 @@ public final class CmdlineBlockShow implements UICmdlineEvent {
 
     @Override
     public String toString() {
-        return "CmdlineBlockShow{" +
-                "lines=" + lines +
-                '}';
+        return "CmdlineBlockShow{" + "lines=" + lines + '}';
     }
 }

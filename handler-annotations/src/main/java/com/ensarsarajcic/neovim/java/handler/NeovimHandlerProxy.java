@@ -24,41 +24,84 @@
 
 package com.ensarsarajcic.neovim.java.handler;
 
-import com.ensarsarajcic.neovim.java.corerpc.client.RPCListener;
+import com.ensarsarajcic.neovim.java.corerpc.client.RpcListener;
 import com.ensarsarajcic.neovim.java.corerpc.message.NotificationMessage;
 import com.ensarsarajcic.neovim.java.corerpc.message.RequestMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.ExecutorService;
 
-public final class NeovimHandlerProxy implements RPCListener.RequestCallback, RPCListener.NotificationCallback {
+/**
+ * Class acting as both a container of {@link RpcListener.RequestCallback}
+ * and {@link RpcListener.NotificationCallback} and as a listener
+ * <p>
+ * It passes all notifications/requests to contained listeners through a {@link ExecutorService}
+ * By default {@link ImmediateExecutorService} is used
+ * Default instance with {@link ImmediateExecutorService} is used by default in {@link NeovimHandlerManager}
+ * <p>
+ * This allows handlers to not block used streamer when notifications/requests arrive and when many handlers are used
+ * <p>
+ * Example:
+ * <pre>
+ *     {@code
+ *     NeovimHandlerProxy neovimHandlerProxy = new NeovimHandlerProxy(customExecutorService);
+ *     NeovimHandlerManager neovimHandlerManager = new NeovimHandlerManager(neovimHandlerProxy);
+ *
+ *     neovimHandlerManager.registerNeovimHandler(uiEventHandler);
+ *     neovimHandlerManager.attachToStream(neovimStream); // All notifications/requests are passed down using customExecutorService now
+ *     }
+ * </pre>
+ */
+public final class NeovimHandlerProxy implements RpcListener.RequestCallback, RpcListener.NotificationCallback {
+    private static final Logger log = LoggerFactory.getLogger(NeovimHandlerProxy.class);
 
-    private List<RPCListener.NotificationCallback> notificationCallbacks = new ArrayList<>();
-    private List<RPCListener.RequestCallback> requestCallbacks = new ArrayList<>();
+    private List<RpcListener.NotificationCallback> notificationCallbacks = new ArrayList<>();
+    private List<RpcListener.RequestCallback> requestCallbacks = new ArrayList<>();
 
-    public void addNotificationCallback(RPCListener.NotificationCallback notificationCallback) {
+    private ExecutorService executorService;
+
+    public NeovimHandlerProxy() {
+        this.executorService = new ImmediateExecutorService();
+    }
+
+    public NeovimHandlerProxy(ExecutorService executorService) {
+        Objects.requireNonNull(executorService, "executorService may not be null");
+        this.executorService = executorService;
+    }
+
+    public void addNotificationCallback(RpcListener.NotificationCallback notificationCallback) {
+        log.info("Registered a new notification callback: {}", notificationCallback);
         this.notificationCallbacks.add(notificationCallback);
     }
 
-    public void addRequestCallback(RPCListener.RequestCallback requestCallback) {
+    public void addRequestCallback(RpcListener.RequestCallback requestCallback) {
+        log.info("Registered a new request callback: {}", requestCallback);
         this.requestCallbacks.add(requestCallback);
     }
 
-    public void removeNotificationCallback(RPCListener.NotificationCallback notificationCallback) {
+    public void removeNotificationCallback(RpcListener.NotificationCallback notificationCallback) {
+        log.info("Removed a notification callback: {}", notificationCallback);
         this.notificationCallbacks.remove(notificationCallback);
     }
 
-    public void removeRequestCallback(RPCListener.RequestCallback requestCallback) {
+    public void removeRequestCallback(RpcListener.RequestCallback requestCallback) {
+        log.info("Removed a request callback: {}", requestCallback);
         this.requestCallbacks.remove(requestCallback);
     }
 
     @Override
     public void notificationReceived(NotificationMessage notificationMessage) {
-        this.notificationCallbacks.forEach(it -> it.notificationReceived(notificationMessage));
+        log.debug("Passing down a notification: {}", notificationMessage);
+        this.notificationCallbacks.forEach(it -> executorService.submit(() -> it.notificationReceived(notificationMessage)));
     }
 
     @Override
     public void requestReceived(RequestMessage requestMessage) {
-        this.requestCallbacks.forEach(it -> it.requestReceived(requestMessage));
+        log.debug("Passing down a request: {}", requestMessage);
+        this.requestCallbacks.forEach(it -> executorService.submit(() -> it.requestReceived(requestMessage)));
     }
 }
