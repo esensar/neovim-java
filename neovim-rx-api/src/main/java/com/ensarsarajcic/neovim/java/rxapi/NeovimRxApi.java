@@ -24,7 +24,6 @@
 
 package com.ensarsarajcic.neovim.java.rxapi;
 
-import com.ensarsarajcic.neovim.java.api.atomic.AtomicCallBuilder;
 import com.ensarsarajcic.neovim.java.api.NeovimApi;
 import com.ensarsarajcic.neovim.java.api.NeovimApiFunction;
 import com.ensarsarajcic.neovim.java.api.atomic.AtomicCallResponse;
@@ -45,6 +44,7 @@ import com.ensarsarajcic.neovim.java.api.types.apiinfo.ApiInfo;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.Buffer;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.Tabpage;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.Window;
+import com.ensarsarajcic.neovim.java.corerpc.message.RequestMessage;
 import io.reactivex.Completable;
 import io.reactivex.Single;
 
@@ -53,8 +53,7 @@ import java.util.Map;
 
 public interface NeovimRxApi {
     @NeovimApiFunction(name = NeovimApi.CALL_ATOMIC, since = 1)
-    Single<AtomicCallResponse> sendAtomic(AtomicCallBuilder atomicCallBuilder);
-    AtomicCallBuilder prepareAtomic();
+    Single<AtomicCallResponse> sendAtomic(List<RequestMessage> requestMessages);
 
     @NeovimApiFunction(name = NeovimApi.GET_HIGHLIGHT_BY_ID, since = 3)
     Single<Map> getHighlightById(int id, boolean rgb);

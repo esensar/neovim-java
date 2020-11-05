@@ -24,7 +24,6 @@
 
 package com.ensarsarajcic.neovim.java.api;
 
-import com.ensarsarajcic.neovim.java.api.atomic.AtomicCallBuilder;
 import com.ensarsarajcic.neovim.java.api.atomic.AtomicCallResponse;
 import com.ensarsarajcic.neovim.java.api.buffer.BufferStreamApi;
 import com.ensarsarajcic.neovim.java.api.buffer.NeovimBufferApi;
@@ -68,13 +67,18 @@ public final class NeovimStreamApi extends BaseStreamApi implements NeovimApi {
     }
 
     @Override
-    public CompletableFuture<AtomicCallResponse> sendAtomic(AtomicCallBuilder atomicCallBuilder) {
-        throw new UnsupportedOperationException("Not yet implemented");
-    }
-
-    @Override
-    public AtomicCallBuilder prepareAtomic() {
-        throw new UnsupportedOperationException("Not yet implemented");
+    public CompletableFuture<AtomicCallResponse> sendAtomic(List<RequestMessage> requestMessages) {
+        var requestArgs = List.of(
+                requestMessages.stream()
+                        .map(
+                                requestMessage -> List.of(requestMessage.getMethod(), requestMessage.getArguments())
+                        ).collect(Collectors.toList())
+        );
+        return sendWithResponseOfType(
+                new RequestMessage.Builder(CALL_ATOMIC)
+                        .addArgument(requestArgs),
+                AtomicCallResponse.class
+        );
     }
 
     // TODO Add highlight definition

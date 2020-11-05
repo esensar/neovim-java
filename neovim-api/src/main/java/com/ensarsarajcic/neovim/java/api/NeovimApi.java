@@ -24,7 +24,6 @@
 
 package com.ensarsarajcic.neovim.java.api;
 
-import com.ensarsarajcic.neovim.java.api.atomic.AtomicCallBuilder;
 import com.ensarsarajcic.neovim.java.api.atomic.AtomicCallResponse;
 import com.ensarsarajcic.neovim.java.api.buffer.NeovimBufferApi;
 import com.ensarsarajcic.neovim.java.api.tabpage.NeovimTabpageApi;
@@ -46,6 +45,7 @@ import com.ensarsarajcic.neovim.java.api.types.msgpack.Buffer;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.Tabpage;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.Window;
 import com.ensarsarajcic.neovim.java.api.window.NeovimWindowApi;
+import com.ensarsarajcic.neovim.java.corerpc.message.RequestMessage;
 
 import java.util.List;
 import java.util.Map;
@@ -130,8 +130,7 @@ public interface NeovimApi {
     // endregion
 
     @NeovimApiFunction(name = CALL_ATOMIC, since = 1)
-    CompletableFuture<AtomicCallResponse> sendAtomic(AtomicCallBuilder atomicCallBuilder);
-    AtomicCallBuilder prepareAtomic();
+    CompletableFuture<AtomicCallResponse> sendAtomic(List<RequestMessage> requestMessages);
 
     @NeovimApiFunction(name = GET_HIGHLIGHT_BY_ID, since = 3)
     CompletableFuture<Map> getHighlightById(int id, boolean rgb);
