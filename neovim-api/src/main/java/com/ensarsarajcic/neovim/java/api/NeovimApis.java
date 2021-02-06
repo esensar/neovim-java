@@ -27,7 +27,9 @@ package com.ensarsarajcic.neovim.java.api;
 import com.ensarsarajcic.neovim.java.api.util.ObjectMappers;
 import com.ensarsarajcic.neovim.java.corerpc.client.RpcClient;
 import com.ensarsarajcic.neovim.java.corerpc.client.RpcConnection;
+import com.ensarsarajcic.neovim.java.corerpc.client.RpcStreamer;
 import com.ensarsarajcic.neovim.java.corerpc.reactive.ReactiveRpcClient;
+import com.ensarsarajcic.neovim.java.corerpc.reactive.ReactiveRpcStreamer;
 
 public final class NeovimApis {
 
@@ -36,10 +38,17 @@ public final class NeovimApis {
     }
 
     public static NeovimApi getApiForConnection(RpcConnection rpcConnection) {
-        var rpcClient = new RpcClient.Builder()
-                .withObjectMapper(ObjectMappers.defaultNeovimMapper()).build();
-        var reactiveRpcStreamer = ReactiveRpcClient.createDefaultInstanceWithCustomStreamer(rpcClient);
+        var reactiveRpcStreamer = getNeovimReactiveRpcStreamer();
         reactiveRpcStreamer.attach(rpcConnection);
         return new NeovimStreamApi(reactiveRpcStreamer);
+    }
+
+    public static ReactiveRpcStreamer getNeovimReactiveRpcStreamer() {
+        return ReactiveRpcClient.createDefaultInstanceWithCustomStreamer(getNeovimRpcStreamer());
+    }
+
+    public static RpcStreamer getNeovimRpcStreamer() {
+        return new RpcClient.Builder()
+                .withObjectMapper(ObjectMappers.defaultNeovimMapper()).build();
     }
 }
