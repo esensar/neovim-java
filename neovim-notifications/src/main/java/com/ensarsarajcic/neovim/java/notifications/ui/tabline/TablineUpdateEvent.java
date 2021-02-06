@@ -42,7 +42,7 @@ public final class TablineUpdateEvent implements UiTablineEvent {
         try {
             ObjectMapper objectMapper = ObjectMappers.defaultNeovimMapper();
 
-            List<List> tabsList = (List<List>) list.get(2);
+            List<List> tabsList = (List<List>) list.get(1);
 
             List<TabInfo> tabInfos = new ArrayList<>();
 
@@ -56,7 +56,7 @@ public final class TablineUpdateEvent implements UiTablineEvent {
             }
 
             return new TablineUpdateEvent(
-                    objectMapper.readerFor(Tabpage.class).readValue(objectMapper.writeValueAsBytes(list.get(1))),
+                    objectMapper.readerFor(Tabpage.class).readValue(objectMapper.writeValueAsBytes(list.get(0))),
                     tabInfos
             );
         } catch (IOException e) {
