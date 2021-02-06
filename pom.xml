@@ -73,6 +73,7 @@
         <jackson.databind.version>2.9.10</jackson.databind.version>
         <apache.commons.version>3.4</apache.commons.version>
         <slf4j.version>1.7.25</slf4j.version>
+        <reflections.version>0.9.12</reflections.version>
         <ipcsocket.version>1.0.0</ipcsocket.version>
         <asm.version>7.2</asm.version>
         <java.version>11</java.version>

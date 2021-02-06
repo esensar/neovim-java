@@ -15,4 +15,5 @@ module neovim.notifications {
     requires slf4j.api;
     requires com.fasterxml.jackson.databind;
     requires com.fasterxml.jackson.annotation;
+    requires reflections;
 }

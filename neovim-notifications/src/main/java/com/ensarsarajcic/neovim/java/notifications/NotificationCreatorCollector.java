@@ -27,13 +27,11 @@ package com.ensarsarajcic.neovim.java.notifications;
 import com.ensarsarajcic.neovim.java.api.util.ObjectMappers;
 import com.ensarsarajcic.neovim.java.notifications.buffer.BufferEvent;
 import com.ensarsarajcic.neovim.java.notifications.ui.UiEvent;
-import com.ensarsarajcic.neovim.java.notifications.util.ReflectionUtils;
+import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.lang.reflect.Field;
-import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -51,74 +49,63 @@ final class NotificationCreatorCollector {
 
     private static Map<String, Function<List, UiEvent>> uiEventCreators = null;
     private static Map<String, Function<List, BufferEvent>> bufferEventCreators = null;
+    private static Reflections reflections = new Reflections("com.ensarsarajcic.neovim.java.notifications");
 
 
     private NotificationCreatorCollector() {
         throw new AssertionError("No instance");
     }
+    
 
     private static Map<String, Function<List, UiEvent>> createUiEventCreators() {
         Map<String, Function<List, UiEvent>> uiEventCreators = new HashMap<>();
-        try {
-            Class[] classes = ReflectionUtils.getClasses(UiEvent.class.getPackageName());
-            for (Class clazz : classes) {
-                if (!UiEvent.class.isAssignableFrom(clazz) || clazz.isInterface()) {
-                    continue;
-                }
-                Class<? extends UiEvent> uiEventClass = clazz;
-
-                try {
-                    Field nameField = uiEventClass.getDeclaredField("NAME");
-                    Function<List, UiEvent> creator = null;
-                    try {
-                        Field creatorField = uiEventClass.getDeclaredField("CREATOR");
-                        creator = (Function<List, UiEvent>) creatorField.get(null);
-                    } catch (NoSuchFieldException ex) {
-                        creator = list -> ObjectMappers.defaultNeovimMapper().convertValue(list, uiEventClass);
-                    }
-                    String name = (String) nameField.get(null);
-                    uiEventCreators.put(name, creator);
-                } catch (NoSuchFieldException | IllegalAccessException e) {
-                    log.error("An error occurred while building creator for " + uiEventClass, e);
-                    e.printStackTrace();
-                }
+        var classes = reflections.getSubTypesOf(UiEvent.class);
+        for (Class<? extends UiEvent> uiEventClass : classes) {
+            if (!UiEvent.class.isAssignableFrom(uiEventClass) || uiEventClass.isInterface()) {
+                continue;
             }
-        } catch (ClassNotFoundException | IOException | URISyntaxException e) {
-            log.error("An error ocurred while building creators for ui events!", e);
-            e.printStackTrace();
+            try {
+                Field nameField = uiEventClass.getDeclaredField("NAME");
+                Function<List, UiEvent> creator = null;
+                try {
+                    Field creatorField = uiEventClass.getDeclaredField("CREATOR");
+                    creator = (Function<List, UiEvent>) creatorField.get(null);
+                } catch (NoSuchFieldException ex) {
+                    creator = list -> ObjectMappers.defaultNeovimMapper().convertValue(list, uiEventClass);
+                }
+                String name = (String) nameField.get(null);
+                uiEventCreators.put(name, creator);
+            } catch (NoSuchFieldException | IllegalAccessException e) {
+                log.error("An error occurred while building creator for " + uiEventClass, e);
+                e.printStackTrace();
+            }
         }
         return uiEventCreators;
     }
 
     private static Map<String, Function<List, BufferEvent>> createBufferEventCreators() {
         Map<String, Function<List, BufferEvent>> bufferEventCreators = new HashMap<>();
-        try {
-            Class[] classes = ReflectionUtils.getClasses(BufferEvent.class.getPackageName());
-            for (Class clazz : classes) {
-                if (!BufferEvent.class.isAssignableFrom(clazz) || clazz.isInterface()) {
-                    continue;
-                }
-                Class<? extends BufferEvent> bufferEventClass = clazz;
-
-                try {
-                    Field nameField = bufferEventClass.getDeclaredField("NAME");
-                    Function<List, BufferEvent> creator = null;
-                    try {
-                        Field creatorField = bufferEventClass.getDeclaredField("CREATOR");
-                        creator = (Function<List, BufferEvent>) creatorField.get(null);
-                    } catch (NoSuchFieldException ex) {
-                        creator = list -> ObjectMappers.defaultNeovimMapper().convertValue(list, bufferEventClass);
-                    }
-                    String name = (String) nameField.get(null);
-                    bufferEventCreators.put(name, creator);
-                } catch (NoSuchFieldException | IllegalAccessException e) {
-                    log.error("An error occurred while building creator for " + bufferEventClass, e);
-                    e.printStackTrace();
-                }
+        var classes = reflections.getSubTypesOf(BufferEvent.class);
+        for (Class<? extends BufferEvent> bufferEventClass : classes) {
+            if (!BufferEvent.class.isAssignableFrom(bufferEventClass) || bufferEventClass.isInterface()) {
+                continue;
             }
-        } catch (ClassNotFoundException | IOException | URISyntaxException e) {
-            log.error("An error ocurred while building creators for buffer events!", e);
-            e.printStackTrace();
+
+            try {
+                Field nameField = bufferEventClass.getDeclaredField("NAME");
+                Function<List, BufferEvent> creator = null;
+                try {
+                    Field creatorField = bufferEventClass.getDeclaredField("CREATOR");
+                    creator = (Function<List, BufferEvent>) creatorField.get(null);
+                } catch (NoSuchFieldException ex) {
+                    creator = list -> ObjectMappers.defaultNeovimMapper().convertValue(list, bufferEventClass);
+                }
+                String name = (String) nameField.get(null);
+                bufferEventCreators.put(name, creator);
+            } catch (NoSuchFieldException | IllegalAccessException e) {
+                log.error("An error occurred while building creator for " + bufferEventClass, e);
+                e.printStackTrace();
+            }
         }
         return bufferEventCreators;
     }
