@@ -7,7 +7,7 @@
     <groupId>com.ensarsarajcic.neovim.java</groupId>
     <artifactId>parent</artifactId>
     <packaging>pom</packaging>
-    <version>0.2.1-SNAPSHOT</version>
+    <version>0.2.2-SNAPSHOT</version>
 
     <modules>
         <!-- Core -->
@@ -289,6 +289,9 @@
                                     </goals>
                                 </execution>
                             </executions>
+                            <configuration>
+                                <javadocExecutable>${java.home}/bin/javadoc</javadocExecutable>
+                            </configuration>
                         </plugin>
                         <plugin>
                             <groupId>org.apache.maven.plugins</groupId>
