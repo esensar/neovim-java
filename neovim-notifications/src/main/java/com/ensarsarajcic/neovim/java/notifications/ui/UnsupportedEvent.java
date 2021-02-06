@@ -1,6 +1,7 @@
 package com.ensarsarajcic.neovim.java.notifications.ui;
 
 public class UnsupportedEvent implements UiEvent {
+    public static final String NAME = "__special_unsupported";
 
     private final String expectedEventName;
 
@@ -14,7 +15,7 @@ public class UnsupportedEvent implements UiEvent {
 
     @Override
     public String getEventName() {
-        return "__special_unsupported";
+        return NAME;
     }
 
     @Override
