@@ -30,6 +30,7 @@ import com.ensarsarajcic.neovim.java.corerpc.reactive.ReactiveRpcStreamer;
 import com.ensarsarajcic.neovim.java.notifications.buffer.BufferEvent;
 import com.ensarsarajcic.neovim.java.notifications.ui.NeovimRedrawEvent;
 import com.ensarsarajcic.neovim.java.notifications.ui.UiEvent;
+import com.ensarsarajcic.neovim.java.notifications.ui.UnsupportedEvent;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -126,8 +127,8 @@ public final class NeovimStreamNotificationHandler implements NeovimNotification
                     try {
                         return NotificationCreatorCollector.getUIEventCreators().get(name).apply(o);
                     } catch (NullPointerException ex) {
-                        log.error("Missing creator for ui event {}" + name, ex);
-                        throw ex;
+                        log.error("Missing creator for ui event " + name, ex);
+                        return new UnsupportedEvent(name);
                     }
                 })
                 .collect(Collectors.toList());
