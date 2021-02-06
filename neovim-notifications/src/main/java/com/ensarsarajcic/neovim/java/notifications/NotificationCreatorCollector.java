@@ -49,13 +49,11 @@ final class NotificationCreatorCollector {
 
     private static Map<String, Function<List, UiEvent>> uiEventCreators = null;
     private static Map<String, Function<List, BufferEvent>> bufferEventCreators = null;
-    private static Reflections reflections = new Reflections("com.ensarsarajcic.neovim.java.notifications");
-
+    private static final Reflections reflections = new Reflections("com.ensarsarajcic.neovim.java.notifications");
 
     private NotificationCreatorCollector() {
         throw new AssertionError("No instance");
     }
-    
 
     private static Map<String, Function<List, UiEvent>> createUiEventCreators() {
         Map<String, Function<List, UiEvent>> uiEventCreators = new HashMap<>();
