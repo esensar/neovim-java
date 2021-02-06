@@ -33,6 +33,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 
 public final class TablineUpdateEvent implements UiTablineEvent {
@@ -42,15 +43,15 @@ public final class TablineUpdateEvent implements UiTablineEvent {
         try {
             ObjectMapper objectMapper = ObjectMappers.defaultNeovimMapper();
 
-            List<List> tabsList = (List<List>) list.get(1);
+            List<Map> tabsList = (List<Map>) list.get(1);
 
             List<TabInfo> tabInfos = new ArrayList<>();
 
-            for (List object : tabsList) {
+            for (Map object : tabsList) {
                 tabInfos.add(
                         new TabInfo(
-                                objectMapper.readerFor(Tabpage.class).readValue(objectMapper.writeValueAsBytes(object.get(0))),
-                                (String) object.get(1)
+                                objectMapper.readerFor(Tabpage.class).readValue(objectMapper.writeValueAsBytes(object.get("tab"))),
+                                (String) object.get("name")
                         )
                 );
             }

@@ -81,21 +81,33 @@ public final class ModeInfo {
             @JsonProperty(value = "blinkwait", index = 2) int blinkWait,
             @JsonProperty(value = "blinkon", index = 3) int blinkOn,
             @JsonProperty(value = "blinkoff", index = 4) int blinkOff,
-            @JsonProperty(value = "hl_id", index = 5) int highlightId,
-            @JsonProperty(value = "id_lm", index = 6) int highlightLangmapId,
+            @JsonProperty(value = "attr_id", index = 5) int cursorAttributeId,
+            @JsonProperty(value = "attr_id_lm", index = 6) int cursorAttributeLangmapId,
             @JsonProperty(value = "short_name", index = 7) String shortName,
             @JsonProperty(value = "name", index = 8) String fullName,
-            @JsonProperty(value = "mouse_shape", index = 9) Object mouseShape) {
+            @JsonProperty(value = "mouse_shape", index = 9) Object mouseShape,
+            @JsonProperty(value = "hl_id") Integer hlId,
+            @JsonProperty(value = "id_lm") Integer hlLmId) {
         this.cursorShape = cursorShape;
         this.cellPercentage = cellPercentage;
         this.blinkWait = blinkWait;
         this.blinkOn = blinkOn;
         this.blinkOff = blinkOff;
-        this.highlightId = highlightId;
-        this.highlightLangmapId = highlightLangmapId;
         this.shortName = shortName;
         this.fullName = fullName;
         this.mouseShape = mouseShape;
+
+        if (hlId != null) {
+            this.highlightId = hlId;
+        } else {
+            this.highlightId = cursorAttributeId;
+        }
+
+        if (hlLmId != null) {
+            this.highlightLangmapId = hlLmId;
+        } else {
+            this.highlightLangmapId = cursorAttributeLangmapId;
+        }
     }
 
     public CursorShape getCursorShape() {
