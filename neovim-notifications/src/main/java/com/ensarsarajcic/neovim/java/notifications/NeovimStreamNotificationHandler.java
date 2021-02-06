@@ -82,8 +82,10 @@ public final class NeovimStreamNotificationHandler implements NeovimNotification
                 notificationMessage -> notificationMessage.getName().equals(NeovimRedrawEvent.NAME));
         MappingProcessor<NotificationMessage, NeovimRedrawEvent> uiEventMappingProcessor =
                 new MappingProcessor<>(notificationMessage -> {
-                    List<List> rawEvents = objectMapper.convertValue(notificationMessage.getArguments(),
-                            objectMapper.getTypeFactory().constructCollectionLikeType(List.class, List.class));
+                    List<List> rawEvents = objectMapper.convertValue(
+                            notificationMessage.getArguments(),
+                            List.class
+                    );
                     return new NeovimRedrawEvent(
                             rawEvents.stream()
                                     .map(NeovimStreamNotificationHandler::eventFromRawData)
