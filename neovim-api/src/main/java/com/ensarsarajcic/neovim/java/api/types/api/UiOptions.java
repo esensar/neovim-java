@@ -50,28 +50,28 @@ public final class UiOptions {
     private final boolean extTabline;
     @JsonProperty("ext_termcolors")
     private final boolean extTermColors;
-    
+
     public UiOptions(
             @JsonProperty("rgb")
-            boolean rgb,
+                    boolean rgb,
             @JsonProperty("override")
-            boolean override,
+                    boolean override,
             @JsonProperty("ext_cmdline")
-            boolean extCmdline,
+                    boolean extCmdline,
             @JsonProperty("ext_hlstate")
-            boolean extHlState,
+                    boolean extHlState,
             @JsonProperty("ext_linegrid")
-            boolean extLineGrid,
+                    boolean extLineGrid,
             @JsonProperty("ext_messages")
-            boolean extMessages,
+                    boolean extMessages,
             @JsonProperty("ext_multigrid")
-            boolean extMultiGrid,
+                    boolean extMultiGrid,
             @JsonProperty("ext_popupmenu")
-            boolean extPopupMenu,
+                    boolean extPopupMenu,
             @JsonProperty("ext_tabline")
-            boolean extTabline,
+                    boolean extTabline,
             @JsonProperty("ext_termcolors")
-            boolean extTermColors) {
+                    boolean extTermColors) {
         this.rgb = rgb;
         this.override = override;
         this.extCmdline = extCmdline;
