@@ -29,40 +29,87 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public final class UiOptions {
-    public static final UiOptions TERMINAL = new UiOptions(false, false, false, false, false);
-    public static final UiOptions FULL_UI = new UiOptions(true, true, true, true, true);
 
     @JsonProperty("rgb")
     private final boolean rgb;
+    @JsonProperty("override")
+    private final boolean override;
+    @JsonProperty("ext_cmdline")
+    private final boolean extCmdline;
+    @JsonProperty("ext_hlstate")
+    private final boolean extHlState;
+    @JsonProperty("ext_linegrid")
+    private final boolean extLineGrid;
+    @JsonProperty("ext_messages")
+    private final boolean extMessages;
+    @JsonProperty("ext_multigrid")
+    private final boolean extMultiGrid;
     @JsonProperty("ext_popupmenu")
     private final boolean extPopupMenu;
     @JsonProperty("ext_tabline")
     private final boolean extTabline;
-    @JsonProperty("ext_cmdline")
-    private final boolean extCmdline;
-    @JsonProperty("ext_wildmenu")
-    private final boolean extWildmenu;
+    @JsonProperty("ext_termcolors")
+    private final boolean extTermColors;
 
     public UiOptions(
             @JsonProperty("rgb")
                     boolean rgb,
+            @JsonProperty("override")
+                    boolean override,
+            @JsonProperty("ext_cmdline")
+                    boolean extCmdline,
+            @JsonProperty("ext_hlstate")
+                    boolean extHlState,
+            @JsonProperty("ext_linegrid")
+                    boolean extLineGrid,
+            @JsonProperty("ext_messages")
+                    boolean extMessages,
+            @JsonProperty("ext_multigrid")
+                    boolean extMultiGrid,
             @JsonProperty("ext_popupmenu")
                     boolean extPopupMenu,
             @JsonProperty("ext_tabline")
                     boolean extTabline,
-            @JsonProperty("ext_cmdline")
-                    boolean extCmdline,
-            @JsonProperty("ext_wildmenu")
-                    boolean extWildmenu) {
+            @JsonProperty("ext_termcolors")
+                    boolean extTermColors) {
         this.rgb = rgb;
+        this.override = override;
+        this.extCmdline = extCmdline;
+        this.extHlState = extHlState;
+        this.extLineGrid = extLineGrid;
+        this.extMessages = extMessages;
+        this.extMultiGrid = extMultiGrid;
         this.extPopupMenu = extPopupMenu;
         this.extTabline = extTabline;
-        this.extCmdline = extCmdline;
-        this.extWildmenu = extWildmenu;
+        this.extTermColors = extTermColors;
     }
 
     public boolean isRgb() {
         return rgb;
+    }
+
+    public boolean isOverride() {
+        return override;
+    }
+
+    public boolean isExtCmdline() {
+        return extCmdline;
+    }
+
+    public boolean isExtHlState() {
+        return extHlState;
+    }
+
+    public boolean isExtLineGrid() {
+        return extLineGrid;
+    }
+
+    public boolean isExtMessages() {
+        return extMessages;
+    }
+
+    public boolean isExtMultiGrid() {
+        return extMultiGrid;
     }
 
     public boolean isExtPopupMenu() {
@@ -73,11 +120,32 @@ public final class UiOptions {
         return extTabline;
     }
 
-    public boolean isExtCmdline() {
-        return extCmdline;
+    public boolean isExtTermColors() {
+        return extTermColors;
     }
 
-    public boolean isExtWildmenu() {
-        return extWildmenu;
-    }
+    public static final UiOptions TERMINAL = new UiOptions(
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+    );
+    public static final UiOptions FULL_UI = new UiOptions(
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+    );
 }
