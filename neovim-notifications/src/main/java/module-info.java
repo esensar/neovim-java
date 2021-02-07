@@ -16,4 +16,5 @@ module neovim.notifications {
     requires com.fasterxml.jackson.databind;
     requires com.fasterxml.jackson.annotation;
     requires reflections;
+    requires com.fasterxml.jackson.core;
 }

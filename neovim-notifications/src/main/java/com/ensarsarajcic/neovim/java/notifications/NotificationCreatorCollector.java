@@ -73,7 +73,7 @@ final class NotificationCreatorCollector {
                 }
                 String name = (String) nameField.get(null);
                 uiEventCreators.put(name, creator);
-            } catch (NoSuchFieldException | IllegalAccessException e) {
+            } catch (NoSuchFieldException | IllegalAccessException | IllegalArgumentException e) {
                 log.error("An error occurred while building creator for " + uiEventClass, e);
                 e.printStackTrace();
             }
@@ -100,7 +100,7 @@ final class NotificationCreatorCollector {
                 }
                 String name = (String) nameField.get(null);
                 bufferEventCreators.put(name, creator);
-            } catch (NoSuchFieldException | IllegalAccessException e) {
+            } catch (NoSuchFieldException | IllegalAccessException | IllegalArgumentException e) {
                 log.error("An error occurred while building creator for " + bufferEventClass, e);
                 e.printStackTrace();
             }

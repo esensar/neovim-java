@@ -24,11 +24,7 @@
 
 package com.ensarsarajcic.neovim.java.api.types.msgpack;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import org.msgpack.jackson.dataformat.MessagePackFactory;
 
 public final class NeovimJacksonModule {
 
@@ -45,17 +41,5 @@ public final class NeovimJacksonModule {
             simpleModule.addDeserializer(neovimCustomType.getType(), neovimCustomType.getDeserializer());
         }
         return simpleModule;
-    }
-
-    /**
-     * Create an instance of ObjectMapper with proper support for mgspack and neovim msgpack types
-     */
-    public static ObjectMapper createNeovimObjectMapper() {
-        var factory = new MessagePackFactory();
-        factory.disable(JsonParser.Feature.AUTO_CLOSE_SOURCE);
-        factory.disable(JsonGenerator.Feature.AUTO_CLOSE_TARGET);
-        var objectMapper = new ObjectMapper(factory);
-        objectMapper.registerModule(NeovimJacksonModule.createModule());
-        return objectMapper;
     }
 }

@@ -24,12 +24,20 @@
 
 package com.ensarsarajcic.neovim.java.notifications.ui.global;
 
+import com.ensarsarajcic.neovim.java.notifications.ui.UiEvent;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.util.List;
+import java.util.function.Function;
 
 @JsonFormat(shape = JsonFormat.Shape.ARRAY)
 public final class OptionSetEvent implements UiGlobalEvent {
     public static final String NAME = "option_set";
+
+    public static final Function<List, UiEvent> CREATOR = list -> {
+        return new OptionSetEvent((String) list.get(0), list.get(1));
+    };
 
     public enum Option {
         ARABIC_SHAPE("arabicshape"),

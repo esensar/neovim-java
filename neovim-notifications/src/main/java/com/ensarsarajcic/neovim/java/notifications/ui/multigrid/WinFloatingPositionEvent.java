@@ -25,12 +25,37 @@
 package com.ensarsarajcic.neovim.java.notifications.ui.multigrid;
 
 import com.ensarsarajcic.neovim.java.api.types.msgpack.Window;
+import com.ensarsarajcic.neovim.java.api.util.ObjectMappers;
+import com.ensarsarajcic.neovim.java.notifications.ui.UiEvent;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.function.Function;
 
 @JsonFormat(shape = JsonFormat.Shape.ARRAY)
 public final class WinFloatingPositionEvent implements UiMultigridEvent {
     public static final String NAME = "win_float_pos";
+
+    public static final Function<List, UiEvent> CREATOR = list -> {
+        try {
+            ObjectMapper objectMapper = ObjectMappers.defaultNeovimMapper();
+            return new WinFloatingPositionEvent(
+                    (Integer) list.get(0),
+                    objectMapper.readerFor(Window.class).readValue(objectMapper.writeValueAsBytes(list.get(1))),
+                    (String) list.get(2),
+                    (Integer) list.get(3),
+                    (Float) list.get(4),
+                    (Float) list.get(5),
+                    (Boolean) list.get(6)
+            );
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    };
 
     private final int grid;
     private final Window win;

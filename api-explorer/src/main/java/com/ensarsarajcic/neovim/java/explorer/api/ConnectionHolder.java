@@ -26,7 +26,7 @@ package com.ensarsarajcic.neovim.java.explorer.api;
 
 import com.ensarsarajcic.neovim.java.api.NeovimApi;
 import com.ensarsarajcic.neovim.java.api.NeovimStreamApi;
-import com.ensarsarajcic.neovim.java.api.types.msgpack.NeovimJacksonModule;
+import com.ensarsarajcic.neovim.java.api.util.ObjectMappers;
 import com.ensarsarajcic.neovim.java.corerpc.client.RpcClient;
 import com.ensarsarajcic.neovim.java.corerpc.client.RpcConnection;
 import com.ensarsarajcic.neovim.java.corerpc.reactive.ReactiveRpcClient;
@@ -52,7 +52,7 @@ public final class ConnectionHolder {
             synchronized (ConnectionHolder.class) {
                 if (reactiveRpcStreamer == null) {
                     var rpcClient = new RpcClient.Builder()
-                            .withObjectMapper(NeovimJacksonModule.createNeovimObjectMapper()).build();
+                            .withObjectMapper(ObjectMappers.defaultNeovimMapper()).build();
                     rpcClient.attach(connection);
 
                     reactiveRpcStreamer = ReactiveRpcClient.createDefaultInstanceWithCustomStreamer(rpcClient);

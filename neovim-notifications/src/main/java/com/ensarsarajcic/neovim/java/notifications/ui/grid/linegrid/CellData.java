@@ -24,18 +24,20 @@
 
 package com.ensarsarajcic.neovim.java.notifications.ui.grid.linegrid;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+@JsonFormat(shape = JsonFormat.Shape.ARRAY)
 public final class CellData {
 
     private final String text;
-    private final int highlightId;
-    private final int repeat;
+    private final Integer highlightId;
+    private final Integer repeat;
 
     public CellData(
             @JsonProperty(value = "text", index = 0, required = true) String text,
-            @JsonProperty(value = "hl_id", index = 1, required = false) int highlightId,
-            @JsonProperty(value = "repeat", index = 2, required = false) int repeat) {
+            @JsonProperty(value = "hl_id", index = 1, required = false) Integer highlightId,
+            @JsonProperty(value = "repeat", index = 2, required = false) Integer repeat) {
         this.text = text;
         this.highlightId = highlightId;
         this.repeat = repeat;
@@ -45,11 +47,11 @@ public final class CellData {
         return text;
     }
 
-    public int getHighlightId() {
+    public Integer getHighlightId() {
         return highlightId;
     }
 
-    public int getRepeat() {
+    public Integer getRepeat() {
         return repeat;
     }
 
