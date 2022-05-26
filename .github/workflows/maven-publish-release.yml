@@ -13,11 +13,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
-      - name: Set up JDK 11
-        uses: actions/setup-java@v1
+      - uses: actions/checkout@v3
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
         with:
-          java-version: 11
+          java-version: 17
+          distribution: 'temurin'
 
       - name: Remove SNAPSHOT from version
         run: ./mvnw versions:set -DremoveSnapshot
@@ -28,9 +29,10 @@ jobs:
           GH_TOKEN: ${{ github.token }} # GITHUB_TOKEN is the default env for the password
 
       - name: Set up Apache Maven Central
-        uses: actions/setup-java@v1
+        uses: actions/setup-java@v3
         with: # running setup-java again overwrites the settings.xml
-          java-version: 11
+          java-version: 17
+          distribution: 'temurin'
           server-id: ossrh # Value of the distributionManagement/repository/id field of the pom.xml
           server-username: MAVEN_USERNAME # env variable for username in deploy
           server-password: MAVEN_CENTRAL_TOKEN # env variable for token in deploy
