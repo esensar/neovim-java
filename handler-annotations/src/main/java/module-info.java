@@ -3,5 +3,5 @@ module handlerannotations {
     exports com.ensarsarajcic.neovim.java.handler.annotations;
 
     requires corerpc;
-    requires slf4j.api;
+    requires org.slf4j;
 }

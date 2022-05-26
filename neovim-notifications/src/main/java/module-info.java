@@ -12,9 +12,9 @@ module neovim.notifications {
     requires neovimapi;
     requires corerpc;
     requires reactivecorerpc;
-    requires slf4j.api;
+    requires org.slf4j;
     requires com.fasterxml.jackson.databind;
     requires com.fasterxml.jackson.annotation;
-    requires reflections;
     requires com.fasterxml.jackson.core;
+    requires org.reflections;
 }

@@ -77,7 +77,7 @@
         <ipcsocket.version>1.4.0</ipcsocket.version>
         <asm.version>7.2</asm.version>
         <java.version>17</java.version>
-        <javafx.version>17</javafx.version>
+        <javafx.version>17.0.1</javafx.version>
     </properties>
 
     <dependencies>

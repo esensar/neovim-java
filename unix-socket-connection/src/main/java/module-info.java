@@ -3,5 +3,5 @@ module unixsocketconnection {
 
     requires corerpc;
     requires ipcsocket;
-    requires slf4j.api;
+    requires org.slf4j;
 }
