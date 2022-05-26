@@ -5,7 +5,7 @@ name: Maven Package Snapshot
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
 
 jobs:
   build:
