@@ -28,19 +28,26 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }} # GITHUB_TOKEN is the default env for the password
 
+      - name: Decode signing key
+        run: |
+          mkdir -p ~/.gradle
+          echo "${{secrets.MAVEN_GPG_KEY_RING_FILE}}" > ~/secring.gpg.b64
+          base64 -di ~/secring.gpg.b64 > ~/secring.gpg
+          gpg --import secring.gpg
+
       - name: Set up Apache Maven Central
         uses: actions/setup-java@v3
         with: # running setup-java again overwrites the settings.xml
           java-version: 17
           distribution: 'temurin'
           server-id: ossrh # Value of the distributionManagement/repository/id field of the pom.xml
-          server-username: MAVEN_USERNAME # env variable for username in deploy
-          server-password: MAVEN_CENTRAL_TOKEN # env variable for token in deploy
+          server-username: ${{ secrets.MAVEN_USERNAME }} # env variable for username in deploy
+          server-password: ${{ secrets.MAVEN_CENTRAL_TOKEN }} # env variable for token in deploy
           gpg-private-key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }} # Value of the GPG private key to import
-          gpg-passphrase: MAVEN_GPG_PASSPHRASE # env variable for GPG private key passphrase
+          gpg-passphrase: ${{ secrets.MAVEN_GPG_PASSPHRASE }} # env variable for GPG private key passphrase
 
       - name: Publish to Apache Maven Central, visit https://oss.sonatype.org/#stagingRepositories to release.
-        run: ./mvnw clean source:jar javadoc:jar verify gpg:sign deploy -DskipTests -P release
+        run: ./mvnw clean source:jar javadoc:aggregate-jar javadoc:jar verify gpg:sign deploy -DskipTests -P release
         env:
           MAVEN_USERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
           MAVEN_CENTRAL_TOKEN: ${{ secrets.MAVEN_CENTRAL_TOKEN }}
