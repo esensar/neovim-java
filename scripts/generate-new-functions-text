@@ -1,0 +1,4 @@
+#!/bin/sh
+
+API_VERSION=$1
+nvim --api-info | python -c "import msgpack, sys, yaml; api_info = msgpack.unpackb(sys.stdin.buffer.read()); print('Functions: '); print('\n'.join([('- **' + x['name'] + '** - ' + 'https://neovim.io/doc/user/api.html#' + x['name'] + '()') for x in api_info['functions'] if x['since'] == $API_VERSION and x['method'] == False])); print('Methods: '); print('\n'.join([('- **' + x['name'] + '** - ' + 'https://neovim.io/doc/user/api.html#' + x['name'] + '()') for x in api_info['functions'] if x['since'] == $API_VERSION and x['method'] == True]))"

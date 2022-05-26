@@ -1,0 +1,4 @@
+#!/bin/sh
+
+API_VERSION=$1
+nvim --api-info | python -c "import msgpack, sys, yaml; api_info = msgpack.unpackb(sys.stdin.buffer.read()); print('Events: '); print('\n'.join([('- **' + x['name'] + '**') for x in api_info['ui_events'] if x['since'] == $API_VERSION]));"
