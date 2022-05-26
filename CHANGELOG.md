@@ -3,6 +3,11 @@ All notable changes to this project will be documented in this file. This change
 
 ## [Unreleased]
 
+### Added
+- JDK 17 support
+- `neovim-notifications`: global error event
+- `api-explorer`: support for custom neovim executable path
+
 ## [0.2.3] - 2021-02-07
 
 ### Fixed
@@ -43,7 +48,7 @@ All notable changes to this project will be documented in this file. This change
 ## [0.1.15] - 2020-03-04
 
 ### Changed
-- JDK 11 (LST) compatibility
+- JDK 11 (LTS) compatibility
 
 ## [0.1.14] - 2020-03-03
 
