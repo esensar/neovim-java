@@ -12,6 +12,11 @@
     <artifactId>rplugin-example</artifactId>
     <name>rplugin-example</name>
 
+    <properties>
+        <maven.deploy.skip>true</maven.deploy.skip>
+        <maven.javadoc.skip>true</maven.javadoc.skip>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.slf4j</groupId>
