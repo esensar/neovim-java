@@ -18,4 +18,4 @@ jobs:
         with:
           java-version: 11
       - name: Run tests with Maven
-        run: mvn test -B
+        run: ./mvnw test -B

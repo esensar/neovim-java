@@ -20,7 +20,7 @@ jobs:
           java-version: 11
 
       - name: Publish to GitHub Packages Apache Maven
-        run: mvn deploy -DaltDeploymentRepository=github::default::https://maven.pkg.github.com/esensar/neovim-java -Dtoken=$GITHUB_TOKEN -P github -DskipTests
+        run: ./mvnw deploy -DaltDeploymentRepository=github::default::https://maven.pkg.github.com/esensar/neovim-java -Dtoken=$GITHUB_TOKEN -P github -DskipTests
         env:
           GITHUB_TOKEN: ${{ github.token }} # GITHUB_TOKEN is the default env for the password
 
@@ -33,7 +33,7 @@ jobs:
           server-password: MAVEN_CENTRAL_TOKEN # env variable for token in deploy
 
       - name: Publish to Apache Maven Central
-        run: mvn clean source:jar deploy -DskipTests
+        run: ./mvnw clean source:jar deploy -DskipTests
         env:
           MAVEN_USERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
           MAVEN_CENTRAL_TOKEN: ${{ secrets.MAVEN_CENTRAL_TOKEN }}
