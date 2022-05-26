@@ -127,7 +127,7 @@ public final class ApiListController {
             // Load up API
             NeovimApiList apiList;
             if (ConnectionHolder.getConnection() == null) {
-                apiList = ApiDiscovery.discoverApi();
+                apiList = ApiDiscovery.discoverApi(ConnectionHolder.getExecutable());
             } else {
                 apiList = ApiDiscovery.discoverApiFromInstance(ConnectionHolder.getApi());
                 hasConnection = true;

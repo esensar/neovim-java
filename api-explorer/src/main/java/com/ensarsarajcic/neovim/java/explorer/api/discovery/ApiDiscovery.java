@@ -75,8 +75,8 @@ public final class ApiDiscovery {
     /**
      * Loads API Info from --api-info
      */
-    public static NeovimApiList discoverApi() throws IOException {
-        var pb = new ProcessBuilder(createArgs("nvim"));
+    public static NeovimApiList discoverApi(String executable) throws IOException {
+        var pb = new ProcessBuilder(createArgs(executable));
         var neovim = pb.start();
         var factory = new MessagePackFactory();
         factory.disable(JsonParser.Feature.AUTO_CLOSE_SOURCE);

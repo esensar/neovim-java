@@ -24,20 +24,41 @@
   ~ SOFTWARE.
   -->
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
-<AnchorPane prefHeight="349.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8.0.121"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.ensarsarajcic.neovim.java.explorer.ConnectionPickerController">
-    <children>
-        <Button fx:id="exploreBtn" layoutX="57.0" layoutY="38.0" mnemonicParsing="false"
-                text="No connection (Just explore)"/>
-        <Button fx:id="embedBtn" layoutX="99.0" layoutY="136.0" mnemonicParsing="false" text="Embed Neovim"/>
-        <Button fx:id="connectBtn" layoutX="100.0" layoutY="248.0" mnemonicParsing="false" text="Connect to IP"/>
-        <TextField fx:id="ipField" layoutX="67.0" layoutY="221.0" promptText="IP"/>
-        <Button fx:id="connectFileBtn" layoutX="69.0" layoutY="302.0" mnemonicParsing="false"
-                text="Connect to Unix Socket"/>
-        <TextField fx:id="fileField" layoutX="67.0" layoutY="275.0" promptText="File"/>
-    </children>
-</AnchorPane>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<FlowPane alignment="CENTER" columnHalignment="CENTER" orientation="VERTICAL" prefHeight="349.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ensarsarajcic.neovim.java.explorer.ConnectionPickerController">
+    <Button fx:id="executableButton" alignment="CENTER" layoutX="57.0" layoutY="38.0" mnemonicParsing="false" text="Pick nvim executable" textAlignment="CENTER">
+      <FlowPane.margin>
+         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+      </FlowPane.margin></Button>
+    <TextField fx:id="executableField" layoutX="67.0" layoutY="221.0">
+      <FlowPane.margin>
+         <Insets bottom="20.0" left="5.0" right="5.0" top="5.0" />
+      </FlowPane.margin></TextField>
+    <Button fx:id="exploreBtn" layoutX="57.0" layoutY="38.0" mnemonicParsing="false" text="No connection (Just explore)">
+      <FlowPane.margin>
+         <Insets bottom="20.0" left="5.0" right="5.0" top="5.0" />
+      </FlowPane.margin></Button>
+    <Button fx:id="embedBtn" layoutX="99.0" layoutY="136.0" mnemonicParsing="false" text="Embed Neovim">
+      <FlowPane.margin>
+         <Insets bottom="20.0" left="5.0" right="5.0" top="5.0" />
+      </FlowPane.margin></Button>
+    <Button fx:id="connectBtn" layoutX="100.0" layoutY="248.0" mnemonicParsing="false" text="Connect to IP">
+      <FlowPane.margin>
+         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+      </FlowPane.margin></Button>
+    <TextField fx:id="ipField" layoutX="67.0" layoutY="221.0" promptText="IP">
+      <FlowPane.margin>
+         <Insets bottom="20.0" left="5.0" right="5.0" top="5.0" />
+      </FlowPane.margin></TextField>
+    <Button fx:id="connectFileBtn" layoutX="69.0" layoutY="302.0" mnemonicParsing="false" text="Connect to Unix Socket">
+      <FlowPane.margin>
+         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+      </FlowPane.margin></Button>
+    <TextField fx:id="fileField" layoutX="67.0" layoutY="275.0" promptText="File">
+      <FlowPane.margin>
+         <Insets bottom="20.0" left="5.0" right="5.0" top="5.0" />
+      </FlowPane.margin></TextField>
+</FlowPane>

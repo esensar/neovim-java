@@ -43,6 +43,8 @@ public final class ConnectionHolder {
     private static ReactiveRpcStreamer reactiveRpcStreamer;
     private static String connectedIpPort;
 
+    private static String executable = "nvim";
+
     public static void setConnection(RpcConnection rpcConnection) {
         connection = rpcConnection;
     }
@@ -73,6 +75,14 @@ public final class ConnectionHolder {
         }
 
         return neovimApi;
+    }
+
+    public static String getExecutable() {
+        return executable;
+    }
+
+    public static void setExecutable(String executable) {
+        ConnectionHolder.executable = executable;
     }
 
     public static RpcConnection getConnection() {

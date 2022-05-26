@@ -35,6 +35,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyEvent;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -42,6 +44,10 @@ import java.io.IOException;
 import java.net.Socket;
 
 public final class ConnectionPickerController {
+    @FXML
+    public Button executableButton;
+    @FXML
+    public TextField executableField;
     @FXML
     public Button exploreBtn;
     @FXML
@@ -56,10 +62,22 @@ public final class ConnectionPickerController {
     public TextField fileField;
 
     public void initialize() {
+        executableField.setText(ConnectionHolder.getExecutable());
+        executableField.addEventHandler(KeyEvent.KEY_TYPED, keyEvent -> {
+            ConnectionHolder.setExecutable(executableField.getText());
+        });
+        executableButton.setOnAction(event -> {
+            var fileChooser = new FileChooser();
+            fileChooser.setTitle("Find neovim executable");
+            fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+            var file = fileChooser.showOpenDialog(executableButton.getScene().getWindow());
+            ConnectionHolder.setExecutable(file.getAbsolutePath());
+            executableField.setText(ConnectionHolder.getExecutable());
+        });
         exploreBtn.setOnAction(event -> showApiList(exploreBtn));
         embedBtn.setOnAction(event -> {
             try {
-                var pb = new ProcessBuilder("nvim", "--embed");
+                var pb = new ProcessBuilder(ConnectionHolder.getExecutable(), "--embed");
                 var neovim = pb.start();
                 ConnectionHolder.setConnection(new ProcessRpcConnection(neovim));
                 ConnectionHolder.setConnectedIpPort("embedded instance");
