@@ -169,6 +169,7 @@
                     <version>3.8.1</version>
                     <configuration>
                         <release>${java.version}</release>
+                        <useIncrementalCompilation>false</useIncrementalCompilation>
                     </configuration>
                     <dependencies>
                         <dependency>

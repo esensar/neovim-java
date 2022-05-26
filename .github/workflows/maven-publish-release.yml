@@ -40,7 +40,7 @@ jobs:
           gpg-secret-key-ring: ~/secring.gpg
 
       - name: Publish to Apache Maven Central, visit https://oss.sonatype.org/#stagingRepositories to release.
-        run: ./mvnw clean source:jar javadoc:aggregate-jar javadoc:jar gpg:sign deploy -DskipTests -P release
+        run: ./mvnw clean source:jar javadoc:aggregate-jar javadoc:jar verify gpg:sign deploy -DskipTests -P release
         env:
           MAVEN_USERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
           MAVEN_CENTRAL_TOKEN: ${{ secrets.MAVEN_CENTRAL_TOKEN }}

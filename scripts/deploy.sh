@@ -29,11 +29,10 @@ fi
 set -e
 
 echo "Removing SNAPSHOT from version"
-mvn versions:set -DremoveSnapshot
+./mvnw versions:set -DremoveSnapshot
 echo "Deploying to staging."
-mvn clean source:jar javadoc:aggregate-jar javadoc:jar gpg:sign deploy -DskipTests -P release
-# mvn deploy -DaltDeploymentRepository=github::default::https://maven.pkg.github.com/esensar/neovim-java -Dtoken=$GH_TOKEN -P github
+./mvnw clean source:jar javadoc:aggregate-jar javadoc:jar verify gpg:sign deploy -DskipTests -P release
 echo "Deployed to staging. Visit https://oss.sonatype.org/#stagingRepositories to release."
 echo "Changing version to $NEXT_VERSION-SNAPSHOT. Make sure to commit this"
-mvn versions:set -DnewVersion=$NEXT_VERSION-SNAPSHOT
+./mvnw versions:set -DnewVersion=$NEXT_VERSION-SNAPSHOT
 echo "Changed version to $NEXT_VERSION-SNAPSHOT. Make sure to commit this"
