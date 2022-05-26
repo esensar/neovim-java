@@ -3,6 +3,8 @@ All notable changes to this project will be documented in this file. This change
 
 ## [Unreleased]
 
+## [0.3.0] - 2022-05-26
+
 ### Added
 - JDK 17 support
 - `neovim-notifications`: global error event
@@ -92,7 +94,7 @@ All notable changes to this project will be documented in this file. This change
 - `handler-annotations` for easier way of implementing requests and notifications
 - `api-explorer` JavaFX application for exploring Neovim API functions
 
-[Unreleased]: https://github.com/esensar/neovim-java/compare/0.2.3...main
+[Unreleased]: https://github.com/esensar/neovim-java/compare/0.3.0...main
 [0.1.10]: https://github.com/esensar/neovim-java/compare/0.1...0.1.10
 [0.1.11]: https://github.com/esensar/neovim-java/compare/0.1.10...0.1.11
 [0.1.12]: https://github.com/esensar/neovim-java/compare/0.1.11...0.1.12
@@ -104,6 +106,7 @@ All notable changes to this project will be documented in this file. This change
 [0.2.1]: https://github.com/esensar/neovim-java/compare/0.2.0...0.2.1
 [0.2.2]: https://github.com/esensar/neovim-java/compare/0.2.1...0.2.2
 [0.2.3]: https://github.com/esensar/neovim-java/compare/0.2.2...0.2.3
+[0.3.0]: https://github.com/esensar/neovim-java/compare/0.2.3...0.3.0
 [i77]: https://github.com/esensar/neovim-java/issues/77
 [i96]: https://github.com/esensar/neovim-java/issues/96
 [i119]: https://github.com/esensar/neovim-java/issues/119
