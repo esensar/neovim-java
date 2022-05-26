@@ -21,11 +21,6 @@ jobs:
       - name: Remove SNAPSHOT from version
         run: ./mvnw versions:set -DremoveSnapshot
 
-      - name: Publish to GitHub Packages Apache Maven
-        run: ./mvnw deploy -DaltDeploymentRepository=github::default::https://maven.pkg.github.com/esensar/neovim-java -Dtoken=$GH_TOKEN -P github
-        env:
-          GH_TOKEN: ${{ github.token }} # GITHUB_TOKEN is the default env for the password
-
       - name: Decode signing key
         run: |
           mkdir -p ~/.gradle
