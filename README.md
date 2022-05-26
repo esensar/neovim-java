@@ -19,10 +19,10 @@ Consists of following modules:
 
 Many features are not completely tested and this library was mostly built to experiment with Neovim RPC API, but there should be no issues with using this library.
 
-To include this library right away and start working with Neovim, **Neovim API** is enough.  
+To include this library right away and start working with Neovim, **Neovim API** is enough.
 
-Include it in your dependencies:  
-Maven(*Neovim API*):  
+Include it in your dependencies:
+Maven(*Neovim API*):
 ```xml
 <dependency>
   <groupId>com.ensarsarajcic.neovim.java</groupId>
@@ -30,13 +30,13 @@ Maven(*Neovim API*):
   <version>${neovimjava.version}</version>
 </dependency>
 ```
-Gradle(*Neovim API*):  
+Gradle(*Neovim API*):
 ```groovy
 compile 'com.ensarsarajcic.neovim.java:neovim-api:${neovimjava.version}'
 ```
 
-Or if you prefer RxJava2, use **Neovim Rx API**:  
-Maven(*Neovim Rx API*):  
+Or if you prefer RxJava2, use **Neovim Rx API**:
+Maven(*Neovim Rx API*):
 ```xml
 <dependency>
   <groupId>com.ensarsarajcic.neovim.java</groupId>
@@ -44,7 +44,7 @@ Maven(*Neovim Rx API*):
   <version>${neovimjava.version}</version>
 </dependency>
 ```
-Gradle(*Neovim Rx API*):  
+Gradle(*Neovim Rx API*):
 ```groovy
 compile 'com.ensarsarajcic.neovim.java:neovim-rx-api:${neovimjava.version}'
 ```
@@ -57,3 +57,11 @@ For more information, check out README of modules you are interested in.
 This repository contains a small remote plugin example in `rplugin-example`. To run this example run `mvn package` and run Neovim with provided vimrc by calling `nvim -u rplugin-example/vimrc` from project root.
 
 It should be possible to then call the `:NeovimJavaIncrementCount` command which communicated with java plugin.
+
+## Contributing
+
+Check out [contributing guidelines](CONTRIBUTING.md).
+
+## License
+
+[MIT](LICENSE)
