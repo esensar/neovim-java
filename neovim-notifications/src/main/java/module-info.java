@@ -10,9 +10,9 @@ module neovim.notifications {
     exports com.ensarsarajcic.neovim.java.notifications.ui.wildmenu;
     exports com.ensarsarajcic.neovim.java.notifications;
 
-    requires neovimapi;
-    requires corerpc;
-    requires reactivecorerpc;
+    requires com.ensarsarajcic.neovim.java.neovimapi;
+    requires com.ensarsarajcic.neovim.java.corerpc;
+    requires com.ensarsarajcic.neovim.java.reactivecorerpc;
     requires org.slf4j;
     requires com.fasterxml.jackson.databind;
     requires com.fasterxml.jackson.annotation;

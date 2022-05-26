@@ -1,8 +1,8 @@
-module neovimrxapi {
+module com.ensarsarajcic.neovim.java.neovimrxapi {
     exports com.ensarsarajcic.neovim.java.rxapi;
     opens com.ensarsarajcic.neovim.java.rxapi;
 
-    requires neovimapi;
+    requires com.ensarsarajcic.neovim.java.neovimapi;
     requires io.reactivex.rxjava2;
-    requires corerpc;
+    requires com.ensarsarajcic.neovim.java.corerpc;
 }

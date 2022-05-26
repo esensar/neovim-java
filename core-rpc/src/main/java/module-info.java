@@ -1,4 +1,4 @@
-module corerpc {
+module com.ensarsarajcic.neovim.java.corerpc {
     opens com.ensarsarajcic.neovim.java.corerpc.client;
     opens com.ensarsarajcic.neovim.java.corerpc.message;
     exports com.ensarsarajcic.neovim.java.corerpc.client;

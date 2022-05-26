@@ -1,4 +1,4 @@
-module neovimapi {
+module com.ensarsarajcic.neovim.java.neovimapi {
     opens com.ensarsarajcic.neovim.java.api;
     opens com.ensarsarajcic.neovim.java.api.atomic;
     opens com.ensarsarajcic.neovim.java.api.buffer;
@@ -19,8 +19,8 @@ module neovimapi {
     exports com.ensarsarajcic.neovim.java.api.types.apiinfo;
     exports com.ensarsarajcic.neovim.java.api.util;
 
-    requires corerpc;
-    requires reactivecorerpc;
+    requires com.ensarsarajcic.neovim.java.corerpc;
+    requires com.ensarsarajcic.neovim.java.reactivecorerpc;
     requires com.fasterxml.jackson.annotation;
     requires msgpack.core;
     requires jackson.dataformat.msgpack;

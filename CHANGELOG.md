@@ -8,6 +8,9 @@ All notable changes to this project will be documented in this file. This change
 - `neovim-notifications`: global error event
 - `api-explorer`: support for custom neovim executable path
 
+**BREAKING CHANGES**:
+- Updated module names to proper canonical name (e.g. `com.ensarsarajcic.neovim.java.corerpc` instead of `corerpc`)
+
 ## [0.2.3] - 2021-02-07
 
 ### Fixed
