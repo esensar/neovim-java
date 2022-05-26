@@ -63,8 +63,8 @@ public final class ConnectionPickerController {
 
     public void initialize() {
         executableField.setText(ConnectionHolder.getExecutable());
-        executableField.addEventHandler(KeyEvent.KEY_TYPED, keyEvent -> {
-            ConnectionHolder.setExecutable(executableField.getText());
+        executableField.textProperty().addListener((observable, oldValue, newValue) -> {
+            ConnectionHolder.setExecutable(newValue);
         });
         executableButton.setOnAction(event -> {
             var fileChooser = new FileChooser();
