@@ -1,4 +1,5 @@
 module neovim.notifications {
+    exports com.ensarsarajcic.neovim.java.notifications.global;
     exports com.ensarsarajcic.neovim.java.notifications.buffer;
     exports com.ensarsarajcic.neovim.java.notifications.ui;
     exports com.ensarsarajcic.neovim.java.notifications.ui.cmdline;

@@ -26,6 +26,7 @@ package com.ensarsarajcic.neovim.java.notifications;
 
 import com.ensarsarajcic.neovim.java.api.util.ObjectMappers;
 import com.ensarsarajcic.neovim.java.notifications.buffer.BufferEvent;
+import com.ensarsarajcic.neovim.java.notifications.global.GlobalEvent;
 import com.ensarsarajcic.neovim.java.notifications.ui.UiEvent;
 import org.reflections.Reflections;
 import org.slf4j.Logger;
@@ -42,70 +43,44 @@ import java.util.function.Function;
  * These creators are either static fields named CREATOR which generate the object from raw array,
  * or are functions which utilize default neovim mapper to convert object
  * <p>
- * All of the creators are loaded upon first call and cached for further use
+ * All the creators are loaded upon first call and cached for further use
  */
 final class NotificationCreatorCollector {
     private static final Logger log = LoggerFactory.getLogger(NotificationCreatorCollector.class);
 
-    private static Map<String, Function<List, UiEvent>> uiEventCreators = null;
-    private static Map<String, Function<List, BufferEvent>> bufferEventCreators = null;
+    private static volatile Map<String, Function<List, UiEvent>> uiEventCreators = null;
+    private static volatile Map<String, Function<List, BufferEvent>> bufferEventCreators = null;
+    private static volatile Map<String, Function<List, GlobalEvent>> globalEventCreators = null;
     private static final Reflections reflections = new Reflections("com.ensarsarajcic.neovim.java.notifications");
 
     private NotificationCreatorCollector() {
         throw new AssertionError("No instance");
     }
 
-    private static Map<String, Function<List, UiEvent>> createUiEventCreators() {
-        Map<String, Function<List, UiEvent>> uiEventCreators = new HashMap<>();
-        var classes = reflections.getSubTypesOf(UiEvent.class);
-        for (Class<? extends UiEvent> uiEventClass : classes) {
-            if (!UiEvent.class.isAssignableFrom(uiEventClass) || uiEventClass.isInterface()) {
+    private static <T> Map<String, Function<List, T>> createCreatorsFor(Class<T> cls) {
+        Map<String, Function<List, T>> creators = new HashMap<>();
+        var classes = reflections.getSubTypesOf(cls);
+        for (Class<? extends T> eventClass : classes) {
+            if (!cls.isAssignableFrom(eventClass) || eventClass.isInterface()) {
                 continue;
             }
             try {
-                Field nameField = uiEventClass.getDeclaredField("NAME");
-                Function<List, UiEvent> creator = null;
+                Field nameField = eventClass.getDeclaredField("NAME");
+                Function<List, T> creator = null;
                 try {
-                    Field creatorField = uiEventClass.getDeclaredField("CREATOR");
-                    creator = (Function<List, UiEvent>) creatorField.get(null);
+                    Field creatorField = eventClass.getDeclaredField("CREATOR");
+                    creator = (Function<List, T>) creatorField.get(null);
                 } catch (NoSuchFieldException ex) {
-                    creator = list -> ObjectMappers.defaultNeovimMapper().convertValue(list, uiEventClass);
+                    creator = list -> ObjectMappers.defaultNeovimMapper().convertValue(list, eventClass);
                 }
                 String name = (String) nameField.get(null);
-                uiEventCreators.put(name, creator);
+                creators.put(name, creator);
             } catch (NoSuchFieldException | IllegalAccessException | IllegalArgumentException e) {
-                log.error("An error occurred while building creator for " + uiEventClass, e);
+                log.error("An error occurred while building creator for " + eventClass, e);
                 e.printStackTrace();
             }
         }
-        return uiEventCreators;
-    }
-
-    private static Map<String, Function<List, BufferEvent>> createBufferEventCreators() {
-        Map<String, Function<List, BufferEvent>> bufferEventCreators = new HashMap<>();
-        var classes = reflections.getSubTypesOf(BufferEvent.class);
-        for (Class<? extends BufferEvent> bufferEventClass : classes) {
-            if (!BufferEvent.class.isAssignableFrom(bufferEventClass) || bufferEventClass.isInterface()) {
-                continue;
-            }
-
-            try {
-                Field nameField = bufferEventClass.getDeclaredField("NAME");
-                Function<List, BufferEvent> creator = null;
-                try {
-                    Field creatorField = bufferEventClass.getDeclaredField("CREATOR");
-                    creator = (Function<List, BufferEvent>) creatorField.get(null);
-                } catch (NoSuchFieldException ex) {
-                    creator = list -> ObjectMappers.defaultNeovimMapper().convertValue(list, bufferEventClass);
-                }
-                String name = (String) nameField.get(null);
-                bufferEventCreators.put(name, creator);
-            } catch (NoSuchFieldException | IllegalAccessException | IllegalArgumentException e) {
-                log.error("An error occurred while building creator for " + bufferEventClass, e);
-                e.printStackTrace();
-            }
-        }
-        return bufferEventCreators;
+        return creators;
     }
 
     /**
@@ -117,7 +92,7 @@ final class NotificationCreatorCollector {
         if (uiEventCreators == null) {
             synchronized (NotificationCreatorCollector.class) {
                 if (uiEventCreators == null) {
-                    uiEventCreators = createUiEventCreators();
+                    uiEventCreators = createCreatorsFor(UiEvent.class);
                 }
             }
         }
@@ -133,10 +108,26 @@ final class NotificationCreatorCollector {
         if (bufferEventCreators == null) {
             synchronized (NotificationCreatorCollector.class) {
                 if (bufferEventCreators == null) {
-                    bufferEventCreators = createBufferEventCreators();
+                    bufferEventCreators = createCreatorsFor(BufferEvent.class);
                 }
             }
         }
         return bufferEventCreators;
+    }
+
+    /**
+     * Provides all creators of {@link GlobalEvent} notifications
+     *
+     * @return Map of creators where key is notification name and value is function which creates notification from raw array
+     */
+    public static Map<String, Function<List, GlobalEvent>> getGlobalEventCreators() {
+        if (globalEventCreators == null) {
+            synchronized (NotificationCreatorCollector.class) {
+                if (globalEventCreators == null) {
+                    globalEventCreators = createCreatorsFor(GlobalEvent.class);
+                }
+            }
+        }
+        return globalEventCreators;
     }
 }

@@ -25,6 +25,7 @@
 package com.ensarsarajcic.neovim.java.notifications;
 
 import com.ensarsarajcic.neovim.java.notifications.buffer.BufferEvent;
+import com.ensarsarajcic.neovim.java.notifications.global.GlobalEvent;
 import com.ensarsarajcic.neovim.java.notifications.ui.NeovimRedrawEvent;
 
 import java.util.concurrent.Flow;
@@ -54,4 +55,13 @@ public interface NeovimNotificationHandler {
      * @return {@link Flow.Publisher} passing down buffer events as they come
      */
     Flow.Publisher<BufferEvent> bufferEvents();
+
+    /**
+     * Passes down a publisher of {@link GlobalEvent} objects received
+     * {@link GlobalEvent} is a superclass of all general nvim notifications
+     * It will never complete
+     *
+     * @return {@link Flow.Publisher} passing down global events as they come
+     */
+    Flow.Publisher<GlobalEvent> globalEvents();
 }

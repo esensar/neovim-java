@@ -28,6 +28,7 @@ import com.ensarsarajcic.neovim.java.api.util.ObjectMappers;
 import com.ensarsarajcic.neovim.java.corerpc.message.NotificationMessage;
 import com.ensarsarajcic.neovim.java.corerpc.reactive.ReactiveRpcStreamer;
 import com.ensarsarajcic.neovim.java.notifications.buffer.BufferEvent;
+import com.ensarsarajcic.neovim.java.notifications.global.GlobalEvent;
 import com.ensarsarajcic.neovim.java.notifications.ui.NeovimRedrawEvent;
 import com.ensarsarajcic.neovim.java.notifications.ui.UiEvent;
 import com.ensarsarajcic.neovim.java.notifications.ui.UnsupportedEvent;
@@ -112,6 +113,22 @@ public final class NeovimStreamNotificationHandler implements NeovimNotification
                 );
         reactiveRpcStreamer.notificationsFlow().subscribe(bufferEventFilterProcessor);
         bufferEventFilterProcessor.subscribe(bufferEventMappingProcessor);
+        return bufferEventMappingProcessor;
+    }
+
+    @Override
+    public Flow.Publisher<GlobalEvent> globalEvents() {
+        FilterProcessor<NotificationMessage> globalEventFilterProcessor = new FilterProcessor<>(
+                notificationMessage -> NotificationCreatorCollector.getGlobalEventCreators().containsKey(notificationMessage.getName()));
+        MappingProcessor<NotificationMessage, GlobalEvent> bufferEventMappingProcessor =
+                new MappingProcessor<>(
+                        notificationMessage ->
+                                NotificationCreatorCollector.getGlobalEventCreators()
+                                        .get(notificationMessage.getName())
+                                        .apply(notificationMessage.getArguments())
+                );
+        reactiveRpcStreamer.notificationsFlow().subscribe(globalEventFilterProcessor);
+        globalEventFilterProcessor.subscribe(bufferEventMappingProcessor);
         return bufferEventMappingProcessor;
     }
 
