@@ -81,6 +81,9 @@ public interface NeovimBufferApi {
     String DEL_EXTMARK = "nvim_buf_del_extmark";
     String DEL_MARK = "nvim_buf_del_mark";
     String SET_MARK = "nvim_buf_set_mark";
+    String GET_TEXT = "nvim_buf_get_text";
+    String CREATE_USER_COMMAND = "nvim_buf_create_user_command";
+    String DEL_USER_COMMAND = "nvim_buf_del_user_command";
     // endregion
 
     Buffer get();
@@ -190,4 +193,13 @@ public interface NeovimBufferApi {
 
     @NeovimApiFunction(name = SET_MARK, since = 8)
     CompletableFuture<Boolean> setMark(String name, int line, int col, Map<String, Object> options);
+
+    @NeovimApiFunction(name = GET_TEXT, since = 9)
+    CompletableFuture<List<String>> getText(int startRow, int startCol, int endRow, int endCol, Map<String, Object> options);
+
+    @NeovimApiFunction(name = CREATE_USER_COMMAND, since = 9)
+    CompletableFuture<Void> createUserCommand(String name, String command, Map<String, Object> options);
+
+    @NeovimApiFunction(name = DEL_USER_COMMAND, since = 9)
+    CompletableFuture<Void> deleteUserCommand(String name);
 }

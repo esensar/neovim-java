@@ -44,7 +44,7 @@ import java.util.concurrent.CompletableFuture;
 /**
  * Implementation of {@link NeovimWindowApi} based on {@link ReactiveRpcStreamer}
  */
-@NeovimApiClient(name = "full_window_api", target = 8)
+@NeovimApiClient(name = "full_window_api", target = 9)
 public final class WindowStreamApi extends BaseStreamApi implements NeovimWindowApi {
 
     private Window model;

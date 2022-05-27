@@ -47,7 +47,7 @@ import java.util.concurrent.CompletableFuture;
 /**
  * Implementation of {@link NeovimBufferApi} based on {@link ReactiveRpcStreamer}
  */
-@NeovimApiClient(name = "full_buffer_api", target = 8)
+@NeovimApiClient(name = "full_buffer_api", target = 9)
 public final class BufferStreamApi extends BaseStreamApi implements NeovimBufferApi {
 
     private final Buffer model;
@@ -339,6 +339,37 @@ public final class BufferStreamApi extends BaseStreamApi implements NeovimBuffer
                         .addArgument(col)
                         .addArgument(options),
                 Boolean.class
+        );
+    }
+
+    @Override
+    public CompletableFuture<List<String>> getText(int startRow, int startCol, int endRow, int endCol, Map<String, Object> options) {
+        return sendWithResponseOfListType(
+                prepareMessage(GET_TEXT)
+                        .addArgument(startRow)
+                        .addArgument(startCol)
+                        .addArgument(endRow)
+                        .addArgument(endCol)
+                        .addArgument(options),
+                String.class
+        );
+    }
+
+    @Override
+    public CompletableFuture<Void> createUserCommand(String name, String command, Map<String, Object> options) {
+        return sendWithNoResponse(
+                prepareMessage(CREATE_USER_COMMAND)
+                        .addArgument(name)
+                        .addArgument(command)
+                        .addArgument(options)
+        );
+    }
+
+    @Override
+    public CompletableFuture<Void> deleteUserCommand(String name) {
+        return sendWithNoResponse(
+                prepareMessage(DEL_USER_COMMAND)
+                        .addArgument(name)
         );
     }
 
