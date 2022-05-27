@@ -63,7 +63,7 @@ import java.util.stream.Collectors;
 /**
  * Full implementation of {@link NeovimApi} based on {@link ReactiveRpcStreamer}
  */
-@NeovimApiClient(name = "full_stream_api", target = 8)
+@NeovimApiClient(name = "full_stream_api", target = 9)
 public final class NeovimStreamApi extends BaseStreamApi implements NeovimApi {
 
     public NeovimStreamApi(ReactiveRpcStreamer reactiveRpcStreamer) {
@@ -694,5 +694,85 @@ public final class NeovimStreamApi extends BaseStreamApi implements NeovimApi {
                 .addArgument(statuslineString)
                 .addArgument(options),
                 EvalStatuslineResult.class);
+    }
+
+    @Override
+    public CompletableFuture<List<Map>> getAutocommands(Map<String, Object> options) {
+        return sendWithResponseOfListType(new RequestMessage.Builder(GET_AUTOCMDS)
+                .addArgument(options),
+                Map.class);
+    }
+
+    @Override
+    public CompletableFuture<Integer> createAutocommand(List<String> events, Map<String, Object> options) {
+        return sendWithResponseOfType(new RequestMessage.Builder(CREATE_AUTOCMD)
+                .addArgument(events)
+                .addArgument(options),
+                Integer.class);
+    }
+
+    @Override
+    public CompletableFuture<Void> deleteAutocommand(int autocommandId) {
+        return sendWithNoResponse(new RequestMessage.Builder(DEL_AUTOCMD)
+                .addArgument(autocommandId));
+    }
+
+    @Override
+    public CompletableFuture<Void> clearAutocommands(Map<String, Object> options) {
+        return sendWithNoResponse(new RequestMessage.Builder(CLEAR_AUTOCMDS).addArgument(options));
+    }
+
+    @Override
+    public CompletableFuture<Integer> createAugroup(String name, Map<String, Object> options) {
+        return sendWithResponseOfType(new RequestMessage.Builder(CREATE_AUGROUP)
+                .addArgument(name)
+                .addArgument(options),
+                Integer.class);
+    }
+
+    @Override
+    public CompletableFuture<Void> deleteAugroupById(int id) {
+        return sendWithNoResponse(new RequestMessage.Builder(DEL_AUGROUP_BY_ID).addArgument(id));
+    }
+
+    @Override
+    public CompletableFuture<Void> deleteAugroupByName(String name) {
+        return sendWithNoResponse(new RequestMessage.Builder(DEL_AUGROUP_BY_NAME).addArgument(name));
+    }
+
+    @Override
+    public CompletableFuture<Void> executeAutocommands(List<String> event, Map<String, Object> options) {
+        return sendWithNoResponse(new RequestMessage.Builder(EXEC_AUTOCMDS)
+                .addArgument(event)
+                .addArgument(options));
+    }
+
+    @Override
+    public CompletableFuture<Object> getOptionValue(String name, Map<String, Object> options) {
+        return sendWithGenericResponse(new RequestMessage.Builder(GET_OPTION_VALUE)
+                .addArgument(name)
+                .addArgument(options));
+    }
+
+    @Override
+    public CompletableFuture<Void> setOptionValue(String name, Object value, Map<String, Object> options) {
+        return sendWithNoResponse(new RequestMessage.Builder(SET_OPTION_VALUE)
+                .addArgument(name)
+                .addArgument(value)
+                .addArgument(options));
+    }
+
+    @Override
+    public CompletableFuture<Void> createUserCommand(String name, String command, Map<String, Object> options) {
+        return sendWithNoResponse(new RequestMessage.Builder(CREATE_USER_COMMAND)
+                .addArgument(name)
+                .addArgument(command)
+                .addArgument(options));
+    }
+
+    @Override
+    public CompletableFuture<Void> deleteUserCommand(String name) {
+        return sendWithNoResponse(new RequestMessage.Builder(DEL_USER_COMMAND)
+                .addArgument(name));
     }
 }

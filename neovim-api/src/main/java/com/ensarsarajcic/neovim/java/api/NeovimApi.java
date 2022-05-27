@@ -148,6 +148,18 @@ public interface NeovimApi {
     String DEL_MARK = "nvim_del_mark";
     String GET_MARK = "nvim_get_mark";
     String EVAL_STATUSLINE = "nvim_eval_statusline";
+    String GET_AUTOCMDS = "nvim_get_autocmds";
+    String CREATE_AUTOCMD = "nvim_create_autocmd";
+    String DEL_AUTOCMD = "nvim_del_autocmd";
+    String CLEAR_AUTOCMDS = "nvim_clear_autocmds";
+    String CREATE_AUGROUP = "nvim_create_augroup";
+    String DEL_AUGROUP_BY_ID = "nvim_del_augroup_by_id";
+    String DEL_AUGROUP_BY_NAME = "nvim_del_augroup_by_name";
+    String EXEC_AUTOCMDS = "nvim_exec_autocmds";
+    String GET_OPTION_VALUE = "nvim_get_option_value";
+    String SET_OPTION_VALUE = "nvim_set_option_value";
+    String CREATE_USER_COMMAND = "nvim_create_user_command";
+    String DEL_USER_COMMAND = "nvim_del_user_command";
     // endregion
 
     @NeovimApiFunction(name = CALL_ATOMIC, since = 1)
@@ -410,4 +422,40 @@ public interface NeovimApi {
 
     @NeovimApiFunction(name = EVAL_STATUSLINE, since = 8)
     CompletableFuture<EvalStatuslineResult> evalStatusline(String statuslineString, EvalStatuslineOptions options);
+
+    @NeovimApiFunction(name = GET_AUTOCMDS, since = 9)
+    CompletableFuture<List<Map>> getAutocommands(Map<String, Object> options);
+
+    @NeovimApiFunction(name = CREATE_AUTOCMD, since = 9)
+    CompletableFuture<Integer> createAutocommand(List<String> events, Map<String, Object> options);
+
+    @NeovimApiFunction(name = DEL_AUTOCMD, since = 9)
+    CompletableFuture<Void> deleteAutocommand(int autocommandId);
+
+    @NeovimApiFunction(name = CLEAR_AUTOCMDS, since = 9)
+    CompletableFuture<Void> clearAutocommands(Map<String, Object> options);
+
+    @NeovimApiFunction(name = CREATE_AUGROUP, since = 9)
+    CompletableFuture<Integer> createAugroup(String name, Map<String, Object> options);
+
+    @NeovimApiFunction(name = DEL_AUGROUP_BY_ID, since = 9)
+    CompletableFuture<Void> deleteAugroupById(int id);
+
+    @NeovimApiFunction(name = DEL_AUGROUP_BY_NAME, since = 9)
+    CompletableFuture<Void> deleteAugroupByName(String name);
+
+    @NeovimApiFunction(name = EXEC_AUTOCMDS, since = 9)
+    CompletableFuture<Void> executeAutocommands(List<String> event, Map<String, Object> options);
+
+    @NeovimApiFunction(name = GET_OPTION_VALUE, since = 9)
+    CompletableFuture<Object> getOptionValue(String name, Map<String, Object> options);
+
+    @NeovimApiFunction(name = SET_OPTION_VALUE, since = 9)
+    CompletableFuture<Void> setOptionValue(String name, Object value, Map<String, Object> options);
+
+    @NeovimApiFunction(name = CREATE_USER_COMMAND, since = 9)
+    CompletableFuture<Void> createUserCommand(String name, String command, Map<String, Object> options);
+
+    @NeovimApiFunction(name = DEL_USER_COMMAND, since = 9)
+    CompletableFuture<Void> deleteUserCommand(String name);
 }
