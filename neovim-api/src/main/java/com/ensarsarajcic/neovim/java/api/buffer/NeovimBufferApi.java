@@ -79,6 +79,8 @@ public interface NeovimBufferApi {
     String GET_EXTMARKS = "nvim_buf_get_extmarks";
     String SET_EXTMARK = "nvim_buf_set_extmark";
     String DEL_EXTMARK = "nvim_buf_del_extmark";
+    String DEL_MARK = "nvim_buf_del_mark";
+    String SET_MARK = "nvim_buf_set_mark";
     // endregion
 
     Buffer get();
@@ -182,4 +184,10 @@ public interface NeovimBufferApi {
 
     @NeovimApiFunction(name = DEL_EXTMARK, since = 7)
     CompletableFuture<Boolean> deleteExtmark(int nsId, int extmarkId);
+
+    @NeovimApiFunction(name = DEL_MARK, since = 8)
+    CompletableFuture<Boolean> deleteMark(String name);
+
+    @NeovimApiFunction(name = SET_MARK, since = 8)
+    CompletableFuture<Boolean> setMark(String name, int line, int col, Map<String, Object> options);
 }

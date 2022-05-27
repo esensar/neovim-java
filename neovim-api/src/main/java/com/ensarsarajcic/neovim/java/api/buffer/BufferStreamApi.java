@@ -47,7 +47,7 @@ import java.util.concurrent.CompletableFuture;
 /**
  * Implementation of {@link NeovimBufferApi} based on {@link ReactiveRpcStreamer}
  */
-@NeovimApiClient(name = "full_buffer_api", target = 6)
+@NeovimApiClient(name = "full_buffer_api", target = 8)
 public final class BufferStreamApi extends BaseStreamApi implements NeovimBufferApi {
 
     private final Buffer model;
@@ -317,6 +317,27 @@ public final class BufferStreamApi extends BaseStreamApi implements NeovimBuffer
                 prepareMessage(DEL_EXTMARK)
                         .addArgument(nsId)
                         .addArgument(extmarkId),
+                Boolean.class
+        );
+    }
+
+    @Override
+    public CompletableFuture<Boolean> deleteMark(String name) {
+        return sendWithResponseOfType(
+                prepareMessage(DEL_MARK)
+                        .addArgument(name),
+                Boolean.class
+        );
+    }
+
+    @Override
+    public CompletableFuture<Boolean> setMark(String name, int line, int col, Map<String, Object> options) {
+        return sendWithResponseOfType(
+                prepareMessage(SET_MARK)
+                        .addArgument(name)
+                        .addArgument(line)
+                        .addArgument(col)
+                        .addArgument(options),
                 Boolean.class
         );
     }

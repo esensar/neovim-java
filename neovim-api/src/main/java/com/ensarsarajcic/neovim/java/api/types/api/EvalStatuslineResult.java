@@ -24,41 +24,46 @@
 
 package com.ensarsarajcic.neovim.java.api.types.api;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
-@JsonFormat(shape = JsonFormat.Shape.ARRAY)
-@JsonPropertyOrder({"text", "hl_group"})
+import java.util.List;
+import java.util.Map;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
-public final class ChunkInfo {
+public final class EvalStatuslineResult {
 
-    private final String text;
-    private final String hlGroup;
+    @JsonProperty("str")
+    private final int resultString;
+    @JsonProperty("width")
+    private final int width;
+    @JsonProperty("highlights")
+    private final List<Map<String, Object>> highlights;
 
-    public ChunkInfo(
-            @JsonProperty("text")
-                    String text,
-            @JsonProperty("hl_group")
-                    String hlGroup) {
-        this.text = text;
-        this.hlGroup = hlGroup;
+    public EvalStatuslineResult(int resultString, int width, List<Map<String, Object>> highlights) {
+        this.resultString = resultString;
+        this.width = width;
+        this.highlights = highlights;
     }
 
-    public String getText() {
-        return text;
+    public int getResultString() {
+        return resultString;
     }
 
-    public String getHlGroup() {
-        return hlGroup;
+    public int getWidth() {
+        return width;
+    }
+
+    public List<Map<String, Object>> getHighlights() {
+        return highlights;
     }
 
     @Override
     public String toString() {
-        return "ChunkInfo{"
-                + "text='" + text + '\''
-                + ", hlGroup='" + hlGroup + '\''
+        return "EvalStatuslineResult{"
+                + "resultString=" + resultString
+                + ", width=" + width
+                + ", highlights=" + highlights
                 + '}';
     }
 }
