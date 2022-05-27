@@ -41,4 +41,11 @@ public class ScreenshotEvent implements UiGlobalEvent {
     public String getEventName() {
         return NAME;
     }
+
+    @Override
+    public String toString() {
+        return "ScreenshotEvent{"
+                + "path='" + path + '\''
+                + '}';
+    }
 }

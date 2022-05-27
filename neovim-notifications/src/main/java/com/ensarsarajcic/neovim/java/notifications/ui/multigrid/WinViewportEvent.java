@@ -109,13 +109,13 @@ public final class WinViewportEvent implements UiMultigridEvent {
 
     @Override
     public String toString() {
-        return "WinViewportEvent{" +
-                "grid=" + grid +
-                ", win=" + win +
-                ", topLine=" + topLine +
-                ", botLine=" + botLine +
-                ", curLine=" + curLine +
-                ", curCol=" + curCol +
-                '}';
+        return "WinViewportEvent{"
+                + "grid=" + grid
+                + ", win=" + win
+                + ", topLine=" + topLine
+                + ", botLine=" + botLine
+                + ", curLine=" + curLine
+                + ", curCol=" + curCol
+                + '}';
     }
 }
