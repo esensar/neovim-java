@@ -28,6 +28,7 @@ import com.ensarsarajcic.neovim.java.api.atomic.AtomicCallResponse;
 import com.ensarsarajcic.neovim.java.api.buffer.NeovimBufferApi;
 import com.ensarsarajcic.neovim.java.api.tabpage.NeovimTabpageApi;
 import com.ensarsarajcic.neovim.java.api.types.api.ChannelInfo;
+import com.ensarsarajcic.neovim.java.api.types.api.ChunkInfo;
 import com.ensarsarajcic.neovim.java.api.types.api.ClientAttributes;
 import com.ensarsarajcic.neovim.java.api.types.api.ClientType;
 import com.ensarsarajcic.neovim.java.api.types.api.ClientVersionInfo;
@@ -35,6 +36,7 @@ import com.ensarsarajcic.neovim.java.api.types.api.CommandInfo;
 import com.ensarsarajcic.neovim.java.api.types.api.GetCommandsOptions;
 import com.ensarsarajcic.neovim.java.api.types.api.MethodInfo;
 import com.ensarsarajcic.neovim.java.api.types.api.Mouse;
+import com.ensarsarajcic.neovim.java.api.types.api.OptionInfo;
 import com.ensarsarajcic.neovim.java.api.types.api.UiInfo;
 import com.ensarsarajcic.neovim.java.api.types.api.UiOptions;
 import com.ensarsarajcic.neovim.java.api.types.api.VimColorMap;
@@ -127,6 +129,20 @@ public interface NeovimApi {
     String GET_CONTEXT = "nvim_get_context";
     String LOAD_CONTEXT = "nvim_load_context";
     String SELECT_POPUPMENU_ITEM = "nvim_select_popupmenu_item";
+
+    String SET_DECORATION_PROVIDER = "nvim_set_decoration_provider";
+    String UI_PUM_SET_BOUNDS = "nvim_ui_pum_set_bounds";
+    String GET_HL_ID_BY_NAME = "nvim_get_hl_id_by_name";
+    String SET_HL = "nvim_set_hl";
+    String EXEC_LUA = "nvim_exec_lua";
+    String NOTIFY = "nvim_notify";
+    String GET_RUNTIME_FILE = "nvim_get_runtime_file";
+    String GET_ALL_OPTIONS_INFO = "nvim_get_all_options_info";
+    String GET_OPTION_INFO = "nvim_get_option_info";
+    String ECHO = "nvim_echo";
+    String OPEN_TERM = "nvim_open_term";
+    String CHAN_SEND = "nvim_chan_send";
+    String EXEC = "nvim_exec";
     // endregion
 
     @NeovimApiFunction(name = CALL_ATOMIC, since = 1)
@@ -341,4 +357,43 @@ public interface NeovimApi {
 
     @NeovimApiFunction(name = SELECT_POPUPMENU_ITEM, since = 6)
     CompletableFuture<Void> selectPopupmenuItem(int item, boolean insert, boolean finish, Map<String, Object> options);
+
+    @NeovimApiFunction(name = SET_DECORATION_PROVIDER, since = 7)
+    CompletableFuture<Void> setDecorationProvider(int hlId, Map<String, Object> options);
+
+    @NeovimApiFunction(name = UI_PUM_SET_BOUNDS, since = 7)
+    CompletableFuture<Void> uiPumSetBounds(int width, int height, int row, int col);
+
+    @NeovimApiFunction(name = GET_HL_ID_BY_NAME, since = 7)
+    CompletableFuture<Integer> getHlIdByName(String name);
+
+    @NeovimApiFunction(name = SET_HL, since = 7)
+    CompletableFuture<Void> setHl(int hlId, String name, Map hl);
+
+    @NeovimApiFunction(name = EXEC_LUA, since = 7)
+    CompletableFuture<Void> execLua(String code, List<String> arguments);
+
+    @NeovimApiFunction(name = NOTIFY, since = 7)
+    CompletableFuture<Void> notifyUser(String message, int logLevel, Map<String, Object> options);
+
+    @NeovimApiFunction(name = GET_RUNTIME_FILE, since = 7)
+    CompletableFuture<List<String>> getRuntimeFile(String name, boolean all);
+
+    @NeovimApiFunction(name = GET_ALL_OPTIONS_INFO, since = 7)
+    CompletableFuture<Map<String, OptionInfo>> getAllOptionsInfo();
+
+    @NeovimApiFunction(name = GET_OPTION_INFO, since = 7)
+    CompletableFuture<OptionInfo> getOptionInfo();
+
+    @NeovimApiFunction(name = ECHO, since = 7)
+    CompletableFuture<Void> echo(List<ChunkInfo> chunks, boolean history, Map<String, Object> options);
+
+    @NeovimApiFunction(name = OPEN_TERM, since = 7)
+    CompletableFuture<Integer> openTerm(int buffer, Map<String, Object> options);
+
+    @NeovimApiFunction(name = CHAN_SEND, since = 7)
+    CompletableFuture<Void> chanSend(int channel, String data);
+
+    @NeovimApiFunction(name = EXEC, since = 7)
+    CompletableFuture<String> exec(String vimscriptCode, boolean captureOutput);
 }

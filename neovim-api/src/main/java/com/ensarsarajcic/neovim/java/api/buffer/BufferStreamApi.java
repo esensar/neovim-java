@@ -27,6 +27,10 @@ package com.ensarsarajcic.neovim.java.api.buffer;
 import com.ensarsarajcic.neovim.java.api.BaseStreamApi;
 import com.ensarsarajcic.neovim.java.api.NeovimApiClient;
 import com.ensarsarajcic.neovim.java.api.types.api.CommandInfo;
+import com.ensarsarajcic.neovim.java.api.types.api.DeleteBufferOptions;
+import com.ensarsarajcic.neovim.java.api.types.api.ExtmarkInfo;
+import com.ensarsarajcic.neovim.java.api.types.api.GetBufferExtmarkOptions;
+import com.ensarsarajcic.neovim.java.api.types.api.GetBufferExtmarksOptions;
 import com.ensarsarajcic.neovim.java.api.types.api.GetCommandsOptions;
 import com.ensarsarajcic.neovim.java.api.types.api.HighlightedText;
 import com.ensarsarajcic.neovim.java.api.types.api.VimCoords;
@@ -249,6 +253,71 @@ public final class BufferStreamApi extends BaseStreamApi implements NeovimBuffer
         return sendWithResponseOfMapType(
                 prepareMessage(GET_COMMANDS).addArgument(commandsOptions),
                 String.class, CommandInfo.class
+        );
+    }
+
+    @Override
+    public CompletableFuture<Void> setText(int startRow, int startCol, int endRow, int endCol, List<String> lines) {
+        return sendWithNoResponse(
+                prepareMessage(SET_TEXT)
+                        .addArgument(startRow)
+                        .addArgument(startCol)
+                        .addArgument(endRow)
+                        .addArgument(endCol)
+                        .addArgument(lines));
+    }
+
+    @Override
+    public CompletableFuture<Void> delete(DeleteBufferOptions options) {
+        return sendWithNoResponse(prepareMessage(DELETE).addArgument(options));
+    }
+
+    @Override
+    public CompletableFuture<Object> call(Object luaFun) {
+        return sendWithGenericResponse(prepareMessage(CALL).addArgument(luaFun));
+    }
+
+    @Override
+    public CompletableFuture<VimCoords> getExtmarkById(int nsId, int extmarkId, GetBufferExtmarkOptions options) {
+        return sendWithResponseOfType(
+                prepareMessage(GET_EXTMARK_BY_ID)
+                        .addArgument(nsId)
+                        .addArgument(extmarkId)
+                        .addArgument(options),
+                VimCoords.class);
+    }
+
+    @Override
+    public CompletableFuture<List<ExtmarkInfo>> getExtmarks(int nsId, VimCoords start, VimCoords end, GetBufferExtmarksOptions options) {
+        return sendWithResponseOfListType(
+                prepareMessage(GET_EXTMARKS)
+                        .addArgument(nsId)
+                        .addArgument(start)
+                        .addArgument(end)
+                        .addArgument(options),
+                ExtmarkInfo.class
+        );
+    }
+
+    @Override
+    public CompletableFuture<Integer> setExtmark(int nsId, int line, int col, Map<String, Object> options) {
+        return sendWithResponseOfType(
+                prepareMessage(SET_EXTMARK)
+                        .addArgument(nsId)
+                        .addArgument(line)
+                        .addArgument(col)
+                        .addArgument(options),
+                Integer.class
+        );
+    }
+
+    @Override
+    public CompletableFuture<Boolean> deleteExtmark(int nsId, int extmarkId) {
+        return sendWithResponseOfType(
+                prepareMessage(DEL_EXTMARK)
+                        .addArgument(nsId)
+                        .addArgument(extmarkId),
+                Boolean.class
         );
     }
 

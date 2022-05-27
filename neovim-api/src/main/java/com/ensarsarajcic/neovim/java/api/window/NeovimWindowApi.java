@@ -58,6 +58,8 @@ public interface NeovimWindowApi {
     String GET_NUMBER = "nvim_win_get_number";
     String IS_VALID = "nvim_win_is_valid";
     String CLOSE = "nvim_win_close";
+    String HIDE = "nvim_win_hide";
+    String CALL = "nvim_win_call";
     // endregion
 
     Window get();
@@ -118,4 +120,10 @@ public interface NeovimWindowApi {
 
     @NeovimApiFunction(name = CLOSE, since = 6)
     CompletableFuture<Void> close(boolean force);
+
+    @NeovimApiFunction(name = HIDE, since = 7)
+    CompletableFuture<Void> hide();
+
+    @NeovimApiFunction(name = CALL, since = 7)
+    CompletableFuture<Object> call(Object luaFun);
 }

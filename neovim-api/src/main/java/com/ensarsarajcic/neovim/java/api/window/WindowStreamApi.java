@@ -161,6 +161,16 @@ public final class WindowStreamApi extends BaseStreamApi implements NeovimWindow
         return sendWithNoResponse(prepareMessage(CLOSE).addArgument(force));
     }
 
+    @Override
+    public CompletableFuture<Void> hide() {
+        return sendWithNoResponse(prepareMessage(HIDE));
+    }
+
+    @Override
+    public CompletableFuture<Object> call(Object luaFun) {
+        return sendWithGenericResponse(prepareMessage(CALL).addArgument(luaFun));
+    }
+
     private RequestMessage.Builder prepareMessage(String name) {
         return new RequestMessage.Builder(name).addArgument(model);
     }
