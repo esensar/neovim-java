@@ -30,6 +30,7 @@ import com.ensarsarajcic.neovim.java.api.buffer.NeovimBufferApi;
 import com.ensarsarajcic.neovim.java.api.tabpage.NeovimTabpageApi;
 import com.ensarsarajcic.neovim.java.api.tabpage.TabpageStreamApi;
 import com.ensarsarajcic.neovim.java.api.types.api.ChannelInfo;
+import com.ensarsarajcic.neovim.java.api.types.api.ChunkInfo;
 import com.ensarsarajcic.neovim.java.api.types.api.ClientAttributes;
 import com.ensarsarajcic.neovim.java.api.types.api.ClientType;
 import com.ensarsarajcic.neovim.java.api.types.api.ClientVersionInfo;
@@ -37,6 +38,7 @@ import com.ensarsarajcic.neovim.java.api.types.api.CommandInfo;
 import com.ensarsarajcic.neovim.java.api.types.api.GetCommandsOptions;
 import com.ensarsarajcic.neovim.java.api.types.api.MethodInfo;
 import com.ensarsarajcic.neovim.java.api.types.api.Mouse;
+import com.ensarsarajcic.neovim.java.api.types.api.OptionInfo;
 import com.ensarsarajcic.neovim.java.api.types.api.UiInfo;
 import com.ensarsarajcic.neovim.java.api.types.api.UiOptions;
 import com.ensarsarajcic.neovim.java.api.types.api.VimColorMap;
@@ -570,5 +572,102 @@ public final class NeovimStreamApi extends BaseStreamApi implements NeovimApi {
                 .addArgument(insert)
                 .addArgument(finish)
                 .addArgument(options));
+    }
+
+    @Override
+    public CompletableFuture<Void> setDecorationProvider(int hlId, Map<String, Object> options) {
+        return sendWithNoResponse(new RequestMessage.Builder(SET_DECORATION_PROVIDER)
+                .addArgument(hlId)
+                .addArgument(options));
+    }
+
+    @Override
+    public CompletableFuture<Void> uiPumSetBounds(int width, int height, int row, int col) {
+        return sendWithNoResponse(new RequestMessage.Builder(UI_PUM_SET_BOUNDS)
+                .addArgument(width)
+                .addArgument(height)
+                .addArgument(row)
+                .addArgument(col));
+    }
+
+    @Override
+    public CompletableFuture<Integer> getHlIdByName(String name) {
+        return sendWithResponseOfType(new RequestMessage.Builder(GET_HL_ID_BY_NAME)
+                .addArgument(name),
+                Integer.class);
+    }
+
+    @Override
+    public CompletableFuture<Void> setHl(int hlId, String name, Map hl) {
+        return sendWithNoResponse(new RequestMessage.Builder(SET_HL)
+                .addArgument(hlId)
+                .addArgument(name)
+                .addArgument(hl));
+    }
+
+    @Override
+    public CompletableFuture<Void> execLua(String code, List<String> arguments) {
+        return sendWithNoResponse(new RequestMessage.Builder(EXEC_LUA)
+                .addArgument(code)
+                .addArgument(arguments));
+    }
+
+    @Override
+    public CompletableFuture<Void> notifyUser(String message, int logLevel, Map<String, Object> options) {
+        return sendWithNoResponse(new RequestMessage.Builder(NOTIFY)
+                .addArgument(message)
+                .addArgument(logLevel)
+                .addArgument(options));
+    }
+
+    @Override
+    public CompletableFuture<List<String>> getRuntimeFile(String name, boolean all) {
+        return sendWithResponseOfListType(new RequestMessage.Builder(GET_RUNTIME_FILE)
+                .addArgument(name)
+                .addArgument(all),
+                String.class);
+    }
+
+    @Override
+    public CompletableFuture<Map<String, OptionInfo>> getAllOptionsInfo() {
+        return sendWithResponseOfMapType(new RequestMessage.Builder(GET_ALL_OPTIONS_INFO),
+                String.class,
+                OptionInfo.class);
+    }
+
+    @Override
+    public CompletableFuture<OptionInfo> getOptionInfo() {
+        return sendWithResponseOfType(new RequestMessage.Builder(GET_OPTION_INFO), OptionInfo.class);
+    }
+
+    @Override
+    public CompletableFuture<Void> echo(List<ChunkInfo> chunks, boolean history, Map<String, Object> options) {
+        return sendWithNoResponse(new RequestMessage.Builder(ECHO)
+                .addArgument(chunks)
+                .addArgument(history)
+                .addArgument(options));
+    }
+
+    @Override
+    public CompletableFuture<Integer> openTerm(int buffer, Map<String, Object> options) {
+        return sendWithResponseOfType(new RequestMessage.Builder(OPEN_TERM)
+                .addArgument(buffer)
+                .addArgument(options),
+                Integer.class);
+    }
+
+    @Override
+    public CompletableFuture<Void> chanSend(int channel, String data) {
+        return sendWithNoResponse(new RequestMessage.Builder(CHAN_SEND)
+                .addArgument(channel)
+                .addArgument(data));
+    }
+
+    @Override
+    public CompletableFuture<String> exec(String vimscriptCode, boolean captureOutput) {
+        return sendWithResponseOfType(new RequestMessage.Builder(EXEC)
+                .addArgument(vimscriptCode)
+                .addArgument(captureOutput),
+                String.class);
     }
 }

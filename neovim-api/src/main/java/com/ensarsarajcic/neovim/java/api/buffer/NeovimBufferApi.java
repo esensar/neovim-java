@@ -26,6 +26,10 @@ package com.ensarsarajcic.neovim.java.api.buffer;
 
 import com.ensarsarajcic.neovim.java.api.NeovimApiFunction;
 import com.ensarsarajcic.neovim.java.api.types.api.CommandInfo;
+import com.ensarsarajcic.neovim.java.api.types.api.DeleteBufferOptions;
+import com.ensarsarajcic.neovim.java.api.types.api.ExtmarkInfo;
+import com.ensarsarajcic.neovim.java.api.types.api.GetBufferExtmarkOptions;
+import com.ensarsarajcic.neovim.java.api.types.api.GetBufferExtmarksOptions;
 import com.ensarsarajcic.neovim.java.api.types.api.GetCommandsOptions;
 import com.ensarsarajcic.neovim.java.api.types.api.HighlightedText;
 import com.ensarsarajcic.neovim.java.api.types.api.VimCoords;
@@ -68,6 +72,13 @@ public interface NeovimBufferApi {
     String ATTACH_BUFFER = "nvim_buf_attach";
     String DETACH_BUFFER = "nvim_buf_detach";
     String GET_COMMANDS = "nvim_buf_get_commands";
+    String SET_TEXT = "nvim_buf_set_text";
+    String DELETE = "nvim_buf_delete";
+    String CALL = "nvim_buf_call";
+    String GET_EXTMARK_BY_ID = "nvim_buf_get_extmark_by_id";
+    String GET_EXTMARKS = "nvim_buf_get_extmarks";
+    String SET_EXTMARK = "nvim_buf_set_extmark";
+    String DEL_EXTMARK = "nvim_buf_del_extmark";
     // endregion
 
     Buffer get();
@@ -150,4 +161,25 @@ public interface NeovimBufferApi {
 
     @NeovimApiFunction(name = GET_COMMANDS, since = 4)
     CompletableFuture<Map<String, CommandInfo>> getCommands(GetCommandsOptions commandsOptions);
+
+    @NeovimApiFunction(name = SET_TEXT, since = 7)
+    CompletableFuture<Void> setText(int startRow, int startCol, int endRow, int endCol, List<String> lines);
+
+    @NeovimApiFunction(name = DELETE, since = 7)
+    CompletableFuture<Void> delete(DeleteBufferOptions options);
+
+    @NeovimApiFunction(name = CALL, since = 7)
+    CompletableFuture<Object> call(Object luaFun);
+
+    @NeovimApiFunction(name = GET_EXTMARK_BY_ID, since = 7)
+    CompletableFuture<VimCoords> getExtmarkById(int nsId, int extmarkId, GetBufferExtmarkOptions options);
+
+    @NeovimApiFunction(name = GET_EXTMARKS, since = 7)
+    CompletableFuture<List<ExtmarkInfo>> getExtmarks(int nsId, VimCoords start, VimCoords end, GetBufferExtmarksOptions options);
+
+    @NeovimApiFunction(name = SET_EXTMARK, since = 7)
+    CompletableFuture<Integer> setExtmark(int nsId, int line, int col, Map<String, Object> options);
+
+    @NeovimApiFunction(name = DEL_EXTMARK, since = 7)
+    CompletableFuture<Boolean> deleteExtmark(int nsId, int extmarkId);
 }
