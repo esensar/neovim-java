@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file. This change
 
 ## [Unreleased]
 
+### Added
+- Neovim API v7 support
+
 ## [0.3.0] - 2022-05-26
 
 ### Added
