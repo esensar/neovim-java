@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2018 Ensar Sarajčić
+ * Copyright (c) 2022 Ensar Sarajčić
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,42 +29,54 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
-/**
- * Class representing highlighted text group [text, hl_group]
- */
 @JsonFormat(shape = JsonFormat.Shape.ARRAY)
-@JsonPropertyOrder({"text", "hl_group"})
+@JsonPropertyOrder({"row", "col", "buffer", "buffername"})
 @JsonIgnoreProperties(ignoreUnknown = true)
-public final class HighlightedText {
+public final class MarkInfo {
 
-    private final String text;
-    private final String hlGroup;
+    private final int row;
+    private final int col;
+    private final int buffer;
+    private final String bufferName;
 
-    public HighlightedText(
-            @JsonProperty("text")
-                    String text,
-            @JsonProperty("hl_group")
-                    String hlGroup) {
-        this.text = text;
-        this.hlGroup = hlGroup;
+    public MarkInfo(
+            @JsonProperty("row")
+                    int row,
+            @JsonProperty("col")
+                    int col,
+            @JsonProperty("buffer")
+            int buffer,
+            @JsonProperty("buffername")
+            String bufferName) {
+        this.row = row;
+        this.col = col;
+        this.buffer = buffer;
+        this.bufferName = bufferName;
     }
 
-    public HighlightedText(String text) {
-        this(text, null);
+    public int getRow() {
+        return row;
     }
 
-    public String getText() {
-        return text;
+    public int getCol() {
+        return col;
     }
 
-    public String getHlGroup() {
-        return hlGroup;
+    public int getBuffer() {
+        return buffer;
+    }
+
+    public String getBufferName() {
+        return bufferName;
     }
 
     @Override
     public String toString() {
-        return "HighlightedText{"
-                + "text='" + text + '\''
-                + ", hlGroup='" + hlGroup + '\'' + '}';
+        return "MarkInfo{"
+                + "row=" + row
+                + ", col=" + col
+                + ", buffer=" + buffer
+                + ", bufferName='" + bufferName + '\''
+                + '}';
     }
 }

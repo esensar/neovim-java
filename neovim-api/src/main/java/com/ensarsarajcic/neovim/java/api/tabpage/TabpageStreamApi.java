@@ -41,7 +41,7 @@ import java.util.stream.Collectors;
 /**
  * Implementation of {@link TabpageStreamApi} based on {@link ReactiveRpcStreamer}
  */
-@NeovimApiClient(name = "full_tabpage_api", target = 6)
+@NeovimApiClient(name = "full_tabpage_api", target = 8)
 public final class TabpageStreamApi extends BaseStreamApi implements NeovimTabpageApi {
 
     private final Tabpage model;

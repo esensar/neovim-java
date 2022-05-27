@@ -30,12 +30,14 @@ import com.ensarsarajcic.neovim.java.api.buffer.NeovimBufferApi;
 import com.ensarsarajcic.neovim.java.api.tabpage.NeovimTabpageApi;
 import com.ensarsarajcic.neovim.java.api.tabpage.TabpageStreamApi;
 import com.ensarsarajcic.neovim.java.api.types.api.ChannelInfo;
-import com.ensarsarajcic.neovim.java.api.types.api.ChunkInfo;
 import com.ensarsarajcic.neovim.java.api.types.api.ClientAttributes;
 import com.ensarsarajcic.neovim.java.api.types.api.ClientType;
 import com.ensarsarajcic.neovim.java.api.types.api.ClientVersionInfo;
 import com.ensarsarajcic.neovim.java.api.types.api.CommandInfo;
+import com.ensarsarajcic.neovim.java.api.types.api.EvalStatuslineOptions;
+import com.ensarsarajcic.neovim.java.api.types.api.EvalStatuslineResult;
 import com.ensarsarajcic.neovim.java.api.types.api.GetCommandsOptions;
+import com.ensarsarajcic.neovim.java.api.types.api.HighlightedText;
 import com.ensarsarajcic.neovim.java.api.types.api.MethodInfo;
 import com.ensarsarajcic.neovim.java.api.types.api.Mouse;
 import com.ensarsarajcic.neovim.java.api.types.api.OptionInfo;
@@ -61,7 +63,7 @@ import java.util.stream.Collectors;
 /**
  * Full implementation of {@link NeovimApi} based on {@link ReactiveRpcStreamer}
  */
-@NeovimApiClient(name = "full_stream_api", target = 6)
+@NeovimApiClient(name = "full_stream_api", target = 8)
 public final class NeovimStreamApi extends BaseStreamApi implements NeovimApi {
 
     public NeovimStreamApi(ReactiveRpcStreamer reactiveRpcStreamer) {
@@ -641,7 +643,7 @@ public final class NeovimStreamApi extends BaseStreamApi implements NeovimApi {
     }
 
     @Override
-    public CompletableFuture<Void> echo(List<ChunkInfo> chunks, boolean history, Map<String, Object> options) {
+    public CompletableFuture<Void> echo(List<HighlightedText> chunks, boolean history, Map<String, Object> options) {
         return sendWithNoResponse(new RequestMessage.Builder(ECHO)
                 .addArgument(chunks)
                 .addArgument(history)
@@ -669,5 +671,28 @@ public final class NeovimStreamApi extends BaseStreamApi implements NeovimApi {
                 .addArgument(vimscriptCode)
                 .addArgument(captureOutput),
                 String.class);
+    }
+
+    @Override
+    public CompletableFuture<Boolean> deleteMark(String name) {
+        return sendWithResponseOfType(new RequestMessage.Builder(DEL_MARK)
+                .addArgument(name),
+                Boolean.class);
+    }
+
+    @Override
+    public CompletableFuture<Boolean> getMark(String name, Map<String, Object> options) {
+        return sendWithResponseOfType(new RequestMessage.Builder(GET_MARK)
+                .addArgument(name)
+                .addArgument(options),
+                Boolean.class);
+    }
+
+    @Override
+    public CompletableFuture<EvalStatuslineResult> evalStatusline(String statuslineString, EvalStatuslineOptions options) {
+        return sendWithResponseOfType(new RequestMessage.Builder(EVAL_STATUSLINE)
+                .addArgument(statuslineString)
+                .addArgument(options),
+                EvalStatuslineResult.class);
     }
 }

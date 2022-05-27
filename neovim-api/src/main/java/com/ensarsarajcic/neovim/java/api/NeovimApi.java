@@ -28,12 +28,14 @@ import com.ensarsarajcic.neovim.java.api.atomic.AtomicCallResponse;
 import com.ensarsarajcic.neovim.java.api.buffer.NeovimBufferApi;
 import com.ensarsarajcic.neovim.java.api.tabpage.NeovimTabpageApi;
 import com.ensarsarajcic.neovim.java.api.types.api.ChannelInfo;
-import com.ensarsarajcic.neovim.java.api.types.api.ChunkInfo;
 import com.ensarsarajcic.neovim.java.api.types.api.ClientAttributes;
 import com.ensarsarajcic.neovim.java.api.types.api.ClientType;
 import com.ensarsarajcic.neovim.java.api.types.api.ClientVersionInfo;
 import com.ensarsarajcic.neovim.java.api.types.api.CommandInfo;
+import com.ensarsarajcic.neovim.java.api.types.api.EvalStatuslineOptions;
+import com.ensarsarajcic.neovim.java.api.types.api.EvalStatuslineResult;
 import com.ensarsarajcic.neovim.java.api.types.api.GetCommandsOptions;
+import com.ensarsarajcic.neovim.java.api.types.api.HighlightedText;
 import com.ensarsarajcic.neovim.java.api.types.api.MethodInfo;
 import com.ensarsarajcic.neovim.java.api.types.api.Mouse;
 import com.ensarsarajcic.neovim.java.api.types.api.OptionInfo;
@@ -143,6 +145,9 @@ public interface NeovimApi {
     String OPEN_TERM = "nvim_open_term";
     String CHAN_SEND = "nvim_chan_send";
     String EXEC = "nvim_exec";
+    String DEL_MARK = "nvim_del_mark";
+    String GET_MARK = "nvim_get_mark";
+    String EVAL_STATUSLINE = "nvim_eval_statusline";
     // endregion
 
     @NeovimApiFunction(name = CALL_ATOMIC, since = 1)
@@ -386,7 +391,7 @@ public interface NeovimApi {
     CompletableFuture<OptionInfo> getOptionInfo();
 
     @NeovimApiFunction(name = ECHO, since = 7)
-    CompletableFuture<Void> echo(List<ChunkInfo> chunks, boolean history, Map<String, Object> options);
+    CompletableFuture<Void> echo(List<HighlightedText> chunks, boolean history, Map<String, Object> options);
 
     @NeovimApiFunction(name = OPEN_TERM, since = 7)
     CompletableFuture<Integer> openTerm(int buffer, Map<String, Object> options);
@@ -396,4 +401,13 @@ public interface NeovimApi {
 
     @NeovimApiFunction(name = EXEC, since = 7)
     CompletableFuture<String> exec(String vimscriptCode, boolean captureOutput);
+
+    @NeovimApiFunction(name = DEL_MARK, since = 8)
+    CompletableFuture<Boolean> deleteMark(String name);
+
+    @NeovimApiFunction(name = GET_MARK, since = 8)
+    CompletableFuture<Boolean> getMark(String name, Map<String, Object> options);
+
+    @NeovimApiFunction(name = EVAL_STATUSLINE, since = 8)
+    CompletableFuture<EvalStatuslineResult> evalStatusline(String statuslineString, EvalStatuslineOptions options);
 }
