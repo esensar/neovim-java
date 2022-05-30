@@ -29,6 +29,7 @@
         <!-- Helpers -->
         <module>api-explorer</module>
         <module>rplugin-example</module>
+        <module>plugin-host</module>
     </modules>
 
     <name>neovim-java (Parent)</name>

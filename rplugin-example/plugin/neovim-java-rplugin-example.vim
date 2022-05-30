@@ -9,14 +9,14 @@ let s:bin = expand('<sfile>:p:h').'/../target/rplugin-example.jar'
 " Entry point. Initialize RPC
 function! s:connect()
   let id = s:initRpc()
-  
+
   if 0 == id
     echoerr "neovim-java-rplugin-example: cannot start rpc process"
   elseif -1 == id
     echoerr "neovim-java-rplugin-example: rpc process is not executable"
   else
     " Mutate our jobId variable to hold the channel ID
-    let s:neovimJavaJobId = id 
+    let s:neovimJavaJobId = id
   endif
 endfunction
 
@@ -37,4 +37,3 @@ function! s:initRpc()
 endfunction
 
 call s:connect()
-command! NeovimJavaIncrementCount :echo rpcrequest(s:neovimJavaJobId, 'increment_calls')
