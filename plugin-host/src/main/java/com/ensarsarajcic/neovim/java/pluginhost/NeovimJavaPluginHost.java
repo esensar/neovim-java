@@ -22,6 +22,7 @@ public final class NeovimJavaPluginHost {
     private final NeovimApi api;
     private final NeovimStreamNotificationHandler neovimStreamNotificationHandler;
     private final RpcClient client;
+    private final RemotePluginManager remotePluginManager;
 
     private ApiInfo apiInfo = null;
     private PluginApi pluginApi = null;
@@ -37,16 +38,24 @@ public final class NeovimJavaPluginHost {
         client = RpcClient.getDefaultAsyncInstance();
         var reactiveRpcClient = ReactiveRpcClient.createDefaultInstanceWithCustomStreamer(client);
         neovimStreamNotificationHandler = new NeovimStreamNotificationHandler(reactiveRpcClient);
+        remotePluginManager = new RemotePluginManager(neovimHandlerManager, neovimHandlerProxy, client);
         api = new NeovimStreamApi(reactiveRpcClient);
     }
 
     public CompletableFuture<Void> start(String[] args) {
+        if (apiInfo != null) throw new RuntimeException("Plugin already started!");
+
         client.attach(rpcConnection);
-        return api.getApiInfo().thenAccept(info -> {
-            neovimHandlerManager.attachToStream(client);
-            this.apiInfo = info;
-            this.pluginApi = new PluginApi(api, apiInfo);
-        });
+        return api.getApiInfo()
+                .thenAccept(info -> {
+                    neovimHandlerManager.attachToStream(client);
+                    this.apiInfo = info;
+                    this.pluginApi = new PluginApi(api, apiInfo);
+                })
+                .thenCompose(v -> remotePluginManager.setupRemotePlugins(this))
+                .thenAccept(v -> {
+                    remotePluginManager.startRemotePlugins();
+                });
     }
 
     public NeovimHandlerManager getNeovimHandlerManager() {

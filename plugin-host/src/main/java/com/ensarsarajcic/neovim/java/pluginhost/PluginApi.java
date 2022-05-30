@@ -2,12 +2,26 @@ package com.ensarsarajcic.neovim.java.pluginhost;
 
 import com.ensarsarajcic.neovim.java.api.NeovimApi;
 import com.ensarsarajcic.neovim.java.api.types.apiinfo.ApiInfo;
-import com.ensarsarajcic.neovim.java.handler.NeovimHandlerProxy;
+import com.ensarsarajcic.neovim.java.pluginhost.opts.AutocommandOpts;
+import com.ensarsarajcic.neovim.java.pluginhost.opts.CommandOpts;
 
-import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 public final class PluginApi {
+
+    private static final String COMMAND_ARGS =
+            "{'lineStart': <line1>, 'lineEnd': <line2>, 'range': <range>, 'count': <count>, 'bang': '<bang>', 'mods': '<mods>', 'register': '<reg>', 'args': '<args>'}";
+    private static final String AUTOCOMMAND_ARGS =
+            "{'file': '<afile>', 'match': <amatch>, 'buffer': <abuf>}";
+
+    public static class CommandAction {
+        public static final String CALL = "call %s";
+        public static final String ECHO = "echo %s";
+        public static final String NOTIFY = "vim.notify(%s)";
+    }
 
     private final NeovimApi api;
     private final ApiInfo apiInfo;
@@ -20,25 +34,75 @@ public final class PluginApi {
     public CompletableFuture<Void> addRequestCommand(
             String commandName,
             String requestName,
-            boolean echo,
-            String description
+            CommandOpts opts
     ) {
-        var options = new HashMap<String, Object>();
-        options.put("desc", description);
-        var command = echo ? "echo " : "";
+        return addRequestCommand(commandName, requestName, opts, null);
+    }
+
+    public CompletableFuture<Void> addRequestCommand(
+            String commandName,
+            String requestName,
+            CommandOpts opts,
+            String commandAction
+    ) {
+        var requestString = String.format(
+                "rpcrequest(%d, '%s', %s)",
+                apiInfo.getChannelId(),
+                requestName,
+                COMMAND_ARGS
+        );
+        String command = String.format(
+                Objects.requireNonNullElse(
+                        commandAction,
+                        CommandAction.CALL
+                ),
+                requestString
+        );
         return api.createUserCommand(
                 commandName,
-                String.format("%srpcrequest(%d, '%s')", command, apiInfo.getChannelId(), requestName),
-                options
+                command,
+                opts.toNeovimOptions()
         );
     }
 
-    public CompletableFuture<Void> addNotificationCommand(String commandName, String requestName, String description) {
-        var options = new HashMap<String, Object>();
-        options.put("desc", description);
+    public CompletableFuture<Void> addNotificationCommand(String commandName, String requestName, CommandOpts opts) {
         return api.createUserCommand(
                 commandName,
-                String.format("rpcnotify(%d, '%s')", apiInfo.getChannelId(), requestName),
+                String.format(
+                        "call rpcnotify(%d, '%s', %s)",
+                        apiInfo.getChannelId(),
+                        requestName,
+                        COMMAND_ARGS
+                ),
+                opts.toNeovimOptions()
+        );
+    }
+
+    public CompletableFuture<Integer> addAutocommand(
+            List<String> events,
+            String requestName,
+            AutocommandOpts opts
+    ) {
+        String command;
+        if (opts.sync()) {
+            command = String.format(
+                    "call rpcrequest(%d, '%s', %s)",
+                    apiInfo.getChannelId(),
+                    requestName,
+                    AUTOCOMMAND_ARGS
+            );
+        } else {
+            command = String.format(
+                    "call rpcnotify(%d, '%s', %s)",
+                    apiInfo.getChannelId(),
+                    requestName,
+                    AUTOCOMMAND_ARGS
+            );
+        }
+        Map<String, Object> options = opts.toNeovimOptions();
+        options.put("command", command);
+        return api.createAutocommand(
+                events,
                 options
         );
     }
