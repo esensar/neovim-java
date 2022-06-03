@@ -54,13 +54,18 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Supplier;
 
 public final class RemotePluginManager {
 
     private final NeovimHandlerManager neovimHandlerManager;
     private final NeovimHandlerProxy neovimHandlerProxy;
     private final RpcClient client;
-    private final List<Runnable> initializers = new ArrayList<>();
+
+    // Hooks
+    private final List<Supplier<CompletableFuture<Void>>> preconfigurationHooks = new ArrayList<>();
+    private final List<Supplier<CompletableFuture<Void>>> readyHooks = new ArrayList<>();
+    private final List<Supplier<CompletableFuture<Void>>> setupMethods = new ArrayList<>();
 
     public RemotePluginManager(NeovimHandlerManager neovimHandlerManager, NeovimHandlerProxy neovimHandlerProxy, RpcClient rpcClient) {
         this.neovimHandlerManager = neovimHandlerManager;
@@ -91,11 +96,31 @@ public final class RemotePluginManager {
 
                 neovimHandlerManager.registerNeovimHandler(instance);
                 try {
-                    var initializerMethod = plugin.getDeclaredMethod("initialize");
+                    var initializerMethod = plugin.getDeclaredMethod("onReady");
                     Object finalInstance = instance;
-                    initializers.add(() -> {
+                    readyHooks.add(() -> {
                         try {
-                            initializerMethod.invoke(finalInstance);
+                            if (initializerMethod.getReturnType() == CompletableFuture.class) {
+                                // Ignore result, just take the completable part
+                                return ((CompletableFuture) initializerMethod.invoke(finalInstance)).thenApply(x -> null);
+                            } else {
+                                initializerMethod.invoke(finalInstance);
+                                return CompletableFuture.completedFuture(null);
+                            }
+                        } catch (IllegalAccessException | InvocationTargetException e) {
+                            throw new RuntimeException(e);
+                        }
+                    });
+                    var preconfigureMethod = plugin.getDeclaredMethod("prepare");
+                    preconfigurationHooks.add(() -> {
+                        try {
+                            if (preconfigureMethod.getReturnType() == CompletableFuture.class) {
+                                // Ignore result, just take the completable part
+                                return ((CompletableFuture) preconfigureMethod.invoke(finalInstance)).thenApply(x -> null);
+                            } else {
+                                preconfigureMethod.invoke(finalInstance);
+                                return CompletableFuture.completedFuture(null);
+                            }
                         } catch (IllegalAccessException | InvocationTargetException e) {
                             throw new RuntimeException(e);
                         }
@@ -106,16 +131,28 @@ public final class RemotePluginManager {
                 throw new RuntimeException(e);
             }
 
-            futures.add(setupCommands(plugin, instance, pluginHost));
-            futures.add(setupAutocommands(plugin, instance, pluginHost));
-            pluginHost.getNeovimHandlerManager().registerNeovimHandler(instance);
+            Object finalInstance = instance;
+            setupMethods.add(() -> CompletableFuture.allOf(
+                    setupCommands(plugin, finalInstance, pluginHost),
+                    setupAutocommands(plugin, finalInstance, pluginHost)
+            ));
         }
 
-        return CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
+        return preconfigurationHooks.stream()
+                .map(Supplier::get)
+                .reduce((l, r) -> l.thenCombine(r, (lr, rr) -> null))
+                .orElse(CompletableFuture.completedFuture(null))
+                .thenCompose((v) -> setupMethods.stream()
+                        .map(Supplier::get)
+                        .reduce((l, r) -> l.thenCombine(r, (lr, rr) -> null))
+                        .orElse(CompletableFuture.completedFuture(null)));
     }
 
-    public void startRemotePlugins() {
-        initializers.forEach(Runnable::run);
+    public CompletableFuture<Void> startRemotePlugins() {
+        return readyHooks.stream()
+                .map(Supplier::get)
+                .reduce((l, r) -> l.thenCombine(r, (lr, rr) -> null))
+                .orElse(CompletableFuture.completedFuture(null));
     }
 
     private CompletableFuture<Void> setupCommands(Class<?> plugin, Object pluginInstance, NeovimJavaPluginHost pluginHost) {

@@ -77,9 +77,7 @@ public final class NeovimJavaPluginHost {
                     this.pluginApi = new PluginApi(api, apiInfo);
                 })
                 .thenCompose(v -> remotePluginManager.setupRemotePlugins(this))
-                .thenAccept(v -> {
-                    remotePluginManager.startRemotePlugins();
-                });
+                .thenCompose(v -> remotePluginManager.startRemotePlugins());
     }
 
     public NeovimHandlerManager getNeovimHandlerManager() {
