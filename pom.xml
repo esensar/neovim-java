@@ -28,8 +28,12 @@
 
         <!-- Helpers -->
         <module>api-explorer</module>
-        <module>rplugin-example</module>
         <module>plugin-host</module>
+        <module>plugins-common-host</module>
+
+        <!-- Examples -->
+        <module>rplugin-example</module>
+        <module>rplugin-hosted-example</module>
     </modules>
 
     <name>neovim-java (Parent)</name>

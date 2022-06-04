@@ -16,6 +16,8 @@ Consists of following modules:
  * **Handler annotations**  [![javadoc](https://javadoc.io/badge2/com.ensarsarajcic.neovim.java/handler-annotations/javadoc.svg)](https://javadoc.io/doc/com.ensarsarajcic.neovim.java/handler-annotations) - addition allowing creation of annotation based handlers for requests and notifications
  * **Neovim notifications**  [![javadoc](https://javadoc.io/badge2/com.ensarsarajcic.neovim.java/neovim-notifications/javadoc.svg)](https://javadoc.io/doc/com.ensarsarajcic.neovim.java/neovim-notifications) - addition allowing usage of notifications through Java 9 Flows interface and also provides data models for all neovim notifications
  * **API Explorer**  [![javadoc](https://javadoc.io/badge2/com.ensarsarajcic.neovim.java/api-explorer/javadoc.svg)](https://javadoc.io/doc/com.ensarsarajcic.neovim.java/api-explorer) - simple JavaFX application used for testing library and exploring neovim API
+ * **Plugin host**  [![javadoc](https://javadoc.io/badge2/com.ensarsarajcic.neovim.java/plugin-host/javadoc.svg)](https://javadoc.io/doc/com.ensarsarajcic.neovim.java/plugin-host) - library for building remote plugins - this should be the main dependency when developing Neovim plugins (either standalone or hosted by `plugins-common-host`) - enables easy usage with [neovim-java-plugin-host](https://github.com/esensar/neovim-java-plugin-host)
+ * **Plugins common host**  [![javadoc](https://javadoc.io/badge2/com.ensarsarajcic.neovim.java/plugins-common-host/javadoc.svg)](https://javadoc.io/doc/com.ensarsarajcic.neovim.java/plugins-common-host) - executable which can be used as a remote plugin in Neovim, which should load all other plugins from classpath (provided by [neovim-java-plugin-host](https://github.com/esensar/neovim-java-plugin-host))
 
 Many features are not completely tested and this library was mostly built to experiment with Neovim RPC API, but there should be no issues with using this library.
 
@@ -57,6 +59,10 @@ For more information, check out README of modules you are interested in.
 This repository contains a small remote plugin example in `rplugin-example`. To run this example run `mvn package` and run Neovim with provided vimrc by calling `nvim -u rplugin-example/vimrc` from project root.
 
 It should be possible to then call the `:NeovimJavaIncrementCount` command which communicated with java plugin.
+
+It is an example of a standalone rplugin which should provide its own configuration.
+
+`rplugin-hosted-example` is an example of a hosted plugin which can be easily loaded with [neovim-java-plugin-host](https://github.com/esensar/neovim-java-plugin-host)
 
 ## Contributing
 
