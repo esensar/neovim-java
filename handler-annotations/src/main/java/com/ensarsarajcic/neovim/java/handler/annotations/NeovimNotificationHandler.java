@@ -36,7 +36,7 @@ import java.lang.annotation.Target;
  * <p>
  * To actually use this, object with this method needs to be registered in {@link com.ensarsarajcic.neovim.java.handler.NeovimHandlerManager}
  * <p>
- * Currently, only single argument methods are supported and that argument must be of {@link com.ensarsarajcic.neovim.java.corerpc.message.NotificationMessage} type
+ * Currently, only zero argument or single argument methods are supported and that argument must be of {@link com.ensarsarajcic.neovim.java.corerpc.message.NotificationMessage} type
  */
 @Inherited
 @Retention(RetentionPolicy.RUNTIME)

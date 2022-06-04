@@ -39,7 +39,7 @@ public final class PluginApi {
     private static final String COMMAND_ARGS =
             "{'lineStart': <line1>, 'lineEnd': <line2>, 'range': <range>, 'count': <count>, 'bang': '<bang>', 'mods': '<mods>', 'register': '<reg>', 'args': '<args>'}";
     private static final String AUTOCOMMAND_ARGS =
-            "{'file': '<afile>', 'match': <amatch>, 'buffer': <abuf>}";
+            "{'file': expand('<afile>'), 'match': expand('<amatch>'), 'buffer': expand('<abuf>')}";
 
     public static class CommandAction {
         public static final String CALL = "call %s";
