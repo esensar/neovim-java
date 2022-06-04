@@ -15,8 +15,10 @@ This library consists of multiple modules and you may choose which one you want 
  * [**Handler annotations**](#handler-annotations) [![javadoc](https://javadoc.io/badge2/com.ensarsarajcic.neovim.java/handler-annotations/javadoc.svg)](https://javadoc.io/doc/com.ensarsarajcic.neovim.java/handler-annotations) - addition allowing creation of annotation based handlers for requests and notifications
  * [**Neovim notifications**](#neovim-notifications) [![javadoc](https://javadoc.io/badge2/com.ensarsarajcic.neovim.java/neovim-notifications/javadoc.svg)](https://javadoc.io/doc/com.ensarsarajcic.neovim.java/neovim-notifications) - addition allowing usage of notifications through Java 9 Flows interface and also provides data models for all neovim notifications
  * [**API Explorer**](#api-explorer) [![javadoc](https://javadoc.io/badge2/com.ensarsarajcic.neovim.java/api-explorer/javadoc.svg)](https://javadoc.io/doc/com.ensarsarajcic.neovim.java/api-explorer) - simple JavaFX application used for testing library and exploring neovim API
+ * [**Plugin host**](#plugin-host) [![javadoc](https://javadoc.io/badge2/com.ensarsarajcic.neovim.java/plugin-host/javadoc.svg)](https://javadoc.io/doc/com.ensarsarajcic.neovim.java/plugin-host) - library for building remote plugins - this should be the main dependency when developing Neovim plugins (either standalone or hosted by `plugins-common-host`) - enables easy usage with [neovim-java-plugin-host](https://github.com/esensar/neovim-java-plugin-host)
+ * [**Plugins common host**](#plugins-common-host) [![javadoc](https://javadoc.io/badge2/com.ensarsarajcic.neovim.java/plugins-common-host/javadoc.svg)](https://javadoc.io/doc/com.ensarsarajcic.neovim.java/plugins-common-host) - executable which can be used as a remote plugin in Neovim, which should load all other plugins from classpath (provided by [neovim-java-plugin-host](https://github.com/esensar/neovim-java-plugin-host))
 
-## Core RPC 
+## Core RPC
 [![javadoc](https://javadoc.io/badge2/com.ensarsarajcic.neovim.java/core-rpc/javadoc.svg)](https://javadoc.io/doc/com.ensarsarajcic.neovim.java/core-rpc)
 Core of the library with a basic interface for RPC communication through a `RPCConnection`. This implements basic Neovim API definition, without any specific types or functions. It can be used if functions to be used may not be known beforehand. All of the classes in this module may be replaced with a different implementation if special behaviour is required.
 
@@ -62,8 +64,8 @@ Similar to this, different parts of `RPCClient` can be changed using the builder
 
 ### Info
 
-If you wish to include this module (and not some other module), you may add it as your dependency:  
-Maven:  
+If you wish to include this module (and not some other module), you may add it as your dependency:
+Maven:
 ```xml
 <dependency>
   <groupId>com.ensarsarajcic.neovim.java</groupId>
@@ -71,7 +73,7 @@ Maven:
   <version>${neovimjava.version}</version>
 </dependency>
 ```
-Gradle:  
+Gradle:
 ```groovy
 compile 'com.ensarsarajcic.neovim.java:core-rpc:${neovimjava.version}'
 ```
@@ -81,8 +83,8 @@ compile 'com.ensarsarajcic.neovim.java:core-rpc:${neovimjava.version}'
 Reactive core RPC module is a simple wrapper around core RPC module. It provides a reactive interface using Java 9 Flows. Requests and notifications
 are provided through a `Flow`, while sending messages returns a `CompletableFuture` which can return a response.
 
-Include it in your dependencies:  
-Maven:  
+Include it in your dependencies:
+Maven:
 ```xml
 <dependency>
   <groupId>com.ensarsarajcic.neovim.java</groupId>
@@ -90,7 +92,7 @@ Maven:
   <version>${neovimjava.version}</version>
 </dependency>
 ```
-Gradle:  
+Gradle:
 ```groovy
 compile 'com.ensarsarajcic.neovim.java:reactive-core-rpc:${neovimjava.version}'
 ```
@@ -98,14 +100,14 @@ compile 'com.ensarsarajcic.neovim.java:reactive-core-rpc:${neovimjava.version}'
 It handles the same `RPCConnection` interface as core RPC module and creation is very similar:
 ```java
     Socket socket = new Socket("127.0.0.1", 1234);
-    
+
     RPCConnection localConnection = new TcpSocketRPCConnection(socket);
     ReactiveRPCStreamer rpcStreamer = ReactiveRPCClient.getDefaultInstance(); // shared singleton
-    
+
     rpcStreamer.attach(localConnection);
     Message request = new RequestMessage.Builder("nvim_get_current_line");
     rpcStreamer.response(request).thenAccept(System.out::println); // requesting
-    
+
     rpcStreamer.notificationsFlow().subscribe(notificationsSubscriber); // notifications subscription
 ```
 
@@ -115,8 +117,8 @@ RxJava wrapper is not provided, since it is very easy to wrap this Java 9 Flow i
 [![javadoc](https://javadoc.io/badge2/com.ensarsarajcic.neovim.java/unix-socket-connection/javadoc.svg)](https://javadoc.io/doc/com.ensarsarajcic.neovim.java/unix-socket-connection)
 Unix socket connection module provides a very simple additional implementation of `RPCConnection` based on Unix domain sockets.
 
-Include it in your dependencies:  
-Maven:  
+Include it in your dependencies:
+Maven:
 ```xml
 <dependency>
   <groupId>com.ensarsarajcic.neovim.java</groupId>
@@ -124,7 +126,7 @@ Maven:
   <version>${neovimjava.version}</version>
 </dependency>
 ```
-Gradle:  
+Gradle:
 ```groovy
 compile 'com.ensarsarajcic.neovim.java:unix-socket-connection:${neovimjava.version}'
 ```
@@ -150,8 +152,8 @@ and provides 4 separate **APIs**: *Neovim*, *Buffer*, *Tabpage* and *Window* (th
 All calls are made using *reactive-core-rpc* module and all calls return `CompletableFuture`. If you prefer RxJava over Java 9 Flows, you can use
 *neovim-rx-api* module.
 
-Include it in your dependencies:  
-Maven:  
+Include it in your dependencies:
+Maven:
 ```xml
 <dependency>
   <groupId>com.ensarsarajcic.neovim.java</groupId>
@@ -159,7 +161,7 @@ Maven:
   <version>${neovimjava.version}</version>
 </dependency>
 ```
-Gradle:  
+Gradle:
 ```groovy
 compile 'com.ensarsarajcic.neovim.java:neovim-api:${neovimjava.version}'
 ```
@@ -167,12 +169,12 @@ compile 'com.ensarsarajcic.neovim.java:neovim-api:${neovimjava.version}'
 Example usage:
 ```java
     Socket socket = new Socket("127.0.0.1", 1234);
-    
+
     RPCConnection localConnection = new TcpSocketRPCConnection(socket);
     NeovimApi api = NeovimApis.getApiForConnection(localConnection);
-    
+
     api.getCurrentLine().thenAccept(System.out::println);
-    
+
     NeovimApi another = new NeovimStreamApi(ReactiveRPCClient.getDefaultInstance());
 ```
 
@@ -180,8 +182,8 @@ Example usage:
 [![javadoc](https://javadoc.io/badge2/com.ensarsarajcic.neovim.java/neovim-rx-api/javadoc.svg)](https://javadoc.io/doc/com.ensarsarajcic.neovim.java/neovim-rx-api)
 Neovim RX api module provides a same API as neovim API module, but using RxJava2.
 
-Include it in your dependencies:  
-Maven:  
+Include it in your dependencies:
+Maven:
 ```xml
 <dependency>
   <groupId>com.ensarsarajcic.neovim.java</groupId>
@@ -189,7 +191,7 @@ Maven:
   <version>${neovimjava.version}</version>
 </dependency>
 ```
-Gradle:  
+Gradle:
 ```groovy
 compile 'com.ensarsarajcic.neovim.java:neovim-rx-api:${neovimjava.version}'
 ```
@@ -197,11 +199,11 @@ compile 'com.ensarsarajcic.neovim.java:neovim-rx-api:${neovimjava.version}'
 Example:
 ```java
     Socket socket = new Socket("127.0.0.1", 1234);
-    
+
     RPCConnection localConnection = new TcpSocketRPCConnection(socket);
     NeovimApi api = NeovimApis.getApiForConnection(localConnection); // Create regular API
     NeovimRxApi rxApi = new NeovimRxWrapper(api); // And then wrap it in RxJava2 interface
-    
+
     api.getCurrentLine().thenAccept(System.out::println);
     rxApi.getCurrentLine().subscribe(System.out::println);
 ```
@@ -212,8 +214,8 @@ Handler annotations module provides a way to register listeners for requests and
 object with methods annotated with `NeovimNotificationHandler` or `NeovimRequestHandler`. These methods need to take only one parameter, `NotificationMessage`
 and `RequestMessage` respectively.
 
-Include it in your dependencies:  
-Maven:  
+Include it in your dependencies:
+Maven:
 ```xml
 <dependency>
   <groupId>com.ensarsarajcic.neovim.java</groupId>
@@ -221,7 +223,7 @@ Maven:
   <version>${neovimjava.version}</version>
 </dependency>
 ```
-Gradle:  
+Gradle:
 ```groovy
 compile 'com.ensarsarajcic.neovim.java:handler-annotations:${neovimjava.version}'
 ```
@@ -229,13 +231,13 @@ compile 'com.ensarsarajcic.neovim.java:handler-annotations:${neovimjava.version}
 Example usage:
 ```java
     class AHandlerClass {
-    
+
         @NeovimNotificationHandler("redraw")
         public void handleRedraw(NotificationMessage message) {
             System.out.println("Received a message: " + message);
         }
     }
-    
+
     NeovimHandlerManager neovimHandlerManager = new NeovimHandlerManager();
 
     neovimHandlerManager.registerNeovimHandler(new AHandlerClass());
@@ -252,8 +254,8 @@ By default, all notifications and requests will be blocking. If you need a diffe
 Neovim notifications module provides a way to receive notifications through Java 9 Flows. Besides that it provides models for all neovim notifications,
 which can only be checked using *instanceof* operator currently, but provide an easier way to parse data.
 
-Include it in your dependencies:  
-Maven:  
+Include it in your dependencies:
+Maven:
 ```xml
 <dependency>
   <groupId>com.ensarsarajcic.neovim.java</groupId>
@@ -261,7 +263,7 @@ Maven:
   <version>${neovimjava.version}</version>
 </dependency>
 ```
-Gradle:  
+Gradle:
 ```groovy
 compile 'com.ensarsarajcic.neovim.java:neovim-notifications:${neovimjava.version}'
 ```
@@ -279,3 +281,99 @@ Example usage:
 Simple JavaFX application loading Neovim API information using `nvim --api-info`. Displays all loaded information in tables for simple overview.
 
 It can also be used as an example of usage of library.
+
+## Plugin host
+
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.ensarsarajcic.neovim.java/core-rpc/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.ensarsarajcic.neovim.java/plugin-host)
+[![javadoc](https://javadoc.io/badge2/com.ensarsarajcic.neovim.java/core-rpc/javadoc.svg)](https://javadoc.io/doc/com.ensarsarajcic.neovim.java/plugin-host)
+
+This is the plugin host module, the main module when developing neovim remote plugins. It uses rest of the core modules to communicate with neovim and it provides annotations to easily define commands and autocommands. It can also be used to create hosted plugins, which can't be run on their own, but depend on [neovim-java-plugin-host](https://github.com/esensar/neovim-java-plugin-host).
+
+It provides `NeovimJavaPluginHost` which holds everything needed to communicate with neovim. It provides a simple `start` method to connect to neovim via `stdio` (useful for plugins). It immediately loads API info, to be a able to provide `PluginApi` functionality, which enables easy command and autocommand creation.
+
+This module also provides annotations for even easier command and autocommand creation (`@NeovimCommand` and `@NeovimAutocommand`).
+
+Include it in your dependencies:
+Maven:
+```xml
+<dependency>
+  <groupId>com.ensarsarajcic.neovim.java</groupId>
+  <artifactId>plugin-host</artifactId>
+  <version>${neovimjava.version}</version>
+</dependency>
+```
+Gradle:
+```groovy
+compile 'com.ensarsarajcic.neovim.java:plugin-host:${neovimjava.version}'
+```
+
+Example of usage:
+
+```java
+import com.ensarsarajcic.neovim.java.pluginhost.NeovimJavaPluginHost;
+
+public final class Plugin {
+    public static void main(String[] args) {
+        var host = new NeovimJavaPluginHost();
+        host.start().thenCompose(() -> {
+            host.getApi().executeCommand("echo \"hello from java\"");
+        });
+    }
+}
+```
+
+Example of hosted usage:
+
+```java
+import com.ensarsarajcic.neovim.java.corerpc.message.RequestMessage;
+import com.ensarsarajcic.neovim.java.pluginhost.NeovimJavaPluginHost;
+import com.ensarsarajcic.neovim.java.pluginhost.annotations.NeovimCommand;
+import com.ensarsarajcic.neovim.java.pluginhost.annotations.NeovimJavaHostedPlugin;
+
+import java.util.HashMap;
+import java.util.concurrent.CompletableFuture;
+
+@NeovimJavaHostedPlugin
+public final class HostedPlugin {
+    private final NeovimJavaPluginHost host;
+
+    public HostedPlugin(NeovimJavaPluginHost host) {
+        this.host = host;
+    }
+
+    // Hook before initializing all the plugins
+    // useful to add autocommand groups to be used with annotations
+    public CompletableFuture<Void> prepare() {
+        host.getApi().createAugroup("MyHostedPluginGroup", new HashMap<>());
+    }
+
+    // Hook after all plugins have been initialized
+    // All hooks can either return CompletableFuture<Void> or void
+    public void onReady() {
+    }
+
+    // All command handlers can either take `RequestMessage` or `CommandState`
+    // NOTE: if sync = false, take `NotificationMessage` instead
+    @NeovimCommand(value = "MyHostedPluginCommand", sync = true)
+    public String incrementCalls(RequestMessage message)
+            throws NeovimRequestException {
+        // command handlers can throw NeovimRequestException to return error to neovim
+        return "Hello from java";
+    }
+
+    // All autocommand handlers can either take `NotificationMessage` or `AutocommandState`
+    // NOTE: if sync = true, take `RequestMessage` instead
+    @NeovimAutocommand(value = {"BufRead"}, pattern = "*", group = "MyHostedPluginGroup")
+    public void onBufRead(AutocommandState autocommandState) {
+        System.err.println("Autocommand: " + autocommandState);
+    }
+}
+```
+
+**NOTE**: `@NeovimJavaHostedPlugin` annotation can be used in standalone examples too. Any class annotated with it will automatically be registered and any `@NeovimCommand` and `@NeovimAutocommand` annotations will be processed.
+
+Check out `rplugin-example` and `rplugin-hosted-example` too.
+
+## Plugins common host
+
+Check out [neovim-java-plugin-host](https://github.com/esensar/neovim-java-plugin-host) for guide on how to use it.
