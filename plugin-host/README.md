@@ -7,10 +7,10 @@ This is the plugin host module, the main module when developing neovim remote pl
 
 It provides `NeovimJavaPluginHost` which holds everything needed to communicate with neovim. It provides a simple `start` method to connect to neovim via `stdio` (useful for plugins). It immediately loads API info, to be a able to provide `PluginApi` functionality, which enables easy command and autocommand creation.
 
-This module also provides annotations for even easier command and autocommand creation (`@Command` and `@Autocommand`).
+This module also provides annotations for even easier command and autocommand creation (`@NeovimCommand` and `@NeovimAutocommand`).
 
-Include it in your dependencies:  
-Maven:  
+Include it in your dependencies:
+Maven:
 ```xml
 <dependency>
   <groupId>com.ensarsarajcic.neovim.java</groupId>
@@ -18,7 +18,7 @@ Maven:
   <version>${neovimjava.version}</version>
 </dependency>
 ```
-Gradle:  
+Gradle:
 ```groovy
 compile 'com.ensarsarajcic.neovim.java:plugin-host:${neovimjava.version}'
 ```
