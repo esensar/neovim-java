@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2018 Ensar Sarajčić
+ * Copyright (c) 2022 Ensar Sarajčić
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package com.ensarsarajcic.neovim.java.handler.annotations;
+package com.ensarsarajcic.neovim.java.pluginhost.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Inherited;
@@ -30,25 +30,15 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-/**
- * Annotation used to mark a method as a request handler
- * That means that this method will be called when request with name matching value of this annotation arrives
- * <p>
- * To actually use this, object with this method needs to be registered in {@link com.ensarsarajcic.neovim.java.handler.NeovimHandlerManager}
- * <p>
- * Currently, only zero argument or single argument methods are supported and that argument must be of {@link com.ensarsarajcic.neovim.java.corerpc.message.RequestMessage} type
- * <p>
- * Methods return value will be used to respond to attached Neovim instance
- * If methods throws an exception, it will be returned as RpcError, but only if it is instance of NeovimRequestException or NeovimRequestValidationException
- */
 @Inherited
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface NeovimRequestHandler {
-    /**
-     * Name of request this method will handle
-     *
-     * @return name of request
-     */
-    String value();
+public @interface NeovimAutocommand {
+    String[] value();
+    String group() default "";
+    String pattern() default "*";
+    String description() default "";
+    boolean once() default false;
+    boolean nested() default false;
+    boolean sync() default false;
 }

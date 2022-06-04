@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2018 Ensar Sarajčić
+ * Copyright (c) 2022 Ensar Sarajčić
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,30 +22,27 @@
  * SOFTWARE.
  */
 
-package com.ensarsarajcic.neovim.java.handler.annotations;
+package com.ensarsarajcic.neovim.java.pluginhost.state;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Inherited;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-/**
- * Annotation used to mark a method as a notification handler
- * That means that this method will be called when notification with name matching value of this annotation arrives
- * <p>
- * To actually use this, object with this method needs to be registered in {@link com.ensarsarajcic.neovim.java.handler.NeovimHandlerManager}
- * <p>
- * Currently, only zero argument or single argument methods are supported and that argument must be of {@link com.ensarsarajcic.neovim.java.corerpc.message.NotificationMessage} type
- */
-@Inherited
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.METHOD)
-public @interface NeovimNotificationHandler {
-    /**
-     * Name of notification this method will handle
-     *
-     * @return name of notification
-     */
-    String value();
+
+public record CommandState(
+        @JsonProperty("lineStart")
+        Integer lineStart,
+        @JsonProperty("lineEnd")
+        Integer lineEnd,
+        @JsonProperty("range")
+        Integer range,
+        @JsonProperty("count")
+        Integer count,
+        @JsonProperty("bang")
+        String bang,
+        @JsonProperty("mods")
+        String mods,
+        @JsonProperty("register")
+        String register,
+        @JsonProperty("args")
+        String args
+) {
 }

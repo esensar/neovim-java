@@ -142,10 +142,15 @@ public final class NeovimHandlerManager {
                     return (RpcListener.NotificationCallback) notificationMessage -> {
                         if (notificationName.equals(notificationMessage.getName())) {
                             try {
-                                if (Modifier.isStatic(methodNeovimNotificationHandlerEntry.getKey().getModifiers())) {
-                                    methodNeovimNotificationHandlerEntry.getKey().invoke(null, notificationMessage);
+                                Object targetObject = null;
+                                if (!Modifier.isStatic(methodNeovimNotificationHandlerEntry.getKey().getModifiers())) {
+                                    targetObject = handler;
+                                }
+
+                                if (methodNeovimNotificationHandlerEntry.getKey().getParameterCount() == 0) {
+                                    methodNeovimNotificationHandlerEntry.getKey().invoke(targetObject);
                                 } else {
-                                    methodNeovimNotificationHandlerEntry.getKey().invoke(handler, notificationMessage);
+                                    methodNeovimNotificationHandlerEntry.getKey().invoke(targetObject, notificationMessage);
                                 }
                             } catch (IllegalAccessException | InvocationTargetException e) {
                                 log.error("Error ocurred while invoking handler for notification: " + notificationName, e);
@@ -169,10 +174,15 @@ public final class NeovimHandlerManager {
                                 Object result = null;
                                 NeovimHandlerException error = null;
                                 try {
-                                    if (Modifier.isStatic(methodNeovimRequestHandlerEntry.getKey().getModifiers())) {
-                                        result = methodNeovimRequestHandlerEntry.getKey().invoke(null, requestMessage);
+                                    Object targetObject = null;
+                                    if (!Modifier.isStatic(methodNeovimRequestHandlerEntry.getKey().getModifiers())) {
+                                        targetObject = handler;
+                                    }
+
+                                    if (methodNeovimRequestHandlerEntry.getKey().getParameterCount() == 0) {
+                                        methodNeovimRequestHandlerEntry.getKey().invoke(targetObject);
                                     } else {
-                                        result = methodNeovimRequestHandlerEntry.getKey().invoke(handler, requestMessage);
+                                        methodNeovimRequestHandlerEntry.getKey().invoke(targetObject, requestMessage);
                                     }
                                 } catch (InvocationTargetException ex) {
                                     if (ex.getCause() instanceof NeovimHandlerException) {
@@ -204,10 +214,15 @@ public final class NeovimHandlerManager {
                     return (RpcListener.RequestCallback) requestMessage -> {
                         if (requestName.equals(requestMessage.getMethod())) {
                             try {
-                                if (Modifier.isStatic(methodNeovimRequestListenerEntry.getKey().getModifiers())) {
-                                    methodNeovimRequestListenerEntry.getKey().invoke(null, requestMessage);
+                                Object targetObject = null;
+                                if (!Modifier.isStatic(methodNeovimRequestListenerEntry.getKey().getModifiers())) {
+                                    targetObject = handler;
+                                }
+
+                                if (methodNeovimRequestListenerEntry.getKey().getParameterCount() == 0) {
+                                    methodNeovimRequestListenerEntry.getKey().invoke(targetObject);
                                 } else {
-                                    methodNeovimRequestListenerEntry.getKey().invoke(handler, requestMessage);
+                                    methodNeovimRequestListenerEntry.getKey().invoke(targetObject, requestMessage);
                                 }
                             } catch (IllegalAccessException | InvocationTargetException e) {
                                 log.error("Error ocurred while invoking request listener for request: " + requestName, e);
