@@ -12,11 +12,6 @@
     <artifactId>plugins-common-host</artifactId>
     <name>plugins-common-host</name>
 
-    <properties>
-        <maven.deploy.skip>true</maven.deploy.skip>
-        <maven.javadoc.skip>true</maven.javadoc.skip>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
