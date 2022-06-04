@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file. This change
 
 ## [Unreleased]
 
+- `plugin-host` module for both standalone and hosted plugins
+- `plugins-common-host` for hosted plugins
+
 ## [0.4.0] - 2022-05-27
 
 ### Added
