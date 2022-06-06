@@ -80,7 +80,6 @@ public final class RemotePluginManager {
                         .addScanners(Scanners.TypesAnnotated)
         );
         var hostedPlugins = reflections.getTypesAnnotatedWith(NeovimJavaHostedPlugin.class);
-        var futures = new ArrayList<CompletableFuture<Void>>();
         for (var plugin : hostedPlugins) {
             Object instance = null;
             try {

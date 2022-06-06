@@ -35,6 +35,8 @@ import com.ensarsarajcic.neovim.java.handler.NeovimHandlerManager;
 import com.ensarsarajcic.neovim.java.handler.NeovimHandlerProxy;
 import com.ensarsarajcic.neovim.java.notifications.NeovimStreamNotificationHandler;
 
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executors;
 
@@ -76,7 +78,9 @@ public final class NeovimJavaPluginHost {
                     this.apiInfo = info;
                     this.pluginApi = new PluginApi(api, apiInfo);
                 })
+                .thenCompose(v -> api.executeAutocommands(List.of("User"), Map.of("pattern", "NeovimJavaPrepare", "modeline", false)))
                 .thenCompose(v -> remotePluginManager.setupRemotePlugins(this))
+                .thenCompose(v -> api.executeAutocommands(List.of("User"), Map.of("pattern", "NeovimJavaReady", "modeline", false)))
                 .thenCompose(v -> remotePluginManager.startRemotePlugins());
     }
 
