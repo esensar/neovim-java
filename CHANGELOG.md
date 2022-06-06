@@ -3,6 +3,8 @@ All notable changes to this project will be documented in this file. This change
 
 ## [Unreleased]
 
+## [0.4.2] - 2022-06-06
+
 - autocommand events for `plugin-host` - `NeovimJavaPrepare` and `NeovimJavaReady`
 - fully qualified names as defaults for command/autocommand and request/notification handlers
 - support for automatically mapped arguments for `@NeovimCommand` and `@NeovimAutocommand` annotated methods - using Jackson
