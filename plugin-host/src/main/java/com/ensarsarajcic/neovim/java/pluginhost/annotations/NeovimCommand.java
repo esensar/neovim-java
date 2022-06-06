@@ -38,6 +38,7 @@ public @interface NeovimCommand {
     String nargs() default "0";
     String complete() default "";
     String description() default "";
+    String customHandlerName() default "";
     boolean enableRange() default false;
     String range() default "";
     String count() default "";

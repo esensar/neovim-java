@@ -46,7 +46,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 /**
  * Simple class used to register and connect {@link NeovimNotificationHandler} and {@link NeovimRequestHandler}
@@ -138,7 +137,11 @@ public final class NeovimHandlerManager {
 
         List<RpcListener.NotificationCallback> notificationCallbacks = notificationHandlers.stream()
                 .map(methodNeovimNotificationHandlerEntry -> {
-                    String notificationName = methodNeovimNotificationHandlerEntry.getValue().value();
+                    String requestedName = methodNeovimNotificationHandlerEntry.getValue().value();
+                    if (requestedName.isEmpty()) {
+                        requestedName = String.format("%s.%s", handler.getClass().getCanonicalName(), methodNeovimNotificationHandlerEntry.getKey().getName());
+                    }
+                    final String notificationName = requestedName;
                     return (RpcListener.NotificationCallback) notificationMessage -> {
                         if (notificationName.equals(notificationMessage.getName())) {
                             try {
@@ -159,15 +162,18 @@ public final class NeovimHandlerManager {
                             }
                         }
                     };
-                })
-                .collect(Collectors.toList());
+                }).toList();
 
         notificationCallbacks.forEach(neovimHandlerProxy::addNotificationCallback);
         handlers.get(handler).getKey().addAll(notificationCallbacks);
 
         List<RpcListener.RequestCallback> requestCallbacks = requestHandlers.stream()
                 .map(methodNeovimRequestHandlerEntry -> {
-                    String requestName = methodNeovimRequestHandlerEntry.getValue().value();
+                    String requestedName = methodNeovimRequestHandlerEntry.getValue().value();
+                    if (requestedName.isEmpty()) {
+                        requestedName = String.format("%s.%s", handler.getClass().getCanonicalName(), methodNeovimRequestHandlerEntry.getKey().getName());
+                    }
+                    final String requestName = requestedName;
                     return (RpcListener.RequestCallback) requestMessage -> {
                         if (requestName.equals(requestMessage.getMethod())) {
                             try {
@@ -202,15 +208,18 @@ public final class NeovimHandlerManager {
                             }
                         }
                     };
-                })
-                .collect(Collectors.toList());
+                }).toList();
 
         requestCallbacks.forEach(neovimHandlerProxy::addRequestCallback);
         handlers.get(handler).getValue().addAll(requestCallbacks);
 
         List<RpcListener.RequestCallback> requestListenersCallbacks = requestListeners.stream()
                 .map(methodNeovimRequestListenerEntry -> {
-                    String requestName = methodNeovimRequestListenerEntry.getValue().value();
+                    String requestedName = methodNeovimRequestListenerEntry.getValue().value();
+                    if (requestedName.isEmpty()) {
+                        requestedName = String.format("%s.%s", handler.getClass().getCanonicalName(), methodNeovimRequestListenerEntry.getKey().getName());
+                    }
+                    final String requestName = requestedName;
                     return (RpcListener.RequestCallback) requestMessage -> {
                         if (requestName.equals(requestMessage.getMethod())) {
                             try {
@@ -231,8 +240,7 @@ public final class NeovimHandlerManager {
                             }
                         }
                     };
-                })
-                .collect(Collectors.toList());
+                }).toList();
 
         requestListenersCallbacks.forEach(neovimHandlerProxy::addRequestCallback);
         handlers.get(handler).getValue().addAll(requestListenersCallbacks);

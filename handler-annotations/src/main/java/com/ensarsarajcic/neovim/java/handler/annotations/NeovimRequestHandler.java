@@ -47,8 +47,9 @@ import java.lang.annotation.Target;
 public @interface NeovimRequestHandler {
     /**
      * Name of request this method will handle
+     * By default fully qualified method name is used
      *
      * @return name of request
      */
-    String value();
+    String value() default "";
 }

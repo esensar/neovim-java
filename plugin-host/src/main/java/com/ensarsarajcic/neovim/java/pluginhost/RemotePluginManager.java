@@ -52,7 +52,6 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
 
@@ -160,7 +159,11 @@ public final class RemotePluginManager {
         for (var methodCommandEntry : commands) {
             NeovimCommand annotation = methodCommandEntry.getValue();
             String commandName = annotation.value();
-            String handlerName = String.format("neovim-java-hosted-plugin:%s:%s", plugin.getCanonicalName(), commandName);
+            String requestedName = methodCommandEntry.getValue().customHandlerName();
+            if (requestedName.isEmpty()) {
+                requestedName = String.format("%s.%s", plugin.getCanonicalName(), methodCommandEntry.getKey().getName());
+            }
+            final String handlerName =  requestedName;
             if (annotation.sync()) {
                 addRequestHandler(pluginInstance, handlerName, methodCommandEntry.getKey(), false);
                 futures.add(pluginHost.getPluginApi().addRequestCommand(
@@ -186,7 +189,11 @@ public final class RemotePluginManager {
 
         for (var methodAutocommandEntry : autocommands) {
             NeovimAutocommand annotation = methodAutocommandEntry.getValue();
-            String handlerName = String.format("neovim-java-hosted-plugin:autocommand-handler:%s:%s", plugin.getCanonicalName(), UUID.randomUUID());
+            String requestedName = methodAutocommandEntry.getValue().customHandlerName();
+            if (requestedName.isEmpty()) {
+                requestedName = String.format("%s.%s", plugin.getCanonicalName(), methodAutocommandEntry.getKey().getName());
+            }
+            final String handlerName =  requestedName;
             if (annotation.sync()) {
                 addRequestHandler(pluginInstance, handlerName, methodAutocommandEntry.getKey(), true);
             } else {

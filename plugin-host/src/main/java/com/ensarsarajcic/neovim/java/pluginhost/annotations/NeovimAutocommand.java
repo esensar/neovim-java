@@ -38,6 +38,7 @@ public @interface NeovimAutocommand {
     String group() default "";
     String pattern() default "*";
     String description() default "";
+    String customHandlerName() default "";
     boolean once() default false;
     boolean nested() default false;
     boolean sync() default false;
