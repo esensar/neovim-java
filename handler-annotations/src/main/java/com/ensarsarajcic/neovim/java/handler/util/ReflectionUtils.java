@@ -25,12 +25,14 @@
 package com.ensarsarajcic.neovim.java.handler.util;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiFunction;
 
 /**
  * Utilities for reflection required by this library, since all handlers are called reflectively
@@ -66,5 +68,22 @@ public final class ReflectionUtils {
             klass = klass.getSuperclass();
         }
         return methods;
+    }
+
+    public static Object invokeMethodWithArgs(
+            final Object targetObject,
+            final Method method,
+            final List<?> arguments,
+            final BiFunction<Class<?>, Object, Object> mapper
+            ) throws InvocationTargetException, IllegalAccessException {
+        if (method.getParameterCount() != arguments.size()) {
+            throw new IllegalArgumentException("Method should take same number of arguments as passed!");
+        }
+        var args = new ArrayList<>();
+        var types = method.getParameterTypes();
+        for (var i = 0; i < arguments.size(); i++) {
+            args.add(mapper.apply(types[i], arguments.get(i)));
+        }
+        return method.invoke(targetObject, args.toArray(new Object[1]));
     }
 }

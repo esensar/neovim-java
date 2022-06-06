@@ -272,33 +272,35 @@ public final class RemotePluginManager {
             throw new RuntimeException("Command and autocommand methods can only take a single argument!");
         } else if (method.getParameterCount() > 0) {
             Object param = null;
+            List<?> args;
+            if (message instanceof RequestMessage) {
+                args = ((RequestMessage) message).getArguments();
+            } else if (message instanceof NotificationMessage) {
+                args = ((NotificationMessage) message).getArguments();
+            } else {
+                throw new RuntimeException("Unsupported message type: " + message);
+            }
             Class<?> paramType = method.getParameterTypes()[0];
             if (paramType == messageClass) {
                 param = message;
             } else if (!autocommand && paramType == CommandState.class) {
-                Object data;
-                if (message instanceof RequestMessage) {
-                    data = ((RequestMessage) message).getArguments().get(0);
-                } else if (message instanceof NotificationMessage) {
-                    data = ((NotificationMessage) message).getArguments().get(0);
-                } else {
-                    throw new RuntimeException("Unsupported message type: " + message);
-                }
                 param = ObjectMappers.defaultNeovimMapper().readerFor(CommandState.class).readValue(
-                        ObjectMappers.defaultNeovimMapper().writeValueAsBytes(data)
+                        ObjectMappers.defaultNeovimMapper().writeValueAsBytes(args.get(0))
                 );
             } else if (autocommand && paramType == AutocommandState.class) {
-                Object data;
-                if (message instanceof RequestMessage) {
-                    data = ((RequestMessage) message).getArguments().get(0);
-                } else if (message instanceof NotificationMessage) {
-                    data = ((NotificationMessage) message).getArguments().get(0);
-                } else {
-                    throw new RuntimeException("Unsupported message type: " + message);
-                }
                 param = ObjectMappers.defaultNeovimMapper().readerFor(AutocommandState.class).readValue(
-                        ObjectMappers.defaultNeovimMapper().writeValueAsBytes(data)
+                        ObjectMappers.defaultNeovimMapper().writeValueAsBytes(args.get(0))
                 );
+            } else if (method.getParameterCount() == args.size()) {
+                return ReflectionUtils.invokeMethodWithArgs(targetObject, method, args, (type, o) -> {
+                    try {
+                        return ObjectMappers.defaultNeovimMapper().readerFor(type).readValue(
+                                ObjectMappers.defaultNeovimMapper().writeValueAsBytes(o)
+                        );
+                    } catch (IOException e) {
+                        throw new RuntimeException("Mapping arguments for handler failed", e);
+                    }
+                });
             } else {
                 if (autocommand) {
                     throw new RuntimeException("Autocommand methods can only take a RequestMessage or AutocommandState!");

@@ -69,8 +69,8 @@ import java.util.Objects;
 public final class NeovimHandlerManager {
     private static final Logger log = LoggerFactory.getLogger(NeovimHandlerManager.class);
 
-    private NeovimHandlerProxy neovimHandlerProxy;
-    private Map<Object, Map.Entry<List<RpcListener.NotificationCallback>, List<RpcListener.RequestCallback>>> handlers = new HashMap<>();
+    private final NeovimHandlerProxy neovimHandlerProxy;
+    private final Map<Object, Map.Entry<List<RpcListener.NotificationCallback>, List<RpcListener.RequestCallback>>> handlers = new HashMap<>();
     private WeakReference<RpcStreamer> rpcStreamer;
 
     /**
@@ -186,9 +186,9 @@ public final class NeovimHandlerManager {
                                     }
 
                                     if (methodNeovimRequestHandlerEntry.getKey().getParameterCount() == 0) {
-                                        methodNeovimRequestHandlerEntry.getKey().invoke(targetObject);
+                                        result = methodNeovimRequestHandlerEntry.getKey().invoke(targetObject);
                                     } else {
-                                        methodNeovimRequestHandlerEntry.getKey().invoke(targetObject, requestMessage);
+                                        result = methodNeovimRequestHandlerEntry.getKey().invoke(targetObject, requestMessage);
                                     }
                                 } catch (InvocationTargetException ex) {
                                     if (ex.getCause() instanceof NeovimHandlerException) {
