@@ -27,6 +27,7 @@ package com.ensarsarajcic.neovim.java.pluginhost;
 import com.ensarsarajcic.neovim.java.api.NeovimApi;
 import com.ensarsarajcic.neovim.java.api.NeovimStreamApi;
 import com.ensarsarajcic.neovim.java.api.types.apiinfo.ApiInfo;
+import com.ensarsarajcic.neovim.java.api.util.ObjectMappers;
 import com.ensarsarajcic.neovim.java.corerpc.client.RpcClient;
 import com.ensarsarajcic.neovim.java.corerpc.client.RpcConnection;
 import com.ensarsarajcic.neovim.java.corerpc.client.StdIoRpcConnection;
@@ -35,6 +36,7 @@ import com.ensarsarajcic.neovim.java.handler.NeovimHandlerManager;
 import com.ensarsarajcic.neovim.java.handler.NeovimHandlerProxy;
 import com.ensarsarajcic.neovim.java.notifications.NeovimStreamNotificationHandler;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -60,7 +62,15 @@ public final class NeovimJavaPluginHost {
     public NeovimJavaPluginHost(NeovimHandlerProxy neovimHandlerProxy) {
         this.rpcConnection = new StdIoRpcConnection();
         this.neovimHandlerProxy = neovimHandlerProxy;
-        this.neovimHandlerManager = new NeovimHandlerManager(neovimHandlerProxy);
+        this.neovimHandlerManager = new NeovimHandlerManager(neovimHandlerProxy, (type, o) -> {
+            try {
+                return ObjectMappers.defaultNeovimMapper().readerFor(type).readValue(
+                        ObjectMappers.defaultNeovimMapper().writeValueAsBytes(o)
+                );
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
         client = RpcClient.getDefaultAsyncInstance();
         var reactiveRpcClient = ReactiveRpcClient.createDefaultInstanceWithCustomStreamer(client);
         neovimStreamNotificationHandler = new NeovimStreamNotificationHandler(reactiveRpcClient);

@@ -36,7 +36,8 @@ import java.lang.annotation.Target;
  * <p>
  * To actually use this, object with this method needs to be registered in {@link com.ensarsarajcic.neovim.java.handler.NeovimHandlerManager}
  * <p>
- * Currently, only zero argument or single argument methods are supported and that argument must be of {@link com.ensarsarajcic.neovim.java.corerpc.message.RequestMessage} type
+ * Handlers with zero arguments are supported, as well as single argument handlers with argument of {@link com.ensarsarajcic.neovim.java.corerpc.message.RequestMessage} type
+ * or handlers whose arguments can be mapped to from request arguments using mapper provided to {@link com.ensarsarajcic.neovim.java.handler.NeovimHandlerManager}
  * <p>
  * Methods return value will be used to respond to attached Neovim instance
  * If methods throws an exception, it will be returned as RpcError, but only if it is instance of NeovimRequestException or NeovimRequestValidationException

@@ -26,6 +26,8 @@ package com.ensarsarajcic.neovim.java.handler;
 
 import com.ensarsarajcic.neovim.java.corerpc.client.RpcListener;
 import com.ensarsarajcic.neovim.java.corerpc.client.RpcStreamer;
+import com.ensarsarajcic.neovim.java.corerpc.message.NotificationMessage;
+import com.ensarsarajcic.neovim.java.corerpc.message.RequestMessage;
 import com.ensarsarajcic.neovim.java.corerpc.message.ResponseMessage;
 import com.ensarsarajcic.neovim.java.handler.annotations.NeovimNotificationHandler;
 import com.ensarsarajcic.neovim.java.handler.annotations.NeovimRequestHandler;
@@ -46,6 +48,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.BiFunction;
 
 /**
  * Simple class used to register and connect {@link NeovimNotificationHandler} and {@link NeovimRequestHandler}
@@ -71,6 +74,7 @@ public final class NeovimHandlerManager {
 
     private final NeovimHandlerProxy neovimHandlerProxy;
     private final Map<Object, Map.Entry<List<RpcListener.NotificationCallback>, List<RpcListener.RequestCallback>>> handlers = new HashMap<>();
+    private final BiFunction<Class<?>, Object, Object> typeMapper;
     private WeakReference<RpcStreamer> rpcStreamer;
 
     /**
@@ -87,8 +91,21 @@ public final class NeovimHandlerManager {
      * @throws NullPointerException if passed {@link NeovimHandlerProxy} is null
      */
     public NeovimHandlerManager(NeovimHandlerProxy neovimHandlerProxy) {
+        this(neovimHandlerProxy, Class::cast);
+    }
+
+    /**
+     * Creates a new {@link NeovimHandlerManager} with given {@link NeovimHandlerProxy} and type mapper
+     *
+     * @param neovimHandlerProxy proxy to use for dispatching notifications/messages
+     * @param typeMapper function that attempts to map given argument to the given class
+     * @throws NullPointerException if passed {@link NeovimHandlerProxy} is null
+     */
+    public NeovimHandlerManager(NeovimHandlerProxy neovimHandlerProxy, BiFunction<Class<?>, Object, Object> typeMapper) {
         Objects.requireNonNull(neovimHandlerProxy, "neovimHandlerProxy is required to dispatch notifications/messages");
+        Objects.requireNonNull(typeMapper, "typeMapper is required to map arguments to handler methods");
         this.neovimHandlerProxy = neovimHandlerProxy;
+        this.typeMapper = typeMapper;
     }
 
     /**
@@ -152,8 +169,15 @@ public final class NeovimHandlerManager {
 
                                 if (methodNeovimNotificationHandlerEntry.getKey().getParameterCount() == 0) {
                                     methodNeovimNotificationHandlerEntry.getKey().invoke(targetObject);
-                                } else {
+                                } else if (methodNeovimNotificationHandlerEntry.getKey().getParameterCount() == 1 && methodNeovimNotificationHandlerEntry.getKey().getParameterTypes()[0] == NotificationMessage.class) {
                                     methodNeovimNotificationHandlerEntry.getKey().invoke(targetObject, notificationMessage);
+                                } else {
+                                    ReflectionUtils.invokeMethodWithArgs(
+                                            targetObject,
+                                            methodNeovimNotificationHandlerEntry.getKey(),
+                                            notificationMessage.getArguments(),
+                                            typeMapper
+                                    );
                                 }
                             } catch (IllegalAccessException | InvocationTargetException e) {
                                 log.error("Error ocurred while invoking handler for notification: " + notificationName, e);
@@ -187,8 +211,15 @@ public final class NeovimHandlerManager {
 
                                     if (methodNeovimRequestHandlerEntry.getKey().getParameterCount() == 0) {
                                         result = methodNeovimRequestHandlerEntry.getKey().invoke(targetObject);
-                                    } else {
+                                    } else if (methodNeovimRequestHandlerEntry.getKey().getParameterCount() == 1 && methodNeovimRequestHandlerEntry.getKey().getParameterTypes()[0] == RequestMessage.class) {
                                         result = methodNeovimRequestHandlerEntry.getKey().invoke(targetObject, requestMessage);
+                                    } else {
+                                        ReflectionUtils.invokeMethodWithArgs(
+                                                targetObject,
+                                                methodNeovimRequestHandlerEntry.getKey(),
+                                                requestMessage.getArguments(),
+                                                typeMapper
+                                        );
                                     }
                                 } catch (InvocationTargetException ex) {
                                     if (ex.getCause() instanceof NeovimHandlerException) {
@@ -230,10 +261,17 @@ public final class NeovimHandlerManager {
 
                                 if (methodNeovimRequestListenerEntry.getKey().getParameterCount() == 0) {
                                     methodNeovimRequestListenerEntry.getKey().invoke(targetObject);
-                                } else {
+                                } else if (methodNeovimRequestListenerEntry.getKey().getParameterCount() == 1 && methodNeovimRequestListenerEntry.getKey().getParameterTypes()[0] == RequestMessage.class) {
                                     methodNeovimRequestListenerEntry.getKey().invoke(targetObject, requestMessage);
+                                } else {
+                                    ReflectionUtils.invokeMethodWithArgs(
+                                            targetObject,
+                                            methodNeovimRequestListenerEntry.getKey(),
+                                            requestMessage.getArguments(),
+                                            typeMapper
+                                    );
                                 }
-                            } catch (IllegalAccessException | InvocationTargetException e) {
+                        } catch (IllegalAccessException | InvocationTargetException e) {
                                 log.error("Error ocurred while invoking request listener for request: " + requestName, e);
                                 e.printStackTrace();
                                 throw new RuntimeException(e);
