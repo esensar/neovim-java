@@ -67,7 +67,7 @@ final class RemotePluginManager {
     private final List<Supplier<CompletableFuture<Void>>> readyHooks = new ArrayList<>();
     private final List<Supplier<CompletableFuture<Void>>> setupMethods = new ArrayList<>();
 
-    public RemotePluginManager(NeovimHandlerManager neovimHandlerManager, NeovimHandlerProxy neovimHandlerProxy, RpcClient rpcClient) {
+    RemotePluginManager(NeovimHandlerManager neovimHandlerManager, NeovimHandlerProxy neovimHandlerProxy, RpcClient rpcClient) {
         this.neovimHandlerManager = neovimHandlerManager;
         this.neovimHandlerProxy = neovimHandlerProxy;
         this.client = rpcClient;
