@@ -53,6 +53,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public final class RemotePluginManager {
@@ -218,18 +219,27 @@ public final class RemotePluginManager {
                             method,
                             requestMessage,
                             RequestMessage.class,
-                            autocommand
+                            autocommand,
+                            e -> {
+                                try {
+                                    client.send(new ResponseMessage(requestMessage.getId(), e.toRpcError(), null));
+                                } catch (IOException ex) {
+                                    throw new RuntimeException(ex);
+                                }
+                            }
                     );
                     client.send(new ResponseMessage(requestMessage.getId(), null, result));
-                } catch (Exception ex) {
+                } catch (Throwable ex) {
+                    NeovimHandlerException error;
                     if (ex.getCause() instanceof NeovimHandlerException) {
-                        try {
-                            client.send(new ResponseMessage(requestMessage.getId(), ((NeovimHandlerException) ex.getCause()).toRpcError(), null));
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                        error = (NeovimHandlerException) ex.getCause();
                     } else {
-                        ex.printStackTrace();
+                        error = new NeovimHandlerException(ex.getMessage());
+                    }
+                    try {
+                        client.send(new ResponseMessage(requestMessage.getId(), error.toRpcError(), null));
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
                 }
             }
@@ -245,7 +255,8 @@ public final class RemotePluginManager {
                             method,
                             notificationMessage,
                             NotificationMessage.class,
-                            autocommand
+                            autocommand,
+                            Throwable::printStackTrace
                     );
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -259,7 +270,8 @@ public final class RemotePluginManager {
             Method method,
             Object message,
             Class<?> messageClass,
-            boolean autocommand
+            boolean autocommand,
+            Consumer<NeovimHandlerException> errorHandler
     ) throws Exception {
         Object result = null;
         NeovimHandlerException error = null;
@@ -269,7 +281,7 @@ public final class RemotePluginManager {
         }
 
         if (method.getParameterCount() > 1) {
-            throw new RuntimeException("Command and autocommand methods can only take a single argument!");
+            throw new NeovimHandlerException("Command and autocommand methods can only take a single argument!");
         } else if (method.getParameterCount() > 0) {
             Object param = null;
             List<?> args;
@@ -278,7 +290,7 @@ public final class RemotePluginManager {
             } else if (message instanceof NotificationMessage) {
                 args = ((NotificationMessage) message).getArguments();
             } else {
-                throw new RuntimeException("Unsupported message type: " + message);
+                throw new NeovimHandlerException("Unsupported message type: " + message);
             }
             Class<?> paramType = method.getParameterTypes()[0];
             if (paramType == messageClass) {
@@ -298,14 +310,17 @@ public final class RemotePluginManager {
                                 ObjectMappers.defaultNeovimMapper().writeValueAsBytes(o)
                         );
                     } catch (IOException e) {
-                        throw new RuntimeException("Mapping arguments for handler failed", e);
+                        errorHandler.accept(
+                                new NeovimHandlerException("Mapping arguments for handler failed " + e.getMessage())
+                        );
+                        throw new RuntimeException(e);
                     }
                 });
             } else {
                 if (autocommand) {
-                    throw new RuntimeException("Autocommand methods can only take a RequestMessage or AutocommandState!");
+                    throw new NeovimHandlerException("Autocommand methods can only take a RequestMessage or AutocommandState!");
                 } else {
-                    throw new RuntimeException("Command methods can only take a RequestMessage or CommandState!");
+                    throw new NeovimHandlerException("Command methods can only take a RequestMessage or CommandState!");
                 }
             }
 

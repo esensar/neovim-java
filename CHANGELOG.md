@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file. This change
 
 ## [Unreleased]
 
+## [0.4.3] - 2022-06-08
+
+- fixed error handling in `@NeovimRequestHandler` methods - ensure that response is always sent back to Neovim
+
 ## [0.4.2] - 2022-06-06
 
 - autocommand events for `plugin-host` - `NeovimJavaPrepare` and `NeovimJavaReady`

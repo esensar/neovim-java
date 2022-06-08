@@ -214,25 +214,25 @@ public final class NeovimHandlerManager {
                                     } else if (methodNeovimRequestHandlerEntry.getKey().getParameterCount() == 1 && methodNeovimRequestHandlerEntry.getKey().getParameterTypes()[0] == RequestMessage.class) {
                                         result = methodNeovimRequestHandlerEntry.getKey().invoke(targetObject, requestMessage);
                                     } else {
-                                        ReflectionUtils.invokeMethodWithArgs(
+                                        result = ReflectionUtils.invokeMethodWithArgs(
                                                 targetObject,
                                                 methodNeovimRequestHandlerEntry.getKey(),
                                                 requestMessage.getArguments(),
                                                 typeMapper
                                         );
                                     }
-                                } catch (InvocationTargetException ex) {
+                                } catch (InvocationTargetException | IllegalAccessException ex) {
                                     if (ex.getCause() instanceof NeovimHandlerException) {
                                         error = (NeovimHandlerException) ex.getCause();
                                     } else {
-                                        throw ex;
+                                        error = new NeovimHandlerException(ex.getMessage());
                                     }
                                 }
                                 var streamer = rpcStreamer.get();
                                 if (streamer != null) {
                                     streamer.send(new ResponseMessage(requestMessage.getId(), error != null ? error.toRpcError() : null, result));
                                 }
-                            } catch (IllegalAccessException | InvocationTargetException | IOException e) {
+                            } catch (IOException e) {
                                 log.error("Error ocurred while invoking handler for request: " + requestName, e);
                                 e.printStackTrace();
 //                                throw new RuntimeException(e);
