@@ -68,7 +68,8 @@ public final class NeovimJavaPluginHost {
                         ObjectMappers.defaultNeovimMapper().writeValueAsBytes(o)
                 );
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                e.printStackTrace();
+                return null;
             }
         });
         client = RpcClient.getDefaultAsyncInstance();
