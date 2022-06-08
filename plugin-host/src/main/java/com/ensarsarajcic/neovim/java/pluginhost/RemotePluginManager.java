@@ -56,7 +56,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public final class RemotePluginManager {
+final class RemotePluginManager {
 
     private final NeovimHandlerManager neovimHandlerManager;
     private final NeovimHandlerProxy neovimHandlerProxy;

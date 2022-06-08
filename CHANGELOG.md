@@ -3,6 +3,8 @@ All notable changes to this project will be documented in this file. This change
 
 ## [Unreleased]
 
+- exposed `RpcClient` and `ReactiveRpcClient` from `NeovimJavaPluginHost` for easy access to different communication interfaces
+
 ## [0.4.4] - 2022-06-08
 
 - prevent plugin host from stopping when message mapping fails
