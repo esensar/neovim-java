@@ -25,13 +25,15 @@
 package com.ensarsarajcic.neovim.java.pluginhost;
 
 import com.ensarsarajcic.neovim.java.api.NeovimApi;
+import com.ensarsarajcic.neovim.java.api.NeovimApis;
 import com.ensarsarajcic.neovim.java.api.NeovimStreamApi;
 import com.ensarsarajcic.neovim.java.api.types.apiinfo.ApiInfo;
 import com.ensarsarajcic.neovim.java.api.util.ObjectMappers;
-import com.ensarsarajcic.neovim.java.corerpc.client.RpcClient;
 import com.ensarsarajcic.neovim.java.corerpc.client.RpcConnection;
+import com.ensarsarajcic.neovim.java.corerpc.client.RpcStreamer;
 import com.ensarsarajcic.neovim.java.corerpc.client.StdIoRpcConnection;
 import com.ensarsarajcic.neovim.java.corerpc.reactive.ReactiveRpcClient;
+import com.ensarsarajcic.neovim.java.corerpc.reactive.ReactiveRpcStreamer;
 import com.ensarsarajcic.neovim.java.handler.NeovimHandlerManager;
 import com.ensarsarajcic.neovim.java.handler.NeovimHandlerProxy;
 import com.ensarsarajcic.neovim.java.notifications.NeovimStreamNotificationHandler;
@@ -49,8 +51,8 @@ public final class NeovimJavaPluginHost {
     private final NeovimHandlerProxy neovimHandlerProxy;
     private final NeovimApi api;
     private final NeovimStreamNotificationHandler neovimStreamNotificationHandler;
-    private final RpcClient client;
-    private final ReactiveRpcClient reactiveClient;
+    private final RpcStreamer client;
+    private final ReactiveRpcStreamer reactiveClient;
     private final RemotePluginManager remotePluginManager;
 
     private ApiInfo apiInfo = null;
@@ -73,7 +75,7 @@ public final class NeovimJavaPluginHost {
                 return null;
             }
         });
-        client = RpcClient.getDefaultAsyncInstance();
+        client = NeovimApis.getNeovimRpcStreamer();
         reactiveClient = ReactiveRpcClient.createDefaultInstanceWithCustomStreamer(client);
         neovimStreamNotificationHandler = new NeovimStreamNotificationHandler(reactiveClient);
         remotePluginManager = new RemotePluginManager(neovimHandlerManager, neovimHandlerProxy, client);
@@ -116,11 +118,11 @@ public final class NeovimJavaPluginHost {
         return pluginApi;
     }
 
-    public RpcClient getClient() {
+    public RpcStreamer getClient() {
         return client;
     }
 
-    public ReactiveRpcClient getReactiveClient() {
+    public ReactiveRpcStreamer getReactiveClient() {
         return reactiveClient;
     }
 }

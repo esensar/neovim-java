@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file. This change
 
 ## [Unreleased]
 
+## [0.4.6] - 2022-06-09
+
+- fixed an issue where wrong object mapper was used for plugin host
+
 ## [0.4.5] - 2022-06-08
 
 - exposed `RpcClient` and `ReactiveRpcClient` from `NeovimJavaPluginHost` for easy access to different communication interfaces

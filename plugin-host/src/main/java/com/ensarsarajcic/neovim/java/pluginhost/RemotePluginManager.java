@@ -26,6 +26,7 @@ package com.ensarsarajcic.neovim.java.pluginhost;
 
 import com.ensarsarajcic.neovim.java.api.util.ObjectMappers;
 import com.ensarsarajcic.neovim.java.corerpc.client.RpcClient;
+import com.ensarsarajcic.neovim.java.corerpc.client.RpcStreamer;
 import com.ensarsarajcic.neovim.java.corerpc.message.NotificationMessage;
 import com.ensarsarajcic.neovim.java.corerpc.message.RequestMessage;
 import com.ensarsarajcic.neovim.java.corerpc.message.ResponseMessage;
@@ -60,14 +61,14 @@ final class RemotePluginManager {
 
     private final NeovimHandlerManager neovimHandlerManager;
     private final NeovimHandlerProxy neovimHandlerProxy;
-    private final RpcClient client;
+    private final RpcStreamer client;
 
     // Hooks
     private final List<Supplier<CompletableFuture<Void>>> preconfigurationHooks = new ArrayList<>();
     private final List<Supplier<CompletableFuture<Void>>> readyHooks = new ArrayList<>();
     private final List<Supplier<CompletableFuture<Void>>> setupMethods = new ArrayList<>();
 
-    RemotePluginManager(NeovimHandlerManager neovimHandlerManager, NeovimHandlerProxy neovimHandlerProxy, RpcClient rpcClient) {
+    RemotePluginManager(NeovimHandlerManager neovimHandlerManager, NeovimHandlerProxy neovimHandlerProxy, RpcStreamer rpcClient) {
         this.neovimHandlerManager = neovimHandlerManager;
         this.neovimHandlerProxy = neovimHandlerProxy;
         this.client = rpcClient;
