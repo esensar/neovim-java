@@ -25,7 +25,6 @@
 package com.ensarsarajcic.neovim.java.pluginhost;
 
 import com.ensarsarajcic.neovim.java.api.util.ObjectMappers;
-import com.ensarsarajcic.neovim.java.corerpc.client.RpcClient;
 import com.ensarsarajcic.neovim.java.corerpc.client.RpcStreamer;
 import com.ensarsarajcic.neovim.java.corerpc.message.NotificationMessage;
 import com.ensarsarajcic.neovim.java.corerpc.message.RequestMessage;
