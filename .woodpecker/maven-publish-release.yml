@@ -8,6 +8,8 @@ pipeline:
             from-secret: MAVEN_CENTRAL_USERNAME
           password:
             from-secret: MAVEN_CENTRAL_TOKEN
+    when:
+      event: tag
 
   publish:
     image: eclipse-temurin:17-jdk-alpine
