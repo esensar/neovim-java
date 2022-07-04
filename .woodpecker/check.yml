@@ -1,0 +1,7 @@
+pipeline:
+  check:
+    image: eclipse-temurin:17-jdk-alpine
+    commands:
+      - ./mvnw checkstyle:check -B
+
+branches: main

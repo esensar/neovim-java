@@ -1,0 +1,8 @@
+pipeline:
+  publish:
+    image: eclipse-temurin:17-jdk-alpine
+    commands:
+      - ./mvnw clean source:jar deploy -DskipTests
+
+when:
+  event: tag

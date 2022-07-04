@@ -1,0 +1,7 @@
+pipeline:
+  test:
+    image: eclipse-temurin:17-jdk-alpine
+    commands:
+      - ./mvnw test -B
+
+branches: main
