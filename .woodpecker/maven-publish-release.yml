@@ -1,7 +1,18 @@
 pipeline:
+  prepare-credentials:
+    image: robertstettner/drone-mvn-auth
+    settings:
+      servers:
+        - id: ossrh
+          username:
+            from-secret: MAVEN_CENTRAL_USERNAME
+          password:
+            from-secret: MAVEN_CENTRAL_TOKEN
+
   publish:
     image: eclipse-temurin:17-jdk-alpine
     commands:
-      - ./mvnw clean source:jar javadoc:aggregate-jar javadoc:jar verify gpg:sign deploy -DskipTests -P release
+      - echo $MAVEN_GPG_PRIVATE_KEY | gpg --import
+      - ./mvnw clean source:jar javadoc:aggregate-jar javadoc:jar verify gpg:sign deploy -DskipTests -Dgpg.passphrase=$MAVEN_GPG_PASSPHRASE -P release
     when:
       event: tag
