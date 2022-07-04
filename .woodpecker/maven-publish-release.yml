@@ -1,5 +1,5 @@
 pipeline:
-  test:
+  publish:
     image: eclipse-temurin:17-jdk-alpine
     commands:
       - ./mvnw clean source:jar javadoc:aggregate-jar javadoc:jar verify gpg:sign deploy -DskipTests -P release
