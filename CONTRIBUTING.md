@@ -19,10 +19,6 @@ Following is a basic set of guidelines for contributing to this repository and i
 
 Code of conduct is [available in the repository](CODE_OF_CONDUCT.md)
 
-## Asking questions
-
-For asking questions, please make sure to use [**Discussions**](https://github.com/esensar/neovim-java/discussions) instead of **Issues**.
-
 ## Styleguides
 
 ### Commit messages

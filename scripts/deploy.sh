@@ -3,8 +3,6 @@
 # Deploy and sign a jar, source jar and javadoc jar to Sonatype's staging repo. After this it has to be released on https://oss.sonatype.org/#stagingRepositories
 # It requires proper GPG signing configuration in local maven settings
 
-# Also deploys to github
-# Requires GH_TOKEN and github profile set up
 key="$1"
 
 case $key in

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.ensarsarajcic.neovim.java</groupId>
@@ -41,15 +40,15 @@
     <url>https://www.ensarsarajcic.com/neovim-java</url>
 
     <scm>
-        <url>https://github.com/esensar/neovim-java</url>
-        <connection>scm:git:https://github.com/esensar/neovim-java.git</connection>
-        <developerConnection>scm:git:git@github.com:esensar/neovim-java.git</developerConnection>
+        <url>https://codeberg.org/neovim-java/neovim-java</url>
+        <connection>scm:git:https://codeberg.org/neovim-java/neovim-java.git</connection>
+        <developerConnection>scm:git:git@codeberg.org:neovim-java/neovim-java.git</developerConnection>
         <tag>HEAD</tag>
     </scm>
 
     <issueManagement>
-        <system>GitHub Issues</system>
-        <url>https://github.com/esensar/neovim-java/issues</url>
+        <system>Codeberg Issues</system>
+        <url>https://codeberg.org/neovim-java/neovim-java/issues</url>
     </issueManagement>
 
     <licenses>
@@ -149,7 +148,7 @@
                             </goals>
                             <configuration>
                                 <rules>
-                                    <banDuplicatePomDependencyVersions/>
+                                    <banDuplicatePomDependencyVersions />
                                     <requireMavenVersion>
                                         <version>3.5</version>
                                     </requireMavenVersion>
@@ -274,16 +273,6 @@
     </build>
 
     <profiles>
-        <profile>
-            <id>github</id>
-            <repositories>
-                <repository>
-                    <id>github</id>
-                    <name>GitHub esensar neovim-java Apache Maven Packages</name>
-                    <url>https://maven.pkg.github.com/esensar/neovim-java</url>
-                </repository>
-            </repositories>
-        </profile>
         <profile>
             <id>release</id>
             <build>

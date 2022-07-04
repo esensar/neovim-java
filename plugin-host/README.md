@@ -3,7 +3,7 @@
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.ensarsarajcic.neovim.java/core-rpc/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.ensarsarajcic.neovim.java/plugin-host)
 [![javadoc](https://javadoc.io/badge2/com.ensarsarajcic.neovim.java/core-rpc/javadoc.svg)](https://javadoc.io/doc/com.ensarsarajcic.neovim.java/plugin-host)
 
-This is the plugin host module, the main module when developing neovim remote plugins. It uses rest of the core modules to communicate with neovim and it provides annotations to easily define commands and autocommands. It can also be used to create hosted plugins, which can't be run on their own, but depend on [neovim-java-plugin-host](https://github.com/esensar/neovim-java-plugin-host).
+This is the plugin host module, the main module when developing neovim remote plugins. It uses rest of the core modules to communicate with neovim and it provides annotations to easily define commands and autocommands. It can also be used to create hosted plugins, which can't be run on their own, but depend on [neovim-java-plugin-host](https://codeberg.org/neovim-java/neovim-java-plugin-host).
 
 It provides `NeovimJavaPluginHost` which holds everything needed to communicate with neovim. It provides a simple `start` method to connect to neovim via `stdio` (useful for plugins). It immediately loads API info, to be a able to provide `PluginApi` functionality, which enables easy command and autocommand creation.
 
