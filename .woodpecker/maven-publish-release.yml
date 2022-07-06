@@ -1,13 +1,11 @@
 pipeline:
   prepare-credentials:
-    image: robertstettner/drone-mvn-auth
-    settings:
-      servers:
-        - id: ossrh
-          username:
-            from-secret: MAVEN_CENTRAL_USERNAME
-          password:
-            from-secret: MAVEN_CENTRAL_TOKEN
+    image: alpine:latest
+    secrets:
+      - MAVEN_CENTRAL_USERNAME
+      - MAVEN_CENTRAL_TOKEN
+    commands:
+      - echo '<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 https://maven.apache.org/xsd/settings-1.0.0.xsd"><servers><server><id>ossrh</id><username>'$${MAVEN_CENTRAL_USERNAME}'</username><password>'$${MAVEN_CENTRAL_TOKEN}'</password></server></servers></settings>' > settings.xml
     when:
       event: tag
 
@@ -15,6 +13,6 @@ pipeline:
     image: eclipse-temurin:17-jdk-alpine
     commands:
       - echo $MAVEN_GPG_PRIVATE_KEY | gpg --import
-      - ./mvnw clean source:jar javadoc:aggregate-jar javadoc:jar verify gpg:sign deploy -DskipTests -Dgpg.passphrase=$MAVEN_GPG_PASSPHRASE -P release
+      - ./mvnw clean source:jar javadoc:aggregate-jar javadoc:jar verify gpg:sign deploy -DskipTests -Dgpg.passphrase=$MAVEN_GPG_PASSPHRASE -P release -s settings.xml
     when:
       event: tag
