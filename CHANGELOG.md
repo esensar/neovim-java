@@ -3,6 +3,8 @@ All notable changes to this project will be documented in this file. This change
 
 ## [Unreleased]
 
+- remove extra list in `NeovimStreamApi#sendAtomic` ([#139][gi139])
+
 ## [0.4.6] - 2022-06-09
 
 - fixed an issue where wrong object mapper was used for plugin host
@@ -132,7 +134,7 @@ All notable changes to this project will be documented in this file. This change
 - `handler-annotations` for easier way of implementing requests and notifications
 - `api-explorer` JavaFX application for exploring Neovim API functions
 
-[Unreleased]: https://codeberg.org/neovim-java/neovim-java/compare/0.4.5...main
+[Unreleased]: https://codeberg.org/neovim-java/neovim-java/compare/0.4.6...main
 [0.1.10]: https://codeberg.org/neovim-java/neovim-java/compare/0.1...0.1.10
 [0.1.11]: https://codeberg.org/neovim-java/neovim-java/compare/0.1.10...0.1.11
 [0.1.12]: https://codeberg.org/neovim-java/neovim-java/compare/0.1.11...0.1.12
@@ -151,6 +153,8 @@ All notable changes to this project will be documented in this file. This change
 [0.4.3]: https://codeberg.org/neovim-java/neovim-java/compare/0.4.2...0.4.3
 [0.4.4]: https://codeberg.org/neovim-java/neovim-java/compare/0.4.3...0.4.4
 [0.4.5]: https://codeberg.org/neovim-java/neovim-java/compare/0.4.4...0.4.5
+[0.4.6]: https://codeberg.org/neovim-java/neovim-java/compare/0.4.5...0.4.6
 [i77]: https://codeberg.org/neovim-java/neovim-java/issues/77
 [i96]: https://codeberg.org/neovim-java/neovim-java/issues/96
 [i119]: https://codeberg.org/neovim-java/neovim-java/issues/119
+[gi139]: https://github.com/esensar/neovim-java/issues/139
