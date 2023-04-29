@@ -72,12 +72,9 @@ public final class NeovimStreamApi extends BaseStreamApi implements NeovimApi {
 
     @Override
     public CompletableFuture<AtomicCallResponse> sendAtomic(List<RequestMessage> requestMessages) {
-        var requestArgs = List.of(
-                requestMessages.stream()
-                        .map(
-                                requestMessage -> List.of(requestMessage.getMethod(), requestMessage.getArguments())
-                        ).collect(Collectors.toList())
-        );
+        var requestArgs = requestMessages.stream()
+                .map(requestMessage -> List.of(requestMessage.getMethod(), requestMessage.getArguments()))
+                .toList();
         return sendWithResponseOfType(
                 new RequestMessage.Builder(CALL_ATOMIC)
                         .addArgument(requestArgs),
