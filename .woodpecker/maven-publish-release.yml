@@ -11,6 +11,9 @@ pipeline:
 
   publish:
     image: eclipse-temurin:17-jdk-alpine
+    secrets:
+      - MAVEN_GPG_PRIVATE_KEY
+      - MAVEN_GPG_PASSPHRASE
     commands:
       - apk add gpg
       - echo $MAVEN_GPG_PRIVATE_KEY | gpg --import
