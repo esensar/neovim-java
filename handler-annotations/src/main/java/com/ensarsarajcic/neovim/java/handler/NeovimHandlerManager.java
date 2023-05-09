@@ -29,6 +29,7 @@ import com.ensarsarajcic.neovim.java.corerpc.client.RpcStreamer;
 import com.ensarsarajcic.neovim.java.corerpc.message.NotificationMessage;
 import com.ensarsarajcic.neovim.java.corerpc.message.RequestMessage;
 import com.ensarsarajcic.neovim.java.corerpc.message.ResponseMessage;
+import com.ensarsarajcic.neovim.java.corerpc.message.RpcError;
 import com.ensarsarajcic.neovim.java.handler.annotations.NeovimNotificationHandler;
 import com.ensarsarajcic.neovim.java.handler.annotations.NeovimRequestHandler;
 import com.ensarsarajcic.neovim.java.handler.annotations.NeovimRequestListener;
@@ -43,8 +44,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.AbstractMap;
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -73,9 +74,9 @@ public final class NeovimHandlerManager {
     private static final Logger log = LoggerFactory.getLogger(NeovimHandlerManager.class);
 
     private final NeovimHandlerProxy neovimHandlerProxy;
-    private final Map<Object, Map.Entry<List<RpcListener.NotificationCallback>, List<RpcListener.RequestCallback>>> handlers = new HashMap<>();
+    private final Map<Object, HandlerEntry> handlers = new HashMap<>();
     private final BiFunction<Class<?>, Object, Object> typeMapper;
-    private WeakReference<RpcStreamer> rpcStreamer;
+    private WeakReference<RpcStreamer> rpcStreamer = new WeakReference<>(null);
 
     /**
      * Creates a new {@link NeovimHandlerManager} with default {@link NeovimHandlerProxy} using {@link ImmediateExecutorService}
@@ -122,6 +123,18 @@ public final class NeovimHandlerManager {
         rpcStreamer.addNotificationCallback(neovimHandlerProxy);
         rpcStreamer.addRequestCallback(neovimHandlerProxy);
         this.rpcStreamer = new WeakReference<>(rpcStreamer);
+
+        this.neovimHandlerProxy.setFallbackHandler(requestMessage -> {
+            var streamer = this.rpcStreamer.get();
+            if (streamer != null) {
+                try {
+                    streamer.send(new ResponseMessage(requestMessage.getId(), RpcError.exception("No handler found for " + requestMessage.getMethod()), null));
+                } catch (IOException e) {
+                    log.error("Error occurred while invoking fallback handler for request: " + requestMessage.getMethod(), e);
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     /**
@@ -150,138 +163,128 @@ public final class NeovimHandlerManager {
         List<Map.Entry<Method, NeovimRequestHandler>> requestHandlers =
                 ReflectionUtils.getMethodsAnnotatedWith(handler.getClass(), NeovimRequestHandler.class);
 
-        handlers.put(handler, new AbstractMap.SimpleEntry<>(new ArrayList<>(), new ArrayList<>()));
+        HandlerEntry handlerEntry = new HandlerEntry();
 
-        List<RpcListener.NotificationCallback> notificationCallbacks = notificationHandlers.stream()
+        notificationHandlers.stream()
                 .map(methodNeovimNotificationHandlerEntry -> {
                     String requestedName = methodNeovimNotificationHandlerEntry.getValue().value();
                     if (requestedName.isEmpty()) {
                         requestedName = String.format("%s.%s", handler.getClass().getCanonicalName(), methodNeovimNotificationHandlerEntry.getKey().getName());
                     }
                     final String notificationName = requestedName;
-                    return (RpcListener.NotificationCallback) notificationMessage -> {
-                        if (notificationName.equals(notificationMessage.getName())) {
-                            try {
-                                Object targetObject = null;
-                                if (!Modifier.isStatic(methodNeovimNotificationHandlerEntry.getKey().getModifiers())) {
-                                    targetObject = handler;
-                                }
-
-                                if (methodNeovimNotificationHandlerEntry.getKey().getParameterCount() == 0) {
-                                    methodNeovimNotificationHandlerEntry.getKey().invoke(targetObject);
-                                } else if (methodNeovimNotificationHandlerEntry.getKey().getParameterCount() == 1 && methodNeovimNotificationHandlerEntry.getKey().getParameterTypes()[0] == NotificationMessage.class) {
-                                    methodNeovimNotificationHandlerEntry.getKey().invoke(targetObject, notificationMessage);
-                                } else {
-                                    ReflectionUtils.invokeMethodWithArgs(
-                                            targetObject,
-                                            methodNeovimNotificationHandlerEntry.getKey(),
-                                            notificationMessage.getArguments(),
-                                            typeMapper
-                                    );
-                                }
-                            } catch (IllegalAccessException | InvocationTargetException e) {
-                                log.error("Error ocurred while invoking handler for notification: " + notificationName, e);
-                                e.printStackTrace();
-                                throw new RuntimeException(e);
+                    return new AbstractMap.SimpleEntry<String, RpcListener.NotificationCallback>(requestedName, notificationMessage -> {
+                        try {
+                            Object targetObject = null;
+                            if (!Modifier.isStatic(methodNeovimNotificationHandlerEntry.getKey().getModifiers())) {
+                                targetObject = handler;
                             }
+
+                            if (methodNeovimNotificationHandlerEntry.getKey().getParameterCount() == 0) {
+                                methodNeovimNotificationHandlerEntry.getKey().invoke(targetObject);
+                            } else if (methodNeovimNotificationHandlerEntry.getKey().getParameterCount() == 1 && methodNeovimNotificationHandlerEntry.getKey().getParameterTypes()[0] == NotificationMessage.class) {
+                                methodNeovimNotificationHandlerEntry.getKey().invoke(targetObject, notificationMessage);
+                            } else {
+                                ReflectionUtils.invokeMethodWithArgs(
+                                        targetObject,
+                                        methodNeovimNotificationHandlerEntry.getKey(),
+                                        notificationMessage.getArguments(),
+                                        typeMapper
+                                );
+                            }
+                        } catch (IllegalAccessException | InvocationTargetException e) {
+                            log.error("Error occurred while invoking handler for notification: " + notificationName, e);
+                            e.printStackTrace();
+                            throw new RuntimeException(e);
                         }
-                    };
-                }).toList();
+                    });
+                }).forEach((kv) -> handlerEntry.addNotificationCallback(kv.getKey(), kv.getValue()));
 
-        notificationCallbacks.forEach(neovimHandlerProxy::addNotificationCallback);
-        handlers.get(handler).getKey().addAll(notificationCallbacks);
-
-        List<RpcListener.RequestCallback> requestCallbacks = requestHandlers.stream()
+        requestHandlers.stream()
                 .map(methodNeovimRequestHandlerEntry -> {
                     String requestedName = methodNeovimRequestHandlerEntry.getValue().value();
                     if (requestedName.isEmpty()) {
                         requestedName = String.format("%s.%s", handler.getClass().getCanonicalName(), methodNeovimRequestHandlerEntry.getKey().getName());
                     }
                     final String requestName = requestedName;
-                    return (RpcListener.RequestCallback) requestMessage -> {
-                        if (requestName.equals(requestMessage.getMethod())) {
+                    return new AbstractMap.SimpleEntry<String, RpcListener.RequestCallback>(requestedName, requestMessage -> {
+                        try {
+                            Object result = null;
+                            NeovimHandlerException error = null;
                             try {
-                                Object result = null;
-                                NeovimHandlerException error = null;
-                                try {
-                                    Object targetObject = null;
-                                    if (!Modifier.isStatic(methodNeovimRequestHandlerEntry.getKey().getModifiers())) {
-                                        targetObject = handler;
-                                    }
+                                Object targetObject = null;
+                                if (!Modifier.isStatic(methodNeovimRequestHandlerEntry.getKey().getModifiers())) {
+                                    targetObject = handler;
+                                }
 
-                                    if (methodNeovimRequestHandlerEntry.getKey().getParameterCount() == 0) {
-                                        result = methodNeovimRequestHandlerEntry.getKey().invoke(targetObject);
-                                    } else if (methodNeovimRequestHandlerEntry.getKey().getParameterCount() == 1 && methodNeovimRequestHandlerEntry.getKey().getParameterTypes()[0] == RequestMessage.class) {
-                                        result = methodNeovimRequestHandlerEntry.getKey().invoke(targetObject, requestMessage);
-                                    } else {
-                                        result = ReflectionUtils.invokeMethodWithArgs(
-                                                targetObject,
-                                                methodNeovimRequestHandlerEntry.getKey(),
-                                                requestMessage.getArguments(),
-                                                typeMapper
-                                        );
-                                    }
-                                } catch (InvocationTargetException | IllegalAccessException ex) {
-                                    if (ex.getCause() instanceof NeovimHandlerException) {
-                                        error = (NeovimHandlerException) ex.getCause();
-                                    } else {
-                                        error = new NeovimHandlerException(ex.getMessage());
-                                    }
+                                if (methodNeovimRequestHandlerEntry.getKey().getParameterCount() == 0) {
+                                    result = methodNeovimRequestHandlerEntry.getKey().invoke(targetObject);
+                                } else if (methodNeovimRequestHandlerEntry.getKey().getParameterCount() == 1 && methodNeovimRequestHandlerEntry.getKey().getParameterTypes()[0] == RequestMessage.class) {
+                                    result = methodNeovimRequestHandlerEntry.getKey().invoke(targetObject, requestMessage);
+                                } else {
+                                    result = ReflectionUtils.invokeMethodWithArgs(
+                                            targetObject,
+                                            methodNeovimRequestHandlerEntry.getKey(),
+                                            requestMessage.getArguments(),
+                                            typeMapper
+                                    );
                                 }
-                                var streamer = rpcStreamer.get();
-                                if (streamer != null) {
-                                    streamer.send(new ResponseMessage(requestMessage.getId(), error != null ? error.toRpcError() : null, result));
+                            } catch (InvocationTargetException | IllegalAccessException ex) {
+                                if (ex.getCause() instanceof NeovimHandlerException) {
+                                    error = (NeovimHandlerException) ex.getCause();
+                                } else {
+                                    error = new NeovimHandlerException(ex.getMessage());
                                 }
-                            } catch (IOException e) {
-                                log.error("Error ocurred while invoking handler for request: " + requestName, e);
-                                e.printStackTrace();
-//                                throw new RuntimeException(e);
                             }
+                            var streamer = rpcStreamer.get();
+                            if (streamer != null) {
+                                streamer.send(new ResponseMessage(requestMessage.getId(), error != null ? error.toRpcError() : null, result));
+                            }
+                        } catch (IOException e) {
+                            log.error("Error ocurred while invoking handler for request: " + requestName, e);
+                            e.printStackTrace();
                         }
-                    };
-                }).toList();
+                    });
+                }).forEach(kv -> handlerEntry.setRequestCallback(kv.getKey(), kv.getValue()));
 
-        requestCallbacks.forEach(neovimHandlerProxy::addRequestCallback);
-        handlers.get(handler).getValue().addAll(requestCallbacks);
-
-        List<RpcListener.RequestCallback> requestListenersCallbacks = requestListeners.stream()
+        requestListeners.stream()
                 .map(methodNeovimRequestListenerEntry -> {
                     String requestedName = methodNeovimRequestListenerEntry.getValue().value();
                     if (requestedName.isEmpty()) {
                         requestedName = String.format("%s.%s", handler.getClass().getCanonicalName(), methodNeovimRequestListenerEntry.getKey().getName());
                     }
                     final String requestName = requestedName;
-                    return (RpcListener.RequestCallback) requestMessage -> {
-                        if (requestName.equals(requestMessage.getMethod())) {
-                            try {
-                                Object targetObject = null;
-                                if (!Modifier.isStatic(methodNeovimRequestListenerEntry.getKey().getModifiers())) {
-                                    targetObject = handler;
-                                }
-
-                                if (methodNeovimRequestListenerEntry.getKey().getParameterCount() == 0) {
-                                    methodNeovimRequestListenerEntry.getKey().invoke(targetObject);
-                                } else if (methodNeovimRequestListenerEntry.getKey().getParameterCount() == 1 && methodNeovimRequestListenerEntry.getKey().getParameterTypes()[0] == RequestMessage.class) {
-                                    methodNeovimRequestListenerEntry.getKey().invoke(targetObject, requestMessage);
-                                } else {
-                                    ReflectionUtils.invokeMethodWithArgs(
-                                            targetObject,
-                                            methodNeovimRequestListenerEntry.getKey(),
-                                            requestMessage.getArguments(),
-                                            typeMapper
-                                    );
-                                }
-                        } catch (IllegalAccessException | InvocationTargetException e) {
-                                log.error("Error ocurred while invoking request listener for request: " + requestName, e);
-                                e.printStackTrace();
-                                throw new RuntimeException(e);
+                    return new AbstractMap.SimpleEntry<String, RpcListener.RequestCallback>(requestName, requestMessage -> {
+                        try {
+                            Object targetObject = null;
+                            if (!Modifier.isStatic(methodNeovimRequestListenerEntry.getKey().getModifiers())) {
+                                targetObject = handler;
                             }
-                        }
-                    };
-                }).toList();
 
-        requestListenersCallbacks.forEach(neovimHandlerProxy::addRequestCallback);
-        handlers.get(handler).getValue().addAll(requestListenersCallbacks);
+                            if (methodNeovimRequestListenerEntry.getKey().getParameterCount() == 0) {
+                                methodNeovimRequestListenerEntry.getKey().invoke(targetObject);
+                            } else if (methodNeovimRequestListenerEntry.getKey().getParameterCount() == 1 && methodNeovimRequestListenerEntry.getKey().getParameterTypes()[0] == RequestMessage.class) {
+                                methodNeovimRequestListenerEntry.getKey().invoke(targetObject, requestMessage);
+                            } else {
+                                ReflectionUtils.invokeMethodWithArgs(
+                                        targetObject,
+                                        methodNeovimRequestListenerEntry.getKey(),
+                                        requestMessage.getArguments(),
+                                        typeMapper
+                                );
+                            }
+                        } catch (IllegalAccessException | InvocationTargetException e) {
+                            log.error("Error ocurred while invoking request listener for request: " + requestName, e);
+                            e.printStackTrace();
+                            throw new RuntimeException(e);
+                        }
+                    });
+                }).forEach(kv -> handlerEntry.addRequestListener(kv.getKey(), kv.getValue()));
+
+        handlers.put(
+                handler,
+                handlerEntry
+        );
+        handlerEntry.register(neovimHandlerProxy);
     }
 
     /**
@@ -294,7 +297,49 @@ public final class NeovimHandlerManager {
     public void unregisterNeovimHandler(Object handler) {
         log.info("Neovim handler unregistered ({})", handler);
         var callbacks = handlers.remove(handler);
-        callbacks.getKey().forEach(neovimHandlerProxy::removeNotificationCallback);
-        callbacks.getValue().forEach(neovimHandlerProxy::removeRequestCallback);
+        callbacks.unregister(neovimHandlerProxy);
+    }
+
+    private static final class HandlerEntry {
+
+        private final Map<String, RpcListener.RequestCallback> requestCallbacks = new HashMap<>();
+        private final Map<String, List<RpcListener.RequestCallback>> requestListeners = new HashMap<>();
+        private final Map<String, List<RpcListener.NotificationCallback>> notificationListener = new HashMap<>();
+
+        public void addNotificationCallback(String notificationName, RpcListener.NotificationCallback notificationCallback) {
+            this.notificationListener.compute(notificationName, (k, list) -> {
+                if (list == null) {
+                    list = new LinkedList<>();
+                }
+                list.add(notificationCallback);
+                return list;
+            });
+        }
+
+        public void addRequestListener(String requestName, RpcListener.RequestCallback requestCallback) {
+            this.requestListeners.compute(requestName, (k, list) -> {
+                if (list == null) {
+                    list = new LinkedList<>();
+                }
+                list.add(requestCallback);
+                return list;
+            });
+        }
+
+        public void setRequestCallback(String requestName, RpcListener.RequestCallback requestCallback) {
+            this.requestCallbacks.put(requestName, requestCallback);
+        }
+
+        public void register(NeovimHandlerProxy handlerProxy) {
+            requestCallbacks.forEach(handlerProxy::addRequestCallback);
+            requestListeners.forEach(handlerProxy::addRequestCallbacks);
+            notificationListener.forEach(handlerProxy::addNotificationCallbacks);
+        }
+
+        public void unregister(NeovimHandlerProxy handlerProxy) {
+            requestCallbacks.forEach(handlerProxy::removeRequestCallback);
+            requestListeners.forEach(handlerProxy::removeRequestCallbacks);
+            notificationListener.forEach(handlerProxy::removeNotificationCallbacks);
+        }
     }
 }

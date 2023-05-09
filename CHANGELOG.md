@@ -3,6 +3,13 @@ All notable changes to this project will be documented in this file. This change
 
 ## [Unreleased]
 
+### Added
+- fallback request handler in case no handler for a request is added (`handler-annotations`) - this ensures that neovim doesn't wait for response which will never come
+
+### Improvements
+- `handler-annotations` no longer sequentially checks all registered handlers, but looks for handlers based on method name
+
+### Fixes
 - remove extra list in `NeovimStreamApi#sendAtomic` ([#139][gi139])
 
 ## [0.4.6] - 2022-06-09

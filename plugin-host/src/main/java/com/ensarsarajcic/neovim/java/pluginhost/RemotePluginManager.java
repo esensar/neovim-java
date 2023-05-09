@@ -211,56 +211,52 @@ final class RemotePluginManager {
     }
 
     private void addRequestHandler(Object pluginInstance, String handlerName, Method method, boolean autocommand) {
-        neovimHandlerProxy.addRequestCallback(requestMessage -> {
-            if (handlerName.equals(requestMessage.getMethod())) {
-                try {
-                    var result = invokeCommandMethod(
-                            pluginInstance,
-                            method,
-                            requestMessage,
-                            RequestMessage.class,
-                            autocommand,
-                            e -> {
-                                try {
-                                    client.send(new ResponseMessage(requestMessage.getId(), e.toRpcError(), null));
-                                } catch (IOException ex) {
-                                    throw new RuntimeException(ex);
-                                }
+        neovimHandlerProxy.addRequestCallback(handlerName, requestMessage -> {
+            try {
+                var result = invokeCommandMethod(
+                        pluginInstance,
+                        method,
+                        requestMessage,
+                        RequestMessage.class,
+                        autocommand,
+                        e -> {
+                            try {
+                                client.send(new ResponseMessage(requestMessage.getId(), e.toRpcError(), null));
+                            } catch (IOException ex) {
+                                throw new RuntimeException(ex);
                             }
-                    );
-                    client.send(new ResponseMessage(requestMessage.getId(), null, result));
-                } catch (Throwable ex) {
-                    NeovimHandlerException error;
-                    if (ex.getCause() instanceof NeovimHandlerException) {
-                        error = (NeovimHandlerException) ex.getCause();
-                    } else {
-                        error = new NeovimHandlerException(ex.getMessage());
-                    }
-                    try {
-                        client.send(new ResponseMessage(requestMessage.getId(), error.toRpcError(), null));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                        }
+                );
+                client.send(new ResponseMessage(requestMessage.getId(), null, result));
+            } catch (Throwable ex) {
+                NeovimHandlerException error;
+                if (ex.getCause() instanceof NeovimHandlerException) {
+                    error = (NeovimHandlerException) ex.getCause();
+                } else {
+                    error = new NeovimHandlerException(ex.getMessage());
+                }
+                try {
+                    client.send(new ResponseMessage(requestMessage.getId(), error.toRpcError(), null));
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
             }
         });
     }
 
     private void addNotificationHandler(Object pluginInstance, String handlerName, Method method, boolean autocommand) {
-        neovimHandlerProxy.addNotificationCallback(notificationMessage -> {
-            if (handlerName.equals(notificationMessage.getName())) {
-                try {
-                    invokeCommandMethod(
-                            pluginInstance,
-                            method,
-                            notificationMessage,
-                            NotificationMessage.class,
-                            autocommand,
-                            Throwable::printStackTrace
-                    );
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
+        neovimHandlerProxy.addNotificationCallback(handlerName, notificationMessage -> {
+            try {
+                invokeCommandMethod(
+                        pluginInstance,
+                        method,
+                        notificationMessage,
+                        NotificationMessage.class,
+                        autocommand,
+                        Throwable::printStackTrace
+                );
+            } catch (Exception ex) {
+                ex.printStackTrace();
             }
         });
     }
