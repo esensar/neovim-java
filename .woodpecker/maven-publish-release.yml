@@ -2,8 +2,8 @@ pipeline:
   prepare-credentials:
     image: alpine:latest
     secrets:
-      - MAVEN_CENTRAL_USERNAME
-      - MAVEN_CENTRAL_TOKEN
+      - maven_central_username
+      - maven_central_token
     commands:
       - echo '<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 https://maven.apache.org/xsd/settings-1.0.0.xsd"><servers><server><id>ossrh</id><username>'$${MAVEN_CENTRAL_USERNAME}'</username><password>'$${MAVEN_CENTRAL_TOKEN}'</password></server></servers></settings>' > settings.xml
     when:
@@ -12,8 +12,8 @@ pipeline:
   publish:
     image: eclipse-temurin:17-jdk-alpine
     secrets:
-      - MAVEN_GPG_PRIVATE_KEY
-      - MAVEN_GPG_PASSPHRASE
+      - maven_gpg_private_key
+      - maven_gpg_passphrase
     commands:
       - apk add gpg
       - echo $MAVEN_GPG_PRIVATE_KEY | gpg --import
