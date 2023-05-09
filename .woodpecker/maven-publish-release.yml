@@ -12,6 +12,7 @@ pipeline:
   publish:
     image: eclipse-temurin:17-jdk-alpine
     commands:
+      - apk add gpg
       - echo $MAVEN_GPG_PRIVATE_KEY | gpg --import
       - ./mvnw clean source:jar javadoc:aggregate-jar javadoc:jar verify gpg:sign deploy -DskipTests -Dgpg.passphrase=$MAVEN_GPG_PASSPHRASE -P release -s settings.xml
     when:
