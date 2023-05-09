@@ -17,6 +17,7 @@ pipeline:
     commands:
       - apk add gpg gpg-agent
       - echo $MAVEN_GPG_PRIVATE_KEY | base64 -di | gpg --import --batch
+      - ./mvnw versions:set -DremoveSnapshot
       - ./mvnw clean source:jar javadoc:aggregate-jar javadoc:jar verify gpg:sign deploy -DskipTests -Dgpg.passphrase=$MAVEN_GPG_PASSPHRASE -P release -s settings.xml
     when:
       event: tag
