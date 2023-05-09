@@ -1,7 +1,7 @@
 # Change Log
 All notable changes to this project will be documented in this file. This change log follows the conventions of [keepachangelog.com](http://keepachangelog.com/).
 
-## [Unreleased]
+## [0.5.0] - 2023-05-09
 
 ### Added
 - fallback request handler in case no handler for a request is added (`handler-annotations`) - this ensures that neovim doesn't wait for response which will never come
