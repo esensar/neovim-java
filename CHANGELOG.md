@@ -1,6 +1,8 @@
 # Change Log
 All notable changes to this project will be documented in this file. This change log follows the conventions of [keepachangelog.com](http://keepachangelog.com/).
 
+## [Unreleased]
+
 ## [0.5.0] - 2023-05-09
 
 ### Added
@@ -141,7 +143,7 @@ All notable changes to this project will be documented in this file. This change
 - `handler-annotations` for easier way of implementing requests and notifications
 - `api-explorer` JavaFX application for exploring Neovim API functions
 
-[Unreleased]: https://codeberg.org/neovim-java/neovim-java/compare/0.4.6...main
+[Unreleased]: https://codeberg.org/neovim-java/neovim-java/compare/0.5.0...main
 [0.1.10]: https://codeberg.org/neovim-java/neovim-java/compare/0.1...0.1.10
 [0.1.11]: https://codeberg.org/neovim-java/neovim-java/compare/0.1.10...0.1.11
 [0.1.12]: https://codeberg.org/neovim-java/neovim-java/compare/0.1.11...0.1.12
@@ -161,6 +163,7 @@ All notable changes to this project will be documented in this file. This change
 [0.4.4]: https://codeberg.org/neovim-java/neovim-java/compare/0.4.3...0.4.4
 [0.4.5]: https://codeberg.org/neovim-java/neovim-java/compare/0.4.4...0.4.5
 [0.4.6]: https://codeberg.org/neovim-java/neovim-java/compare/0.4.5...0.4.6
+[0.5.0]: https://codeberg.org/neovim-java/neovim-java/compare/0.4.6...0.5.0
 [i77]: https://codeberg.org/neovim-java/neovim-java/issues/77
 [i96]: https://codeberg.org/neovim-java/neovim-java/issues/96
 [i119]: https://codeberg.org/neovim-java/neovim-java/issues/119
