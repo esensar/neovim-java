@@ -16,7 +16,7 @@ pipeline:
       - MAVEN_GPG_PASSPHRASE
     commands:
       - apk add gpg
-      - echo $MAVEN_GPG_PRIVATE_KEY | gpg --import
+      - echo $MAVEN_GPG_PRIVATE_KEY | base64 -di | gpg --import
       - ./mvnw clean source:jar javadoc:aggregate-jar javadoc:jar verify gpg:sign deploy -DskipTests -Dgpg.passphrase=$MAVEN_GPG_PASSPHRASE -P release -s settings.xml
     when:
       event: tag
