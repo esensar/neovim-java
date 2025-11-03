@@ -37,7 +37,7 @@
 
     <name>neovim-java (Parent)</name>
     <description>Java Client for Neovim API</description>
-    <url>https://www.ensarsarajcic.com/neovim-java</url>
+    <url>https://neovim-java.codeberg.page/</url>
 
     <scm>
         <url>https://codeberg.org/neovim-java/neovim-java</url>
